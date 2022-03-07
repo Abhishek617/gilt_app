@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+
+import '../../widgets/rounded_button_widget.dart';
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -65,7 +68,7 @@ class _LoginState extends State<Login> {
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.mail),
                 border: OutlineInputBorder(
-
+  
                 ),
                 labelText: '   Enter Mail',
               ),
@@ -123,12 +126,16 @@ class _LoginState extends State<Login> {
             child: Container(
               height: 40.0,
               width: 320,
-              child: ElevatedButton(
+              child: RoundedButtonWidget(
+              buttonText: 'Login',
+                  buttonColor: Colors.blue,
+
+
                   onPressed: (){
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         Routes.after_login, (Route<dynamic> route) => false);
                   },
-                  child: Text('Log In')),
+              ),
             ),
           ),
         ),

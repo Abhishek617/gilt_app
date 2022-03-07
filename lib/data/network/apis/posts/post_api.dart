@@ -26,7 +26,7 @@ class PostApi {
     }
   }
 
-/// sample api call with default rest client
+/// guilt_app api call with default rest client
 //  Future<PostsList> getPosts() {
 //
 //    return _restClient

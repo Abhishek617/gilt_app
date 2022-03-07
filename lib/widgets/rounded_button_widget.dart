@@ -11,7 +11,7 @@ class RoundedButtonWidget extends StatelessWidget {
     required this.buttonText,
     required this.buttonColor,
     this.textColor = Colors.white,
-    required this.onPressed,
+    required this.onPressed ,
   }) : super(key: key);
 
   @override
