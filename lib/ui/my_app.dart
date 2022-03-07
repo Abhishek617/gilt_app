@@ -2,13 +2,14 @@ import 'package:guilt_app/constants/app_theme.dart';
 import 'package:guilt_app/constants/strings.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
+import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/stores/language/language_store.dart';
 import 'package:guilt_app/stores/post/post_store.dart';
 import 'package:guilt_app/stores/theme/theme_store.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/ui/home/home.dart';
-import 'package:guilt_app/ui/login/login.dart';
 import 'package:guilt_app/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
               // Built-in localization of basic text for Cupertino widgets
               GlobalCupertinoLocalizations.delegate,
             ],
-            home: _userStore.isLoggedIn ? HomeScreen() : LoginScreen(),
+            home:_userStore.isFirst ? OnBoardingPage() : (_userStore.isLoggedIn ? HomeScreen() : WelcomeLogin()),
           );
         },
       ),

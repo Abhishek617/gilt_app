@@ -1,3 +1,3 @@
-# guilt_app Project
+# Guilt App
 
-A guilt_app project created in flutter. Guilt_app supports both platforms Android and iOS.
+The Guilt App project is created in flutter framework. Guilt App supports both platforms Android and iOS.

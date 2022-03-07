@@ -20,6 +20,7 @@ abstract class _UserStore with Store {
 
   // bool to check if current user is logged in
   bool isLoggedIn = false;
+  bool isFirst = true;
 
   // constructor:---------------------------------------------------------------
   _UserStore(Repository repository) : this._repository = repository {
@@ -30,6 +31,10 @@ abstract class _UserStore with Store {
     // checking if user is logged in
     repository.isLoggedIn.then((value) {
       this.isLoggedIn = value;
+    });
+    // checking if user uses app first time
+    repository.isFirst.then((value) {
+      this.isFirst = value;
     });
   }
 

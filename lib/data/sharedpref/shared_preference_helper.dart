@@ -24,6 +24,14 @@ class SharedPreferenceHelper {
     return _sharedPreference.remove(Preferences.auth_token);
   }
 
+  Future<bool> get isFirst async {
+    return _sharedPreference.getBool(Preferences.is_first_open) ?? false;
+  }
+
+  Future<bool> saveIsFirst(bool value) async {
+    return _sharedPreference.setBool(Preferences.is_first_open, value);
+  }
+
   // Login:---------------------------------------------------------------------
   Future<bool> get isLoggedIn async {
     return _sharedPreference.getBool(Preferences.is_logged_in) ?? false;
