@@ -61,20 +61,15 @@ class _Reset_passwordState extends State<Reset_password> {
                   ),
                 ),
               ),
-               Container(
-                 height: 50,
-                 width: 320,
-                 margin: EdgeInsets.symmetric(vertical: Dimens.vertical_padding),
-                 child: ElevatedButtonWidget(
-                   buttonText: 'Reset Password',
-                     buttonColor: Colors.orangeAccent,
-                     textColor: Colors.black,
-                     onPressed: (){
-                       Navigator.of(context).pushNamedAndRemoveUntil(
-                           Routes.otp, (Route<dynamic> route) => false);
-                     },
-                     ),
-               ),
+               ElevatedButtonWidget(
+                 buttonText: 'Reset Password',
+                   buttonColor: Colors.orangeAccent,
+                   textColor: Colors.black,
+                   onPressed: (){
+                     Navigator.of(context).pushNamedAndRemoveUntil(
+                         Routes.otp, (Route<dynamic> route) => false);
+                   },
+                   ),
             ],
           ),
         ),

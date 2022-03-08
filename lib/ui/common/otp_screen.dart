@@ -72,19 +72,15 @@ class _Otp_screenState extends State<Otp_screen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
-                  child: Container(
-                    height: 50,
-                    width: 320,
-                    child: ElevatedButtonWidget(
-                      textColor: Colors.black,
-                        buttonColor: Colors.orangeAccent,
-                        buttonText: 'Continue',
-                        onPressed: (){
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              Routes.reset_password, (Route<dynamic> route) => false);
-                        },
-                        ),
-                  ),
+                  child: ElevatedButtonWidget(
+                    textColor: Colors.black,
+                      buttonColor: Colors.orangeAccent,
+                      buttonText: 'Continue',
+                      onPressed: (){
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            Routes.reset_password, (Route<dynamic> route) => false);
+                      },
+                      ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20),

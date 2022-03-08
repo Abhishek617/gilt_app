@@ -107,19 +107,15 @@ class _Change_passwordState extends State<Change_password> {
               ),
               Padding(
                 padding: const EdgeInsets.only( top: 15),
-                child: Container(
-                  height: 50.0,
-                  width: 320,
-                  child: ElevatedButtonWidget(
-                    buttonColor: Colors.orangeAccent,
-                      textColor: Colors.black,
-                      buttonText: 'Change Password',
-                      onPressed: (){
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            Routes.login, (Route<dynamic> route) => false);
-                      },
-                      ),
-                ),
+                child: ElevatedButtonWidget(
+                  buttonColor: Colors.orangeAccent,
+                    textColor: Colors.black,
+                    buttonText: 'Change Password',
+                    onPressed: (){
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.login, (Route<dynamic> route) => false);
+                    },
+                    ),
               ),
 
             ],

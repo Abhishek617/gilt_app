@@ -117,17 +117,13 @@ class _LoginState extends State<Login> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 5, top: 20),
-              child: Container(
-                height: 40.0,
-                width: 320,
-                child: ElevatedButtonWidget(
-                buttonText: 'Login',
-                    buttonColor: Colors.blue,
-                    onPressed: (){
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          Routes.after_login, (Route<dynamic> route) => false);
-                    },
-                ),
+              child: ElevatedButtonWidget(
+              buttonText: 'Login',
+                  buttonColor: Colors.blue,
+                  onPressed: (){
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        Routes.after_login, (Route<dynamic> route) => false);
+                  },
               ),
             ),
             Padding(

@@ -43,30 +43,22 @@ class _After_LoginScreenState extends State<After_LoginScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 40),
-                child: Container(
-                  height: 50.0,
-                  width: 320,
-                  child: ElevatedButtonWidget(
-                    textColor: Colors.black,
-                      buttonColor: Colors.orangeAccent,
-                      buttonText: 'Business Owner',
-                      onPressed: (){},
-                  ),
+                child: ElevatedButtonWidget(
+                  textColor: Colors.black,
+                    buttonColor: Colors.orangeAccent,
+                    buttonText: 'Business Owner',
+                    onPressed: (){},
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
-                child: Container(
-                  height: 50.0,
-                  width: 320,
-                  child: ElevatedButtonWidget(
-                    buttonText: 'Individual User',
-                      buttonColor: Colors.orangeAccent,
-                      textColor: Colors.black,
-                      onPressed: (){},
+                child: ElevatedButtonWidget(
+                  buttonText: 'Individual User',
+                    buttonColor: Colors.orangeAccent,
+                    textColor: Colors.black,
+                    onPressed: (){},
 
                 ),
-              ),
               ),
             ],
           ),

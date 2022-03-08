@@ -14,15 +14,16 @@ class ElevatedButtonWidget extends StatelessWidget {
     required this.onPressed ,
   }) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-     // color: buttonColor,
-     // shape: StadiumBorder(),
-      onPressed: onPressed,
-      child: Text(
-        buttonText,
-        style: Theme.of(context).textTheme.button!.copyWith(color: textColor),
+    return Container(
+      height: 55.0,
+      width: 320,
+      margin: EdgeInsets.symmetric(vertical: 2),
+      child: ElevatedButton(
+        child: Text(buttonText),
+        onPressed: onPressed,
       ),
     );
   }
