@@ -13,6 +13,18 @@ class _After_LoginScreenState extends State<After_LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {},
+            child: Icon(
+              Icons.power_settings_new_rounded,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

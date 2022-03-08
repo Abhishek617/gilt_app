@@ -22,8 +22,7 @@ class _LoginState extends State<Login> {
         appBar: AppBar(
           leading: GestureDetector(
             onTap: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  Routes.welcome_login, (Route<dynamic> route) => false);
+              Routes.goBack(context);
             },
             child: Icon(
               Icons.arrow_back_ios_outlined,
@@ -122,9 +121,7 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.only(left: 210, top: 10),
                   child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            Routes.forgot_password,
-                            (Route<dynamic> route) => false);
+                        Routes.navigateToScreen(context, Routes.forgot_password);
                       },
                       child: Text(
                         'Forgot password',
@@ -139,8 +136,7 @@ class _LoginState extends State<Login> {
                     buttonText: 'Login',
                     buttonColor: Theme.of(context).colorScheme.primary,
                     onPressed: () {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          Routes.after_login, (Route<dynamic> route) => false);
+                      Routes.navigateToScreen(context, Routes.after_login);
                     },
                   ),
                 ),
@@ -159,8 +155,7 @@ class _LoginState extends State<Login> {
                                     color: Colors.blueAccent, fontSize: 14),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    Navigator.of(context).pushNamedAndRemoveUntil(
-                                        Routes.signup, (Route<dynamic> route) => false);
+                                    Routes.navigateToScreen(context, Routes.signup);
                                   })
                           ]),
                     ),

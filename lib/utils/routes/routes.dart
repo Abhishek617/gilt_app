@@ -25,7 +25,6 @@ class Routes {
   static const String otp = '/otp';
   static const String signup = '/signup';
 
-
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
     intro: (BuildContext context) => OnBoardingPage(),
@@ -34,11 +33,17 @@ class Routes {
     login: (BuildContext context) => Login(),
     home: (BuildContext context) => HomeScreen(),
     otp: (BuildContext context) => Otp_screen(),
-    forgot_password:(BuildContext context) => Reset_password(),
-    reset_password:(BuildContext context) => Change_password(),
-    signup:(BuildContext context) => SignUp(),
+    forgot_password: (BuildContext context) => Reset_password(),
+    reset_password: (BuildContext context) => Change_password(),
+    signup: (BuildContext context) => SignUp(),
   };
+
+  static navigateToScreen(BuildContext context, String route) {
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(route, (Route<dynamic> route) => true);
+  }
+
+  static goBack(BuildContext context) {
+    Navigator.of(context).pop();
+  }
 }
-
-
-
