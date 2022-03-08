@@ -69,6 +69,7 @@ abstract class _UserStore with Store {
     loginFuture = ObservableFuture(future);
     await future.then((value) async {
       if (value) {
+        print('isFirst : false');
         _repository.saveIsLoggedIn(true);
         this.isLoggedIn = true;
         _repository.saveIsFirst(false);

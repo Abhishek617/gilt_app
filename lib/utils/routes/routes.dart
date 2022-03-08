@@ -38,9 +38,9 @@ class Routes {
     signup: (BuildContext context) => SignUp(),
   };
 
-  static navigateToScreen(BuildContext context, String route) {
+  static navigateToScreen(BuildContext context, route) {
     Navigator.of(context)
-        .pushNamedAndRemoveUntil(route, (Route<dynamic> route) => true);
+        .push( MaterialPageRoute(builder: (_) => route));
   }
 
   static goBack(BuildContext context) {

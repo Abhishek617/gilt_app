@@ -25,7 +25,7 @@ class SharedPreferenceHelper {
   }
 
   Future<bool> get isFirst async {
-    return _sharedPreference.getBool(Preferences.is_first_open) ?? false;
+    return _sharedPreference.getBool(Preferences.is_first_open) ?? true;
   }
 
   Future<bool> saveIsFirst(bool value) async {
