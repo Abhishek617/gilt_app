@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 40),
+                  padding: const EdgeInsets.only(top: 50),
                   child: AppLogoWidget(
                     width: 140.0,
                     height: 140.0,

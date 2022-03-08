@@ -21,7 +21,7 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 60),
+                padding: EdgeInsets.only(top: 100),
                 child: AppLogoWidget(
                   width: 200,
                   height: 150,

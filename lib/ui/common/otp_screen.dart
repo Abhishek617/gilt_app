@@ -17,19 +17,19 @@ class _Otp_screenState extends State<Otp_screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 70,
+        toolbarHeight: 50,
         leading: Icon(
           Icons.arrow_back_ios_outlined,color: Colors.black, size: 15,),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ) ,
       body:
-        Center(
-          child: SingleChildScrollView(
+        SingleChildScrollView(
+          child: Center(
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 60,),
+                  padding: const EdgeInsets.only(top: 50),
                   child: AppLogoWidget(
                     width: 140.0,
                     height: 140.0,

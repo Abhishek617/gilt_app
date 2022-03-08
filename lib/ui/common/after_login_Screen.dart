@@ -17,7 +17,7 @@ class _After_LoginScreenState extends State<After_LoginScreen> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 130),
+                padding: const EdgeInsets.only(top: 120),
                 child: AppLogoWidget(
                   width: 160.0,
                   height: 160.0,

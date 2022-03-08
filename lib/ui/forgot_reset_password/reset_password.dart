@@ -17,6 +17,7 @@ class _Reset_passwordState extends State<Reset_password> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 50,
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pushNamedAndRemoveUntil(
@@ -33,7 +34,7 @@ class _Reset_passwordState extends State<Reset_password> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 30),
+                padding: const EdgeInsets.only(top: 50),
                 child: AppLogoWidget(
                   width: 140.0,
                   height: 140.0,
