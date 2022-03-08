@@ -11,9 +11,8 @@ class ElevatedButtonWidget extends StatelessWidget {
     required this.buttonText,
     required this.buttonColor,
     this.textColor = Colors.white,
-    required this.onPressed ,
+    required this.onPressed,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +21,7 @@ class ElevatedButtonWidget extends StatelessWidget {
       width: 320,
       margin: EdgeInsets.symmetric(vertical: 8),
       child: ElevatedButton(
-        child: Text(buttonText),
+        child: Text(buttonText, style: TextStyle(color: textColor)),
         onPressed: onPressed,
       ),
     );

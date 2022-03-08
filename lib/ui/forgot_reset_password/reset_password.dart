@@ -8,11 +8,14 @@ import 'package:guilt_app/widgets/textfield_widget.dart';
 
 class Reset_password extends StatefulWidget {
   const Reset_password({Key? key}) : super(key: key);
+
   @override
   _Reset_passwordState createState() => _Reset_passwordState();
 }
+
 class _Reset_passwordState extends State<Reset_password> {
   bool passenable = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,11 +27,14 @@ class _Reset_passwordState extends State<Reset_password> {
                 Routes.login, (Route<dynamic> route) => false);
           },
           child: Icon(
-            Icons.arrow_back_ios_outlined,color: Colors.black, size: 15,),
+            Icons.arrow_back_ios_outlined,
+            color: Colors.black,
+            size: 15,
+          ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-      ) ,
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -41,12 +47,21 @@ class _Reset_passwordState extends State<Reset_password> {
                 ),
               ),
               Padding(
-                  padding: EdgeInsets.only(top:3),
-                  child: Text('Guilt App', style: TextStyle(fontSize: 19.0,),)),
-
+                  padding: EdgeInsets.only(top: 3),
+                  child: Text(
+                    'Guilt App',
+                    style: TextStyle(
+                      fontSize: 19.0,
+                    ),
+                  )),
               Padding(
                 padding: EdgeInsets.only(top: Dimens.vertical_padding),
-                child: Text('free guide will tell about the impact your gift will have', style: TextStyle(fontSize: 13.0,),),
+                child: Text(
+                  'free guide will tell about the impact your gift will have',
+                  style: TextStyle(
+                    fontSize: 13.0,
+                  ),
+                ),
               ),
               SizedBox(
                 height: 25,
@@ -55,47 +70,51 @@ class _Reset_passwordState extends State<Reset_password> {
                 height: 50,
                 width: 320,
                 margin: EdgeInsets.symmetric(vertical: Dimens.vertical_padding),
-                child:
-                TextField(
-                  obscureText: passenable, //if passenable == true, show **, else show password character
+                child: TextField(
+                  obscureText: passenable,
+                  //if passenable == true, show **, else show password character
                   decoration: InputDecoration(
                       prefixIcon: Icon(Icons.password_sharp),
-                      border: OutlineInputBorder(
-                      ),
+                      border: OutlineInputBorder(),
                       hintText: "New Enter Password",
                       labelText: "Enter New Password",
-                      suffix: IconButton(onPressed: (){ //add Icon button at end of TextField
-                        setState(() { //refresh UI
-                          if(passenable){ //if passenable == true, make it false
-                            passenable = false;
-                          }else{
-                            passenable = true; //if passenable == false, make it true
-                          }
-                        });
-                      }, icon: Padding(
-                        padding: const EdgeInsets.only(top: 25.0),
-                        child: Icon(
-                          passenable == true
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                      ))
-                    //eye icon if passenable = true, else, Icon is ***__
-                  ),
+                      suffix: IconButton(
+                          onPressed: () {
+                            //add Icon button at end of TextField
+                            setState(() {
+                              //refresh UI
+                              if (passenable) {
+                                //if passenable == true, make it false
+                                passenable = false;
+                              } else {
+                                passenable =
+                                    true; //if passenable == false, make it true
+                              }
+                            });
+                          },
+                          icon: Padding(
+                            padding: const EdgeInsets.only(top: 25.0),
+                            child: Icon(
+                              passenable == true
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                          ))
+                      //eye icon if passenable = true, else, Icon is ***__
+                      ),
                 ),
               ),
               SizedBox(
                 height: 15,
               ),
-               ElevatedButtonWidget(
-                 buttonText: 'Reset Password',
-                 buttonColor: Theme.of(context).colorScheme.primary,
-                   textColor: Colors.black,
-                   onPressed: (){
-                     Navigator.of(context).pushNamedAndRemoveUntil(
-                         Routes.otp, (Route<dynamic> route) => false);
-                   },
-                   ),
+              ElevatedButtonWidget(
+                buttonText: 'Reset Password',
+                buttonColor: Theme.of(context).colorScheme.primary,
+                onPressed: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      Routes.otp, (Route<dynamic> route) => false);
+                },
+              ),
             ],
           ),
         ),
