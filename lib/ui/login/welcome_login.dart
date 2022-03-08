@@ -27,38 +27,33 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                   height: 150,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: ElevatedButtonWidget(
-                  textColor: Colors.white,
-                  buttonText: 'Log In',
-                  buttonColor: Theme.of(context).colorScheme.primary,
-                  onPressed: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        Routes.login, (Route<dynamic> route) => false);
-                  },
-                ),
+              SizedBox(
+                height: 15,
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: ElevatedButtonWidget(
-                  textColor: Colors.white,
-                  buttonColor: Theme.of(context).colorScheme.primary,
-                  buttonText: 'Sign Up',
-                  onPressed: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        Routes.login, (Route<dynamic> route) => false);
-                  },
-                ),
+              ElevatedButtonWidget(
+                textColor: Colors.white,
+                buttonText: 'Log In',
+                buttonColor: Theme.of(context).colorScheme.primary,
+                onPressed: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      Routes.login, (Route<dynamic> route) => false);
+                },
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: ElevatedButtonWidget(
-                  textColor: Colors.white,
-                  buttonColor: Theme.of(context).colorScheme.primary,
-                  buttonText: 'Continue With Gmail',
-                  onPressed: () {},
-                ),
+
+              ElevatedButtonWidget(
+                textColor: Colors.white,
+                buttonColor: Theme.of(context).colorScheme.primary,
+                buttonText: 'Sign Up',
+                onPressed: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      Routes.login, (Route<dynamic> route) => false);
+                },
+              ),
+              ElevatedButtonWidget(
+                textColor: Colors.white,
+                buttonColor: Theme.of(context).colorScheme.primary,
+                buttonText: 'Continue With Gmail',
+                onPressed: () {},
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 150),

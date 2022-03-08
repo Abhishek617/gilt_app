@@ -21,87 +21,84 @@ class _Change_passwordState extends State<Change_password> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: AppLogoWidget(
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 100),
+            child: Column(
+              children: [
+                AppLogoWidget(
                   width: 140.0,
                   height: 140.0,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 15),
-                child: Text('Guilt App', style: TextStyle(fontSize: 19.0,),),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text('free guide will tell about the impact your gift will have', style: TextStyle(fontSize: 13.0,),),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Container(
-                  height: 50,
-                  width: 310,
+                Padding(
+                  padding: const EdgeInsets.only(top: 0),
+                  child: Text('Guilt App', style: TextStyle(fontSize: 19.0,),),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text('free guide will tell about the impact your gift will have', style: TextStyle(fontSize: 13.0,),),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Container(
+                    height: 50,
+                    width: 310,
 
-                  child: TextField(
-                    obscureText: passenable, //if passenable == true, show **, else show password character
-                    decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.password_sharp),
-                        border: OutlineInputBorder(
+                    child: TextField(
+                      obscureText: passenable, //if passenable == true, show **, else show password character
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.password_sharp),
+                          border: OutlineInputBorder(
 
-                        ),
-                        hintText: "New Enter Password",
-                        labelText: "Enter New Password",
-                        suffix: IconButton(onPressed: (){ //add Icon button at end of TextField
-                          setState(() { //refresh UI
-                            if(passenable){ //if passenable == true, make it false
-                              passenable = false;
-                            }else{
-                              passenable = true; //if passenable == false, make it true
-                            }
-                          });
-                        }, icon: Icon(passenable == true?Icons.remove_red_eye:Icons.password))
-                      //eye icon if passenable = true, else, Icon is ***__
+                          ),
+                          hintText: "New Enter Password",
+                          labelText: "Enter New Password",
+                          suffix: IconButton(onPressed: (){ //add Icon button at end of TextField
+                            setState(() { //refresh UI
+                              if(passenable){ //if passenable == true, make it false
+                                passenable = false;
+                              }else{
+                                passenable = true; //if passenable == false, make it true
+                              }
+                            });
+                          }, icon: Icon(passenable == true?Icons.remove_red_eye:Icons.password))
+                        //eye icon if passenable = true, else, Icon is ***__
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Container(
-                  height: 50,
-                  width: 310,
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Container(
+                    height: 50,
+                    width: 310,
 
-                  child: TextField(
-                    obscureText: passenable, //if passenable == true, show **, else show password character
-                    decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.password_sharp),
-                        border: OutlineInputBorder(
+                    child: TextField(
+                      obscureText: passenable, //if passenable == true, show **, else show password character
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.password_sharp),
+                          border: OutlineInputBorder(
 
-                        ),
-                        hintText: "Enter Conform Password",
-                        labelText: "Enter Conform Password",
-                        suffix: IconButton(onPressed: (){ //add Icon button at end of TextField
-                          setState(() { //refresh UI
-                            if(passenable){ //if passenable == true, make it false
-                              passenable = false;
-                            }else{
-                              passenable = true; //if passenable == false, make it true
-                            }
-                          });
-                        }, icon: Icon(passenable == true?Icons.remove_red_eye:Icons.password))
-                      //eye icon if passenable = true, else, Icon is ***__
+                          ),
+                          hintText: "Enter Conform Password",
+                          labelText: "Enter Conform Password",
+                          suffix: IconButton(onPressed: (){ //add Icon button at end of TextField
+                            setState(() { //refresh UI
+                              if(passenable){ //if passenable == true, make it false
+                                passenable = false;
+                              }else{
+                                passenable = true; //if passenable == false, make it true
+                              }
+                            });
+                          }, icon: Icon(passenable == true?Icons.remove_red_eye:Icons.password))
+                        //eye icon if passenable = true, else, Icon is ***__
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only( top: 15),
-                child: ElevatedButtonWidget(
-                  buttonColor: Colors.orangeAccent,
+                ElevatedButtonWidget(
+                  buttonColor: Theme.of(context).colorScheme.primary,
                     textColor: Colors.black,
                     buttonText: 'Change Password',
                     onPressed: (){
@@ -109,9 +106,9 @@ class _Change_passwordState extends State<Change_password> {
                           Routes.login, (Route<dynamic> route) => false);
                     },
                     ),
-              ),
 
-            ],
+              ],
+            ),
           ),
         ),
       ),

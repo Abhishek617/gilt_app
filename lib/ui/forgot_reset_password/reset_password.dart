@@ -55,7 +55,7 @@ class _Reset_passwordState extends State<Reset_password> {
               ),
                ElevatedButtonWidget(
                  buttonText: 'Reset Password',
-                   buttonColor: Colors.orangeAccent,
+                 buttonColor: Theme.of(context).colorScheme.primary,
                    textColor: Colors.black,
                    onPressed: (){
                      Navigator.of(context).pushNamedAndRemoveUntil(

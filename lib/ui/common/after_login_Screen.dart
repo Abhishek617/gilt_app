@@ -38,7 +38,7 @@ class _After_LoginScreenState extends State<After_LoginScreen> {
                 padding: const EdgeInsets.only(top: 40),
                 child: ElevatedButtonWidget(
                   textColor: Colors.black,
-                    buttonColor: Colors.orangeAccent,
+                  buttonColor: Theme.of(context).colorScheme.primary,
                     buttonText: 'Business Owner',
                     onPressed: (){},
                 ),
