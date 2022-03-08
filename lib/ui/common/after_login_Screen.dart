@@ -12,8 +12,8 @@ class _After_LoginScreenState extends State<After_LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Center(
           child: Column(
             children: [
               Padding(
@@ -35,23 +35,21 @@ class _After_LoginScreenState extends State<After_LoginScreen> {
                 child: Text('free guide will tell about the impact your gift will have', style: TextStyle(fontSize: 13.0,),),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 40),
+                padding: const EdgeInsets.only(top: 25),
                 child: ElevatedButtonWidget(
+
                   textColor: Colors.black,
                   buttonColor: Theme.of(context).colorScheme.primary,
                     buttonText: 'Business Owner',
                     onPressed: (){},
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: ElevatedButtonWidget(
-                  buttonText: 'Individual User',
-                    buttonColor: Colors.orangeAccent,
-                    textColor: Colors.black,
-                    onPressed: (){},
+              ElevatedButtonWidget(
+                buttonText: 'Individual User',
+                buttonColor: Theme.of(context).colorScheme.primary,
+                  textColor: Colors.black,
+                  onPressed: (){},
 
-                ),
               ),
             ],
           ),
