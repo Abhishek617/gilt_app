@@ -61,10 +61,10 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 150),
                 child: Text(
                   'Terms of Service',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline,fontStyle: FontStyle.italic),
                 ),
               ),
             ],
