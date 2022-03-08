@@ -33,6 +33,7 @@ class TextFieldWidget extends StatelessWidget {
         keyboardType: this.inputType,
         style: Theme.of(context).textTheme.bodyText2,
         decoration: InputDecoration(
+            border: OutlineInputBorder(),
             hintText: this.hint,
             hintStyle:
                 Theme.of(context).textTheme.bodyText2!.copyWith(color: hintColor),

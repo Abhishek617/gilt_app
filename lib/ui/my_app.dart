@@ -3,6 +3,10 @@ import 'package:guilt_app/constants/strings.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
+import 'package:guilt_app/ui/common/after_login_Screen.dart';
+import 'package:guilt_app/ui/common/otp_screen.dart';
+import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
+import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/stores/language/language_store.dart';
@@ -55,7 +59,7 @@ class MyApp extends StatelessWidget {
               // Built-in localization of basic text for Cupertino widgets
               GlobalCupertinoLocalizations.delegate,
             ],
-            home:_userStore.isFirst ? OnBoardingPage() : (_userStore.isLoggedIn ? HomeScreen() : WelcomeLogin()),
+            home:_userStore.isFirst ? OnBoardingPage() : (_userStore.isLoggedIn ? HomeScreen() : Reset_password()),
           );
         },
       ),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class RoundedButtonWidget extends StatelessWidget {
+class ElevatedButtonWidget extends StatelessWidget {
   final String buttonText;
   final Color buttonColor;
   final Color textColor;
   final VoidCallback onPressed;
 
-  const RoundedButtonWidget({
+  const ElevatedButtonWidget({
     Key? key,
     required this.buttonText,
     required this.buttonColor,
@@ -16,9 +16,9 @@ class RoundedButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      color: buttonColor,
-      shape: StadiumBorder(),
+    return ElevatedButton(
+     // color: buttonColor,
+     // shape: StadiumBorder(),
       onPressed: onPressed,
       child: Text(
         buttonText,
