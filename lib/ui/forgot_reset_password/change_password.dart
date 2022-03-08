@@ -80,9 +80,6 @@ class _Change_passwordState extends State<Change_password> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 15,
-                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: Container(
@@ -119,7 +116,7 @@ class _Change_passwordState extends State<Change_password> {
                   ),
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 30,
                 ),
                 ElevatedButtonWidget(
                   buttonColor: Theme.of(context).colorScheme.primary,
