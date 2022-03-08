@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
@@ -65,7 +66,7 @@ class _SignUpState extends State<SignUp> {
                 padding: const EdgeInsets.only(left: 5, top: 30),
                 child: Container(
                   height: 50,
-                  width: 310,
+                  width: 330,
                   child: TextField(
                     // controller: nameController,
                     decoration: const InputDecoration(
@@ -86,10 +87,14 @@ class _SignUpState extends State<SignUp> {
                       child: TextField(
                         // controller: nameController,
                         decoration: const InputDecoration(
+
+
                           prefixIcon: Icon(Icons.person),
                           border: OutlineInputBorder(),
-                          labelText: '   Enter Mail',
+                          hintText: 'First Name', hintStyle: TextStyle(fontSize: 15),
                         ),
+
+
                       ),
                     ),
                   ),
@@ -99,11 +104,13 @@ class _SignUpState extends State<SignUp> {
                       height: 50,
                       width: 160,
                       child: TextField(
+
                         // controller: nameController,
                         decoration: const InputDecoration(
+
                           prefixIcon: Icon(Icons.person),
                           border: OutlineInputBorder(),
-                          labelText: '   Enter Mail',
+                          labelText: 'Firs Name',
                         ),
                       ),
                     ),
@@ -114,7 +121,7 @@ class _SignUpState extends State<SignUp> {
                 padding: const EdgeInsets.only(left: 5, top: 15),
                 child: Container(
                   height: 50,
-                  width: 310,
+                  width: 330,
                   child: TextField(
                     // controller: nameController,
                     decoration: const InputDecoration(
@@ -129,7 +136,7 @@ class _SignUpState extends State<SignUp> {
                 padding: const EdgeInsets.only(left: 5, top: 10),
                 child: Container(
                   height: 50,
-                  width: 310,
+                  width: 330,
                   child: TextField(
                     obscureText: passenable,
                     //if passenable == true, show **, else show password character
@@ -164,6 +171,39 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5, top: 20),
+                child: ElevatedButtonWidget(
+                  buttonText: 'Create Account',
+                  buttonColor: Theme.of(context).colorScheme.primary,
+                  onPressed: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        Routes.after_login, (Route<dynamic> route) => false);
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5, top: 20),
+                child: Container(
+                    child: Center(
+                      child: RichText(
+                        text: TextSpan(
+                            text: 'Don\'t have an account?',
+                            style: TextStyle(color: Colors.black, fontSize: 14),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: ' Sign in',
+                                  style: TextStyle(
+                                      color: Colors.blueAccent, fontSize: 14,  decoration: TextDecoration.underline),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.of(context).pushNamedAndRemoveUntil(
+                                          Routes.signup, (Route<dynamic> route) => false);
+                                    })
+                            ]),
+                      ),
+                    )),
               ),
             ],
           ),
