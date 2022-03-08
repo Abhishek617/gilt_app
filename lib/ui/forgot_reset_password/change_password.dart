@@ -16,15 +16,21 @@ class _Change_passwordState extends State<Change_password> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
-        leading: Icon(
-          Icons.arrow_back_ios_outlined,color: Colors.black, size: 15,),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                Routes.welcome_login, (Route<dynamic> route) => false);
+          },
+          child: Icon(
+            Icons.arrow_back_ios_outlined,color: Colors.black, size: 15,),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 100),
+            padding: const EdgeInsets.only(top: 60),
             child: Column(
               children: [
                 AppLogoWidget(
@@ -32,25 +38,24 @@ class _Change_passwordState extends State<Change_password> {
                   height: 140.0,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 0),
+                  padding: const EdgeInsets.only(top: 20),
                   child: Text('Guilt App', style: TextStyle(fontSize: 19.0,),),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: Text('free guide will tell about the impact your gift will have', style: TextStyle(fontSize: 13.0,),),
                 ),
+
                 Padding(
-                  padding: const EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.only(top: 35),
                   child: Container(
                     height: 50,
                     width: 310,
-
                     child: TextField(
                       obscureText: passenable, //if passenable == true, show **, else show password character
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.password_sharp),
                           border: OutlineInputBorder(
-
                           ),
                           hintText: "New Enter Password",
                           labelText: "Enter New Password",
@@ -62,18 +67,27 @@ class _Change_passwordState extends State<Change_password> {
                                 passenable = true; //if passenable == false, make it true
                               }
                             });
-                          }, icon: Icon(passenable == true?Icons.remove_red_eye:Icons.password))
+                          }, icon: Padding(
+                            padding: const EdgeInsets.only(top: 25.0),
+                            child: Icon(
+                              passenable == true
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                          ))
                         //eye icon if passenable = true, else, Icon is ***__
                       ),
                     ),
                   ),
+                ),
+                SizedBox(
+                  height: 15,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: Container(
                     height: 50,
                     width: 310,
-
                     child: TextField(
                       obscureText: passenable, //if passenable == true, show **, else show password character
                       decoration: InputDecoration(
@@ -91,11 +105,21 @@ class _Change_passwordState extends State<Change_password> {
                                 passenable = true; //if passenable == false, make it true
                               }
                             });
-                          }, icon: Icon(passenable == true?Icons.remove_red_eye:Icons.password))
+                          }, icon: Padding(
+                            padding: const EdgeInsets.only(top: 25.0),
+                            child: Icon(
+                              passenable == true
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                          ))
                         //eye icon if passenable = true, else, Icon is ***__
                       ),
                     ),
                   ),
+                ),
+                SizedBox(
+                  height: 15,
                 ),
                 ElevatedButtonWidget(
                   buttonColor: Theme.of(context).colorScheme.primary,
