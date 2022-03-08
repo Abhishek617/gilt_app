@@ -77,45 +77,49 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 85, top: 15),
-                    child: Container(
-                      height: 50,
-                      width: 160,
-                      child: TextField(
-                        // controller: nameController,
-                        decoration: const InputDecoration(
+              Center(
+                child: Container(
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 81, top: 15),
+                        child: Container(
+                          height: 50,
+                          width: 160,
+                          child: TextField(
+                            // controller: nameController,
+                            decoration: const InputDecoration(
 
 
-                          prefixIcon: Icon(Icons.person),
-                          border: OutlineInputBorder(),
-                          hintText: 'First Name', hintStyle: TextStyle(fontSize: 15),
-                        ),
+                              prefixIcon: Icon(Icons.person),
+                              border: OutlineInputBorder(),
+                              hintText: 'First Name', hintStyle: TextStyle(fontSize: 15),
+                            ),
 
 
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5, top: 15),
-                    child: Container(
-                      height: 50,
-                      width: 160,
-                      child: TextField(
-
-                        // controller: nameController,
-                        decoration: const InputDecoration(
-
-                          prefixIcon: Icon(Icons.person),
-                          border: OutlineInputBorder(),
-                          labelText: 'Firs Name',
+                          ),
                         ),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5, top: 15),
+                        child: Container(
+                          height: 50,
+                          width: 160,
+                          child: TextField(
+
+                            // controller: nameController,
+                            decoration: const InputDecoration(
+
+                              prefixIcon: Icon(Icons.person),
+                              border: OutlineInputBorder(),
+                              labelText: 'Last Name',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 5, top: 15),
@@ -199,7 +203,7 @@ class _SignUpState extends State<SignUp> {
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
                                       Navigator.of(context).pushNamedAndRemoveUntil(
-                                          Routes.signup, (Route<dynamic> route) => false);
+                                          Routes.login, (Route<dynamic> route) => false);
                                     })
                             ]),
                       ),
