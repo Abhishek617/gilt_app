@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 
 class Change_password extends StatefulWidget {
@@ -26,17 +27,9 @@ class _Change_passwordState extends State<Change_password> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 10),
-                child: Container(
+                child: AppLogoWidget(
                   width: 140.0,
                   height: 140.0,
-                  decoration: new BoxDecoration(
-                    color: Colors.blue,
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: NetworkImage("https://cdn-icons-png.flaticon.com/512/3135/3135715.png"),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
                 ),
               ),
               Padding(

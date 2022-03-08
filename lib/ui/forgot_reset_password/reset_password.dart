@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/dimens.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:guilt_app/widgets/textfield_widget.dart';
 
@@ -27,18 +28,9 @@ class _Reset_passwordState extends State<Reset_password> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
+              AppLogoWidget(
                 width: 140.0,
                 height: 140.0,
-                margin: EdgeInsets.symmetric(vertical: Dimens.vertical_padding),
-                decoration: new BoxDecoration(
-                  color: Colors.blue,
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: NetworkImage("https://cdn-icons-png.flaticon.com/512/3135/3135715.png"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
               ),
               Padding(
                   padding: EdgeInsets.only(top: Dimens.vertical_padding,bottom: 50),

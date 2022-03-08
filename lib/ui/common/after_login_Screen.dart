@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 class After_LoginScreen extends StatefulWidget {
   const After_LoginScreen({Key? key}) : super(key: key);
@@ -17,17 +18,9 @@ class _After_LoginScreenState extends State<After_LoginScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 130),
-                child: Container(
+                child: AppLogoWidget(
                   width: 160.0,
                   height: 160.0,
-                  decoration: new BoxDecoration(
-                    color: Colors.blue,
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: NetworkImage("https://cdn-icons-png.flaticon.com/512/1177/1177568.png"),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
                 ),
               ),Padding(
                 padding: const EdgeInsets.only(top: 20),

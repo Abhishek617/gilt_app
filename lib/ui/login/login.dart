@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:guilt_app/constants/assets.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/app_logo.dart';
 
 import '../../widgets/rounded_button_widget.dart';
 
@@ -36,17 +38,9 @@ class _LoginState extends State<Login> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 40),
-              child: Container(
+              child: AppLogoWidget(
                 width: 140.0,
                 height: 140.0,
-                decoration: new BoxDecoration(
-                  color: Colors.blue,
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: NetworkImage("https://cdn-icons-png.flaticon.com/512/3135/3135715.png"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
               ),
             ),
             Padding(

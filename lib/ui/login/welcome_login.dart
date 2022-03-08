@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/assets.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 
 class WelcomeLogin extends StatefulWidget {
@@ -21,15 +22,9 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
             children: [
               Padding(
                 padding: EdgeInsets.only(top: 60),
-                child: Container(
+                child: AppLogoWidget(
                   width: 200,
                   height: 150,
-                  decoration: new BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(Assets.appLogo),
-                      fit: BoxFit.contain,
-                    ),
-                  ),
                 ),
               ),
               Padding(

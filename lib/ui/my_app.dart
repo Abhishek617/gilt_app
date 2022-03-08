@@ -20,6 +20,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
+import 'login/login.dart';
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   // Create your store as a final variable in a base Widget. This works better
@@ -59,7 +61,7 @@ class MyApp extends StatelessWidget {
               // Built-in localization of basic text for Cupertino widgets
               GlobalCupertinoLocalizations.delegate,
             ],
-            home:_userStore.isFirst ? OnBoardingPage() : (_userStore.isLoggedIn ? HomeScreen() : WelcomeLogin()),
+            home:_userStore.isFirst ? OnBoardingPage() : (_userStore.isLoggedIn ? HomeScreen() : Login()),
           );
         },
       ),

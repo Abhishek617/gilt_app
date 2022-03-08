@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 
 class Otp_screen extends StatefulWidget {
@@ -29,17 +30,9 @@ class _Otp_screenState extends State<Otp_screen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 60,),
-                  child: Container(
+                  child: AppLogoWidget(
                     width: 140.0,
                     height: 140.0,
-                    decoration: new BoxDecoration(
-                      color: Colors.blue,
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage("https://cdn-icons-png.flaticon.com/512/3135/3135715.png"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
                   ),
                 ),
                 Padding(
