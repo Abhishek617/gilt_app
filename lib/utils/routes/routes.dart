@@ -6,6 +6,7 @@ import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/home/home.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/login/login.dart';
+import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,8 @@ class Routes {
   static const String forgot_password = '/forgot_password';
   static const String reset_password = '/reset_password';
   static const String otp = '/otp';
+  static const String signup = '/signup';
+
 
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
@@ -33,6 +36,7 @@ class Routes {
     otp: (BuildContext context) => Otp_screen(),
     forgot_password:(BuildContext context) => Reset_password(),
     reset_password:(BuildContext context) => Change_password(),
+    signup:(BuildContext context) => SignUp(),
   };
 }
 

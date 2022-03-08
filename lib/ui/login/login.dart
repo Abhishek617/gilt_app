@@ -155,11 +155,14 @@ class _LoginState extends State<Login> {
                           style: TextStyle(color: Colors.black, fontSize: 14),
                           children: <TextSpan>[
                             TextSpan(
-                                text: ' Sign up',
+                                text: 'Sign up',
                                 style: TextStyle(
                                     color: Colors.blueAccent, fontSize: 14),
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () {})
+                                  ..onTap = () {
+                                    Navigator.of(context).pushNamedAndRemoveUntil(
+                                        Routes.signup, (Route<dynamic> route) => false);
+                                  })
                           ]),
                     ),
                   )),

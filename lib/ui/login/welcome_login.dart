@@ -46,7 +46,7 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                 buttonText: 'Sign Up',
                 onPressed: () {
                   Navigator.of(context).pushNamedAndRemoveUntil(
-                      Routes.login, (Route<dynamic> route) => false);
+                      Routes.signup, (Route<dynamic> route) => false);
                 },
               ),
               ElevatedButtonWidget(
@@ -62,6 +62,7 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                   style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline,fontStyle: FontStyle.italic),
                 ),
               ),
+
             ],
           ),
         ),
