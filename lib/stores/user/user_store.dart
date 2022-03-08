@@ -71,6 +71,8 @@ abstract class _UserStore with Store {
       if (value) {
         _repository.saveIsLoggedIn(true);
         this.isLoggedIn = true;
+        _repository.saveIsFirst(false);
+        this.isFirst = false;
         this.success = true;
       } else {
         print('failed to login');
@@ -85,6 +87,8 @@ abstract class _UserStore with Store {
 
   logout() {
     this.isLoggedIn = false;
+    this.isFirst = true;
+    _repository.saveIsFirst(true);
     _repository.saveIsLoggedIn(false);
   }
 

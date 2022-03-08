@@ -20,7 +20,6 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 50,
           leading: GestureDetector(
             onTap: () {
               Navigator.of(context).pushNamedAndRemoveUntil(
@@ -40,7 +39,7 @@ class _LoginState extends State<Login> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 50),
+                  padding: const EdgeInsets.only(top: 0),
                   child: AppLogoWidget(
                     width: 140.0,
                     height: 140.0,
@@ -138,7 +137,7 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.only(left: 5, top: 20),
                   child: ElevatedButtonWidget(
                     buttonText: 'Login',
-                    buttonColor: Colors.blue,
+                    buttonColor: Theme.of(context).colorScheme.primary,
                     onPressed: () {
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           Routes.after_login, (Route<dynamic> route) => false);
@@ -176,8 +175,7 @@ class _LoginState extends State<Login> {
                       color: Colors.blue,
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                        image: NetworkImage(
-                            "https://cdn-icons-png.flaticon.com/512/6956/6956877.png"),
+                        image: NetworkImage("https://cdn-icons-png.flaticon.com/512/6956/6956877.png"),
                         fit: BoxFit.cover,
                       ),
                     ),

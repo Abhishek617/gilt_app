@@ -31,7 +31,6 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                 height: 15,
               ),
               ElevatedButtonWidget(
-                textColor: Colors.white,
                 buttonText: 'Log In',
                 buttonColor: Theme.of(context).colorScheme.primary,
                 onPressed: () {
@@ -39,9 +38,7 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                       Routes.login, (Route<dynamic> route) => false);
                 },
               ),
-
               ElevatedButtonWidget(
-                textColor: Colors.white,
                 buttonColor: Theme.of(context).colorScheme.primary,
                 buttonText: 'Sign Up',
                 onPressed: () {
@@ -50,7 +47,6 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                 },
               ),
               ElevatedButtonWidget(
-                textColor: Colors.white,
                 buttonColor: Theme.of(context).colorScheme.primary,
                 buttonText: 'Continue With Gmail',
                 onPressed: () {},

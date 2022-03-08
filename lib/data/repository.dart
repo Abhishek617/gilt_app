@@ -65,13 +65,14 @@ class Repository {
       .update(post)
       .then((id) => id)
       .catchError((error) => throw error);
-  Future<void> saveIsFirst(bool value) =>
-      _sharedPrefsHelper.saveIsFirst(value);
+
+  Future<void> saveIsFirst(bool value) => _sharedPrefsHelper.saveIsFirst(value);
+
   Future<bool> get isFirst => _sharedPrefsHelper.isFirst;
 
   // Login:---------------------------------------------------------------------
   Future<bool> login(String email, String password) async {
-    return await Future.delayed(Duration(seconds: 2), ()=> true);
+    return await Future.delayed(Duration(seconds: 2), () => true);
   }
 
   Future<void> saveIsLoggedIn(bool value) =>
