@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/assets.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -16,7 +17,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   var activeScreen = 0;
 
   void _onIntroEnd(context) {
-   Routes.navigateToScreen(context, Routes.welcome_login);
+    Routes.navigateToScreen(context, Routes.welcome_login);
   }
 
   _getGloabalHeader() {
@@ -51,7 +52,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                     onTap: () => _onIntroEnd(context),
                     child: Padding(
                       padding: const EdgeInsets.only(top: 16.0, right: 16),
-                      child: Text('Skip'),
+                      child: Text(
+                        'Skip',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor),
+                      ),
                     ),
                   ),
                 ),
@@ -60,8 +67,20 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     );
   }
 
-  Widget _buildImage(String assetName, [double width = 200]) {
-    return Image.asset(Assets.appIcon,width: width,);
+  Widget _buildImage(String assetName) {
+    return Container(
+        width: DeviceUtils.getScaledWidth(context, 0.50),
+        height: DeviceUtils.getScaledHeight(context, 0.25),
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: AssetImage(
+              Assets.appIcon,
+            ),
+            fit: BoxFit.contain,
+          ),
+        ));
   }
 
   @override
@@ -100,7 +119,11 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       },
       pages: [
         PageViewModel(
-          title: "First",
+          title: null,
+          titleWidget: Text(
+            'First',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
           body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
           image: _buildImage('img1.jpg'),
           footer: ElevatedButtonWidget(
@@ -113,7 +136,11 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Second",
+          title: null,
+          titleWidget: Text(
+            'Second',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
           body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
           image: _buildImage('img2.jpg'),
           footer: ElevatedButtonWidget(
@@ -126,7 +153,11 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Third",
+          title: null,
+          titleWidget: Text(
+            'Third',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
           body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
           image: _buildImage('img3.jpg'),
           footer: ElevatedButtonWidget(
