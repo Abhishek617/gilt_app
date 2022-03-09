@@ -1,6 +1,8 @@
+import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
+import 'package:guilt_app/ui/common/success_error_validation.dart';
 import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/home/home.dart';
@@ -24,6 +26,7 @@ class Routes {
   static const String reset_password = '/reset_password';
   static const String otp = '/otp';
   static const String signup = '/signup';
+  static const String success_error_validate = '/success_error_validate';
 
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
@@ -36,10 +39,15 @@ class Routes {
     forgot_password: (BuildContext context) => Reset_password(),
     reset_password: (BuildContext context) => Change_password(),
     signup: (BuildContext context) => SignUp(),
+    success_error_validate: (BuildContext context) => SuccessErrorValidateScreen(),
   };
 
   static navigateToScreen(BuildContext context, route) {
     Navigator.of(context).pushNamed(route);
+  }
+
+  static navigateToScreenWithArgs(BuildContext context, route, SuccessErrorValidationPageArgs successErrorValidationPageArgs) {
+    Navigator.of(context).pushNamed(route,arguments: successErrorValidationPageArgs);
   }
 
   static goBack(BuildContext context) {

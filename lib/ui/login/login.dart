@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:guilt_app/constants/assets.dart';
+import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 
@@ -133,10 +134,20 @@ class _LoginState extends State<Login> {
                 Padding(
                   padding: const EdgeInsets.only(left: 5, top: 20),
                   child: ElevatedButtonWidget(
-                    buttonText: 'Login',
+                    buttonText: 'Login Success',
                     buttonColor: Theme.of(context).colorScheme.primary,
                     onPressed: () {
-                      Routes.navigateToScreen(context, Routes.home);
+                      Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, top: 20),
+                  child: ElevatedButtonWidget(
+                    buttonText: 'Login Fail',
+                    buttonColor: Theme.of(context).colorScheme.primary,
+                    onPressed: () {
+                      Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: false, description: 'Something went wrong', title: 'Error', isPreviousLogin: true));
                     },
                   ),
                 ),
