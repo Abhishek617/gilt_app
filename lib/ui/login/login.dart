@@ -161,9 +161,10 @@ class _LoginState extends State<Login> {
                           style: TextStyle(color: Colors.black, fontSize: 14),
                           children: <TextSpan>[
                             TextSpan(
-                                text: 'Sign up',
+                                text: ' Sign up',
                                 style: TextStyle(
-                                    color: Colors.blueAccent, fontSize: 14),
+                                    color: Colors.blueAccent, fontSize: 14,decoration: TextDecoration.underline,fontStyle: FontStyle.italic),
+
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     Routes.navigateToScreen(context, Routes.signup);
