@@ -37,7 +37,7 @@ class _Before_LoginScreenState extends State<Before_LoginScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Text(
-                  'free guide will tell about the ',
+                  'Lorem ipsum dolor sit amet,',
                   style: TextStyle(
                     fontSize: 13.0,
                   ),
@@ -46,7 +46,7 @@ class _Before_LoginScreenState extends State<Before_LoginScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Text(
-                  'free guide will tell about the impact your gift will have',
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                   style: TextStyle(
                     fontSize: 13.0,
                   ),

@@ -55,7 +55,7 @@ class _SignUpState extends State<SignUp> {
               Padding(
                 padding: const EdgeInsets.only(left: 5, top: 20),
                 child: Text(
-                  'free guide will tell about the impact your gift will have',
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                   style: TextStyle(
                     fontSize: 13.0,
                   ),
