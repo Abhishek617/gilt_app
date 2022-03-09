@@ -23,7 +23,8 @@ class _Reset_passwordState extends State<Reset_password> {
         toolbarHeight: 50,
         leading: GestureDetector(
           onTap: () {
-            Routes.navigateToScreen(context, Routes.login);
+            // Routes.navigateToScreen(context, Routes.login);
+            Routes.goBack(context);
           },
           child: Icon(
             Icons.arrow_back_ios_outlined,
@@ -56,7 +57,7 @@ class _Reset_passwordState extends State<Reset_password> {
               Padding(
                 padding: EdgeInsets.only(top: Dimens.vertical_padding),
                 child: Text(
-                  'free guide will tell about the impact your gift will have',
+                  '',
                   style: TextStyle(
                     fontSize: 13.0,
                   ),

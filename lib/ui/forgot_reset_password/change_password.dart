@@ -20,7 +20,8 @@ class _Change_passwordState extends State<Change_password> {
         toolbarHeight: 50,
         leading: GestureDetector(
           onTap: () {
-            Routes.navigateToScreen(context, Routes.welcome_login);
+            // Routes.navigateToScreen(context, Routes.welcome_login);
+            Routes.goBack(context);
           },
           child: Icon(
             Icons.arrow_back_ios_outlined,
@@ -54,7 +55,7 @@ class _Change_passwordState extends State<Change_password> {
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Text(
-                  'free guide will tell about the impact your gift will have',
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                   style: TextStyle(
                     fontSize: 13.0,
                   ),
@@ -111,8 +112,8 @@ class _Change_passwordState extends State<Change_password> {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.password_sharp),
                         border: OutlineInputBorder(),
-                        hintText: "Enter Conform Password",
-                        labelText: "Enter Conform Password",
+                        hintText: "Enter Confirm Password",
+                        labelText: "Enter Confirm Password",
                         suffix: IconButton(
                             onPressed: () {
                               //add Icon button at end of TextField
