@@ -46,7 +46,22 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Routes.navigateToScreen(context, Routes.before_login);
+            },
+            child: Icon(
+              Icons.power_settings_new_rounded,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+      // appBar: _buildAppBar(),
       body: _buildBody(),
     );
   }
@@ -122,7 +137,8 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context) {
         return _postStore.loading
             ? CustomProgressIndicatorWidget()
-            : Material(child: _buildListView());
+            : Material(child: Center(child: Text('Welcome To Guilt Trip',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),)));
+            // : Material(child: _buildListView());
       },
     );
   }

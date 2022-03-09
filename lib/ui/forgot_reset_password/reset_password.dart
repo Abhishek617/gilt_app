@@ -23,8 +23,7 @@ class _Reset_passwordState extends State<Reset_password> {
         toolbarHeight: 50,
         leading: GestureDetector(
           onTap: () {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                Routes.login, (Route<dynamic> route) => false);
+            Routes.navigateToScreen(context, Routes.login);
           },
           child: Icon(
             Icons.arrow_back_ios_outlined,
@@ -111,8 +110,7 @@ class _Reset_passwordState extends State<Reset_password> {
                 buttonText: 'Reset Password',
                 buttonColor: Theme.of(context).colorScheme.primary,
                 onPressed: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      Routes.otp, (Route<dynamic> route) => false);
+                  Routes.navigateToScreen(context, Routes.otp);
                 },
               ),
             ],

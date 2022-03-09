@@ -1,30 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 
-class After_LoginScreen extends StatefulWidget {
-  const After_LoginScreen({Key? key}) : super(key: key);
+class Before_LoginScreen extends StatefulWidget {
+  const Before_LoginScreen({Key? key}) : super(key: key);
 
   @override
-  _After_LoginScreenState createState() => _After_LoginScreenState();
+  _Before_LoginScreenState createState() => _Before_LoginScreenState();
 }
 
-class _After_LoginScreenState extends State<After_LoginScreen> {
+class _Before_LoginScreenState extends State<Before_LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {},
-            child: Icon(
-              Icons.power_settings_new_rounded,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -68,13 +57,17 @@ class _After_LoginScreenState extends State<After_LoginScreen> {
                 child: ElevatedButtonWidget(
                   buttonColor: Theme.of(context).colorScheme.primary,
                   buttonText: 'Business Owner',
-                  onPressed: () {},
+                  onPressed: () {
+                    Routes.navigateToScreen(context, Routes.login);
+                  },
                 ),
               ),
               ElevatedButtonWidget(
                 buttonText: 'Individual User',
                 buttonColor: Theme.of(context).colorScheme.primary,
-                onPressed: () {},
+                onPressed: () {
+                  Routes.navigateToScreen(context, Routes.login);
+                },
               ),
             ],
           ),

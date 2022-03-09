@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:guilt_app/constants/assets.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
@@ -34,16 +33,14 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                 buttonText: 'Log In',
                 buttonColor: Theme.of(context).colorScheme.primary,
                 onPressed: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      Routes.login, (Route<dynamic> route) => false);
+                  Routes.navigateToScreen(context, Routes.before_login);
                 },
               ),
               ElevatedButtonWidget(
                 buttonColor: Theme.of(context).colorScheme.primary,
                 buttonText: 'Sign Up',
                 onPressed: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      Routes.signup, (Route<dynamic> route) => false);
+                  Routes.navigateToScreen(context, Routes.signup);
                 },
               ),
               ElevatedButtonWidget(

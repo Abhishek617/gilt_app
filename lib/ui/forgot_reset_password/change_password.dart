@@ -20,8 +20,7 @@ class _Change_passwordState extends State<Change_password> {
         toolbarHeight: 50,
         leading: GestureDetector(
           onTap: () {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                Routes.welcome_login, (Route<dynamic> route) => false);
+            Routes.navigateToScreen(context, Routes.welcome_login);
           },
           child: Icon(
             Icons.arrow_back_ios_outlined,
@@ -148,8 +147,7 @@ class _Change_passwordState extends State<Change_password> {
                 buttonColor: Theme.of(context).colorScheme.primary,
                 buttonText: 'Change Password',
                 onPressed: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      Routes.login, (Route<dynamic> route) => false);
+                  Routes.navigateToScreen(context, Routes.login);
                 },
               ),
             ],

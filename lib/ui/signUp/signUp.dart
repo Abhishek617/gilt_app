@@ -21,8 +21,7 @@ class _SignUpState extends State<SignUp> {
         toolbarHeight: 50,
         leading: GestureDetector(
           onTap: () {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                Routes.welcome_login, (Route<dynamic> route) => false);
+            Routes.navigateToScreen(context, Routes.welcome_login);
           },
           child: Icon(
             Icons.arrow_back_ios_outlined,
@@ -173,8 +172,7 @@ class _SignUpState extends State<SignUp> {
                   buttonText: 'Create Account',
                   buttonColor: Theme.of(context).colorScheme.primary,
                   onPressed: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        Routes.after_login, (Route<dynamic> route) => false);
+                    Routes.navigateToScreen(context, Routes.before_login);
                   },
                 ),
               ),
@@ -193,8 +191,7 @@ class _SignUpState extends State<SignUp> {
                                       color: Colors.blueAccent, fontSize: 14,  decoration: TextDecoration.underline),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      Navigator.of(context).pushNamedAndRemoveUntil(
-                                          Routes.login, (Route<dynamic> route) => false);
+                                      Routes.navigateToScreen(context, Routes.login);
                                     })
                             ]),
                       ),

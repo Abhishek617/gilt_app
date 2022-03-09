@@ -136,7 +136,7 @@ class _LoginState extends State<Login> {
                     buttonText: 'Login',
                     buttonColor: Theme.of(context).colorScheme.primary,
                     onPressed: () {
-                      Routes.navigateToScreen(context, Routes.after_login);
+                      Routes.navigateToScreen(context, Routes.home);
                     },
                   ),
                 ),

@@ -3,7 +3,7 @@ import 'package:guilt_app/constants/strings.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
-import 'package:guilt_app/ui/common/after_login_Screen.dart';
+import 'package:guilt_app/ui/common/before_login_Screen.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
 import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';

@@ -17,10 +17,15 @@ class _Otp_screenState extends State<Otp_screen> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
-        leading: Icon(
-          Icons.arrow_back_ios_outlined,
-          color: Colors.black,
-          size: 15,
+        leading: GestureDetector(
+          onTap: (){
+            Routes.goBack(context);
+          },
+          child: Icon(
+            Icons.arrow_back_ios_outlined,
+            color: Colors.black,
+            size: 15,
+          ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -78,8 +83,7 @@ class _Otp_screenState extends State<Otp_screen> {
                   buttonColor: Theme.of(context).colorScheme.primary,
                   buttonText: 'Continue',
                   onPressed: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        Routes.reset_password, (Route<dynamic> route) => false);
+                    Routes.navigateToScreen(context, Routes.reset_password);
                   },
                 ),
               ),
