@@ -39,8 +39,7 @@ class Routes {
   };
 
   static navigateToScreen(BuildContext context, route) {
-    Navigator.of(context)
-        .push( MaterialPageRoute(builder: (_) => route));
+    Navigator.of(context).pushReplacementNamed(route);
   }
 
   static goBack(BuildContext context) {

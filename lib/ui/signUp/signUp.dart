@@ -80,15 +80,13 @@ class _SignUpState extends State<SignUp> {
               Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 20.0, top: 15),
+                    padding: const EdgeInsets.only(left: 35.0, top: 15),
                     child: Container(
                       height: 50,
                       width: 162,
                       child: TextField(
                         // controller: nameController,
                         decoration: const InputDecoration(
-
-
                           prefixIcon: Icon(Icons.person),
                           border: OutlineInputBorder(),
                           hintText: 'First Name', hintStyle: TextStyle(fontSize: 15),
@@ -102,7 +100,6 @@ class _SignUpState extends State<SignUp> {
                       height: 50,
                       width: 162,
                       child: TextField(
-
                         // controller: nameController,
                         decoration: const InputDecoration(
 

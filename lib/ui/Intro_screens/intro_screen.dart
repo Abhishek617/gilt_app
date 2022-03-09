@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:guilt_app/constants/assets.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
@@ -12,16 +13,55 @@ class OnBoardingPage extends StatefulWidget {
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
+  var activeScreen = 0;
 
   void _onIntroEnd(context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => WelcomeLogin()),
+   Routes.navigateToScreen(context, Routes.welcome_login);
+  }
+
+  _getGloabalHeader() {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      shadowColor: Colors.transparent,
+      leading: (activeScreen == 0
+          ? Text('')
+          : Align(
+              alignment: Alignment.topRight,
+              child: SafeArea(
+                child: GestureDetector(
+                  onTap: () => _onIntroEnd(context),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 16.0, right: 16),
+                    child: Icon(
+                      Icons.arrow_back_ios_outlined,
+                      color: Colors.black,
+                      size: 15,
+                    ),
+                  ),
+                ),
+              ),
+            )),
+      actions: [
+        (activeScreen == 2
+            ? Text('')
+            : Align(
+                alignment: Alignment.topRight,
+                child: SafeArea(
+                  child: GestureDetector(
+                    onTap: () => _onIntroEnd(context),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, right: 16),
+                      child: Text('Skip'),
+                    ),
+                  ),
+                ),
+              ))
+      ],
     );
   }
 
-  Widget _buildImage(String assetName, [double width = 350]) {
-    return Image.network(
-        "https://cdn.iconscout.com/icon/free/png-64/working-hour-1605692-1361041.png");
+  Widget _buildImage(String assetName, [double width = 200]) {
+    return Image.asset(Assets.appIcon,width: width,);
   }
 
   @override
@@ -39,18 +79,25 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     return IntroductionScreen(
       key: introKey,
       globalBackgroundColor: Colors.white,
-      globalHeader: Align(
-        alignment: Alignment.topRight,
-        child: SafeArea(
-          child: GestureDetector(
-            onTap: ()=> _onIntroEnd(context),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 16.0, right: 16),
-              child: Text('Skip'),
-            ),
-          ),
-        ),
-      ),
+      // globalHeader: activeScreen == 2 ? Text('Go Back'):Align(
+      //   alignment: Alignment.topRight,
+      //   child: SafeArea(
+      //     child: GestureDetector(
+      //       onTap: ()=> _onIntroEnd(context),
+      //       child: Padding(
+      //         padding: const EdgeInsets.only(top: 16.0, right: 16),
+      //         child: Text('Skip'),
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      globalHeader: _getGloabalHeader(),
+      onChange: (page) {
+        print(page);
+        setState(() {
+          activeScreen = page;
+        });
+      },
       pages: [
         PageViewModel(
           title: "First",
@@ -84,9 +131,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           image: _buildImage('img3.jpg'),
           footer: ElevatedButtonWidget(
             buttonColor: Theme.of(context).primaryColor,
-            buttonText: 'Next',
+            buttonText: 'Get Started',
             onPressed: () {
-             _onIntroEnd(context);
+              _onIntroEnd(context);
             },
           ),
           decoration: pageDecoration,
@@ -112,16 +159,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           borderRadius: BorderRadius.all(Radius.circular(25.0)),
         ),
       ),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
-      body: const Center(child: Text("This is the screen after Introduction")),
     );
   }
 }

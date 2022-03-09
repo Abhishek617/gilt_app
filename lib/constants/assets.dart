@@ -7,4 +7,6 @@ class Assets {
   // login screen assets
   static const String loginBackground = "assets/images/img_login.png";
 
+  static const String appIcon = "assets/images/img_login.png";
+
 }

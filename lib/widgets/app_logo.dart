@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/assets.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
 
 class AppLogoWidget extends StatelessWidget {
   final double width;
@@ -10,8 +11,8 @@ class AppLogoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
    return Container(
-      width: width,
-      height: height,
+      width: DeviceUtils.getScaledWidth(context, 0.50),
+      height: DeviceUtils.getScaledHeight(context, 0.25),
       decoration: new BoxDecoration(
         image: DecorationImage(
           image: AssetImage(Assets.appLogo),
