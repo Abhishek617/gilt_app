@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/constants/dimens.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 
@@ -34,36 +36,37 @@ class _SignUpState extends State<SignUp> {
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 50),
-                child: AppLogoWidget(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Dimens.horizontal_padding, vertical: Dimens.vertical_padding),
+            child: Column(
+              children: [
+                AppLogoWidget(
                   width: 140.0,
                   height: 140.0,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5, top: 20),
-                child: Text(
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
                   'Guilt App',
                   style: TextStyle(
                     fontSize: 19.0,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5, top: 20),
-                child: Text(
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
                   'free guide will tell about the impact your gift will have',
                   style: TextStyle(
                     fontSize: 13.0,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5, top: 30),
-                child: Container(
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
                   height: 50,
                   width: 330,
                   child: TextField(
@@ -75,12 +78,11 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 35.0, top: 15),
-                    child: Container(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 5),
                       height: 50,
                       width: 162,
                       child: TextField(
@@ -92,10 +94,12 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5, top: 15),
-                    child: Container(
+                    SizedBox(
+                      width: 5,
+                    ),
+
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 5),
                       height: 50,
                       width: 162,
                       child: TextField(
@@ -108,12 +112,10 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5, top: 15),
-                child: Container(
+                  ],
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
                   height: 50,
                   width: 330,
                   child: TextField(
@@ -125,10 +127,8 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5, top: 10),
-                child: Container(
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
                   height: 50,
                   width: 330,
                   child: TextField(
@@ -165,39 +165,39 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5, top: 20),
-                child: ElevatedButtonWidget(
-                  buttonText: 'Create Account',
-                  buttonColor: Theme.of(context).colorScheme.primary,
-                  onPressed: () {
-                    Routes.navigateToScreen(context, Routes.before_login);
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, top: 20),
+                  child: ElevatedButtonWidget(
+                    buttonText: 'Create Account',
+                    buttonColor: Theme.of(context).colorScheme.primary,
+                    onPressed: () {
+                      Routes.navigateToScreen(context, Routes.before_login);
+                    },
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5, top: 20),
-                child: Container(
-                    child: Center(
-                      child: RichText(
-                        text: TextSpan(
-                            text: 'Don\'t have an account?',
-                            style: TextStyle(color: Colors.black, fontSize: 14),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: ' Sign in',
-                                  style: TextStyle(
-                                      color: Colors.blueAccent, fontSize: 14,  decoration: TextDecoration.underline),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Routes.navigateToScreen(context, Routes.login);
-                                    })
-                            ]),
-                      ),
-                    )),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, top: 20),
+                  child: Container(
+                      child: Center(
+                        child: RichText(
+                          text: TextSpan(
+                              text: 'Don\'t have an account?',
+                              style: TextStyle(color: Colors.black, fontSize: 14),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: ' Sign in',
+                                    style: TextStyle(
+                                        color: Colors.blueAccent, fontSize: 14,  decoration: TextDecoration.underline),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        Routes.navigateToScreen(context, Routes.login);
+                                      })
+                              ]),
+                        ),
+                      )),
+                ),
+              ],
+            ),
           ),
         ),
       ),

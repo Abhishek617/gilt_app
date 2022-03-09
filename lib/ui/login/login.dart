@@ -72,7 +72,7 @@ class _LoginState extends State<Login> {
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.mail),
                         border: OutlineInputBorder(),
-                        labelText: '   Enter Mail',
+                        labelText: 'Enter Mail',
                       ),
                     ),
                   ),
