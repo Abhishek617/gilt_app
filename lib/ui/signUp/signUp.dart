@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:guilt_app/constants/dimens.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
@@ -57,7 +58,7 @@ class _SignUpState extends State<SignUp> {
                   height: 20,
                 ),
                 Text(
-                  'free guide will tell about the impact your gift will have',
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                   style: TextStyle(
                     fontSize: 13.0,
                   ),
@@ -119,8 +120,13 @@ class _SignUpState extends State<SignUp> {
                   height: 50,
                   width: 330,
                   child: TextField(
+                    keyboardType: TextInputType.number,
+                   inputFormatters: [
+                     FilteringTextInputFormatter.deny(RegExp("[a-z']+"))
+                   ],
                     // controller: nameController,
                     decoration: const InputDecoration(
+                      
                       prefixIcon: Icon(Icons.phone),
                       border: OutlineInputBorder(),
                       labelText: 'Phone Number',
@@ -187,7 +193,7 @@ class _SignUpState extends State<SignUp> {
                                 TextSpan(
                                     text: ' Sign in',
                                     style: TextStyle(
-                                        color: Colors.blueAccent, fontSize: 14,  decoration: TextDecoration.underline),
+                                        color: Colors.blueAccent, fontSize: 14,decoration: TextDecoration.underline,fontStyle: FontStyle.italic),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         Routes.navigateToScreen(context, Routes.login);

@@ -65,6 +65,7 @@ class _Otp_screenState extends State<Otp_screen> {
                   height: 70,
                   width: 200,
                   child: OtpTextField(
+                    keyboardType: TextInputType.number,
                     numberOfFields: 4,
                     //borderColor: Color(0xFF512DA8),
                     showFieldAsBox: false,
