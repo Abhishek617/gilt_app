@@ -72,54 +72,48 @@ class _SignUpState extends State<SignUp> {
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.mail),
                       border: OutlineInputBorder(),
-                      labelText: '   Enter Mail',
+                      labelText: 'Enter Email',
                     ),
                   ),
                 ),
               ),
-              Center(
-                child: Container(
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 81, top: 15),
-                        child: Container(
-                          height: 50,
-                          width: 160,
-                          child: TextField(
-                            // controller: nameController,
-                            decoration: const InputDecoration(
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0, top: 15),
+                    child: Container(
+                      height: 50,
+                      width: 162,
+                      child: TextField(
+                        // controller: nameController,
+                        decoration: const InputDecoration(
 
 
-                              prefixIcon: Icon(Icons.person),
-                              border: OutlineInputBorder(),
-                              hintText: 'First Name', hintStyle: TextStyle(fontSize: 15),
-                            ),
-
-
-                          ),
+                          prefixIcon: Icon(Icons.person),
+                          border: OutlineInputBorder(),
+                          hintText: 'First Name', hintStyle: TextStyle(fontSize: 15),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5, top: 15),
-                        child: Container(
-                          height: 50,
-                          width: 160,
-                          child: TextField(
-
-                            // controller: nameController,
-                            decoration: const InputDecoration(
-
-                              prefixIcon: Icon(Icons.person),
-                              border: OutlineInputBorder(),
-                              labelText: 'Last Name',
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5, top: 15),
+                    child: Container(
+                      height: 50,
+                      width: 162,
+                      child: TextField(
+
+                        // controller: nameController,
+                        decoration: const InputDecoration(
+
+                          prefixIcon: Icon(Icons.person),
+                          border: OutlineInputBorder(),
+                          labelText: 'Last Name',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 5, top: 15),
@@ -129,9 +123,9 @@ class _SignUpState extends State<SignUp> {
                   child: TextField(
                     // controller: nameController,
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.mail),
+                      prefixIcon: Icon(Icons.phone),
                       border: OutlineInputBorder(),
-                      labelText: '   Enter Mail',
+                      labelText: 'Phone Number',
                     ),
                   ),
                 ),
