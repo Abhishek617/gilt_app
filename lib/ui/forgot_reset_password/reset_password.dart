@@ -72,48 +72,31 @@ class _Reset_passwordState extends State<Reset_password> {
                   height: 25,
                 ),
 
-                Container(
-                  width: 310,
-                  child: TextFormField(
-                    keyboardType: TextInputType.text,
-                    obscureText: passenable,//This will obscure text dynamically
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.password_sharp,),
-                      border: OutlineInputBorder(),
-                      labelText: 'Password',
-                      hintText: 'Enter your password',
-                      // Here is key idea
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          // Based on passwordVisible state choose the icon
-                          passenable
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                        onPressed: () {
-                          // Update the state i.e. toogle the state of passwordVisible variable
-                          setState(() {
-                            if(passenable){
-                              passenable = false;
-                            }else{
-                              passenable = true;
-                            }
-                          });
-                        },
-                      ),
 
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, top: 30),
+                  child: Container(
+                    // height: 50,
+                    width: 310,
+                    child: TextFormField(
+                      // controller: nameController,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.mail,),
+                        border: OutlineInputBorder(),
+                        labelText: 'Enter Mail',
+
+                      ),
+                      validator: (val){
+                        if(val!.isEmpty || !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            .hasMatch(val)){
+                          return "Enter a valid Email";
+                        }else{
+                          return null;
+                        }
+                      },
                     ),
-                    validator: (val){
-                      if(val!.isEmpty){
-                        return "Enter a password";
-                      }else{
-                        return null;
-                      }
-                    },
                   ),
                 ),
-
 
 
                 SizedBox(
