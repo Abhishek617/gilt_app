@@ -39,15 +39,18 @@ class Routes {
     forgot_password: (BuildContext context) => Reset_password(),
     reset_password: (BuildContext context) => Change_password(),
     signup: (BuildContext context) => SignUp(),
-    success_error_validate: (BuildContext context) => SuccessErrorValidateScreen(),
+    success_error_validate: (BuildContext context) =>
+        SuccessErrorValidateScreen(),
   };
 
   static navigateToScreen(BuildContext context, route) {
     Navigator.of(context).pushNamed(route);
   }
 
-  static navigateToScreenWithArgs(BuildContext context, route, SuccessErrorValidationPageArgs successErrorValidationPageArgs) {
-    Navigator.of(context).pushNamed(route,arguments: successErrorValidationPageArgs);
+  static navigateToScreenWithArgs(
+      BuildContext context, route, successErrorValidationPageArgs) {
+    Navigator.of(context)
+        .pushNamed(route, arguments: successErrorValidationPageArgs);
   }
 
   static goBack(BuildContext context) {
