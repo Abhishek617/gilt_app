@@ -21,68 +21,73 @@ class _SuccessErrorValidateScreenState
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as SuccessErrorValidationPageArgs;
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: DeviceUtils.getScaledWidth(context, 0.60)),
-              child:
-              Container(
-                width: DeviceUtils.getScaledWidth(context, 0.40),
-                height: DeviceUtils.getScaledHeight(context, 0.20),
-                decoration: BoxDecoration(
-                  color: args.isSuccess ? Colors.green : Colors.redAccent,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Center(
-                  child: Icon(
-                    args.isSuccess ? Icons.check_rounded : Icons.close_rounded,
-                    color: Colors.white,
-                    size: DeviceUtils.getScaledWidth(context, 0.35),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: DeviceUtils.getScaledWidth(context, 0.40)),
+                child:
+                Container(
+                  width: DeviceUtils.getScaledWidth(context, 0.40),
+                  height:  DeviceUtils.getScaledWidth(context, 0.40),
+                  //width: 200,
+                  //height: 200,
+                  decoration: BoxDecoration(
+                    color: args.isSuccess ? Colors.green : Colors.redAccent,
+                    borderRadius: BorderRadius.circular(100),
+
+                  ),
+                  child: Center(
+                    child: Icon(
+                      args.isSuccess ? Icons.check_rounded : Icons.close_rounded,
+                      color: Colors.white,
+                      size: DeviceUtils.getScaledWidth(context, 0.30),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: DeviceUtils.getScaledWidth(context, 0.10)),
-              child: Text(
-                args.title,
-                style: TextStyle(
-                  fontSize: 25.0, color: args.isSuccess ? Colors.green : Colors.redAccent,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Text(
-                args.description,
-                style: TextStyle(
-                    fontSize: 20.0,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: DeviceUtils.getScaledHeight(context, 0.30)),
-              child: GestureDetector(
-                onTap: () {
-                  if(args.isPreviousLogin){
-                    Routes.navigateToScreen(context, Routes.login);
-                  }else{
-                    Routes.goBack(context);
-                  }
-                },
+              Padding(
+                padding: EdgeInsets.only(top: DeviceUtils.getScaledWidth(context, 0.10)),
                 child: Text(
-                  'Go Back',
+                  args.title,
                   style: TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                      fontStyle: FontStyle.italic),
+                    fontSize: 25.0, color: args.isSuccess ? Colors.green : Colors.redAccent,
+                    fontWeight: FontWeight.bold
+                  ),
                 ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text(
+                  args.description,
+                  style: TextStyle(
+                      fontSize: 20.0,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    top: DeviceUtils.getScaledHeight(context, 0.30)),
+                child: GestureDetector(
+                  onTap: () {
+                    if(args.isPreviousLogin){
+                      Routes.navigateToScreen(context, Routes.login);
+                    }else{
+                      Routes.goBack(context);
+                    }
+                  },
+                  child: Text(
+                    'Go Back',
+                    style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                        fontStyle: FontStyle.italic),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

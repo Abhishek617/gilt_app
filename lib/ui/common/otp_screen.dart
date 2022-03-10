@@ -15,10 +15,11 @@ class _Otp_screenState extends State<Otp_screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         toolbarHeight: 50,
         leading: GestureDetector(
-          onTap: (){
+          onTap: () {
             Routes.goBack(context);
           },
           child: Icon(
@@ -91,10 +92,12 @@ class _Otp_screenState extends State<Otp_screen> {
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Text(
-                  'Link here',
+                  'Resend Code',
                   style: TextStyle(
-                    fontSize: 12.0,
-                  ),
+                      fontSize: 12.0,
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                      fontStyle: FontStyle.italic),
                 ),
               ),
             ],

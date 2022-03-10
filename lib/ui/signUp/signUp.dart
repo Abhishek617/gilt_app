@@ -6,6 +6,7 @@ import 'package:guilt_app/constants/dimens.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 
+import '../../models/PageModals/success_error_args.dart';
 import '../../widgets/rounded_button_widget.dart';
 
 class SignUp extends StatefulWidget {
@@ -16,6 +17,8 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
   bool passenable = true;
   @override
   Widget build(BuildContext context) {
@@ -36,173 +39,223 @@ class _SignUpState extends State<SignUp> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Dimens.horizontal_padding, vertical: Dimens.vertical_padding),
-            child: Column(
-              children: [
-                AppLogoWidget(
-                  width: 140.0,
-                  height: 140.0,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Guilt App',
-                  style: TextStyle(
-                    fontSize: 19.0,
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  style: TextStyle(
-                    fontSize: 13.0,
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                  height: 50,
-                  width: 330,
-                  child: TextField(
-                    // controller: nameController,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.mail),
-                      border: OutlineInputBorder(),
-                      labelText: 'Enter Email',
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 5),
-                      height: 50,
-                      width: 162,
-                      child: TextField(
-                        // controller: nameController,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.person),
-                          border: OutlineInputBorder(),
-                          hintText: 'First Name', hintStyle: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
 
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 5),
-                      height: 50,
-                      width: 162,
-                      child: TextField(
-                        // controller: nameController,
-                        decoration: const InputDecoration(
-
-                          prefixIcon: Icon(Icons.person),
-                          border: OutlineInputBorder(),
-                          labelText: 'Last Name',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                  height: 50,
-                  width: 330,
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                   inputFormatters: [
-                     FilteringTextInputFormatter.deny(RegExp("[a-z']+"))
-                   ],
-                    // controller: nameController,
-                    decoration: const InputDecoration(
-                      
-                      prefixIcon: Icon(Icons.phone),
-                      border: OutlineInputBorder(),
-                      labelText: 'Phone Number',
+        child:Form(
+         autovalidateMode: AutovalidateMode.always,
+          key: formkey,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Dimens.horizontal_padding, vertical: Dimens.vertical_padding),
+              child: Column(
+                children: [
+                  AppLogoWidget(
+                    width: 140.0,
+                    height: 140.0,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Guilt App',
+                    style: TextStyle(
+                      fontSize: 19.0,
                     ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                  height: 50,
-                  width: 330,
-                  child: TextField(
-                    obscureText: passenable,
-                    //if passenable == true, show **, else show password character
-                    decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.password_sharp),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                    style: TextStyle(
+                      fontSize: 13.0,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                   // height: 50,
+                    width: 330,
+                    child: TextFormField(
+                      // controller: nameController,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.mail),
                         border: OutlineInputBorder(),
-                        hintText: "Enter Password",
-                        labelText: "Password",
-                        suffix: IconButton(
+                        labelText: 'Enter Email',
+                      ),
+                      validator: (val){
+                        if(val!.isEmpty || !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            .hasMatch(val)){
+                          return "Enter a Valid Email";
+                        }else{
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 5),
+                        //height: 50,
+                        width: 162,
+                        child: TextFormField(
+                          // controller: nameController,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.person),
+                            border: OutlineInputBorder(),
+                            hintText: 'First Name', hintStyle: TextStyle(fontSize: 15),
+                          ),
+                          validator: (val){
+                            if(val!.isEmpty){
+                              return "Enter valid First Name";
+                            }else{
+                              return null;
+                            }
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 5),
+                       // height: 50,
+                        width: 162,
+                        child: TextFormField(
+                          // controller: nameController,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.person),
+                            border: OutlineInputBorder(),
+                            labelText: 'Last Name',
+                          ),
+                          validator: (val){
+                            if(val!.isEmpty){
+                              return "Enter Valid Last Name";
+                            }else{
+                              return null;
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                   // height: 50,
+                    width: 330,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                     inputFormatters: [
+                       FilteringTextInputFormatter.deny(RegExp("[a-z']+"))
+                     ],
+                      // controller: nameController,
+                      decoration: const InputDecoration(
+
+                        prefixIcon: Icon(Icons.phone),
+                        border: OutlineInputBorder(),
+                        labelText: 'Phone Number',
+                      ),
+                      validator: (val){
+                        if(val!.isEmpty){
+                          return "Enter a valid Phone Number";
+                        }else{
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+
+
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Container(
+                      width: 330,
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        obscureText: passenable,//This will obscure text dynamically
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.password_sharp,),
+                          border: OutlineInputBorder(),
+                          labelText: 'Password',
+                          hintText: 'Enter your password',
+                          // Here is key idea
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              passenable
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
                             onPressed: () {
-                              //add Icon button at end of TextField
+                              // Update the state i.e. toogle the state of passwordVisible variable
                               setState(() {
-                                //refresh UI
-                                if (passenable) {
-                                  //if passenable == true, make it false
+                                if(passenable){
                                   passenable = false;
-                                } else {
-                                  passenable =
-                                  true; //if passenable == false, make it true
+                                }else{
+                                  passenable = true;
                                 }
                               });
                             },
-                            icon: Padding(
-                              padding: const EdgeInsets.only(top: 25.0),
-                              child: Icon(
-                                passenable == true
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                              ),
-                            ))
-                      //eye icon if passenable = true, else, Icon is ***__
+                          ),
+
+                        ),
+                        validator: (val){
+                          if(val!.isEmpty){
+                            return "Enter a valid password";
+                          }else{
+                            return null;
+                          }
+                        },
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5, top: 20),
-                  child: ElevatedButtonWidget(
-                    buttonText: 'Create Account',
-                    buttonColor: Theme.of(context).colorScheme.primary,
-                    onPressed: () {
-                      Routes.navigateToScreen(context, Routes.before_login);
-                    },
+
+
+
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5, top: 20),
+                    child: ElevatedButtonWidget(
+                      buttonText: 'Create Account',
+                      buttonColor: Theme.of(context).colorScheme.primary,
+                      onPressed: () {
+                        if(formkey.currentState!.validate()){
+                         // Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
+                          Routes.navigateToScreen(context, Routes.before_login);
+                        }else{
+                          print('Eroor');
+                        }
+                       // Routes.navigateToScreen(context, Routes.before_login);
+                      },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5, top: 20),
-                  child: Container(
-                      child: Center(
-                        child: RichText(
-                          text: TextSpan(
-                              text: 'Don\'t have an account?',
-                              style: TextStyle(color: Colors.black, fontSize: 14),
-                              children: <TextSpan>[
-                                TextSpan(
-                                    text: ' Sign in',
-                                    style: TextStyle(
-                                        color: Colors.blueAccent, fontSize: 14,decoration: TextDecoration.underline,fontStyle: FontStyle.italic),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        Routes.navigateToScreen(context, Routes.login);
-                                      })
-                              ]),
-                        ),
-                      )),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5, top: 20),
+                    child: Container(
+                        child: Center(
+                          child: RichText(
+                            text: TextSpan(
+                                text: 'Don\'t have an account?',
+                                style: TextStyle(color: Colors.black, fontSize: 14),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: ' Sign in',
+                                      style: TextStyle(
+                                          color: Colors.blueAccent, fontSize: 14,decoration: TextDecoration.underline,fontStyle: FontStyle.italic),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          Routes.navigateToScreen(context, Routes.login);
+                                        })
+                                ]),
+                          ),
+                        )),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
