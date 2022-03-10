@@ -11,6 +11,8 @@ class Change_password extends StatefulWidget {
 }
 
 class _Change_passwordState extends State<Change_password> {
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
   bool passenable = true;
 
   @override
@@ -36,124 +38,150 @@ class _Change_passwordState extends State<Change_password> {
         ),
         body: SingleChildScrollView(
           child: Center(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                  child: AppLogoWidget(
-                    width: 140.0,
-                    height: 140.0,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Text(
-                    'Guilt App',
-                    style: TextStyle(
-                      fontSize: 19.0,
+            child: Form(
+              autovalidateMode: AutovalidateMode.always,
+              key: formkey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                    child: AppLogoWidget(
+                      width: 140.0,
+                      height: 140.0,
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                    style: TextStyle(
-                      fontSize: 13.0,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Text(
+                      'Guilt App',
+                      style: TextStyle(
+                        fontSize: 19.0,
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 35),
-                  child: Container(
-                    height: 50,
-                    width: 310,
-                    child: TextField(
-                      obscureText: passenable,
-                      //if passenable == true, show **, else show password character
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.password_sharp),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Text(
+                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                      style: TextStyle(
+                        fontSize: 13.0,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Container(
+                      width: 310,
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        obscureText: passenable,//This will obscure text dynamically
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.password_sharp,),
                           border: OutlineInputBorder(),
-                          hintText: "New Enter Password",
-                          labelText: "Enter New Password",
-                          suffix: IconButton(
-                              onPressed: () {
-                                //add Icon button at end of TextField
-                                setState(() {
-                                  //refresh UI
-                                  if (passenable) {
-                                    //if passenable == true, make it false
-                                    passenable = false;
-                                  } else {
-                                    passenable =
-                                        true; //if passenable == false, make it true
-                                  }
-                                });
-                              },
-                              icon: Padding(
-                                padding: const EdgeInsets.only(top: 25.0),
-                                child: Icon(
-                                  passenable == true
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                              ))
-                          //eye icon if passenable = true, else, Icon is ***__
+                          labelText: 'Enter New Password',
+                          hintText: 'Enter New password',
+                          // Here is key idea
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              passenable
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                if(passenable){
+                                  passenable = false;
+                                }else{
+                                  passenable = true;
+                                }
+                              });
+                            },
                           ),
+
+                        ),
+                        validator: (val){
+                          if(val!.isEmpty){
+                            return "Enter New password";
+                          }else{
+                            return null;
+                          }
+                        },
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Container(
-                    height: 50,
-                    width: 310,
-                    child: TextField(
-                      obscureText: passenable,
-                      //if passenable == true, show **, else show password character
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.password_sharp),
+
+
+
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Container(
+                      width: 310,
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        obscureText: passenable,//This will obscure text dynamically
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.password_sharp,),
                           border: OutlineInputBorder(),
-                          hintText: "Enter Confirm Password",
-                          labelText: "Enter Confirm Password",
-                          suffix: IconButton(
-                              onPressed: () {
-                                //add Icon button at end of TextField
-                                setState(() {
-                                  //refresh UI
-                                  if (passenable) {
-                                    //if passenable == true, make it false
-                                    passenable = false;
-                                  } else {
-                                    passenable =
-                                        true; //if passenable == false, make it true
-                                  }
-                                });
-                              },
-                              icon: Padding(
-                                padding: const EdgeInsets.only(top: 25.0),
-                                child: Icon(
-                                  passenable == true
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                              ))
-                          //eye icon if passenable = true, else, Icon is ***__
+                          labelText: 'Password Confirm',
+                          hintText: 'Enter Confirm password',
+                          // Here is key idea
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              passenable
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                if(passenable){
+                                  passenable = false;
+                                }else{
+                                  passenable = true;
+                                }
+                              });
+                            },
                           ),
+
+                        ),
+                        validator: (val){
+                          if(val!.isEmpty){
+                            return "Enter Confirm password";
+                          }else{
+                            return null;
+                          }
+                        },
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                ElevatedButtonWidget(
-                  buttonColor: Theme.of(context).colorScheme.primary,
-                  buttonText: 'Change Password',
-                  onPressed: () {
-                    Routes.navigateToScreen(context, Routes.login);
-                  },
-                ),
-              ],
+
+
+
+
+
+                  SizedBox(
+                    height: 30,
+                  ),
+                  ElevatedButtonWidget(
+                    buttonColor: Theme.of(context).colorScheme.primary,
+                    buttonText: 'Change Password',
+                    onPressed: () {
+                      if(formkey.currentState!.validate()){
+                        Routes.navigateToScreen(context, Routes.login);
+                      }else{
+                        print('Eroor');
+                      }
+
+                     // Routes.navigateToScreen(context, Routes.login);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

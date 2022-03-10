@@ -14,6 +14,8 @@ class Reset_password extends StatefulWidget {
 }
 
 class _Reset_passwordState extends State<Reset_password> {
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
   bool passenable = true;
 
   @override
@@ -37,84 +39,100 @@ class _Reset_passwordState extends State<Reset_password> {
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 50),
-                child: AppLogoWidget(
-                  width: 140.0,
-                  height: 140.0,
-                ),
-              ),
-              Padding(
-                  padding: EdgeInsets.only(top: 3),
-                  child: Text(
-                    'Guilt App',
-                    style: TextStyle(
-                      fontSize: 19.0,
-                    ),
-                  )),
-              Padding(
-                padding: EdgeInsets.only(top: Dimens.vertical_padding),
-                child: Text(
-                  '',
-                  style: TextStyle(
-                    fontSize: 13.0,
+          child: Form(
+            autovalidateMode: AutovalidateMode.always,
+            key: formkey,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: AppLogoWidget(
+                    width: 140.0,
+                    height: 140.0,
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 25,
-              ),
-              Container(
-                height: 50,
-                width: 320,
-                margin: EdgeInsets.symmetric(vertical: Dimens.vertical_padding),
-                child: TextField(
-                  obscureText: passenable,
-                  //if passenable == true, show **, else show password character
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.password_sharp),
-                      border: OutlineInputBorder(),
-                      hintText: "New Enter Password",
-                      labelText: "Enter New Password",
-                      suffix: IconButton(
-                          onPressed: () {
-                            //add Icon button at end of TextField
-                            setState(() {
-                              //refresh UI
-                              if (passenable) {
-                                //if passenable == true, make it false
-                                passenable = false;
-                              } else {
-                                passenable =
-                                    true; //if passenable == false, make it true
-                              }
-                            });
-                          },
-                          icon: Padding(
-                            padding: const EdgeInsets.only(top: 25.0),
-                            child: Icon(
-                              passenable == true
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                            ),
-                          ))
-                      //eye icon if passenable = true, else, Icon is ***__
+                Padding(
+                    padding: EdgeInsets.only(top: 3),
+                    child: Text(
+                      'Guilt App',
+                      style: TextStyle(
+                        fontSize: 19.0,
                       ),
+                    )),
+                Padding(
+                  padding: EdgeInsets.only(top: Dimens.vertical_padding),
+                  child: Text(
+                    '',
+                    style: TextStyle(
+                      fontSize: 13.0,
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              ElevatedButtonWidget(
-                buttonText: 'Reset Password',
-                buttonColor: Theme.of(context).colorScheme.primary,
-                onPressed: () {
-                  Routes.navigateToScreen(context, Routes.otp);
-                },
-              ),
-            ],
+                SizedBox(
+                  height: 25,
+                ),
+
+                Container(
+                  width: 310,
+                  child: TextFormField(
+                    keyboardType: TextInputType.text,
+                    obscureText: passenable,//This will obscure text dynamically
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.password_sharp,),
+                      border: OutlineInputBorder(),
+                      labelText: 'Password',
+                      hintText: 'Enter your password',
+                      // Here is key idea
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          // Based on passwordVisible state choose the icon
+                          passenable
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                        onPressed: () {
+                          // Update the state i.e. toogle the state of passwordVisible variable
+                          setState(() {
+                            if(passenable){
+                              passenable = false;
+                            }else{
+                              passenable = true;
+                            }
+                          });
+                        },
+                      ),
+
+                    ),
+                    validator: (val){
+                      if(val!.isEmpty){
+                        return "Enter a password";
+                      }else{
+                        return null;
+                      }
+                    },
+                  ),
+                ),
+
+
+
+                SizedBox(
+                  height: 15,
+                ),
+                ElevatedButtonWidget(
+                  buttonText: 'Reset Password',
+                  buttonColor: Theme.of(context).colorScheme.primary,
+                  onPressed: () {
+                    if(formkey.currentState!.validate()){
+                      Routes.navigateToScreen(context, Routes.otp);
+                      }else{
+                      print('Eroor');
+                    }
+                    //Routes.navigateToScreen(context, Routes.otp);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
