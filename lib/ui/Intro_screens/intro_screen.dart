@@ -30,7 +30,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               alignment: Alignment.topRight,
               child: SafeArea(
                 child: GestureDetector(
-                  onTap: () => _onIntroEnd(context),
+                  onTap: () => introKey.currentState?.animateScroll(activeScreen -1),
                   child: Padding(
                     padding: const EdgeInsets.only(top: 16.0, right: 16),
                     child: Icon(

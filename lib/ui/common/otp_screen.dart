@@ -33,74 +33,77 @@ class _Otp_screenState extends State<Otp_screen> {
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 50),
-                child: AppLogoWidget(
-                  width: 140.0,
-                  height: 140.0,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text(
-                  'Guilt App',
-                  style: TextStyle(
-                    fontSize: 19.0,
+          child: Form(
+
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: AppLogoWidget(
+                    width: 140.0,
+                    height: 140.0,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  style: TextStyle(
-                    fontSize: 13.0,
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    'Guilt App',
+                    style: TextStyle(
+                      fontSize: 19.0,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Container(
-                  height: 70,
-                  width: 200,
-                  child: OtpTextField(
-                    keyboardType: TextInputType.number,
-                    numberOfFields: 4,
-                    //borderColor: Color(0xFF512DA8),
-                    showFieldAsBox: false,
-                    //set to true to show as box or false to show as dash
-                    onCodeChanged: (String code) {
-                      //handle validation or checks here
-                      //https://pub.dev/packages/flutter_otp_text_field
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                    style: TextStyle(
+                      fontSize: 13.0,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Container(
+                    height: 70,
+                    width: 200,
+                    child: OtpTextField(
+                      keyboardType: TextInputType.number,
+                      numberOfFields: 4,
+                      //borderColor: Color(0xFF512DA8),
+                      showFieldAsBox: false,
+                      //set to true to show as box or false to show as dash
+                      onCodeChanged: (String code) {
+                        //handle validation or checks here
+                        //https://pub.dev/packages/flutter_otp_text_field
+                      },
+                      onSubmit: (String verificationCode) {}, // end onSubmit
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: ElevatedButtonWidget(
+                    buttonColor: Theme.of(context).colorScheme.primary,
+                    buttonText: 'Continue',
+                    onPressed: () {
+                      Routes.navigateToScreen(context, Routes.reset_password);
                     },
-                    onSubmit: (String verificationCode) {}, // end onSubmit
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: ElevatedButtonWidget(
-                  buttonColor: Theme.of(context).colorScheme.primary,
-                  buttonText: 'Continue',
-                  onPressed: () {
-                    Routes.navigateToScreen(context, Routes.reset_password);
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    'Resend Code',
+                    style: TextStyle(
+                        fontSize: 12.0,
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                        fontStyle: FontStyle.italic),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text(
-                  'Resend Code',
-                  style: TextStyle(
-                      fontSize: 12.0,
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                      fontStyle: FontStyle.italic),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
