@@ -4,6 +4,7 @@ import 'package:guilt_app/constants/assets.dart';
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
+import 'package:guilt_app/widgets/textfield_widget.dart';
 
 import '../../widgets/rounded_button_widget.dart';
 
@@ -67,10 +68,13 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
+
+
+
                   Padding(
                     padding: const EdgeInsets.only(left: 5, top: 30),
                     child: Container(
-                     // height: 50,
+                      // height: 50,
                       width: 310,
                       child: TextFormField(
                         // controller: nameController,
@@ -91,8 +95,6 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
-
-
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Container(

@@ -7,7 +7,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool isObscure;
   final bool isIcon;
   final TextInputType? inputType;
-  final TextEditingController textController;
+  //final TextEditingController textController;
   final EdgeInsets padding;
   final Color hintColor;
   final Color iconColor;
@@ -21,25 +21,29 @@ class TextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: padding,
-      child: TextFormField(
-        controller: textController,
-        focusNode: focusNode,
-        onFieldSubmitted: onFieldSubmitted,
-        onChanged: onChanged,
-        autofocus: autoFocus,
-        textInputAction: inputAction,
-        obscureText: this.isObscure,
-        maxLength: 25,
-        keyboardType: this.inputType,
-        style: Theme.of(context).textTheme.bodyText2,
-        decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: this.hint,
-            hintStyle:
-                Theme.of(context).textTheme.bodyText2!.copyWith(color: hintColor),
-            errorText: errorText,
-            counterText: '',
-            icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
+      child: Container(
+        width: 310,
+        child: TextFormField(
+
+         // controller: textController,
+          focusNode: focusNode,
+          onFieldSubmitted: onFieldSubmitted,
+          onChanged: onChanged,
+          autofocus: autoFocus,
+          textInputAction: inputAction,
+          obscureText: this.isObscure,
+          maxLength: 25,
+          keyboardType: this.inputType,
+          style: Theme.of(context).textTheme.bodyText2,
+          decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: this.hint,
+              hintStyle:
+                  Theme.of(context).textTheme.bodyText2!.copyWith(color: hintColor),
+              errorText: errorText,
+              counterText: '',
+              icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
+        ),
       ),
     );
   }
@@ -48,7 +52,7 @@ class TextFieldWidget extends StatelessWidget {
     Key? key,
     required this.icon,
     required this.errorText,
-    required this.textController,
+   // required this.textController,
     this.inputType,
     this.hint,
     this.isObscure = false,
@@ -61,6 +65,7 @@ class TextFieldWidget extends StatelessWidget {
     this.onChanged,
     this.autoFocus = false,
     this.inputAction,
+
   }) : super(key: key);
 
 }

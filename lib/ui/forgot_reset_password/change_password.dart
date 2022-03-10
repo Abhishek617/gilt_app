@@ -12,9 +12,10 @@ class Change_password extends StatefulWidget {
 
 class _Change_passwordState extends State<Change_password> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
-
+  final TextEditingController pass = TextEditingController();
+  final TextEditingController confirmPass = TextEditingController();
   bool passenable = true;
-
+  bool passenable2 = true;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -73,6 +74,7 @@ class _Change_passwordState extends State<Change_password> {
                     child: Container(
                       width: 310,
                       child: TextFormField(
+                        controller: pass,
                         keyboardType: TextInputType.text,
                         obscureText: passenable,//This will obscure text dynamically
                         decoration: InputDecoration(
@@ -120,18 +122,19 @@ class _Change_passwordState extends State<Change_password> {
                     child: Container(
                       width: 310,
                       child: TextFormField(
+                        controller: confirmPass,
                         keyboardType: TextInputType.text,
-                        obscureText: passenable,//This will obscure text dynamically
+                        obscureText: passenable2,//This will obscure text dynamically
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.password_sharp,),
                           border: OutlineInputBorder(),
-                          labelText: 'Password Confirm',
+                          labelText: 'Confirm Password',
                           hintText: 'Enter Confirm password',
                           // Here is key idea
                           suffixIcon: IconButton(
                             icon: Icon(
                               // Based on passwordVisible state choose the icon
-                              passenable
+                              passenable2
                                   ? Icons.visibility
                                   : Icons.visibility_off,
                               color: Theme.of(context).primaryColorDark,
@@ -139,10 +142,10 @@ class _Change_passwordState extends State<Change_password> {
                             onPressed: () {
                               // Update the state i.e. toogle the state of passwordVisible variable
                               setState(() {
-                                if(passenable){
-                                  passenable = false;
+                                if(passenable2){
+                                  passenable2 = false;
                                 }else{
-                                  passenable = true;
+                                  passenable2 = true;
                                 }
                               });
                             },
@@ -152,16 +155,13 @@ class _Change_passwordState extends State<Change_password> {
                         validator: (val){
                           if(val!.isEmpty){
                             return "Enter Confirm password";
-                          }else{
-                            return null;
-                          }
+                          }if(val!= pass.text)
+                            return 'Password Not Match';
+                          return null;
                         },
                       ),
                     ),
                   ),
-
-
-
 
 
                   SizedBox(
