@@ -5,6 +5,8 @@ import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
+import 'package:guilt_app/ui/common/privacy_policy.dart';
+import 'package:guilt_app/ui/common/terms_conditions.dart';
 import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rendering.dart';
 import 'package:guilt_app/constants/assets.dart';
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
@@ -69,6 +70,8 @@ class _LoginState extends State<Login> {
                     ),
                   ),
 
+
+
                   Padding(
                     padding: const EdgeInsets.only(left: 5, top: 30),
                     child: Container(
@@ -93,6 +96,8 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
+
+
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Container(
@@ -138,7 +143,6 @@ class _LoginState extends State<Login> {
                 ),
               ),
 
-
                   Padding(
                     padding: const EdgeInsets.only(left: 210, top: 10),
                     child: GestureDetector(
@@ -167,6 +171,7 @@ class _LoginState extends State<Login> {
                       },
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.only(left: 5, top: 20),
                     child: ElevatedButtonWidget(
@@ -199,6 +204,8 @@ class _LoginState extends State<Login> {
                       ),
                     )),
                   ),
+
+
                   Padding(
                     padding: const EdgeInsets.only(left: 15, top: 10),
                     child: Container(
@@ -214,6 +221,8 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
+
+
                   Padding(
                     padding: const EdgeInsets.only(left: 20, top: 10),
                     child: Text(
@@ -227,7 +236,8 @@ class _LoginState extends State<Login> {
               ),
             ),
           ),
-        ));
+        ),
+    );
   }
 }
 

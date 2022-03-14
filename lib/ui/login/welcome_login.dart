@@ -48,8 +48,13 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                 buttonText: 'Continue With Gmail',
                 onPressed: () {},
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 150),
+              SizedBox(
+                height: 130,
+              ),
+              GestureDetector(
+                onTap: (){
+                  Routes.navigateToScreen(context, Routes.privacy_policy);
+                },
                 child: Text(
                   'Terms of Service',
                   style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline,fontStyle: FontStyle.italic),
