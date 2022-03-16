@@ -1,8 +1,12 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
+import 'package:guilt_app/utils/google_auth/gmail_auth.dart';
+import 'package:guilt_app/ui/login/after_gmail_login.dart';
+
+
 
 class WelcomeLogin extends StatefulWidget {
   const WelcomeLogin({Key? key}) : super(key: key);
@@ -12,6 +16,8 @@ class WelcomeLogin extends StatefulWidget {
 }
 
 class _WelcomeLoginState extends State<WelcomeLogin> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,11 +49,18 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                   Routes.navigateToScreen(context, Routes.signup);
                 },
               ),
+
               ElevatedButtonWidget(
                 buttonColor: Theme.of(context).colorScheme.primary,
                 buttonText: 'Continue With Gmail',
-                onPressed: () {},
+                onPressed: ()async {
+                  await FirebaseServices().signInWithGoogle();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AfterGmailLogin()));
+                },
               ),
+
+
               SizedBox(
                 height: 130,
               ),

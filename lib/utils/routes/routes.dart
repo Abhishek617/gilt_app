@@ -15,6 +15,7 @@ import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
 
+
 class Routes {
   Routes._();
 
@@ -33,6 +34,7 @@ class Routes {
   static const String privacy_policy = '/privacy_policy';
   static const String terms_conditions = '/terms_conditions';
   static const String faqs = '/faqs';
+
 
 
   static final routes = <String, WidgetBuilder>{

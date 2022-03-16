@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "900115571748",
+    "project_id": "auth-guiltapp",
+    "storage_bucket": "auth-guiltapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900115571748:android:a1f1924a90c81f6b8324b1",
+        "android_client_info": {
+          "package_name": "com.iotecksolutions.todoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900115571748-msg80fepl44r5qqcnjrtgm0pfgau2qjg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iotecksolutions.todoapp",
+            "certificate_hash": "bc0f04dbadeee0b2879959eddadc20ff867ed42e"
+          }
+        },
+        {
+          "client_id": "900115571748-k8s28lv5pvf0dj4j3mrd9c9jtredbpla.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGBAQY1k206H6-GPlPoQC_5viU7wiu6bQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "900115571748-k8s28lv5pvf0dj4j3mrd9c9jtredbpla.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

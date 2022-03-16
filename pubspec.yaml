@@ -70,6 +70,8 @@ dependencies:
 
   flutter_otp_text_field: ^1.0.0
   introduction_screen: ^3.0.0
+  google_sign_in: ^5.2.4
+  firebase_auth: ^3.3.10
 
 dev_dependencies:
   flutter_test:
