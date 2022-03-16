@@ -19,7 +19,7 @@ class _Privacy_PolicyState extends State<Privacy_Policy> {
       appBar: AppBar(
         title: Text('Privacy & Policy'),
       ),
-      body: Padding(
+            body: Padding(
         padding: const EdgeInsets.all(25),
         child: Center(
           child: SingleChildScrollView(
@@ -82,7 +82,7 @@ class _Privacy_PolicyState extends State<Privacy_Policy> {
                 ),
                 Row(
                   children: [
-                    Icon( Icons.arrow_circle_right_outlined, color: Colors.orangeAccent),
+                    Icon( Icons.arrow_right_outlined, color: Colors.orangeAccent),
                   SizedBox(width: 5),
 
                   Text('Plusieurs variations de Lorem Ipsum', style: TextStyle(color: Colors.grey))
@@ -94,7 +94,7 @@ class _Privacy_PolicyState extends State<Privacy_Policy> {
                 ),
                 Row(
                   children: [
-                    Icon( Icons.arrow_circle_right_outlined, color: Colors.orangeAccent),
+                    Icon( Icons.arrow_right_outlined, color: Colors.orangeAccent),
                     SizedBox(width: 5),
 
                     Text('ots aléatoires qui ne ressemblent pas',style: TextStyle(color: Colors.grey))
@@ -106,7 +106,7 @@ class _Privacy_PolicyState extends State<Privacy_Policy> {
                 ),
                 Row(
                   children: [
-                    Icon( Icons.arrow_circle_right_outlined, color: Colors.orangeAccent),
+                    Icon( Icons.arrow_right_outlined, color: Colors.orangeAccent),
                     SizedBox(width: 5),
 
                     Text('ul vrai générateur de Lorem Ipsum. Iil ut',style: TextStyle(color: Colors.grey))
@@ -118,7 +118,7 @@ class _Privacy_PolicyState extends State<Privacy_Policy> {
                 ),
                 Row(
                   children: [
-                    Icon( Icons.arrow_circle_right_outlined, color: Colors.orangeAccent),
+                    Icon( Icons.arrow_right_outlined, color: Colors.orangeAccent),
                     SizedBox(width: 5),
 
                     Text('ncontestable du Lorem Ipsum. Il provient',style: TextStyle(color: Colors.grey))
