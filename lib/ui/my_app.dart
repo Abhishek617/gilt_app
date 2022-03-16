@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:guilt_app/constants/app_theme.dart';
 import 'package:guilt_app/constants/strings.dart';
 import 'package:guilt_app/data/repository.dart';
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
         builder: (context) {
           return GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-            child: MaterialApp(
+            child: GetMaterialApp(
               debugShowCheckedModeBanner: false,
               title: Strings.appName,
               theme: _themeStore.darkMode ? themeDataDark : themeData,

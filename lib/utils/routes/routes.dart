@@ -1,5 +1,6 @@
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
+import 'package:guilt_app/ui/Profile/profile.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
 import 'package:guilt_app/ui/common/faqs.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
@@ -34,7 +35,7 @@ class Routes {
   static const String privacy_policy = '/privacy_policy';
   static const String terms_conditions = '/terms_conditions';
   static const String faqs = '/faqs';
-
+  static const String prof = '/prof';
 
 
   static final routes = <String, WidgetBuilder>{
@@ -53,6 +54,7 @@ class Routes {
     privacy_policy: (BuildContext context) => Privacy_Policy(),
     terms_conditions: (BuildContext context) => Terms_Condition(),
     faqs: (BuildContext context) => Faqs(),
+    prof: (BuildContext context) => Profile(),
 
 
   };
