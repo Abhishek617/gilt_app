@@ -1,5 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
+import '../../widgets/rounded_button_with_icon.dart';
 
 
 
@@ -11,6 +16,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  File? pickedImage;
 
   void imagePickerOption() {
     Get.bottomSheet(
@@ -38,14 +44,14 @@ class _ProfileState extends State<Profile> {
                   ),
                   ElevatedButton.icon(
                     onPressed: () {
-
+                      pickImage(ImageSource.camera);
                     },
                     icon: const Icon(Icons.camera),
                     label: const Text("CAMERA"),
                   ),
                   ElevatedButton.icon(
                     onPressed: () {
-
+                    pickImage(ImageSource.gallery);
                     },
                     icon: const Icon(Icons.image),
                     label: const Text("GALLERY"),
@@ -68,63 +74,93 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+  pickImage(ImageSource imageType) async {
+    try {
+      final photo = await ImagePicker().pickImage(source: imageType);
+      if (photo == null) return;
+      final tempImage = File(photo.path);
+      setState(() {
+        pickedImage = tempImage;
+      });
+
+      Get.back();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('profile image'),
+        title: const Text('Profile'),
       ),
-      body: Column(
+      body:
+      Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(
-            height: 50,
+          Padding(
+            padding: EdgeInsets.only(left:30.0,top:40.0,bottom:40.0,right:30.0),
+            child: Text('please capture your image                 ..    \n\n..                                          .',
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  backgroundColor: Colors.grey,
+              ),
+              ),
           ),
           Align(
             alignment: Alignment.center,
             child: Stack(
               children: [
                 Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.indigo, width: 5),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(100),
-                    ),
-                  ),
-                  child: ClipOval(
-                      child: Image.network(
-                      'https://upload.wikimedia.org/wikipedia/commons/5/5f/Alberto_conversi_profile_pic.jpg',
+            decoration: BoxDecoration(
+            border: Border.all(color: Colors.orange, width: 5),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(100),
+            ),
+          ),
+                child: ClipOval(
+                  child: pickedImage != null
+                      ? Image.file(
+                    pickedImage!,
+                    width: 170,
+                    height: 170,
+                    fit: BoxFit.cover,
+                  )
+                     : Image.network(
+                      'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
                       width: 170,
                       height: 170,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: 0,
-                  right: 5,
-                  child: IconButton(
-                    onPressed: imagePickerOption,
-                    icon: const Icon(
-                      Icons.add_a_photo_outlined,
-                      color: Colors.blue,
-                      size: 30,
-                    ),
-                  ),
-                )
               ],
             ),
           ),
+      Padding(
+        padding: EdgeInsets.all(15),
+          child: Text('PROFILE PHOTO',
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w900
+            ),
+            textAlign: TextAlign.center,),
+         ),
           const SizedBox(
             height: 20,
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton.icon(
+            padding: const EdgeInsets.only(left:30.0,top:170.0,bottom:20.0,right:30.0),
+            child: ElevatedButtonWidgetWithIcon(
+                buttonColor: Theme.of(context).colorScheme.primary,
                 onPressed: imagePickerOption,
-                icon: const Icon(Icons.add_a_photo_sharp),
-                label: const Text('UPLOAD IMAGE')),
+                icon: Icons.add_a_photo_sharp,
+                buttonText:(
+                    'Add Your Picture'
+                )),
           )
         ],
       ),
