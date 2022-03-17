@@ -28,18 +28,17 @@ import 'package:flutter/material.dart';
 final ThemeData themeData = new ThemeData(
     fontFamily: FontFamily.productSans,
     brightness: Brightness.light,
-    primarySwatch: MaterialColor(AppColors.orange[500]!.value, AppColors.orange),
-    primaryColor: AppColors.orange[500],
-    primaryColorBrightness: Brightness.light,
-    accentColor: AppColors.orange[500],
-    accentColorBrightness: Brightness.light
-);
+    primaryColor: AppColors.creame[50],
+    secondaryHeaderColor: AppColors.creame[500],
+    colorScheme: ColorScheme.fromSwatch(
+            primarySwatch:
+                MaterialColor(AppColors.creame[50]!.value, AppColors.creame))
+        .copyWith(secondary: AppColors.creame[500]));
 
 final ThemeData themeDataDark = ThemeData(
   fontFamily: FontFamily.productSans,
   brightness: Brightness.dark,
-  primaryColor: AppColors.orange[500],
-  primaryColorBrightness: Brightness.dark,
-  accentColor: AppColors.orange[500],
-  accentColorBrightness: Brightness.dark,
+  primaryColor: AppColors.creame[50],
+  colorScheme:
+      ColorScheme.fromSwatch().copyWith(secondary: AppColors.creame[50]),
 );

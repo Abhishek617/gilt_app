@@ -10,7 +10,7 @@ class ElevatedButtonWidget extends StatelessWidget {
     Key? key,
     required this.buttonText,
     required this.buttonColor,
-    this.textColor = Colors.white,
+    this.textColor = Colors.black,
     required this.onPressed,
   }) : super(key: key);
 
