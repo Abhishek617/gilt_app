@@ -1,5 +1,6 @@
-import'package:guilt_app/models/PageModals/faqs_model.dart';
+import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/widgets/custom_scaffold.dart';
 
 class FaqScreen extends StatefulWidget {
   const FaqScreen({Key? key}) : super(key: key);
@@ -15,37 +16,37 @@ class _FaqScreenState extends State<FaqScreen> {
     vehicleData.add(Vehicle(
         titleText: "How to manage an event?",
         subTitle:
-        "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
         show: false));
     vehicleData.add(Vehicle(
         titleText: "How to manage a payment?",
         subTitle:
-        "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
         show: false));
     vehicleData.add(Vehicle(
         titleText: "How to stay updated?",
         subTitle:
-        "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
         show: false));
     vehicleData.add(Vehicle(
         titleText: "How to create an account?",
         subTitle:
-        "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
         show: false));
     vehicleData.add(Vehicle(
         titleText: "How to protect privacy of account?",
         subTitle:
-        "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
         show: false));
     vehicleData.add(Vehicle(
         titleText: "How to create manage an event?",
         subTitle:
-        "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
         show: false));
     vehicleData.add(Vehicle(
         titleText: "How to invite friends?",
         subTitle:
-        "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
         show: false));
   }
 
@@ -58,11 +59,12 @@ class _FaqScreenState extends State<FaqScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWrapper(
       appBar: AppBar(
+        shadowColor: Colors.transparent,
         title: const Text("FAQ'S"),
       ),
-      body: ListView.builder(
+      child: ListView.builder(
           itemCount: vehicleData.length,
           itemBuilder: (context, index) {
             return Column(
@@ -74,36 +76,41 @@ class _FaqScreenState extends State<FaqScreen> {
                         vehicleData[index].show = !vehicleData[index].show;
                       });
                     },
-                    icon: Icon(vehicleData[index].show
-                        ? Icons.remove_circle_outline
-                        : Icons.add_circle_outline,
-                      color: vehicleData[index].show ? Colors.orange : Colors.black,
+                    icon: Icon(
+                      vehicleData[index].show
+                          ? Icons.remove_circle_outline
+                          : Icons.add_circle_outline,
+                      color: vehicleData[index].show
+                          ? Colors.orange
+                          : Colors.black,
                     ),
                   ),
                   title: Text(
                     vehicleData[index].titleText,
-                    style:  TextStyle(
+                    style: TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,color: vehicleData[index].show ? Colors.orange : Colors.black),
+                        fontWeight: FontWeight.bold,
+                        color: vehicleData[index].show
+                            ? Colors.orange
+                            : Colors.black),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 80.0, right: 25.0, bottom: 10.0),
-                  child: vehicleData[index].show ? Column(
-                    children: [
-                      Text(vehicleData[index].subTitle,
-                        style: TextStyle(
-                          fontSize: 14
-                        ),
-
-                      ),
-                      const SizedBox(height: 5),
-                      const Divider()
-                    ],
-                  ) : SizedBox.shrink(),
+                  child: vehicleData[index].show
+                      ? Column(
+                          children: [
+                            Text(
+                              vehicleData[index].subTitle,
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            const SizedBox(height: 5),
+                            const Divider()
+                          ],
+                        )
+                      : SizedBox.shrink(),
                 ),
-
               ],
             );
           }),

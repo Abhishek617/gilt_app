@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
 import '../../widgets/rounded_button_with_icon.dart';
-
+import 'package:guilt_app/widgets/custom_scaffold.dart';
+import 'package:guilt_app/ui/Profile/full_profile.dart';
+import 'package:guilt_app/widgets/custom_scaffold.dart';
 
 
 class Profile extends StatefulWidget {
@@ -91,17 +92,28 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWrapper(
       appBar: AppBar(
+        shadowColor: Colors.transparent,
         centerTitle: true,
         title: const Text('Profile'),
+
       ),
-      body:
+      child:
       Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if(pickedImage != null)
+            IconButton(
+              padding: const EdgeInsets.only(left:00.0,top:10.0,bottom:5.0,right:00.0),
+              icon:Icon (Icons.add_circle),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FullProfile()));
+              },
+            ),
           Padding(
-            padding: EdgeInsets.only(left:30.0,top:40.0,bottom:40.0,right:30.0),
+            padding: EdgeInsets.only(left:30.0,top:20.0,bottom:40.0,right:30.0),
             child: Text('please capture your image                 ..    \n\n..                                          .',
               style: TextStyle(
                   fontSize: 16,
@@ -137,9 +149,11 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
+
               ],
             ),
           ),
+
       Padding(
         padding: EdgeInsets.all(15),
           child: Text('PROFILE PHOTO',
@@ -152,8 +166,10 @@ class _ProfileState extends State<Profile> {
           const SizedBox(
             height: 20,
           ),
+
+
           Padding(
-            padding: const EdgeInsets.only(left:30.0,top:170.0,bottom:20.0,right:30.0),
+            padding: const EdgeInsets.only(left:30.0,top:100.0,bottom:20.0,right:30.0),
             child: ElevatedButtonWidgetWithIcon(
                 buttonColor: Theme.of(context).colorScheme.primary,
                 onPressed: imagePickerOption,
