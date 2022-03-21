@@ -5,6 +5,7 @@ class ElevatedButtonWidgetWithIcon extends StatelessWidget {
   final Color buttonColor;
   final Color textColor;
   final VoidCallback onPressed;
+  final Color iconColor;
   final icon;
 
   const ElevatedButtonWidgetWithIcon({
@@ -12,6 +13,7 @@ class ElevatedButtonWidgetWithIcon extends StatelessWidget {
     required this.buttonText,
     required this.buttonColor,
     this.textColor = Colors.white,
+    this.iconColor = Colors.white,
     required this.icon,
     required this.onPressed,
   }) : super(key: key);
@@ -23,7 +25,7 @@ class ElevatedButtonWidgetWithIcon extends StatelessWidget {
       width: 320,
       margin: EdgeInsets.symmetric(vertical: 8),
       child: ElevatedButton.icon(
-        icon:Icon(Icons.add_a_photo_sharp),
+        icon:Icon(Icons.add_a_photo_sharp, color: iconColor,),
         label: Text(buttonText, style: TextStyle(color: textColor,fontSize: 16,fontWeight: FontWeight.bold)),
         onPressed: onPressed,
       ),
