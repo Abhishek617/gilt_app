@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
+import 'package:http/http.dart';
+
 
 class Before_LoginScreen extends StatefulWidget {
   const Before_LoginScreen({Key? key}) : super(key: key);
@@ -58,7 +61,7 @@ class _Before_LoginScreenState extends State<Before_LoginScreen> {
                   buttonColor: Theme.of(context).colorScheme.primary,
                   buttonText: 'Business Owner',
                   onPressed: () {
-                    Routes.navigateToScreen(context, Routes.login);
+                    Routes.navigateToScreen(context, Routes.prof);
                   },
                 ),
               ),
@@ -66,7 +69,7 @@ class _Before_LoginScreenState extends State<Before_LoginScreen> {
                 buttonText: 'Individual User',
                 buttonColor: Theme.of(context).colorScheme.primary,
                 onPressed: () {
-                  Routes.navigateToScreen(context, Routes.login);
+                  Routes.navigateToScreen(context, Routes.prof);
                 },
               ),
             ],
