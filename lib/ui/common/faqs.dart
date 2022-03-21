@@ -1,5 +1,6 @@
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/widgets/custom_scaffold.dart';
 
 class FaqScreen extends StatefulWidget {
   const FaqScreen({Key? key}) : super(key: key);
@@ -58,11 +59,12 @@ class _FaqScreenState extends State<FaqScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWrapper(
       appBar: AppBar(
+        shadowColor: Colors.transparent,
         title: const Text("FAQ'S"),
       ),
-      body: ListView.builder(
+      child: ListView.builder(
           itemCount: vehicleData.length,
           itemBuilder: (context, index) {
             return Column(
