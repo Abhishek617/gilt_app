@@ -1,4 +1,5 @@
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
+import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
@@ -53,7 +54,7 @@ class Routes {
         SuccessErrorValidateScreen(),
     privacy_policy: (BuildContext context) => Privacy_Policy(),
     terms_conditions: (BuildContext context) => Terms_Condition(),
-    faqs: (BuildContext context) => Faqs(),
+    faqs: (BuildContext context) => FaqScreen(),
     prof: (BuildContext context) => Profile(),
 
 
