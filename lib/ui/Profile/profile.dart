@@ -9,7 +9,6 @@ import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 
-
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
@@ -30,44 +29,43 @@ class _ProfileState extends State<Profile> {
           ),
           child: Container(
             color: Colors.white,
-            height: 250,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Text(
-                    "Pic Image From",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    "Select a Photo",
+                    style: TextStyle(fontSize: 20, color: Colors.grey),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  ElevatedButton.icon(
+                  const Divider(
+                    height: 1,
+                    color: Colors.grey,
+                  ),
+                  TextButton(
                     onPressed: () {
                       pickImage(ImageSource.camera);
                     },
-                    icon: const Icon(Icons.camera),
-                    label: const Text("CAMERA"),
+                    child: Text("Take Photo...",
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.center),
                   ),
-                  ElevatedButton.icon(
+                  const Divider(
+                    height: 1,
+                    color: Colors.grey,
+                  ),
+                  TextButton(
                     onPressed: () {
-                    pickImage(ImageSource.gallery);
+                      pickImage(ImageSource.gallery);
                     },
-                    icon: const Icon(Icons.image),
-                    label: const Text("GALLERY"),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: const Icon(Icons.close),
-                    label: const Text("CANCEL"),
-                  ),
+                    child: Text("Choose from Library...",
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.center),
+                  )
                 ],
               ),
             ),
@@ -76,6 +74,7 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+
   pickImage(ImageSource imageType) async {
     try {
       final photo = await ImagePicker().pickImage(source: imageType);
@@ -98,85 +97,86 @@ class _ProfileState extends State<Profile> {
         shadowColor: Colors.transparent,
         centerTitle: true,
         title: const Text('Profile'),
-
-      ),
-      child:
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if(pickedImage != null)
+        actions: [
+          if (pickedImage != null)
             IconButton(
-              padding: const EdgeInsets.only(left:00.0,top:10.0,bottom:5.0,right:00.0),
-              icon:Icon (Icons.add_circle),
+              padding: const EdgeInsets.only(
+                  left: 00.0, top: 10.0, bottom: 5.0, right: 00.0),
+              icon: Icon(Icons.check_sharp),
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => FullProfile()));
               },
             ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+
           Padding(
-            padding: EdgeInsets.only(left:30.0,top:20.0,bottom:40.0,right:30.0),
-            child: Text('please capture your image                 ..    \n\n..                                          .',
-              style: TextStyle(
+            padding: EdgeInsets.only(
+                left: 30.0, top: 20.0, bottom: 40.0, right: 30.0),
+            child: Center(
+              child: Text(
+                'Please add profile picture',
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
-                  backgroundColor: Colors.grey,
+                ),
               ),
-              ),
+            ),
           ),
           Align(
             alignment: Alignment.center,
             child: Stack(
               children: [
                 Container(
-            decoration: BoxDecoration(
-            border: Border.all(color: AppColors.primaryColour, width: 5),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(100),
-            ),
-          ),
-                child: ClipOval(
-                  child: pickedImage != null
-                      ? Image.file(
-                    pickedImage!,
-                    width: 170,
-                    height: 170,
-                    fit: BoxFit.cover,
-                  )
-                     : Image.network(
-                      'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
-                      width: 170,
-                      height: 170,
-                      fit: BoxFit.cover,
+                  decoration: BoxDecoration(
+                    border:
+                        Border.all(color: AppColors.primaryColour, width: 5),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(100),
                     ),
+                  ),
+                  child: ClipOval(
+                    child: pickedImage != null
+                        ? Image.file(
+                            pickedImage!,
+                            width: 170,
+                            height: 170,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.network(
+                            'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                            width: 170,
+                            height: 170,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
               ],
             ),
           ),
-
-      Padding(
-        padding: EdgeInsets.all(15),
-          child: Text('PROFILE PHOTO',
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w900
+          Padding(
+            padding: EdgeInsets.all(15),
+            child: Text(
+              'PROFILE PHOTO',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,),
-         ),
+          ),
           const SizedBox(
             height: 20,
           ),
-
-
           Padding(
-            padding: const EdgeInsets.only(left:30.0,top:100.0,bottom:20.0,right:30.0),
+            padding: const EdgeInsets.only(
+                left: 30.0, top: 100.0, bottom: 20.0, right: 30.0),
             child: ElevatedButtonWidgetWithIcon(
                 buttonColor: AppColors.primaryColour,
                 onPressed: imagePickerOption,
-                icon: Icons.add_a_photo_sharp,
-                buttonText:(
-                    'Add Your Picture'
-                )),
+                icon: Icon(Icons.add_a_photo_sharp),
+                buttonText: ('Add Your Picture')),
           )
         ],
       ),

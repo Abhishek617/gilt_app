@@ -27,8 +27,15 @@ class ElevatedButtonWidgetWithIcon extends StatelessWidget {
       width: DeviceUtils.getScaledWidth(context, 0.70),
       margin: EdgeInsets.symmetric(vertical: 8),
       child: ElevatedButton.icon(
-        icon:Icon(Icons.add_a_photo_sharp, color: iconColor,),
-        label: Text(buttonText, style: TextStyle(color: textColor,fontSize: 16,fontWeight: FontWeight.bold)),
+        style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50.0),
+        ))),
+        icon: this.icon,
+        label: Text(buttonText,
+            style: TextStyle(
+                color: textColor, fontSize: 16, fontWeight: FontWeight.bold)),
         onPressed: onPressed,
       ),
     );

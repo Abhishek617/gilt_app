@@ -37,7 +37,7 @@ class _FullProfileState extends State<FullProfile> {
                     'Label Email            ..                              .. ',
                     style: TextStyle(
                       fontSize: 12,
-                      backgroundColor: Colors.grey,
+                      
                     ),
                   ),
                 ),
@@ -76,7 +76,7 @@ class _FullProfileState extends State<FullProfile> {
                               'Label Email            .. ',
                               style: TextStyle(
                                 fontSize: 12,
-                                backgroundColor: Colors.grey,
+                                
                               ),
                             ),
                           ),
@@ -112,7 +112,7 @@ class _FullProfileState extends State<FullProfile> {
                               'Label Email            .. ',
                               style: TextStyle(
                                 fontSize: 12,
-                                backgroundColor: Colors.grey,
+                                
                               ),
                             ),
                           ),
@@ -228,7 +228,7 @@ class _FullProfileState extends State<FullProfile> {
               ],
             ),
           ),
-          isEdit ? get_edit_profile_button() : get_profile_input(),
+          !isEdit ? get_edit_profile_button() : get_profile_input(),
           Divider(
             color: Colors.black12,
             //color of divider
@@ -289,7 +289,7 @@ class _FullProfileState extends State<FullProfile> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
-                backgroundColor: Colors.grey,
+                
               ),
             ),
           ),
@@ -343,7 +343,7 @@ class _FullProfileState extends State<FullProfile> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
-                backgroundColor: Colors.grey,
+                
               ),
             ),
           ),
