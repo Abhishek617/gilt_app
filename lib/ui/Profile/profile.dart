@@ -113,7 +113,6 @@ class _ProfileState extends State<Profile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-
           Padding(
             padding: EdgeInsets.only(
                 left: 30.0, top: 20.0, bottom: 40.0, right: 30.0),
