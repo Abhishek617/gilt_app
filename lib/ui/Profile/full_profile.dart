@@ -159,7 +159,7 @@ class _FullProfileState extends State<FullProfile> {
           padding: const EdgeInsets.only(
               left: 00.0, top: 20.0, bottom: 00.0, right: 00.0),
           child: Text(
-            'PROFILE PHOTO',
+            'USER NAME',
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
             textAlign: TextAlign.center,
           ),
@@ -168,7 +168,7 @@ class _FullProfileState extends State<FullProfile> {
           padding: const EdgeInsets.only(
               left: 00.0, top: 5.0, bottom: 00.0, right: 00.0),
           child: Text(
-            'phpdottechnologies@gmail.com',
+            'test@gmail.com',
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),

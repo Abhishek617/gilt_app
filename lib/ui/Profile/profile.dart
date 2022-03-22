@@ -160,7 +160,7 @@ class _ProfileState extends State<Profile> {
           Padding(
             padding: EdgeInsets.all(15),
             child: Text(
-              'PROFILE PHOTO',
+              'USER NAME',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
               textAlign: TextAlign.center,
             ),
