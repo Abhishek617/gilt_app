@@ -27,7 +27,7 @@ class _FullProfileState extends State<FullProfile> {
                       left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
                   child: Icon(
                     Icons.email,
-                    color:AppColors.primaryColour,
+                    color: AppColors.primaryColour,
                   ),
                 ),
                 Padding(
@@ -37,14 +37,13 @@ class _FullProfileState extends State<FullProfile> {
                     'Label Email            ..                              .. ',
                     style: TextStyle(
                       fontSize: 12,
-                      
                     ),
                   ),
                 ),
                 Padding(
                     padding: const EdgeInsets.only(
                         left: 45.0, top: 00.0, bottom: 00.0, right: 00.0),
-                    child: Icon(Icons.square, color:AppColors.primaryColour)),
+                    child: Icon(Icons.square, color: AppColors.primaryColour)),
               ],
             ),
           ),
@@ -65,7 +64,7 @@ class _FullProfileState extends State<FullProfile> {
                                   bottom: 10.0,
                                   right: 10.0),
                               child: Icon(Icons.person_rounded,
-                                  color:AppColors.primaryColour)),
+                                  color: AppColors.primaryColour)),
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: 00.0,
@@ -76,7 +75,6 @@ class _FullProfileState extends State<FullProfile> {
                               'Label Email            .. ',
                               style: TextStyle(
                                 fontSize: 12,
-                                
                               ),
                             ),
                           ),
@@ -101,7 +99,7 @@ class _FullProfileState extends State<FullProfile> {
                                   bottom: 10.0,
                                   right: 10.0),
                               child: Icon(Icons.person_rounded,
-                                  color:AppColors.primaryColour)),
+                                  color: AppColors.primaryColour)),
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: 00.0,
@@ -112,7 +110,6 @@ class _FullProfileState extends State<FullProfile> {
                               'Label Email            .. ',
                               style: TextStyle(
                                 fontSize: 12,
-                                
                               ),
                             ),
                           ),
@@ -174,28 +171,19 @@ class _FullProfileState extends State<FullProfile> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(
-              left: 80.0, top: 20.0, bottom: 20.0, right: 80.0),
-          child: SizedBox(
-            width: 200.0,
-            height: 45.0,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                setState(() {
-                  this.isEdit = false;
-                });
-              },
-              icon: Icon(
-                Icons.edit,
-                color: Colors.white
-              ),
-              label: Text(
-                'Edit Profile',
-                style: TextStyle(fontSize: 12, color: Colors.white),
+            padding:EdgeInsets.only(
+                left: 80.0, top: 20.0, bottom: 20.0, right: 80.0),
+              child: ElevatedButtonWidgetWithIcon(
+                  buttonColor: AppColors.primaryColour,
+                  onPressed: () {
+                    setState(() {
+                      this.isEdit = false;
+                    });
+                  },
+                  icon: Icon(Icons.edit),
+                  buttonText: ('Edit Profile'),
               ),
             ),
-          ),
-        ),
       ],
     );
   }
@@ -272,8 +260,7 @@ class _FullProfileState extends State<FullProfile> {
                           ),
                           label: Text(
                             'Change',
-                            style:
-                                TextStyle(fontSize: 12, color: Colors.white),
+                            style: TextStyle(fontSize: 12, color: Colors.white),
                           )),
                     ),
                   ),
@@ -289,7 +276,6 @@ class _FullProfileState extends State<FullProfile> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
-                
               ),
             ),
           ),
@@ -343,7 +329,6 @@ class _FullProfileState extends State<FullProfile> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
-                
               ),
             ),
           ),
