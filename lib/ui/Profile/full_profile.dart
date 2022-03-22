@@ -34,16 +34,12 @@ class _FullProfileState extends State<FullProfile> {
                   padding: const EdgeInsets.only(
                       left: 00.0, top: 10.0, bottom: 10.0, right: 10.0),
                   child: Text(
-                    'Label Email            ..                              .. ',
+                    'Email',
                     style: TextStyle(
                       fontSize: 12,
                     ),
                   ),
                 ),
-                Padding(
-                    padding: const EdgeInsets.only(
-                        left: 45.0, top: 00.0, bottom: 00.0, right: 00.0),
-                    child: Icon(Icons.square, color: AppColors.primaryColour)),
               ],
             ),
           ),
@@ -70,9 +66,9 @@ class _FullProfileState extends State<FullProfile> {
                                 left: 00.0,
                                 top: 10.0,
                                 bottom: 10.0,
-                                right: 10.0),
+                                right: 84.0),
                             child: Text(
-                              'Label Email            .. ',
+                              'Name',
                               style: TextStyle(
                                 fontSize: 12,
                               ),
@@ -105,9 +101,9 @@ class _FullProfileState extends State<FullProfile> {
                                 left: 00.0,
                                 top: 10.0,
                                 bottom: 10.0,
-                                right: 10.0),
+                                right: 60.0),
                             child: Text(
-                              'Label Email            .. ',
+                              'Last Name',
                               style: TextStyle(
                                 fontSize: 12,
                               ),
@@ -123,7 +119,7 @@ class _FullProfileState extends State<FullProfile> {
           ),
           Padding(
             padding: const EdgeInsets.only(
-                left: 120.0, top: 10.0, bottom: 20.0, right: 120.0),
+                left: 120.0, top: 20.0, bottom: 10.0, right: 120.0),
             child: SizedBox(
               width: 100.0,
               height: 30.0,
@@ -171,19 +167,19 @@ class _FullProfileState extends State<FullProfile> {
           ),
         ),
         Padding(
-            padding:EdgeInsets.only(
-                left: 80.0, top: 20.0, bottom: 20.0, right: 80.0),
-              child: ElevatedButtonWidgetWithIcon(
-                  buttonColor: AppColors.primaryColour,
-                  onPressed: () {
-                    setState(() {
-                      this.isEdit = false;
-                    });
-                  },
-                  icon: Icon(Icons.edit),
-                  buttonText: ('Edit Profile'),
-              ),
-            ),
+          padding:
+              EdgeInsets.only(left: 80.0, top: 20.0, bottom: 20.0, right: 80.0),
+          child: ElevatedButtonWidgetWithIcon(
+            buttonColor: AppColors.primaryColour,
+            onPressed: () {
+              setState(() {
+                this.isEdit = false;
+              });
+            },
+            icon: Icon(Icons.edit),
+            buttonText: ('Edit Profile'),
+          ),
+        ),
       ],
     );
   }
@@ -216,7 +212,7 @@ class _FullProfileState extends State<FullProfile> {
               ],
             ),
           ),
-          !isEdit ? get_edit_profile_button() : get_profile_input(),
+          isEdit ? get_edit_profile_button() : get_profile_input(),
           Divider(
             color: Colors.black12,
             //color of divider
@@ -272,7 +268,7 @@ class _FullProfileState extends State<FullProfile> {
             padding: EdgeInsets.only(
                 left: 20.0, top: 20.0, bottom: 20.0, right: 20.0),
             child: Text(
-              'please write you description               .                                       .    \n\n.                                                                                                        .                    \n\n                                                                                           .',
+              'please write you description         \n\n                                                                                                                      \n\n                                                                                           ',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
@@ -294,7 +290,7 @@ class _FullProfileState extends State<FullProfile> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 10.0, top: 30.0, bottom: 00.0, right: 40.0),
+                    left: 20.0, top: 30.0, bottom: 00.0, right: 40.0),
                 child: Text(
                   'Contact Details',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
@@ -303,7 +299,7 @@ class _FullProfileState extends State<FullProfile> {
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 85.0, top: 20.0, bottom: 00.0, right: 00.0),
+                    left: 75.0, top: 20.0, bottom: 00.0, right: 00.0),
                 child: SizedBox(
                   width: 110.0,
                   height: 25.0,
@@ -323,9 +319,9 @@ class _FullProfileState extends State<FullProfile> {
           ),
           Padding(
             padding: EdgeInsets.only(
-                left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
+                left: 20.0, top: 20.0, bottom: 20.0, right: 10.0),
             child: Text(
-              '                   phone number         .           . \n\n.               Address                                    .',
+              'phone number            \n\nAddress                                    ',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
