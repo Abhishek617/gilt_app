@@ -36,7 +36,7 @@ class ElevatedButtonWidgetWithIcon extends StatelessWidget {
         label: Text(buttonText,
             style: TextStyle(
                 color: textColor, fontSize: 16, fontWeight: FontWeight.bold)),
-        onPressed: onPressed,
+        onPressed: this.onPressed,
       ),
     );
   }
