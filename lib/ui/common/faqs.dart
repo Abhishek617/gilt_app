@@ -81,7 +81,7 @@ class _FaqScreenState extends State<FaqScreen> {
                           ? Icons.remove_circle_outline
                           : Icons.add_circle_outline,
                       color: vehicleData[index].show
-                          ? Colors.orange
+                          ? Theme.of(context).primaryColor
                           : Colors.black,
                     ),
                   ),
@@ -91,7 +91,7 @@ class _FaqScreenState extends State<FaqScreen> {
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: vehicleData[index].show
-                            ? Colors.orange
+                            ? Theme.of(context).primaryColor
                             : Colors.black),
                   ),
                 ),
