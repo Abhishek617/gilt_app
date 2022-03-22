@@ -6,6 +6,7 @@ import 'package:guilt_app/constants/dimens.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 
+import '../../constants/colors.dart';
 import '../../models/PageModals/success_error_args.dart';
 import '../../widgets/rounded_button_widget.dart';
 
@@ -221,7 +222,7 @@ class _SignUpState extends State<SignUp> {
                     padding: const EdgeInsets.only(left: 5, top: 20),
                     child: ElevatedButtonWidget(
                       buttonText: 'Create Account',
-                      buttonColor: Theme.of(context).colorScheme.primary,
+                      buttonColor: AppColors.primaryColour,
                       onPressed: () {
                         if(formkey.currentState!.validate()){
                          // Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));

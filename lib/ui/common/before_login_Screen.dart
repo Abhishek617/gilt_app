@@ -5,6 +5,8 @@ import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:http/http.dart';
 
+import '../../constants/colors.dart';
+
 
 class Before_LoginScreen extends StatefulWidget {
   const Before_LoginScreen({Key? key}) : super(key: key);
@@ -58,7 +60,7 @@ class _Before_LoginScreenState extends State<Before_LoginScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 25),
                 child: ElevatedButtonWidget(
-                  buttonColor: Theme.of(context).colorScheme.primary,
+                  buttonColor: AppColors.primaryColour,
                   buttonText: 'Business Owner',
                   onPressed: () {
                     Routes.navigateToScreen(context, Routes.login);
@@ -67,7 +69,7 @@ class _Before_LoginScreenState extends State<Before_LoginScreen> {
               ),
               ElevatedButtonWidget(
                 buttonText: 'Individual User',
-                buttonColor: Theme.of(context).colorScheme.primary,
+                buttonColor: AppColors.primaryColour,
                 onPressed: () {
                   Routes.navigateToScreen(context, Routes.login);
                 },

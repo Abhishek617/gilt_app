@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/device/device_utils.dart';
+
 class ElevatedButtonWidgetWithIcon extends StatelessWidget {
   final String buttonText;
   final Color buttonColor;
@@ -21,8 +23,8 @@ class ElevatedButtonWidgetWithIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 55.0,
-      width: 320,
+      height: DeviceUtils.getScaledHeight(context, 0.06),
+      width: DeviceUtils.getScaledWidth(context, 0.70),
       margin: EdgeInsets.symmetric(vertical: 8),
       child: ElevatedButton.icon(
         icon:Icon(Icons.add_a_photo_sharp, color: iconColor,),

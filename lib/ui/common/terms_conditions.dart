@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 
+import '../../constants/colors.dart';
 import '../../utils/routes/routes.dart';
 
 class Terms_Condition extends StatefulWidget {
@@ -155,7 +156,7 @@ class _Terms_ConditionState extends State<Terms_Condition> {
                     padding: const EdgeInsets.only(left: 10, top: 20),
                     child: ElevatedButtonWidget(
                       buttonText: 'Accept',
-                      buttonColor: Theme.of(context).colorScheme.primary,
+                      buttonColor: AppColors.primaryColour,
                       onPressed: () {
                         Routes.navigateToScreen(context, Routes.faqs);
                       },
