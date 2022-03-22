@@ -36,16 +36,24 @@ final ThemeData themeData = new ThemeData(
     backgroundColor: AppColors.pageBackgroundColour,
     scaffoldBackgroundColor: AppColors.pageBackgroundColour,
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.primaryColour,
-      shadowColor: Colors.transparent
-    ),
+        backgroundColor: AppColors.primaryColour,
+        shadowColor: Colors.transparent),
     brightness: Brightness.light,
     primaryColor: AppColors.primaryColour,
     secondaryHeaderColor: AppColors.primaryColour,
+    inputDecorationTheme: InputDecorationTheme(
+        fillColor: Colors.white,
+        border: OutlineInputBorder(),
+        floatingLabelStyle: TextStyle(color: AppColors.primaryColour),
+        focusedBorder:OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.primaryColour, width: 2.0),
+        ),
+        focusColor: AppColors.primaryColour,
+        hoverColor: AppColors.primaryColour),
     colorScheme: ColorScheme.fromSwatch(
             primarySwatch:
-                MaterialColor(AppColors.mauve[50]!.value, AppColors.mauve))
-        .copyWith(secondary: AppColors.cream[500]));
+                MaterialColor(AppColors.mauve[900]!.value, AppColors.mauve))
+        .copyWith(secondary: AppColors.cream[50]));
 
 final ThemeData themeDataDark = ThemeData(
   fontFamily: FontFamily.productSans,
