@@ -63,7 +63,7 @@ class _Before_LoginScreenState extends State<Before_LoginScreen> {
                   buttonColor: AppColors.primaryColour,
                   buttonText: 'Business Owner',
                   onPressed: () {
-                    Routes.navigateToScreen(context, Routes.prof);
+                    Routes.navigateToScreen(context, Routes.login);
                   },
                 ),
               ),
@@ -71,7 +71,7 @@ class _Before_LoginScreenState extends State<Before_LoginScreen> {
                 buttonText: 'Individual User',
                 buttonColor: AppColors.primaryColour,
                 onPressed: () {
-                  Routes.navigateToScreen(context, Routes.prof);
+                  Routes.navigateToScreen(context, Routes.login);
                 },
               ),
             ],
