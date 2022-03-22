@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 
+import '../../constants/colors.dart';
 import '../../widgets/rounded_button_with_icon.dart';
 
 class FullProfile extends StatefulWidget {
@@ -26,7 +27,7 @@ class _FullProfileState extends State<FullProfile> {
                       left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
                   child: Icon(
                     Icons.email,
-                    color: Colors.orange,
+                    color:AppColors.primaryColour,
                   ),
                 ),
                 Padding(
@@ -43,7 +44,7 @@ class _FullProfileState extends State<FullProfile> {
                 Padding(
                     padding: const EdgeInsets.only(
                         left: 45.0, top: 00.0, bottom: 00.0, right: 00.0),
-                    child: Icon(Icons.square, color: Colors.orange)),
+                    child: Icon(Icons.square, color:AppColors.primaryColour)),
               ],
             ),
           ),
@@ -64,7 +65,7 @@ class _FullProfileState extends State<FullProfile> {
                                   bottom: 10.0,
                                   right: 10.0),
                               child: Icon(Icons.person_rounded,
-                                  color: Colors.orange)),
+                                  color:AppColors.primaryColour)),
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: 00.0,
@@ -100,7 +101,7 @@ class _FullProfileState extends State<FullProfile> {
                                   bottom: 10.0,
                                   right: 10.0),
                               child: Icon(Icons.person_rounded,
-                                  color: Colors.orange)),
+                                  color:AppColors.primaryColour)),
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: 00.0,
@@ -137,11 +138,11 @@ class _FullProfileState extends State<FullProfile> {
                 },
                 icon: Icon(
                   Icons.save,
-                  color: Colors.orange,
+                  color: Colors.white,
                 ),
                 label: Text(
                   'Save',
-                  style: TextStyle(fontSize: 12, color: Colors.orange),
+                  style: TextStyle(fontSize: 12, color: Colors.white),
                 ),
               ),
             ),
@@ -186,11 +187,11 @@ class _FullProfileState extends State<FullProfile> {
               },
               icon: Icon(
                 Icons.edit,
-                color: Colors.orange,
+                color: Colors.white
               ),
               label: Text(
                 'Edit Profile',
-                style: TextStyle(fontSize: 12, color: Colors.orange),
+                style: TextStyle(fontSize: 12, color: Colors.white),
               ),
             ),
           ),
@@ -267,12 +268,12 @@ class _FullProfileState extends State<FullProfile> {
                           onPressed: () {},
                           icon: Icon(
                             Icons.edit,
-                            color: Colors.orange,
+                            color: Colors.white,
                           ),
                           label: Text(
                             'Change',
                             style:
-                                TextStyle(fontSize: 12, color: Colors.orange),
+                                TextStyle(fontSize: 12, color: Colors.white),
                           )),
                     ),
                   ),
@@ -324,11 +325,11 @@ class _FullProfileState extends State<FullProfile> {
                       onPressed: () {},
                       icon: Icon(
                         Icons.edit,
-                        color: Colors.orange,
+                        color: Colors.white,
                       ),
                       label: Text(
                         'Change',
-                        style: TextStyle(fontSize: 12, color: Colors.orange),
+                        style: TextStyle(fontSize: 12, color: Colors.white),
                       )),
                 ),
               ),

@@ -3,6 +3,8 @@ import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 
+import '../../constants/colors.dart';
+
 class Change_password extends StatefulWidget {
   const Change_password({Key? key}) : super(key: key);
 
@@ -168,7 +170,7 @@ class _Change_passwordState extends State<Change_password> {
                     height: 30,
                   ),
                   ElevatedButtonWidget(
-                    buttonColor: Theme.of(context).colorScheme.primary,
+                    buttonColor: AppColors.primaryColour,
                     buttonText: 'Change Password',
                     onPressed: () {
                       if(formkey.currentState!.validate()){

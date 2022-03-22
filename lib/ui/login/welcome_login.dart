@@ -6,6 +6,8 @@ import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:guilt_app/utils/google_auth/gmail_auth.dart';
 import 'package:guilt_app/ui/login/after_gmail_login.dart';
 
+import '../../constants/colors.dart';
+
 
 
 class WelcomeLogin extends StatefulWidget {
@@ -37,13 +39,13 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
               ),
               ElevatedButtonWidget(
                 buttonText: 'Log In',
-                buttonColor: Theme.of(context).colorScheme.primary,
+                buttonColor: AppColors.primaryColour,
                 onPressed: () {
                   Routes.navigateToScreen(context, Routes.before_login);
                 },
               ),
               ElevatedButtonWidget(
-                buttonColor: Theme.of(context).colorScheme.primary,
+                buttonColor: AppColors.primaryColour,
                 buttonText: 'Sign Up',
                 onPressed: () {
                   Routes.navigateToScreen(context, Routes.signup);
@@ -51,7 +53,7 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
               ),
 
               ElevatedButtonWidget(
-                buttonColor: Theme.of(context).colorScheme.primary,
+                buttonColor: AppColors.primaryColour,
                 buttonText: 'Continue With Gmail',
                 onPressed: ()async {
                   await FirebaseServices().signInWithGoogle();

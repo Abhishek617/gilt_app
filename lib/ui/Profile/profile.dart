@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:guilt_app/constants/colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../../widgets/rounded_button_with_icon.dart';
@@ -128,7 +129,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 Container(
             decoration: BoxDecoration(
-            border: Border.all(color: Colors.orange, width: 5),
+            border: Border.all(color: AppColors.primaryColour, width: 5),
             borderRadius: const BorderRadius.all(
               Radius.circular(100),
             ),
@@ -149,7 +150,6 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
@@ -171,7 +171,7 @@ class _ProfileState extends State<Profile> {
           Padding(
             padding: const EdgeInsets.only(left:30.0,top:100.0,bottom:20.0,right:30.0),
             child: ElevatedButtonWidgetWithIcon(
-                buttonColor: Theme.of(context).colorScheme.primary,
+                buttonColor: AppColors.primaryColour,
                 onPressed: imagePickerOption,
                 icon: Icons.add_a_photo_sharp,
                 buttonText:(

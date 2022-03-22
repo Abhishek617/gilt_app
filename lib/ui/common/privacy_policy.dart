@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 
+import '../../constants/colors.dart';
 import '../../models/PageModals/success_error_args.dart';
 import '../../utils/routes/routes.dart';
 
@@ -158,7 +159,7 @@ class _Privacy_PolicyState extends State<Privacy_Policy> {
                     padding: const EdgeInsets.only(left: 10, top: 20),
                     child: ElevatedButtonWidget(
                       buttonText: 'Accept',
-                      buttonColor: Theme.of(context).colorScheme.primary,
+                      buttonColor: AppColors.primaryColour,
                       onPressed: () {
                         Routes.navigateToScreen(
                             context, Routes.terms_conditions);

@@ -7,6 +7,7 @@ import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/textfield_widget.dart';
 
+import '../../constants/colors.dart';
 import '../../widgets/rounded_button_widget.dart';
 
 class Login extends StatefulWidget {
@@ -160,7 +161,7 @@ class _LoginState extends State<Login> {
                     padding: const EdgeInsets.only(left: 5, top: 20),
                     child: ElevatedButtonWidget(
                       buttonText: 'Login Success',
-                      buttonColor: Theme.of(context).colorScheme.primary,
+                      buttonColor: AppColors.primaryColour,
                       onPressed: () {
                          if(formkey.currentState!.validate()){
                            Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
@@ -176,7 +177,7 @@ class _LoginState extends State<Login> {
                     padding: const EdgeInsets.only(left: 5, top: 20),
                     child: ElevatedButtonWidget(
                       buttonText: 'Login Fail',
-                      buttonColor: Theme.of(context).colorScheme.primary,
+                      buttonColor: AppColors.primaryColour,
                       onPressed: () {
                         Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: false, description: 'Something went wrong', title: 'Error', isPreviousLogin: true));
                       },

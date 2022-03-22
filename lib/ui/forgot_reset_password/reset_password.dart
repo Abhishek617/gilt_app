@@ -6,6 +6,8 @@ import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:guilt_app/widgets/textfield_widget.dart';
 
+import '../../constants/colors.dart';
+
 class Reset_password extends StatefulWidget {
   const Reset_password({Key? key}) : super(key: key);
 
@@ -104,7 +106,7 @@ class _Reset_passwordState extends State<Reset_password> {
                 ),
                 ElevatedButtonWidget(
                   buttonText: 'Reset Password',
-                  buttonColor: Theme.of(context).colorScheme.primary,
+                  buttonColor: AppColors.primaryColour,
                   onPressed: () {
                     if(formkey.currentState!.validate()){
                       Routes.navigateToScreen(context, Routes.otp);

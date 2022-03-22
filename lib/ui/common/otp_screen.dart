@@ -4,6 +4,8 @@ import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 
+import '../../constants/colors.dart';
+
 class Otp_screen extends StatefulWidget {
   const Otp_screen({Key? key}) : super(key: key);
 
@@ -84,7 +86,7 @@ class _Otp_screenState extends State<Otp_screen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: ElevatedButtonWidget(
-                    buttonColor: Theme.of(context).colorScheme.primary,
+                    buttonColor: AppColors.primaryColour,
                     buttonText: 'Continue',
                     onPressed: () {
                       Routes.navigateToScreen(context, Routes.reset_password);
