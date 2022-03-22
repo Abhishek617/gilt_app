@@ -27,18 +27,30 @@ import 'package:flutter/material.dart';
 
 final ThemeData themeData = new ThemeData(
     fontFamily: FontFamily.productSans,
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        primary: AppColors.buttonColour, // background (button) color
+        onPrimary: Colors.white, // foreground (text) color
+      ),
+    ),
+    backgroundColor: AppColors.pageBackgroundColour,
+    scaffoldBackgroundColor: AppColors.pageBackgroundColour,
+    appBarTheme: AppBarTheme(
+      backgroundColor: AppColors.primaryColour,
+      shadowColor: Colors.transparent
+    ),
     brightness: Brightness.light,
-    primaryColor: AppColors.creame[50],
-    secondaryHeaderColor: AppColors.creame[500],
+    primaryColor: AppColors.primaryColour,
+    secondaryHeaderColor: AppColors.primaryColour,
     colorScheme: ColorScheme.fromSwatch(
             primarySwatch:
-                MaterialColor(AppColors.creame[50]!.value, AppColors.creame))
-        .copyWith(secondary: AppColors.creame[500]));
+                MaterialColor(AppColors.mauve[50]!.value, AppColors.mauve))
+        .copyWith(secondary: AppColors.cream[500]));
 
 final ThemeData themeDataDark = ThemeData(
   fontFamily: FontFamily.productSans,
   brightness: Brightness.dark,
-  primaryColor: AppColors.creame[50],
+  primaryColor: AppColors.cream[50],
   colorScheme:
-      ColorScheme.fromSwatch().copyWith(secondary: AppColors.creame[50]),
+      ColorScheme.fromSwatch().copyWith(secondary: AppColors.cream[50]),
 );

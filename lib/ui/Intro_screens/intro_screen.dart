@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/assets.dart';
+import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
@@ -91,13 +92,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
       bodyTextStyle: bodyStyle,
       bodyPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-      pageColor: Colors.white,
+      pageColor: Colors.transparent,
       imagePadding: EdgeInsets.zero,
     );
 
     return IntroductionScreen(
       key: introKey,
-      globalBackgroundColor: Colors.white,
+      globalBackgroundColor: AppColors.pageBackgroundColour,
       // globalHeader: activeScreen == 2 ? Text('Go Back'):Align(
       //   alignment: Alignment.topRight,
       //   child: SafeArea(
