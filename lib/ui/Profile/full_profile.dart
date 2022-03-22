@@ -126,7 +126,7 @@ class _FullProfileState extends State<FullProfile> {
               child: ElevatedButton.icon(
                 onPressed: () {
                   setState(() {
-                    this.isEdit = true;
+                    isEdit = false;
                   });
                 },
                 icon: Icon(
@@ -173,7 +173,7 @@ class _FullProfileState extends State<FullProfile> {
             buttonColor: AppColors.primaryColour,
             onPressed: () {
               setState(() {
-                this.isEdit = false;
+                isEdit = true;
               });
             },
             icon: Icon(Icons.edit),
@@ -183,7 +183,10 @@ class _FullProfileState extends State<FullProfile> {
       ],
     );
   }
-
+checkProfile()
+{
+  return isEdit ? get_profile_input() : get_edit_profile_button();
+}
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
@@ -212,7 +215,7 @@ class _FullProfileState extends State<FullProfile> {
               ],
             ),
           ),
-          isEdit ? get_edit_profile_button() : get_profile_input(),
+          checkProfile(),
           Divider(
             color: Colors.black12,
             //color of divider
@@ -249,7 +252,11 @@ class _FullProfileState extends State<FullProfile> {
                       width: 110.0,
                       height: 25.0,
                       child: ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              isEdit = false;
+                            });
+                          },
                           icon: Icon(
                             Icons.edit,
                             color: Colors.white,
