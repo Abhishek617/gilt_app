@@ -1,4 +1,5 @@
 import 'package:guilt_app/models/Auth/login_modal.dart';
+import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
 import 'package:mobx/mobx.dart';
 
@@ -71,6 +72,31 @@ abstract class _UserStore with Store {
         _repository.saveIsFirst(false);
         if (value.user?.authToken != null) {
           _repository.saveAuthToken(value.user?.authToken!);
+        }
+        this.isFirst = false;
+        this.success = true;
+        callback(value);
+      } else {
+        print('failed to login');
+      }
+    }).catchError((e) {
+      print(e);
+      this.isLoggedIn = false;
+      this.success = false;
+      throw e;
+    });
+  }
+
+  @action
+  Future signUp(SignUpRequestModal signUpData, callback) async {
+    _repository.signUp(signUpData).then((value) async {
+      if (value != null) {
+        print('isFirst : false');
+        _repository.saveIsLoggedIn(true);
+        this.isLoggedIn = true;
+        _repository.saveIsFirst(false);
+        if (value.data?.user?.authToken != null) {
+          _repository.saveAuthToken(value.data?.user?.authToken!);
         }
         this.isFirst = false;
         this.success = true;

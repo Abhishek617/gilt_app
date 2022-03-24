@@ -4,6 +4,7 @@ import 'package:guilt_app/data/local/datasources/post/post_datasource.dart';
 import 'package:guilt_app/data/network/apis/Auth/auth.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
+import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/post/post.dart';
 import 'package:guilt_app/models/post/post_list.dart';
 import 'package:sembast/sembast.dart';
@@ -79,7 +80,13 @@ class Repository {
         .then((loginData) => loginData)
         .catchError((error) => throw error);
   }
-
+// SignUp:---------------------------------------------------------------------
+  Future<SignUpResponseModal> signUp(SignUpRequestModal signUpData) async {
+    return await _postApi
+        .signup(signUpData)
+        .then((registerData) => registerData)
+        .catchError((error) => throw error);
+  }
   Future<void> saveIsLoggedIn(bool value) =>
       _sharedPrefsHelper.saveIsLoggedIn(value);
 
