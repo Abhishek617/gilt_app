@@ -61,11 +61,11 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
-  final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
+  final _$getProfileAsyncAction = AsyncAction('_PostStore.getProfile');
 
   @override
-  Future<dynamic> getPosts() {
-    return _$getPostsAsyncAction.run(() => super.getPosts());
+  Future<dynamic> getProfile() {
+    return _$getProfileAsyncAction.run(() => super.getProfile());
   }
 
   @override

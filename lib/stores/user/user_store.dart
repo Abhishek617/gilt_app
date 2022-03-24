@@ -1,3 +1,4 @@
+import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
 import 'package:mobx/mobx.dart';
 
@@ -24,7 +25,6 @@ abstract class _UserStore with Store {
 
   // constructor:---------------------------------------------------------------
   _UserStore(Repository repository) : this._repository = repository {
-
     // setting up disposers
     _setupDisposers();
 
@@ -39,7 +39,7 @@ abstract class _UserStore with Store {
   }
 
   // disposers:-----------------------------------------------------------------
-  late List<ReactionDisposer> _disposers;
+  List<ReactionDisposer>? _disposers;
 
   void _setupDisposers() {
     _disposers = [
@@ -47,34 +47,34 @@ abstract class _UserStore with Store {
     ];
   }
 
-  // empty responses:-----------------------------------------------------------
-  static ObservableFuture<bool> emptyLoginResponse =
-  ObservableFuture.value(false);
-
   // store variables:-----------------------------------------------------------
   @observable
   bool success = false;
 
   @observable
-  ObservableFuture<bool> loginFuture = emptyLoginResponse;
+  late ObservableFuture<LoginModal> loginFuture;
 
   @computed
   bool get isLoading => loginFuture.status == FutureStatus.pending;
 
   // actions:-------------------------------------------------------------------
   @action
-  Future login(String email, String password) async {
-
-    final future = _repository.login(email, password);
-    loginFuture = ObservableFuture(future);
-    await future.then((value) async {
-      if (value) {
+  Future login(String email, String password, callback) async {
+    // final future = _repository.login(email, password);
+    //
+    // loginFuture = ObservableFuture(future);
+    _repository.login(email, password).then((value) async {
+      if (value != null) {
         print('isFirst : false');
         _repository.saveIsLoggedIn(true);
         this.isLoggedIn = true;
         _repository.saveIsFirst(false);
+        if (value.user?.authToken != null) {
+          _repository.saveAuthToken(value.user?.authToken!);
+        }
         this.isFirst = false;
         this.success = true;
+        callback(value);
       } else {
         print('failed to login');
       }
@@ -95,7 +95,7 @@ abstract class _UserStore with Store {
 
   // general methods:-----------------------------------------------------------
   void dispose() {
-    for (final d in _disposers) {
+    for (final d in _disposers!) {
       d();
     }
   }

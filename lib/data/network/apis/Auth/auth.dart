@@ -5,8 +5,9 @@ import 'package:guilt_app/data/network/dio_client.dart';
 import 'package:guilt_app/data/network/rest_client.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/post/post_list.dart';
+import 'package:guilt_app/ui/login/login.dart';
 
-class PostApi {
+class AuthApi {
   // dio instance
   final DioClient _dioClient;
 
@@ -14,7 +15,7 @@ class PostApi {
   final RestClient _restClient;
 
   // injecting dio instance
-  PostApi(this._dioClient, this._restClient);
+  AuthApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
   Future<PostList> getProfile() async {
@@ -27,6 +28,7 @@ class PostApi {
     }
   }
 
+  /// Returns list of post in response
   Future login(email, pass) async {
     try {
       final res = await _dioClient
@@ -37,7 +39,8 @@ class PostApi {
       throw e;
     }
   }
-/// guilt_app api call with default rest client
+
+  /// guilt_app api call with default rest client
 //  Future<PostsList> getProfile() {
 //
 //    return _restClient
