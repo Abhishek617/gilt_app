@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 
 class MenuDrawer extends StatelessWidget {
   @override
@@ -295,7 +296,9 @@ class MenuDrawer extends StatelessWidget {
                           'Log Out',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => {
+                          Routes.navigateRootToScreen(context, Routes.login)
+                        },
                       ),
                     ],
                   ),

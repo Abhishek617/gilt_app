@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
@@ -8,6 +10,7 @@ import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/stores/form/form_store.dart';
 import 'package:guilt_app/stores/theme/theme_store.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/textfield_widget.dart';
@@ -210,7 +213,12 @@ class _LoginState extends State<Login> {
                           //         description: 'Logged in successfully',
                           //         title: 'Success',
                           //         isPreviousLogin: false));
-                        }).then((value) {
+                        },(error) {
+                              print(error);
+                              final data = json.decode(json.encode(error.data)) as Map<String, dynamic>;
+                              // Map<String, dynamic> map = json.decode(error.data);
+                              GlobalMethods.showErrorMessage(context,data['message'], 'Log In Exception');
+                            }).then((value) {
                           print(value);
                         });
                       } else {

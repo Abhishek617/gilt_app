@@ -49,8 +49,8 @@ mixin _$UserStore on _UserStore, Store {
   final _$loginAsyncAction = AsyncAction('_UserStore.login');
 
   @override
-  Future<dynamic> login(String email, String password, callback) {
-    return _$loginAsyncAction.run(() => super.login(email, password, callback));
+  Future<dynamic> login(String email, String password, successCallback, errorCallback) {
+    return _$loginAsyncAction.run(() => super.login(email, password, successCallback, errorCallback));
   }
 
   @override
