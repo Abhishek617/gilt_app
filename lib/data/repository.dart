@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:guilt_app/data/local/datasources/post/post_datasource.dart';
+import 'package:guilt_app/data/network/apis/Auth/auth.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
+import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/post/post.dart';
 import 'package:guilt_app/models/post/post_list.dart';
 import 'package:sembast/sembast.dart';
@@ -23,11 +25,11 @@ class Repository {
   Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource);
 
   // Post: ---------------------------------------------------------------------
-  Future<PostList> getPosts() async {
+  Future<PostList> getProfile() async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _postApi.getPosts().then((postsList) {
+    return await _postApi.getProfile().then((postsList) {
       postsList.posts?.forEach((post) {
         _postDataSource.insert(post);
       });
@@ -71,14 +73,22 @@ class Repository {
   Future<bool> get isFirst => _sharedPrefsHelper.isFirst;
 
   // Login:---------------------------------------------------------------------
-  Future<bool> login(String email, String password) async {
-    return await Future.delayed(Duration(seconds: 2), () => true);
+  Future<LoginModal> login(String email, String password) async {
+    return await _postApi
+        .login(email, password)
+        .then((loginData) => loginData)
+        .catchError((error) => throw error);
   }
 
   Future<void> saveIsLoggedIn(bool value) =>
       _sharedPrefsHelper.saveIsLoggedIn(value);
 
   Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
+
+  Future<void> saveAuthToken(String? value) =>
+      _sharedPrefsHelper.saveAuthToken(value!);
+
+  Future<String?> get authToken => _sharedPrefsHelper.authToken;
 
   // Theme: --------------------------------------------------------------------
   Future<void> changeBrightnessToDark(bool value) =>
