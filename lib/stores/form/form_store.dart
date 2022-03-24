@@ -114,7 +114,7 @@ abstract class _FormStore with Store {
   }
 
   @action
-  Future login(email,pass) async {
+  Future login() async {
     loading = true;
 
     Future.delayed(Duration(milliseconds: 2000)).then((future) {

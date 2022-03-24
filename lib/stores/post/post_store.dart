@@ -37,8 +37,8 @@ abstract class _PostStore with Store {
 
   // actions:-------------------------------------------------------------------
   @action
-  Future getProfile() async {
-    final future = _repository.getProfile();
+  Future getPosts() async {
+    final future = _repository.getPosts();
     fetchPostsFuture = ObservableFuture(future);
 
     future.then((postList) {

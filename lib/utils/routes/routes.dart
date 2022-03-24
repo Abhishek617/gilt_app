@@ -17,6 +17,9 @@ import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
 
+
+
+
 class Routes {
   Routes._();
 
@@ -37,6 +40,7 @@ class Routes {
   static const String faqs = '/faqs';
   static const String prof = '/prof';
 
+
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
     intro: (BuildContext context) => OnBoardingPage(),
@@ -54,15 +58,12 @@ class Routes {
     terms_conditions: (BuildContext context) => Terms_Condition(),
     faqs: (BuildContext context) => FaqScreen(),
     prof: (BuildContext context) => Profile(),
+
+
   };
 
   static navigateToScreen(BuildContext context, route) {
     Navigator.of(context).pushNamed(route);
-  }
-
-  static navigateRootToScreen(BuildContext context, route) {
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(route, (Route route) => false);
   }
 
   static navigateToScreenWithArgs(

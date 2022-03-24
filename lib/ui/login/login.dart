@@ -2,16 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:guilt_app/constants/assets.dart';
-import 'package:guilt_app/data/repository.dart';
-import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
-import 'package:guilt_app/stores/form/form_store.dart';
-import 'package:guilt_app/stores/theme/theme_store.dart';
-import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/textfield_widget.dart';
-import 'package:provider/provider.dart';
 
 import '../../widgets/rounded_button_widget.dart';
 
@@ -25,26 +19,6 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   bool passenable = true;
-
-  TextEditingController _userEmailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  ThemeStore _themeStore = ThemeStore(getIt<Repository>());
-  final UserStore _userStore = UserStore(getIt<Repository>());
-  FocusNode? _passwordFocusNode;
-
-  final _store = FormStore();
-
-  @override
-  void initState() {
-    super.initState();
-    _passwordFocusNode = FocusNode();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _themeStore = Provider.of<ThemeStore>(context);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,15 +76,6 @@ class _LoginState extends State<Login> {
                     width: 310,
                     child: TextFormField(
                       // controller: nameController,
-                      controller: _userEmailController,
-                      textInputAction: TextInputAction.next,
-                      autofocus: false,
-                      onChanged: (value) {
-                        _store.setUserId(_userEmailController.text);
-                      },
-                      onFieldSubmitted: (value) {
-                        FocusScope.of(context).requestFocus(_passwordFocusNode);
-                      },
                       decoration: const InputDecoration(
                         prefixIcon: Icon(
                           Icons.mail,
@@ -135,11 +100,6 @@ class _LoginState extends State<Login> {
                     width: 310,
                     child: TextFormField(
                       keyboardType: TextInputType.visiblePassword,
-                      controller: _passwordController,
-                      focusNode: _passwordFocusNode,
-                      onChanged: (value) {
-                        _store.setPassword(_passwordController.text);
-                      },
                       obscureText: passenable,
                       //This will obscure text dynamically
                       decoration: InputDecoration(
@@ -155,6 +115,7 @@ class _LoginState extends State<Login> {
                             passenable
                                 ? Icons.visibility
                                 : Icons.visibility_off,
+                            color: Theme.of(context).primaryColor,
                           ),
                           onPressed: () {
                             // Update the state i.e. toogle the state of passwordVisible variable
@@ -195,24 +156,18 @@ class _LoginState extends State<Login> {
                 Padding(
                   padding: const EdgeInsets.only(left: 5, top: 20),
                   child: ElevatedButtonWidget(
-                    buttonText: 'Login',
+                    buttonText: 'Login Success',
                     buttonColor: Theme.of(context).colorScheme.primary,
                     onPressed: () {
                       if (formkey.currentState!.validate()) {
-                        _userStore.login(_userEmailController.value.text,
-                            _passwordController.value.text, (value) {
-                          Routes.navigateRootToScreen(context, Routes.prof);
-                          // Routes.navigateToScreenWithArgs(
-                          //     context,
-                          //     Routes.success_error_validate,
-                          //     SuccessErrorValidationPageArgs(
-                          //         isSuccess: true,
-                          //         description: 'Logged in successfully',
-                          //         title: 'Success',
-                          //         isPreviousLogin: false));
-                        }).then((value) {
-                          print(value);
-                        });
+                        Routes.navigateToScreenWithArgs(
+                            context,
+                            Routes.success_error_validate,
+                            SuccessErrorValidationPageArgs(
+                                isSuccess: true,
+                                description: 'Logged in successfully',
+                                title: 'Success',
+                                isPreviousLogin: true));
                       } else {
                         print('Eroor');
                       }
@@ -220,23 +175,23 @@ class _LoginState extends State<Login> {
                     },
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 5, top: 20),
-                //   child: ElevatedButtonWidget(
-                //     buttonText: 'Login Fail',
-                //     buttonColor: Theme.of(context).colorScheme.primary,
-                //     onPressed: () {
-                //       Routes.navigateToScreenWithArgs(
-                //           context,
-                //           Routes.success_error_validate,
-                //           SuccessErrorValidationPageArgs(
-                //               isSuccess: false,
-                //               description: 'Something went wrong',
-                //               title: 'Error',
-                //               isPreviousLogin: true));
-                //     },
-                //   ),
-                // ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, top: 20),
+                  child: ElevatedButtonWidget(
+                    buttonText: 'Login Fail',
+                    buttonColor: Theme.of(context).colorScheme.primary,
+                    onPressed: () {
+                      Routes.navigateToScreenWithArgs(
+                          context,
+                          Routes.success_error_validate,
+                          SuccessErrorValidationPageArgs(
+                              isSuccess: false,
+                              description: 'Something went wrong',
+                              title: 'Error',
+                              isPreviousLogin: true));
+                    },
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 5, top: 20),
                   child: Container(
@@ -293,15 +248,5 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
-  }
-
-  // dispose:-------------------------------------------------------------------
-  @override
-  void dispose() {
-    // Clean up the controller when the Widget is removed from the Widget tree
-    _userEmailController.dispose();
-    _passwordController.dispose();
-    _passwordFocusNode?.dispose();
-    super.dispose();
   }
 }

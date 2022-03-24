@@ -47,7 +47,7 @@ class PostDataSource {
     }).toList();
   }
 
-  Future<PostList> getProfileFromDb() async {
+  Future<PostList> getPostsFromDb() async {
 
     print('Loading from database');
 

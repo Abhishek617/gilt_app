@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/network/dio_client.dart';
 import 'package:guilt_app/data/network/rest_client.dart';
-import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/post/post_list.dart';
 
 class PostApi {
@@ -17,9 +16,9 @@ class PostApi {
   PostApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future<PostList> getProfile() async {
+  Future<PostList> getPosts() async {
     try {
-      final res = await _dioClient.get(Endpoints.getProfile);
+      final res = await _dioClient.get(Endpoints.getPosts);
       return PostList.fromJson(res);
     } catch (e) {
       print(e.toString());
@@ -27,21 +26,11 @@ class PostApi {
     }
   }
 
-  Future login(email, pass) async {
-    try {
-      final res = await _dioClient
-          .post(Endpoints.login, data: {"username": email, "password": pass});
-      return LoginModal.fromJson(res);
-    } catch (e) {
-      print(e.toString());
-      throw e;
-    }
-  }
 /// guilt_app api call with default rest client
-//  Future<PostsList> getProfile() {
+//  Future<PostsList> getPosts() {
 //
 //    return _restClient
-//        .get(Endpoints.getProfile)
+//        .get(Endpoints.getPosts)
 //        .then((dynamic res) => PostsList.fromJson(res))
 //        .catchError((error) => throw NetworkException(message: error));
 //  }

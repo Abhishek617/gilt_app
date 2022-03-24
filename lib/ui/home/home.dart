@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // check to see if already called api
     if (!_postStore.loading) {
-      _postStore.getProfile();
+      _postStore.getPosts();
     }
   }
 
