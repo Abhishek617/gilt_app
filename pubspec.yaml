@@ -75,6 +75,7 @@ dependencies:
   image_picker: ^0.8.4+11
   get: ^4.6.1
   file: ^6.1.2
+  material_floating_search_bar: ^0.3.7
 
 dev_dependencies:
   flutter_test:
