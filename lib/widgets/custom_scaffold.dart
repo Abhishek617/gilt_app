@@ -5,11 +5,11 @@ import 'package:guilt_app/ui/common/menu_drawer.dart';
 
 
 class ScaffoldWrapper extends StatefulWidget{
-  ScaffoldWrapper({Key? key, required this.child, required this.appBar,  this.isMenu = true}) : super(key: key);
+  ScaffoldWrapper({Key? key, required this.child, required this.appBar,  this.isMenu = false}) : super(key: key);
 
   final Widget child;
   final AppBar appBar;
-  bool isMenu = true;
+  bool isMenu = false;
   @override
   State<ScaffoldWrapper> createState() => _ScaffoldWrapperState();
 }
