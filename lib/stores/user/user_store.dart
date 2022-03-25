@@ -60,7 +60,8 @@ abstract class _UserStore with Store {
 
   // actions:-------------------------------------------------------------------
   @action
-  Future login(String email, String password, callback) async {
+  Future login(
+      String email, String password, successCallback, errorCallback) async {
     // final future = _repository.login(email, password);
     //
     // loginFuture = ObservableFuture(future);
@@ -75,10 +76,13 @@ abstract class _UserStore with Store {
         }
         this.isFirst = false;
         this.success = true;
-        callback(value);
+        successCallback(value);
       } else {
         print('failed to login');
       }
+    }, onError: (error) {
+      print(error.toString());
+      errorCallback(error.response);
     }).catchError((e) {
       print(e);
       this.isLoggedIn = false;
@@ -88,27 +92,39 @@ abstract class _UserStore with Store {
   }
 
   @action
-  Future signUp(SignUpRequestModal signUpData, callback) async {
-    _repository.signUp(signUpData).then((value) async {
-      if (value != null) {
-        print('isFirst : false');
-        _repository.saveIsLoggedIn(true);
-        this.isLoggedIn = true;
-        _repository.saveIsFirst(false);
-        if (value.data?.user?.authToken != null) {
-          _repository.saveAuthToken(value.data?.user?.authToken!);
+  Future signUp(
+      SignUpRequestModal signUpData, successCallback, errorCallback) async {
+    _repository.signUp(signUpData).then(
+      (value) async {
+        if (value != null) {
+          print('isFirst : false');
+          _repository.saveIsLoggedIn(true);
+          this.isLoggedIn = true;
+          _repository.saveIsFirst(false);
+          if (value.data?.user?.authToken != null) {
+            _repository.saveAuthToken(value.data?.user?.authToken!);
+          }
+          this.isFirst = false;
+          this.success = true;
+          successCallback(value);
+        } else {
+          print('failed to login');
         }
-        this.isFirst = false;
-        this.success = true;
-        callback(value);
-      } else {
-        print('failed to login');
-      }
-    }).catchError((e) {
+      },
+      onError: (exception) {
+        print('onError : exception');
+        errorCallback(exception.response);
+        //Handle exception message
+        if (exception.message != null) {
+          print(exception
+              .message); // Here you get : "Connection  Timeout Exception" or even handled 500 errors on your backend.
+        }
+      },
+    ).catchError((e) {
       print(e);
       this.isLoggedIn = false;
       this.success = false;
-      throw e;
+      return e;
     });
   }
 

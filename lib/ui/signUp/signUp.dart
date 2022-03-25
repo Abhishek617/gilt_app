@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 
@@ -243,14 +246,33 @@ class _SignUpState extends State<SignUp> {
                           });
                           _userStore.signUp(signUpData, (val) {
                             print(val);
-                            Routes.navigateToScreenWithArgs(
+                            if (val.success) {
+                              Routes.navigateToScreenWithArgs(
+                                  context,
+                                  Routes.success_error_validate,
+                                  SuccessErrorValidationPageArgs(
+                                      isSuccess: true,
+                                      description: 'SignUp Success',
+                                      title: 'Success',
+                                      isPreviousLogin: true));
+                            } else {
+                              GlobalMethods.showErrorMessage(context,
+                                  'Something went wrong', 'Sign Up Exception');
+                            }
+                          }, (error) {
+                            print(error.data.toString());
+                            final data = json.decode(json.encode(error.data))
+                                as Map<String, dynamic>;
+                            print(data['error']);
+                            // Map<String, dynamic> map = json.decode(error.data);
+                            List<dynamic> dataList = data["error"];
+                            print(dataList[0]["message"]);
+                            GlobalMethods.showErrorMessage(
                                 context,
-                                Routes.success_error_validate,
-                                SuccessErrorValidationPageArgs(
-                                    isSuccess: true,
-                                    description: 'SignUp Success',
-                                    title: 'Success',
-                                    isPreviousLogin: true));
+                                dataList[0]["field"] +
+                                    ' : ' +
+                                    dataList[0]["message"],
+                                'Sign Up Exception');
                           });
                           // Routes.navigateToScreen(context, Routes.before_login);
                         } else {

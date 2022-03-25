@@ -69,8 +69,8 @@ class MyApp extends StatelessWidget {
                 // Built-in localization of basic text for Cupertino widgets
                 GlobalCupertinoLocalizations.delegate,
               ],
-              // home:(_userStore.isFirst ? OnBoardingPage() : (_userStore.isLoggedIn ? HomeScreen() : WelcomeLogin())),
-              home:(_userStore.isFirst ? Login() : (_userStore.isLoggedIn ? MainProfile() : WelcomeLogin())),
+              home:(_userStore.isFirst ? OnBoardingPage() : (_userStore.isLoggedIn ? MainProfile() : WelcomeLogin())),
+              // home:(_userStore.isFirst ? Login() : (_userStore.isLoggedIn ? SignUp() : WelcomeLogin())),
             ),
           );
         },
