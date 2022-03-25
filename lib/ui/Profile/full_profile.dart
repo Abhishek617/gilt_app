@@ -193,7 +193,7 @@ checkProfile()
       appBar: AppBar(
         shadowColor: Colors.transparent,
         centerTitle: true,
-        title: const Text('Full Profile'),
+        title: const Text('Profile'),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

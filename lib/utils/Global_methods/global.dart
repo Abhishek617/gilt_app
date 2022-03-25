@@ -18,4 +18,5 @@ class GlobalMethods {
 
     return SizedBox.shrink();
   }
+
 }

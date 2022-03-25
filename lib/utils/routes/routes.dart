@@ -1,6 +1,8 @@
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
+import 'package:guilt_app/ui/Profile/full_profile.dart';
+import 'package:guilt_app/ui/Profile/main_profile.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
 import 'package:guilt_app/ui/common/faqs.dart';
@@ -36,6 +38,8 @@ class Routes {
   static const String terms_conditions = '/terms_conditions';
   static const String faqs = '/faqs';
   static const String prof = '/prof';
+  static const String events_home = '/events_home';
+  static const String view_profile = '/view_profile';
 
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
@@ -54,6 +58,8 @@ class Routes {
     terms_conditions: (BuildContext context) => Terms_Condition(),
     faqs: (BuildContext context) => FaqScreen(),
     prof: (BuildContext context) => Profile(),
+    view_profile: (BuildContext context) => FullProfile(),
+    events_home: (BuildContext context) => MainProfile()
   };
 
   static navigateToScreen(BuildContext context, route) {

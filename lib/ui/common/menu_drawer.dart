@@ -240,7 +240,7 @@ class MenuDrawer extends StatelessWidget {
                           'Profile',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => {Routes.navigateToScreen(context, Routes.view_profile)},
                       ),
                       ListTile(
                         horizontalTitleGap: -10,

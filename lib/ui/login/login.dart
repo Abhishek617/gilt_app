@@ -204,7 +204,7 @@ class _LoginState extends State<Login> {
                       if (formkey.currentState!.validate()) {
                         _userStore.login(_userEmailController.value.text,
                             _passwordController.value.text, (value) {
-                          Routes.navigateRootToScreen(context, Routes.prof);
+                          Routes.navigateRootToScreen(context, Routes.events_home);
                           // Routes.navigateToScreenWithArgs(
                           //     context,
                           //     Routes.success_error_validate,

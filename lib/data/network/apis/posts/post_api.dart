@@ -28,6 +28,7 @@ class PostApi {
     }
   }
 
+  // Login POST API
   Future login(email, pass) async {
     try {
       final res = await _dioClient

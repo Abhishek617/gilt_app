@@ -96,7 +96,7 @@ class _MainProfileState extends State<MainProfile> {
       isMenu: true,
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: Center(child:Text("Main Profile")),
+        title: Center(child:Text("Test User")),
         actions: [
           IconButton(
             padding: EdgeInsets.only(
