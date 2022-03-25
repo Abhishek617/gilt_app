@@ -20,6 +20,7 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
       drawer: widget.isMenu == true ? MenuDrawer() : null,
       backgroundColor: Theme.of(context).primaryColor,
       appBar: widget.appBar,
+
       body: ClipRRect(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50)),
         child:

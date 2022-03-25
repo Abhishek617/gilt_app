@@ -182,7 +182,7 @@ class MenuDrawer extends StatelessWidget {
                   onTap: () => {Navigator.of(context).pop()},
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 80, bottom: 10),
+                  padding: EdgeInsets.only(top: 70, bottom: 10),
                   child: Column(
                     children: [
                       ListTile(

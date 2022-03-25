@@ -5,6 +5,7 @@ import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
+import 'package:guilt_app/ui/Profile/main_profile.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
 import 'package:guilt_app/ui/common/privacy_policy.dart';
@@ -69,7 +70,7 @@ class MyApp extends StatelessWidget {
                 GlobalCupertinoLocalizations.delegate,
               ],
               // home:(_userStore.isFirst ? OnBoardingPage() : (_userStore.isLoggedIn ? HomeScreen() : WelcomeLogin())),
-              home:(_userStore.isFirst ? Login() : (_userStore.isLoggedIn ? SignUp() : WelcomeLogin())),
+              home:(_userStore.isFirst ? Login() : (_userStore.isLoggedIn ? MainProfile() : WelcomeLogin())),
             ),
           );
         },
