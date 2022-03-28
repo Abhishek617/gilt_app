@@ -21,6 +21,7 @@ import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/ui/Event/event.dart';
 import '../../ui/attendees/attendees.dart';
+import '../../ui/notification/notification.dart';
 
 import '../../ui/Business/add_business.dart';
 import '../../ui/Business/business_list.dart';
@@ -52,6 +53,7 @@ class Routes {
   static const String event = '/event';
   static const  String event_details = '/event_details';
   static const  String atendees = '/atendees';
+  static const  String notifi = '/notifi';
 
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
@@ -79,6 +81,7 @@ class Routes {
     event: (BuildContext context) => Event(),
     event_details: (BuildContext context) => EventDetails(),
     atendees: (BuildContext context) => Attendees(),
+    notifi: (BuildContext context) => Notifications(),
   };
 
   static navigateToScreen(BuildContext context, route) {

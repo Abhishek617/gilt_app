@@ -199,7 +199,7 @@ class MenuDrawer extends StatelessWidget {
                           'Notification',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => {  Routes.navigateToScreen(context, Routes.notifi)},
                       ),
                       ListTile(
                         horizontalTitleGap: -10,
