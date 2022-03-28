@@ -135,7 +135,8 @@ class MenuDrawer extends StatelessWidget {
                     'BECOME A BUSINESS',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {  Routes.navigateToScreen(
+                  context, Routes.add_business)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),

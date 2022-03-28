@@ -19,6 +19,9 @@ import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
 
+import '../../ui/Business/add_business.dart';
+import '../../ui/Business/business_list.dart';
+
 class Routes {
   Routes._();
 
@@ -40,6 +43,9 @@ class Routes {
   static const String prof = '/prof';
   static const String events_home = '/events_home';
   static const String view_profile = '/view_profile';
+  static const String add_business = '/add_business';
+  static const String business_list = '/business_list';
+
 
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
@@ -59,7 +65,10 @@ class Routes {
     faqs: (BuildContext context) => FaqScreen(),
     prof: (BuildContext context) => Profile(),
     view_profile: (BuildContext context) => FullProfile(),
-    events_home: (BuildContext context) => MainProfile()
+    events_home: (BuildContext context) => MainProfile(),
+    add_business: (BuildContext context) => Add_business(),
+    business_list: (BuildContext context) => Business_list(),
+
   };
 
   static navigateToScreen(BuildContext context, route) {

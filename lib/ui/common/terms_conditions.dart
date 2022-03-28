@@ -177,6 +177,7 @@ class _Terms_ConditionState extends State<Terms_Condition> {
               ),
             ),
           ),
-        ));
+        )
+    );
   }
 }
