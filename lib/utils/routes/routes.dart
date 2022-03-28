@@ -18,6 +18,7 @@ import 'package:guilt_app/ui/login/login.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/ui/Event/event.dart';
 
 class Routes {
   Routes._();
@@ -40,6 +41,7 @@ class Routes {
   static const String prof = '/prof';
   static const String events_home = '/events_home';
   static const String view_profile = '/view_profile';
+  static const String event = '/event';
 
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
@@ -59,7 +61,8 @@ class Routes {
     faqs: (BuildContext context) => FaqScreen(),
     prof: (BuildContext context) => Profile(),
     view_profile: (BuildContext context) => FullProfile(),
-    events_home: (BuildContext context) => MainProfile()
+    events_home: (BuildContext context) => MainProfile(),
+    event: (BuildContext context) => Event(),
   };
 
   static navigateToScreen(BuildContext context, route) {
