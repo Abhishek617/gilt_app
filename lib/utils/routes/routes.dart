@@ -1,5 +1,6 @@
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
+import 'package:guilt_app/ui/Event/event_detail.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
 import 'package:guilt_app/ui/Profile/main_profile.dart';
@@ -19,6 +20,7 @@ import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/ui/Event/event.dart';
+import '../../ui/attendees/attendees.dart';
 
 class Routes {
   Routes._();
@@ -42,6 +44,8 @@ class Routes {
   static const String events_home = '/events_home';
   static const String view_profile = '/view_profile';
   static const String event = '/event';
+  static const  String event_details = '/event_details';
+  static const  String atendees = '/atendees';
 
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
@@ -63,6 +67,8 @@ class Routes {
     view_profile: (BuildContext context) => FullProfile(),
     events_home: (BuildContext context) => MainProfile(),
     event: (BuildContext context) => Event(),
+    event_details: (BuildContext context) => EventDetails(),
+    atendees: (BuildContext context) => Attendees(),
   };
 
   static navigateToScreen(BuildContext context, route) {

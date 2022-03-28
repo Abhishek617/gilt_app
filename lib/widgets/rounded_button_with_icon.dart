@@ -28,6 +28,7 @@ class ElevatedButtonWidgetWithIcon extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 8),
       child: ElevatedButton.icon(
         style: ButtonStyle(
+          backgroundColor: MaterialStateColor.resolveWith((states) => this.buttonColor),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),
@@ -36,6 +37,7 @@ class ElevatedButtonWidgetWithIcon extends StatelessWidget {
         label: Text(buttonText,
             style: TextStyle(
                 color: textColor, fontSize: 16, fontWeight: FontWeight.bold)),
+        
         onPressed: this.onPressed,
       ),
     );

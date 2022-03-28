@@ -76,6 +76,7 @@ dependencies:
   get: ^4.6.1
   file: ^6.1.2
   material_floating_search_bar: ^0.3.7
+  full_screen_image: ^1.0.2
 
 dev_dependencies:
   flutter_test:
