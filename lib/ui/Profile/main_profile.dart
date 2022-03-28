@@ -4,7 +4,7 @@ import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import '../common/menu_drawer.dart';
-
+import 'package:guilt_app/utils/routes/routes.dart';
 class MainProfile extends StatefulWidget {
   const MainProfile({Key? key}) : super(key: key);
 
@@ -96,7 +96,28 @@ class _MainProfileState extends State<MainProfile> {
       isMenu: true,
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: Center(child:Text("Test User")),
+        title: Container(
+          width: double.infinity,
+          height: 40,
+          decoration: BoxDecoration(
+              color: Colors.transparent, borderRadius: BorderRadius.circular(5)),
+          child: Center(
+            child: TextField(
+              decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search, color: Colors.white,),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.clear, color: Colors.white,),
+                    onPressed: () {
+                      /* Clear the search field */
+                    },
+                  ),
+                  hintText: 'Search...',
+                  hintStyle: TextStyle(color: Colors.white),
+                  suffixIconColor: Colors.white,
+                  border: InputBorder.none),
+            ),
+          ),
+        ),
         actions: [
           IconButton(
             padding: EdgeInsets.only(
@@ -104,7 +125,9 @@ class _MainProfileState extends State<MainProfile> {
             icon: Icon(Icons.circle_notifications),
             onPressed: () {},
           ),
+
         ],
+
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -259,15 +282,20 @@ class _MainProfileState extends State<MainProfile> {
                 Padding(
                   padding: EdgeInsets.only(
                       left: 140.0, top: 5.0, bottom: 10.0, right: 5.0),
-                  child: Text(
-                    'see all',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      decoration: TextDecoration.underline,
-                      color: Colors.blueAccent,
+                  child: GestureDetector(
+                    child: Text(
+                      'see all',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        decoration: TextDecoration.underline,
+                        color: Colors.blueAccent,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
+                    onTap: (){
+                      Routes.navigateToScreen(context, Routes.event);
+                      }
                   ),
                 ),
               ],

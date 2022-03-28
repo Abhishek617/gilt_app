@@ -1,5 +1,6 @@
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
+import 'package:guilt_app/ui/Event/event_detail.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
 import 'package:guilt_app/ui/Profile/main_profile.dart';
@@ -18,6 +19,8 @@ import 'package:guilt_app/ui/login/login.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/ui/Event/event.dart';
+import '../../ui/attendees/attendees.dart';
 
 import '../../ui/Business/add_business.dart';
 import '../../ui/Business/business_list.dart';
@@ -46,6 +49,9 @@ class Routes {
   static const String add_business = '/add_business';
   static const String business_list = '/business_list';
 
+  static const String event = '/event';
+  static const  String event_details = '/event_details';
+  static const  String atendees = '/atendees';
 
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
@@ -69,6 +75,10 @@ class Routes {
     add_business: (BuildContext context) => Add_business(),
     business_list: (BuildContext context) => Business_list(),
 
+    events_home: (BuildContext context) => MainProfile(),
+    event: (BuildContext context) => Event(),
+    event_details: (BuildContext context) => EventDetails(),
+    atendees: (BuildContext context) => Attendees(),
   };
 
   static navigateToScreen(BuildContext context, route) {
