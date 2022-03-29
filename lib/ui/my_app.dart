@@ -15,7 +15,6 @@ import 'package:guilt_app/ui/common/success_message.dart';
 import 'package:guilt_app/ui/common/terms_conditions.dart';
 import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
-import 'package:guilt_app/ui/home/tabController.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
