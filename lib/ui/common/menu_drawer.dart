@@ -127,7 +127,7 @@ class MenuDrawer extends StatelessWidget {
                     'BOOK EVENT',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {Routes.navigateToScreen(context, Routes.book_event)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),

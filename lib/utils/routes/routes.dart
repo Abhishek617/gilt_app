@@ -1,6 +1,8 @@
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:guilt_app/ui/Event/create_event.dart';
+import 'package:guilt_app/ui/Event/book_event.dart';
+import 'package:guilt_app/ui/Event/book_event_details.dart';
 import 'package:guilt_app/ui/Event/event_detail.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
@@ -57,6 +59,8 @@ class Routes {
   static const  String event_details = '/event_details';
   static const  String atendees = '/atendees';
   static const  String notifi = '/notifi';
+  static const  String book_event = '/book_event ';
+  static const  String book_event_details = '/book_event_details ';
   static const  String success_message = '/success';
   static const  String about_screen = '/about_screen';
   static const  String create_event = '/createevent';
@@ -90,6 +94,8 @@ class Routes {
     event_details: (BuildContext context) => EventDetails(),
     atendees: (BuildContext context) => Attendees(),
     notifi: (BuildContext context) => Notifications(),
+    book_event: (BuildContext context) => BookEvent(),
+    book_event_details: (BuildContext context) => BookEventDetails(),
     notifi: (BuildContext context) => Notifications(),
     success_message: (BuildContext context) => Success_message(),
     about_screen: (BuildContext context) => About_screen(),
