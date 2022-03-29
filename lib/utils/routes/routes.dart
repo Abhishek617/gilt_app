@@ -1,15 +1,18 @@
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
+import 'package:guilt_app/ui/Event/create_event.dart';
 import 'package:guilt_app/ui/Event/event_detail.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
 import 'package:guilt_app/ui/Profile/main_profile.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
+import 'package:guilt_app/ui/common/about_screen.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
 import 'package:guilt_app/ui/common/faqs.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
 import 'package:guilt_app/ui/common/privacy_policy.dart';
 import 'package:guilt_app/ui/common/success_error_validation.dart';
+import 'package:guilt_app/ui/common/success_message.dart';
 import 'package:guilt_app/ui/common/terms_conditions.dart';
 import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
@@ -54,6 +57,11 @@ class Routes {
   static const  String event_details = '/event_details';
   static const  String atendees = '/atendees';
   static const  String notifi = '/notifi';
+  static const  String success_message = '/success';
+  static const  String about_screen = '/about_screen';
+  static const  String create_event = '/createevent';
+
+
 
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
@@ -82,6 +90,13 @@ class Routes {
     event_details: (BuildContext context) => EventDetails(),
     atendees: (BuildContext context) => Attendees(),
     notifi: (BuildContext context) => Notifications(),
+    notifi: (BuildContext context) => Notifications(),
+    success_message: (BuildContext context) => Success_message(),
+    about_screen: (BuildContext context) => About_screen(),
+    create_event: (BuildContext context) => Create_event(),
+
+
+
   };
 
   static navigateToScreen(BuildContext context, route) {
