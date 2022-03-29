@@ -23,6 +23,9 @@ import 'package:guilt_app/ui/Event/event.dart';
 import '../../ui/attendees/attendees.dart';
 import '../../ui/notification/notification.dart';
 
+import '../../ui/Business/add_business.dart';
+import '../../ui/Business/business_list.dart';
+
 class Routes {
   Routes._();
 
@@ -44,6 +47,9 @@ class Routes {
   static const String prof = '/prof';
   static const String events_home = '/events_home';
   static const String view_profile = '/view_profile';
+  static const String add_business = '/add_business';
+  static const String business_list = '/business_list';
+
   static const String event = '/event';
   static const  String event_details = '/event_details';
   static const  String atendees = '/atendees';
@@ -67,6 +73,10 @@ class Routes {
     faqs: (BuildContext context) => FaqScreen(),
     prof: (BuildContext context) => Profile(),
     view_profile: (BuildContext context) => FullProfile(),
+    events_home: (BuildContext context) => MainProfile(),
+    add_business: (BuildContext context) => Add_business(),
+    business_list: (BuildContext context) => Business_list(),
+
     events_home: (BuildContext context) => MainProfile(),
     event: (BuildContext context) => Event(),
     event_details: (BuildContext context) => EventDetails(),

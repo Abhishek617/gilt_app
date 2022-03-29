@@ -16,7 +16,18 @@ class _Terms_ConditionState extends State<Terms_Condition> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
+        isMenu: false,
         appBar: AppBar(
+          leading: GestureDetector(
+            onTap: () {
+              Routes.goBack(context);
+            },
+            child: Icon(
+              Icons.arrow_back_ios_outlined,
+              //color: Colors.black,
+              size: 15,
+            ),
+          ),
           title: Text('Terms and Conditions'),
           shadowColor: Colors.transparent,
         ),
@@ -166,6 +177,7 @@ class _Terms_ConditionState extends State<Terms_Condition> {
               ),
             ),
           ),
-        ));
+        )
+    );
   }
 }
