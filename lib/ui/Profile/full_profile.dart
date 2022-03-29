@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:guilt_app/models/Auth/profile_modal.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants/colors.dart';
 import '../../widgets/rounded_button_with_icon.dart';
@@ -13,6 +16,20 @@ class FullProfile extends StatefulWidget {
 
 class _FullProfileState extends State<FullProfile> {
   bool isEdit = false;
+  late UserStore _profileStore;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // initializing stores
+    _profileStore = Provider.of<UserStore>(context);
+
+    // check to see if already called api
+    if (!_profileStore.loading) {
+      _profileStore.getProfile();
+    }
+  }
+
 
   get_profile_input() {
     return Container(

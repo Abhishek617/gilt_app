@@ -4,6 +4,7 @@ import 'package:guilt_app/data/local/datasources/post/post_datasource.dart';
 import 'package:guilt_app/data/network/apis/Auth/auth.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
+import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/post/post.dart';
 import 'package:guilt_app/models/post/post_list.dart';
@@ -26,16 +27,14 @@ class Repository {
   Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource);
 
   // Post: ---------------------------------------------------------------------
-  Future<PostList> getProfile() async {
+  Future<GetProfileResponseModal> getProfile() async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _postApi.getProfile().then((postsList) {
-      postsList.posts?.forEach((post) {
-        _postDataSource.insert(post);
-      });
+    return await _postApi.getProfile().then((profileData) {
 
-      return postsList;
+
+      return profileData;
     }).catchError((error) => throw error);
   }
 
@@ -96,6 +95,7 @@ class Repository {
       _sharedPrefsHelper.saveAuthToken(value!);
 
   Future<String?> get authToken => _sharedPrefsHelper.authToken;
+
 
   // Theme: --------------------------------------------------------------------
   Future<void> changeBrightnessToDark(bool value) =>
