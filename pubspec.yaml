@@ -77,6 +77,12 @@ dependencies:
   file: ^6.1.2
   material_floating_search_bar: ^0.3.7
 
+  #Botton Tab Navigation bar
+  animated_bottom_navigation_bar: ^0.3.2
+
+  #Text size automation
+  auto_size_text: ^3.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

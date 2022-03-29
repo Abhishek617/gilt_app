@@ -12,6 +12,7 @@ import 'package:guilt_app/ui/common/privacy_policy.dart';
 import 'package:guilt_app/ui/common/terms_conditions.dart';
 import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
+import 'package:guilt_app/ui/home/tabController.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
@@ -69,7 +70,7 @@ class MyApp extends StatelessWidget {
                 // Built-in localization of basic text for Cupertino widgets
                 GlobalCupertinoLocalizations.delegate,
               ],
-              home:(_userStore.isFirst ? OnBoardingPage() : (_userStore.isLoggedIn ? MainProfile() : WelcomeLogin())),
+              home:(_userStore.isFirst ? WelcomeLogin() : (_userStore.isLoggedIn ? MainProfile() : WelcomeLogin())),
               // home:(_userStore.isFirst ? Login() : (_userStore.isLoggedIn ? SignUp() : WelcomeLogin())),
             ),
           );

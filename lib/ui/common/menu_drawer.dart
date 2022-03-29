@@ -2,9 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 
 class MenuDrawer extends StatelessWidget {
+  final UserStore _userStore = UserStore(getIt<Repository>());
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -297,7 +302,14 @@ class MenuDrawer extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
                         onTap: () => {
-                          Routes.navigateRootToScreen(context, Routes.login)
+                          _userStore.logout((response){
+                            print(response);
+                            Routes.navigateRootToScreen(context, Routes.login);
+                          }, (error){
+                            Routes.navigateRootToScreen(context, Routes.login);
+                            // GlobalMethods.showErrorMessage(context, error.message.toString(), 'Logout Error');
+                          })
+
                         },
                       ),
                     ],
