@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:full_screen_image/full_screen_image.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/rounded_button_with_icon.dart';
 
 import '../../utils/routes/routes.dart';
@@ -16,36 +17,31 @@ class _EventDetailsState extends State<EventDetails> {
   @override
   Widget build(BuildContext context) {
    return Scaffold(
+     floatingActionButton: FloatingActionButton.extended(
+       onPressed: (){
+         Routes.navigateToScreen(context, Routes.atendees);
+       },
 
+          icon: Icon(Icons.supervised_user_circle_rounded, color: Colors.grey,),
+          label: Text('+20 Attendees', style: TextStyle(color: AppColors.primaryColour, fontSize: 12),),
+
+
+         backgroundColor: Colors.white,
+     ),
+    floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(180.0),
+        preferredSize: Size.fromHeight(DeviceUtils.getScaledHeight(context, 0.18)),
     child: AppBar(
-      title: Text('           Event Details'),
+      title: Text('         Event Details'),
       shadowColor: Colors.transparent,
         flexibleSpace:Column(
           children: [
             Padding(
                 padding: EdgeInsets.only(
-                    left: 25.0, top: 90.0, bottom: 5.0, right: 10.0),
+                    left: 25.0, top: 90.0, bottom: 5.0, right: 25.0),
                 child: Icon(Icons.image,
                     size: 40,
                     color: Colors.white)),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 10.0, top: 5.0, bottom: 0.0, right: 10.0),
-              child: ElevatedButtonWidgetWithIcon(
-                  buttonColor: Colors.white,
-                  onPressed: (){
-                    Routes.navigateToScreen(context, Routes.atendees);
-                  },
-                  icon: Icon(Icons.supervised_user_circle, color: Colors.black,),
-                  buttonText: ('+20 Attendees'),
-                textColor: Colors.black,
-
-
-              ),
-            )
-
         ],),
     ),
       ),
@@ -60,7 +56,7 @@ class _EventDetailsState extends State<EventDetails> {
                     Row(children: [
                       Padding(
                         padding: EdgeInsets.only(
-                            right: 10, bottom: 30, top: 10, left: 25),
+                            right: 10, bottom: 30, top: 40, left: 25),
                         child: Text('A Virtual Evening of \nSmooth Jazz ',
                             style: TextStyle(
                                 color: Colors.black,
@@ -69,7 +65,7 @@ class _EventDetailsState extends State<EventDetails> {
                       ),
                       Padding(
                           padding: EdgeInsets.only(
-                              left: 110.0, top: 10.0, bottom: 30.0, right: 20.0),
+                              left: 110.0, top: 40.0, bottom: 30.0, right: 20.0),
                           child: Icon(Icons.message_rounded,
                               size: 20,
                               color: Theme.of(context).colorScheme.primary)),
