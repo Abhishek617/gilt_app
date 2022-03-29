@@ -17,7 +17,18 @@ class _Privacy_PolicyState extends State<Privacy_Policy> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
+        isMenu: false,
         appBar: AppBar(
+          leading: GestureDetector(
+            onTap: () {
+              Routes.goBack(context);
+            },
+            child: Icon(
+              Icons.arrow_back_ios_outlined,
+              //color: Colors.black,
+              size: 15,
+            ),
+          ),
           shadowColor: Colors.transparent,
           title: Text('Privacy & Policy'),
         ),

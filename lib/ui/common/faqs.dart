@@ -2,6 +2,8 @@ import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 
+import '../../utils/routes/routes.dart';
+
 class FaqScreen extends StatefulWidget {
   const FaqScreen({Key? key}) : super(key: key);
 
@@ -60,9 +62,21 @@ class _FaqScreenState extends State<FaqScreen> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
+      //isMenu: false,
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            Routes.goBack(context);
+          },
+          child: Icon(
+            Icons.arrow_back_ios_outlined,
+            //color: Colors.black,
+            size: 15,
+          ),
+        ),
         shadowColor: Colors.transparent,
         title: const Text("FAQ'S"),
+       //leading: Icon(Icons.arrow_back_ios_outlined,size: 15,),
       ),
       child: ListView.builder(
           itemCount: vehicleData.length,

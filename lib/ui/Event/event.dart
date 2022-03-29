@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/ui/Event/event_detail.dart';
+
+import '../../utils/routes/routes.dart';
 
 class Event extends StatefulWidget {
   const Event({Key? key}) : super(key: key);
@@ -35,68 +38,71 @@ class _EventState extends State<Event> {
     return  Column(children:[
       Padding(
         padding: EdgeInsets.only(left: 0, top: 0, right: 00, bottom: 10),
-        child: Card(
-          child: Container(
-            margin: EdgeInsets.all(5),
-            width: 370,
-            color: backgroundcolor,
-            alignment: Alignment.center,
-            child: Row(
-              children: [
-                Column(children: [
-                   Image.network(
-                  'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
-                  width: 80,
-                  height: 80,
-              ),
-                ],
+        child: GestureDetector(
+        onTap:()=> Routes.navigateToScreen(context, Routes.event_details),
+          child: Card(
+            child: Container(
+              margin: EdgeInsets.all(5),
+              width: 370,
+              color: backgroundcolor,
+              alignment: Alignment.center,
+              child: Row(
+                children: [
+                  Column(children: [
+                     Image.network(
+                    'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                    width: 80,
+                    height: 80,
                 ),
-                Padding(padding: EdgeInsets.only(left: 15),
-                  child: Column(
-                    children: [
+                  ],
+                  ),
+                  Padding(padding: EdgeInsets.only(left: 15),
+                    child: Column(
+                      children: [
 
-                      Padding(padding: EdgeInsets.only(right: 45, bottom: 3, top: 3),
-                        child: Text('13 JAN 2022, 2:00PM', textAlign: TextAlign.left,
-                          style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400)
-                        ),
-                      ),
-
-
-                         Text('A Virtual Evening of \nSmooth Jazz ',
+                        Padding(padding: EdgeInsets.only(right: 45, bottom: 3, top: 3),
+                          child: Text('13 JAN 2022, 2:00PM', textAlign: TextAlign.left,
                             style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700)),
+                                color: Colors.blue,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400)
+                          ),
+                        ),
 
 
-                          Row(
-                            children: [
-                              Padding(
+                           Text('A Virtual Evening of \nSmooth Jazz ',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700)),
+
+
+                            Row(
+                              children: [
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 00.0, top: 3.0, bottom: 00.0, right: 0.0),
+                                    child: Icon(Icons.location_on,
+                                        size: 20,
+                                        color: Theme.of(context).colorScheme.primary)),
+                                Padding(
                                   padding: EdgeInsets.only(
-                                      left: 00.0, top: 3.0, bottom: 00.0, right: 0.0),
-                                  child: Icon(Icons.location_on,
-                                      size: 20,
-                                      color: Theme.of(context).colorScheme.primary)),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: 0.0, top: 3.0, bottom: 00.0, right: 40.0),
-                                child: Text(
-                                  '36, guild street, london, uk',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w500,
+                                      left: 0.0, top: 3.0, bottom: 00.0, right: 40.0),
+                                  child: Text(
+                                    '36, guild street, london, uk',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                    ],
+                              ],
+                            ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -108,68 +114,71 @@ class _EventState extends State<Event> {
     return  Column(children:[
       Padding(
         padding: EdgeInsets.only(left: 0, top: 0, right: 00, bottom: 10),
-        child: Card(
-          child: Container(
-            margin: EdgeInsets.all(5),
-            width: 370,
-            color: backgroundcolor,
-            alignment: Alignment.center,
-            child: Row(
-              children: [
-                Column(children: [
-                  Image.network(
-                    'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
-                    width: 80,
-                    height: 80,
+        child: GestureDetector(
+          onTap:()=> Routes.navigateToScreen(context, Routes.event_details),
+          child: Card(
+            child: Container(
+              margin: EdgeInsets.all(5),
+              width: 370,
+              color: backgroundcolor,
+              alignment: Alignment.center,
+              child: Row(
+                children: [
+                  Column(children: [
+                    Image.network(
+                      'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                      width: 80,
+                      height: 80,
+                    ),
+                  ],
                   ),
-                ],
-                ),
-                Padding(padding: EdgeInsets.only(left: 15),
-                  child: Column(
-                    children: [
+                  Padding(padding: EdgeInsets.only(left: 15),
+                    child: Column(
+                      children: [
 
-                      Padding(padding: EdgeInsets.only(right: 45, bottom: 3, top: 3),
-                        child: Text('13 JAN 2022, 2:00PM', textAlign: TextAlign.left,
-                            style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400)
-                        ),
-                      ),
-
-
-                      Text('A Virtual Evening of \nSmooth Jazz ',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700)),
-
-
-                      Row(
-                        children: [
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 00.0, top: 3.0, bottom: 00.0, right: 0.0),
-                              child: Icon(Icons.location_on,
-                                  size: 20,
-                                  color: Theme.of(context).colorScheme.primary)),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 0.0, top: 3.0, bottom: 00.0, right: 40.0),
-                            child: Text(
-                              '36, guild street, london, uk',
+                        Padding(padding: EdgeInsets.only(right: 45, bottom: 3, top: 3),
+                          child: Text('13 JAN 2022, 2:00PM', textAlign: TextAlign.left,
                               style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
+                                  color: Colors.blue,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400)
+                          ),
+                        ),
+
+
+                        Text('A Virtual Evening of \nSmooth Jazz ',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700)),
+
+
+                        Row(
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    left: 00.0, top: 3.0, bottom: 00.0, right: 0.0),
+                                child: Icon(Icons.location_on,
+                                    size: 20,
+                                    color: Theme.of(context).colorScheme.primary)),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 0.0, top: 3.0, bottom: 00.0, right: 40.0),
+                              child: Text(
+                                '36, guild street, london, uk',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -177,7 +186,7 @@ class _EventState extends State<Event> {
     ],
     );
   }
-  List<String> item = [' b', 'c ', ' d', ' d', 'd '];
+  List<String> item = [' b', 'c ', ' d', ' d', 'd ','c','f','s'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -123,7 +123,9 @@ class _MainProfileState extends State<MainProfile> {
             padding: EdgeInsets.only(
                 left: 00.0, top: 10.0, bottom: 5.0, right: 00.0),
             icon: Icon(Icons.circle_notifications),
-            onPressed: () {},
+            onPressed: () {
+              Routes.navigateToScreen(context, Routes.notifi);
+            },
           ),
 
         ],
@@ -334,15 +336,20 @@ class _MainProfileState extends State<MainProfile> {
                 Padding(
                   padding: EdgeInsets.only(
                       left: 182.0, top: 10.0, bottom: 10.0, right: 0.0),
-                  child: Text(
-                    'see all',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      decoration: TextDecoration.underline,
-                      color: Colors.blueAccent,
+                  child: GestureDetector(
+                    child: Text(
+                      'see all',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        decoration: TextDecoration.underline,
+                        color: Colors.blueAccent,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
+                    onTap: (){
+                      Routes.navigateToScreen(context, Routes.event);
+                    },
                   ),
                 ),
               ],

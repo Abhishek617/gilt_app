@@ -98,7 +98,8 @@ class MenuDrawer extends StatelessWidget {
                     'ADD EVENT',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {Routes.navigateToScreen(
+                      context, Routes.create_event)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
@@ -131,7 +132,7 @@ class MenuDrawer extends StatelessWidget {
                     'BOOK EVENT',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {Routes.navigateToScreen(context, Routes.book_event)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
@@ -140,7 +141,8 @@ class MenuDrawer extends StatelessWidget {
                     'BECOME A BUSINESS',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {  Routes.navigateToScreen(
+                  context, Routes.add_business)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
@@ -149,7 +151,8 @@ class MenuDrawer extends StatelessWidget {
                     'MESSAGE',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {Routes.navigateToScreen(
+                      context, Routes.success_message)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
@@ -158,7 +161,8 @@ class MenuDrawer extends StatelessWidget {
                     'ABOUT APP',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {Routes.navigateToScreen(
+                      context, Routes.about_screen)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
@@ -203,7 +207,7 @@ class MenuDrawer extends StatelessWidget {
                           'Notification',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => {  Routes.navigateToScreen(context, Routes.notifi)},
                       ),
                       ListTile(
                         horizontalTitleGap: -10,
