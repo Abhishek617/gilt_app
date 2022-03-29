@@ -78,6 +78,12 @@ dependencies:
   material_floating_search_bar: ^0.3.7
   full_screen_image: ^1.0.2
 
+  #Botton Tab Navigation bar
+  animated_bottom_navigation_bar: ^0.3.2
+
+  #Text size automation
+  auto_size_text: ^3.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

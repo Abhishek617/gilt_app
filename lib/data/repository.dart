@@ -4,6 +4,7 @@ import 'package:guilt_app/data/local/datasources/post/post_datasource.dart';
 import 'package:guilt_app/data/network/apis/Auth/auth.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
+import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/post/post.dart';
@@ -31,6 +32,7 @@ class Repository {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
+    return await _postApi.getProfile().then((postsList) {
     return await _postApi.getProfile().then((profileData) {
 
 
@@ -77,6 +79,13 @@ class Repository {
     return await _postApi
         .login(email, password)
         .then((loginData) => loginData)
+        .catchError((error) => throw error);
+  }
+  // Logout:---------------------------------------------------------------------
+  Future<LogOutModal> logout() async {
+    return await _postApi
+        .logout()
+        .then((logoutData) => logoutData)
         .catchError((error) => throw error);
   }
 // SignUp:---------------------------------------------------------------------

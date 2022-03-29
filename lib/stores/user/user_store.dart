@@ -82,6 +82,7 @@ abstract class _UserStore with Store {
         this.isLoggedIn = true;
         _repository.saveIsFirst(false);
         if (value.user?.authToken != null) {
+          print(value.user?.authToken!);
           _repository.saveAuthToken(value.user?.authToken!);
         }
         this.isFirst = false;
@@ -111,6 +112,41 @@ abstract class _UserStore with Store {
       this.Profile_data = profileData;
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
+    });
+  }
+
+  @action
+  Future logout(successCallback, errorCallback) async {
+    // final future = _repository.login(email, password);
+    //
+    // loginFuture = ObservableFuture(future);
+    _repository.logout().then((value) async {
+      if (value != null) {
+        print('isFirst : false');
+        this.isLoggedIn = false;
+        this.isFirst = true;
+        _repository.saveIsFirst(true);
+        _repository.saveIsLoggedIn(false);
+        successCallback(value);
+      } else {
+        this.isLoggedIn = false;
+        this.isFirst = true;
+        _repository.saveIsFirst(true);
+        _repository.saveIsLoggedIn(false);
+        print('failed to login');
+      }
+    }, onError: (error) {
+      print(error.toString());
+      this.isLoggedIn = false;
+      this.isFirst = true;
+      _repository.saveIsFirst(true);
+      _repository.saveIsLoggedIn(false);
+      errorCallback(error.response);
+    }).catchError((e) {
+      print(e);
+      this.isLoggedIn = false;
+      this.success = false;
+      throw e;
     });
   }
 
@@ -149,13 +185,6 @@ abstract class _UserStore with Store {
       this.success = false;
       return e;
     });
-  }
-
-  logout() {
-    this.isLoggedIn = false;
-    this.isFirst = true;
-    _repository.saveIsFirst(true);
-    _repository.saveIsLoggedIn(false);
   }
 
   // general methods:-----------------------------------------------------------
