@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:dio/dio.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
 
 abstract class NetworkModule {
   /// A singleton dio provider.
@@ -8,12 +11,10 @@ abstract class NetworkModule {
   /// Calling it multiple times will return the same instance.
   static Dio provideDio(SharedPreferenceHelper sharedPrefHelper) {
     final dio = Dio();
-
     dio
       ..options.baseUrl = Endpoints.baseUrl
       ..options.connectTimeout = Endpoints.connectionTimeout
       ..options.receiveTimeout = Endpoints.receiveTimeout
-      ..options.headers = {'Content-Type': 'application/json; charset=utf-8'}
       ..interceptors.add(LogInterceptor(
         request: true,
         responseBody: true,
@@ -24,15 +25,15 @@ abstract class NetworkModule {
         InterceptorsWrapper(
           onRequest: (RequestOptions options,
               RequestInterceptorHandler handler) async {
-            // getting token
+            options.headers['Content-Type']= 'application/json; charset=utf-8';
+                 // getting token
             var token = await sharedPrefHelper.authToken;
-            print('token' + token.toString());
+            print('interceptor_token ' + token.toString());
             if (token != null) {
-              options.headers.putIfAbsent('Authorization', () => token);
+             await options.headers.putIfAbsent('Authorization', () => token);
             } else {
               print('Auth token is null');
             }
-
             return handler.next(options);
           },
         ),
