@@ -87,6 +87,7 @@ abstract class _UserStore with Store {
         }
         this.isFirst = false;
         this.success = true;
+        getProfile();
         successCallback(value);
       } else {
         print('failed to login');
