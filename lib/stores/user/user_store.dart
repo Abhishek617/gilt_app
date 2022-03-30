@@ -5,6 +5,8 @@ import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../data/repository.dart';
+import '../../models/Auth/profile_modal.dart';
+import '../../utils/dio/dio_error_util.dart';
 import '../form/form_store.dart';
 
 part 'user_store.g.dart';
@@ -24,6 +26,10 @@ abstract class _UserStore with Store {
   // bool to check if current user is logged in
   bool isLoggedIn = false;
   bool isFirst = true;
+  GetProfileResponseModal? Profile_data;
+
+  static ObservableFuture<GetProfileResponseModal?> emptyPostResponse =
+  ObservableFuture.value(null);
 
   // constructor:---------------------------------------------------------------
   _UserStore(Repository repository) : this._repository = repository {
@@ -59,6 +65,10 @@ abstract class _UserStore with Store {
   @observable
   late ObservableFuture<LoginModal> loginFuture;
 
+  @observable
+  ObservableFuture<GetProfileResponseModal?> fetchPostsFuture =
+  ObservableFuture<GetProfileResponseModal?>(emptyPostResponse);
+
   @computed
   bool get isLoading => loginFuture.status == FutureStatus.pending;
 
@@ -76,6 +86,7 @@ abstract class _UserStore with Store {
         this.isLoggedIn = true;
         _repository.saveIsFirst(false);
         if (value.user?.authToken != null) {
+          print(value.user?.authToken!);
           _repository.saveAuthToken(value.user?.authToken!);
         }
         this.isFirst = false;
@@ -86,6 +97,54 @@ abstract class _UserStore with Store {
       }
     }, onError: (error) {
       print(error.toString());
+      errorCallback(error.response);
+    }).catchError((e) {
+      print(e);
+      this.isLoggedIn = false;
+      this.success = false;
+      throw e;
+    });
+  }
+  @computed
+  bool get loading => fetchPostsFuture.status == FutureStatus.pending;
+  @action
+  Future getProfile() async {
+    final future = _repository.getProfile();
+    fetchPostsFuture = ObservableFuture(future);
+
+    future.then((profileData) {
+      this.Profile_data = profileData;
+    }).catchError((error) {
+      errorStore.errorMessage = DioErrorUtil.handleError(error);
+    });
+  }
+
+  @action
+  Future logout(successCallback, errorCallback) async {
+    // final future = _repository.login(email, password);
+    //
+    // loginFuture = ObservableFuture(future);
+    _repository.logout().then((value) async {
+      if (value != null) {
+        print('isFirst : false');
+        this.isLoggedIn = false;
+        this.isFirst = true;
+        _repository.saveIsFirst(true);
+        _repository.saveIsLoggedIn(false);
+        successCallback(value);
+      } else {
+        this.isLoggedIn = false;
+        this.isFirst = true;
+        _repository.saveIsFirst(true);
+        _repository.saveIsLoggedIn(false);
+        print('failed to login');
+      }
+    }, onError: (error) {
+      print(error.toString());
+      this.isLoggedIn = false;
+      this.isFirst = true;
+      _repository.saveIsFirst(true);
+      _repository.saveIsLoggedIn(false);
       errorCallback(error.response);
     }).catchError((e) {
       print(e);
@@ -142,12 +201,6 @@ abstract class _UserStore with Store {
 
 
 
-  logout() {
-    this.isLoggedIn = false;
-    this.isFirst = true;
-    _repository.saveIsFirst(true);
-    _repository.saveIsLoggedIn(false);
-  }
 
 
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants/preferences.dart';

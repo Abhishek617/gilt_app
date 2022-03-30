@@ -5,6 +5,8 @@ import 'package:guilt_app/data/network/dio_client.dart';
 import 'package:guilt_app/data/network/rest_client.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
+import 'package:guilt_app/models/Auth/profile_modal.dart';
+import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/post/post_list.dart';
 
@@ -19,10 +21,10 @@ class PostApi {
   PostApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future<PostList> getProfile() async {
+  Future<GetProfileResponseModal> getProfile() async {
     try {
-      final res = await _dioClient.get(Endpoints.getProfile);
-      return PostList.fromJson(res);
+      final res = await _dioClient.post(Endpoints.getProfile);
+      return GetProfileResponseModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
@@ -35,6 +37,18 @@ class PostApi {
       final res = await _dioClient
           .post(Endpoints.login, data: {"username": email, "password": pass});
       return LoginModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Login POST API
+  Future logout() async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.logout);
+      return LogOutModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
