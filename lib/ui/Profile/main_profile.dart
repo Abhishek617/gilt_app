@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
+import 'package:provider/provider.dart';
 import '../common/menu_drawer.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 class MainProfile extends StatefulWidget {
@@ -13,6 +15,20 @@ class MainProfile extends StatefulWidget {
 }
 
 class _MainProfileState extends State<MainProfile> {
+  late UserStore _profileStore;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // initializing stores
+    _profileStore = Provider.of<UserStore>(context);
+
+    // check to see if already called api
+    if (!_profileStore.loading) {
+      _profileStore.getProfile();
+    }
+  }
+
   Widget box(String title, Color backgroundcolor, Image demo) {
     return Padding(
       padding: EdgeInsets.only(left: 0, top: 0, right: 10, bottom: 0),
