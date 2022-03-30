@@ -4,11 +4,17 @@ import 'package:guilt_app/data/local/datasources/post/post_datasource.dart';
 import 'package:guilt_app/data/network/apis/Auth/auth.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
+import 'package:guilt_app/models/Auth/otp_send.dart';
+import 'package:guilt_app/models/Auth/otp_send.dart';
+import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/post/post.dart';
 import 'package:guilt_app/models/post/post_list.dart';
+import 'package:guilt_app/ui/common/otp_screen.dart';
+import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:sembast/sembast.dart';
 
+import '../models/Auth/otp_send.dart';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
 
@@ -80,6 +86,20 @@ class Repository {
         .then((loginData) => loginData)
         .catchError((error) => throw error);
   }
+
+
+  // OtpSend:---------------------------------------------------------------------
+
+  Future<OtpSendModel> Send_Otp() async {
+    return await _postApi
+        .Reset_password()
+        .then((otpSendData) => otpSendData)
+        .catchError((error) => throw error);
+  }
+
+
+
+
 // SignUp:---------------------------------------------------------------------
   Future<SignUpResponseModal> signUp(SignUpRequestModal signUpData) async {
     return await _postApi

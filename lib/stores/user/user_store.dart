@@ -1,6 +1,7 @@
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
+import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../data/repository.dart';
@@ -47,6 +48,9 @@ abstract class _UserStore with Store {
       reaction((_) => success, (_) => success = false, delay: 200),
     ];
   }
+  // store variables:-----------------------------------------------------------
+
+
 
   // store variables:-----------------------------------------------------------
   @observable
@@ -91,6 +95,11 @@ abstract class _UserStore with Store {
     });
   }
 
+
+
+
+
+
   @action
   Future signUp(
       SignUpRequestModal signUpData, successCallback, errorCallback) async {
@@ -128,12 +137,21 @@ abstract class _UserStore with Store {
     });
   }
 
+
+
+
+
+
   logout() {
     this.isLoggedIn = false;
     this.isFirst = true;
     _repository.saveIsFirst(true);
     _repository.saveIsLoggedIn(false);
   }
+
+
+
+
 
   // general methods:-----------------------------------------------------------
   void dispose() {
