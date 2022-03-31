@@ -233,7 +233,7 @@ class _SignUpState extends State<SignUp> {
                     padding: const EdgeInsets.only(left: 5, top: 20),
                     child: ElevatedButtonWidget(
                       buttonText: 'Create Account',
-                      buttonColor: AppColors.primaryColour,
+                      buttonColor: AppColors.primaryColor,
                       onPressed: () {
                         if (formkey.currentState!.validate()) {
                           final signUpData = SignUpRequestModal.fromJson({

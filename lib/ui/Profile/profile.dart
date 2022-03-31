@@ -133,7 +133,7 @@ class _ProfileState extends State<Profile> {
                 Container(
                   decoration: BoxDecoration(
                     border:
-                        Border.all(color: AppColors.primaryColour, width: 5),
+                        Border.all(color: AppColors.primaryColor, width: 5),
                     borderRadius: const BorderRadius.all(
                       Radius.circular(100),
                     ),
@@ -172,7 +172,7 @@ class _ProfileState extends State<Profile> {
             padding: const EdgeInsets.only(
                 left: 30.0, top: 100.0, bottom: 20.0, right: 30.0),
             child: ElevatedButtonWidgetWithIcon(
-                buttonColor: AppColors.primaryColour,
+                buttonColor: AppColors.primaryColor,
                 onPressed: imagePickerOption,
                 icon: Icon(Icons.add_a_photo_sharp),
                 buttonText: ('Add Your Picture')),

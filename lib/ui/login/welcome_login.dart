@@ -39,13 +39,13 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
               ),
               ElevatedButtonWidget(
                 buttonText: 'Log In',
-                buttonColor: AppColors.primaryColour,
+                buttonColor: AppColors.primaryColor,
                 onPressed: () {
                   Routes.navigateToScreen(context, Routes.before_login);
                 },
               ),
               ElevatedButtonWidget(
-                buttonColor: AppColors.primaryColour,
+                buttonColor: AppColors.primaryColor,
                 buttonText: 'Sign Up',
                 onPressed: () {
                   Routes.navigateToScreen(context, Routes.signup);
@@ -53,7 +53,7 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
               ),
 
               ElevatedButtonWidget(
-                buttonColor: AppColors.primaryColour,
+                buttonColor: AppColors.primaryColor,
                 buttonText: 'Continue With Gmail',
                 onPressed: ()async {
                   await FirebaseServices().signInWithGoogle();

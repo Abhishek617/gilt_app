@@ -106,7 +106,7 @@ class _Reset_passwordState extends State<Reset_password> {
                 ),
                 ElevatedButtonWidget(
                   buttonText: 'Reset Password',
-                  buttonColor: AppColors.primaryColour,
+                  buttonColor: AppColors.primaryColor,
                   onPressed: () {
                     if(formkey.currentState!.validate()){
                       Routes.navigateToScreen(context, Routes.otp);

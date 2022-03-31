@@ -549,7 +549,7 @@ class _Business_listState extends State<Business_list> {
                     padding: const EdgeInsets.only(left: 10, top: 20),
                     child: ElevatedButtonWidget(
                       buttonText: 'Accept',
-                      buttonColor: AppColors.primaryColour,
+                      buttonColor: AppColors.primaryColor,
                       onPressed: () {
                         Routes.navigateToScreen(context, Routes.faqs);
                       },

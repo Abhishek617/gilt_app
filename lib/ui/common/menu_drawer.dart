@@ -23,7 +23,7 @@ class MenuDrawer extends StatelessWidget {
             height: 180,
             child: DrawerHeader(
               decoration: BoxDecoration(
-                color: AppColors.primaryColour,
+                color: AppColors.primaryColor,
               ),
               child: Column(
                 children: [
@@ -201,7 +201,7 @@ class MenuDrawer extends StatelessWidget {
                         leading: Icon(
                           Icons.settings,
                           size: 20,
-                          color: AppColors.primaryColour,
+                          color: AppColors.primaryColor,
                         ),
                         title: Text(
                           'Notification',
@@ -215,7 +215,7 @@ class MenuDrawer extends StatelessWidget {
                         leading: Icon(
                           Icons.settings,
                           size: 20,
-                          color: AppColors.primaryColour,
+                          color: AppColors.primaryColor,
                         ),
                         title: Text(
                           'Change Password',
@@ -229,7 +229,7 @@ class MenuDrawer extends StatelessWidget {
                         leading: Icon(
                           Icons.settings,
                           size: 20,
-                          color: AppColors.primaryColour,
+                          color: AppColors.primaryColor,
                         ),
                         title: Text(
                           'Settings',
@@ -243,7 +243,7 @@ class MenuDrawer extends StatelessWidget {
                         leading: Icon(
                           Icons.settings,
                           size: 20,
-                          color: AppColors.primaryColour,
+                          color: AppColors.primaryColor,
                         ),
                         title: Text(
                           'Profile',
@@ -257,7 +257,7 @@ class MenuDrawer extends StatelessWidget {
                         leading: Icon(
                           Icons.settings,
                           size: 20,
-                          color: AppColors.primaryColour,
+                          color: AppColors.primaryColor,
                         ),
                         title: Text(
                           'Rate The App',
@@ -271,7 +271,7 @@ class MenuDrawer extends StatelessWidget {
                         leading: Icon(
                           Icons.settings,
                           size: 20,
-                          color: AppColors.primaryColour,
+                          color: AppColors.primaryColor,
                         ),
                         title: Text(
                           'Terms and Conditions',
@@ -285,7 +285,7 @@ class MenuDrawer extends StatelessWidget {
                         leading: Icon(
                           Icons.settings,
                           size: 20,
-                          color: AppColors.primaryColour,
+                          color: AppColors.primaryColor,
                         ),
                         title: Text(
                           'Privacy Policy',
@@ -299,7 +299,7 @@ class MenuDrawer extends StatelessWidget {
                         leading: Icon(
                           Icons.settings,
                           size: 20,
-                          color: AppColors.primaryColour,
+                          color: AppColors.primaryColor,
                         ),
                         title: Text(
                           'Log Out',

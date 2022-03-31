@@ -42,8 +42,9 @@ class AppColors {
     800: const Color(0xFFc42870),
     900: mauve_app
   };
-  static const pageBackgroundColour = cream_app;
-  static final primaryColour = mauve_app;
-  static final buttonColour = primaryColour;
-  static const buttonTextColour = const Color(0xFFffffff);
+  static const pageBackgroundColor = cream_app;
+  static final primaryColor = mauve_app;
+  static final buttonColor = primaryColor;
+  static const buttonTextColor = const Color(0xFFffffff);
+  static const grayTextColor =  const Color(0xffa5a4a4);
 }

@@ -212,7 +212,7 @@ class _MainProfileState extends State<MainProfile> {
               padding: EdgeInsets.only(
                   left: 80.0, top: 10.0, bottom: 5.0, right: 80.0),
               child: ElevatedButtonWidget(
-                buttonColor: AppColors.primaryColour,
+                buttonColor: AppColors.primaryColor,
                 onPressed: () {},
                 buttonText: ('Add Business'),
               ),
