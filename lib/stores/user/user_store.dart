@@ -25,6 +25,7 @@ abstract class _UserStore with Store {
   // bool to check if current user is logged in
   bool isLoggedIn = false;
   bool isFirst = true;
+  String? authToken;
   GetProfileResponseModal? Profile_data;
 
   static ObservableFuture<GetProfileResponseModal?> emptyPostResponse =
@@ -84,6 +85,7 @@ abstract class _UserStore with Store {
         if (value.user?.authToken != null) {
           print(value.user?.authToken!);
           _repository.saveAuthToken(value.user?.authToken!);
+          authToken = value.user?.authToken;
         }
         this.isFirst = false;
         this.success = true;
@@ -112,7 +114,8 @@ abstract class _UserStore with Store {
     future.then((profileData) {
       this.Profile_data = profileData;
     }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
+      print(error.toString());
+      // errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }
 

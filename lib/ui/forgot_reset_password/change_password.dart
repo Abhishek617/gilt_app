@@ -170,7 +170,7 @@ class _Change_passwordState extends State<Change_password> {
                     height: 30,
                   ),
                   ElevatedButtonWidget(
-                    buttonColor: AppColors.primaryColour,
+                    buttonColor: AppColors.primaryColor,
                     buttonText: 'Change Password',
                     onPressed: () {
                       if(formkey.currentState!.validate()){

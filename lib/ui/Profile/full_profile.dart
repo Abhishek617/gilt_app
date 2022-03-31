@@ -51,7 +51,7 @@ class _FullProfileState extends State<FullProfile> {
                       left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
                   child: Icon(
                     Icons.email,
-                    color: AppColors.primaryColour,
+                    color: AppColors.primaryColor,
                   ),
                 ),
                 Padding(
@@ -84,7 +84,7 @@ class _FullProfileState extends State<FullProfile> {
                                   bottom: 10.0,
                                   right: 10.0),
                               child: Icon(Icons.person_rounded,
-                                  color: AppColors.primaryColour)),
+                                  color: AppColors.primaryColor)),
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: 00.0,
@@ -119,7 +119,7 @@ class _FullProfileState extends State<FullProfile> {
                                   bottom: 10.0,
                                   right: 10.0),
                               child: Icon(Icons.person_rounded,
-                                  color: AppColors.primaryColour)),
+                                  color: AppColors.primaryColor)),
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: 00.0,
@@ -196,7 +196,7 @@ class _FullProfileState extends State<FullProfile> {
           padding:
               EdgeInsets.only(left: 80.0, top: 20.0, bottom: 20.0, right: 80.0),
           child: ElevatedButtonWidgetWithIcon(
-            buttonColor: AppColors.primaryColour,
+            buttonColor: AppColors.primaryColor,
             onPressed: () {
               setState(() {
                 isEdit = true;

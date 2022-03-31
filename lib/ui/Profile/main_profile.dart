@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
+import 'package:provider/provider.dart';
 import '../common/menu_drawer.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+
 class MainProfile extends StatefulWidget {
   const MainProfile({Key? key}) : super(key: key);
 
@@ -13,6 +16,21 @@ class MainProfile extends StatefulWidget {
 }
 
 class _MainProfileState extends State<MainProfile> {
+  late UserStore _profileStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // initializing stores
+    _profileStore = Provider.of<UserStore>(context);
+
+    // check to see if already called api
+    if (!_profileStore.loading) {
+      _profileStore.getProfile();
+    }
+  }
+
   Widget box(String title, Color backgroundcolor, Image demo) {
     return Padding(
       padding: EdgeInsets.only(left: 0, top: 0, right: 10, bottom: 0),
@@ -89,7 +107,6 @@ class _MainProfileState extends State<MainProfile> {
 
   List<String> item = [' b', 'c ', ' d', ' d', 'd ', 'd '];
 
-
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
@@ -100,13 +117,20 @@ class _MainProfileState extends State<MainProfile> {
           width: double.infinity,
           height: 40,
           decoration: BoxDecoration(
-              color: Colors.transparent, borderRadius: BorderRadius.circular(5)),
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(5)),
           child: Center(
             child: TextField(
               decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search, color: Colors.white,),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.clear, color: Colors.white,),
+                    icon: Icon(
+                      Icons.clear,
+                      color: Colors.white,
+                    ),
                     onPressed: () {
                       /* Clear the search field */
                     },
@@ -127,9 +151,7 @@ class _MainProfileState extends State<MainProfile> {
               Routes.navigateToScreen(context, Routes.notifi);
             },
           ),
-
         ],
-
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -177,18 +199,11 @@ class _MainProfileState extends State<MainProfile> {
               padding: EdgeInsets.only(
                   left: 40.0, top: 10.0, bottom: 5.0, right: 40.0),
               child: SizedBox(
-                height: 10,
-                child: TextField(
-                  decoration: new InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(8.0),
-                      ),
-                    ),
-                    filled: true,
-                    labelStyle: new TextStyle(fontSize: 8, color: Colors.black),
-                    labelText:
-                        '                                                 Description Here',
+                height: 15,
+                child: Center(
+                  child: Text(
+                    'Description Here',
+
                   ),
                 ),
               ),
@@ -197,9 +212,9 @@ class _MainProfileState extends State<MainProfile> {
               padding: EdgeInsets.only(
                   left: 80.0, top: 10.0, bottom: 5.0, right: 80.0),
               child: ElevatedButtonWidget(
-                buttonColor: AppColors.primaryColour,
+                buttonColor: AppColors.primaryColor,
                 onPressed: () {},
-                buttonText: ('Edit Profile'),
+                buttonText: ('Add Business'),
               ),
             ),
             Padding(
@@ -285,20 +300,19 @@ class _MainProfileState extends State<MainProfile> {
                   padding: EdgeInsets.only(
                       left: 140.0, top: 5.0, bottom: 10.0, right: 5.0),
                   child: GestureDetector(
-                    child: Text(
-                      'see all',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        decoration: TextDecoration.underline,
-                        color: Colors.blueAccent,
+                      child: Text(
+                        'see all',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          decoration: TextDecoration.underline,
+                          color: Colors.blueAccent,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    onTap: (){
-                      Routes.navigateToScreen(context, Routes.event);
-                      }
-                  ),
+                      onTap: () {
+                        Routes.navigateToScreen(context, Routes.event);
+                      }),
                 ),
               ],
             ),
@@ -347,7 +361,7 @@ class _MainProfileState extends State<MainProfile> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    onTap: (){
+                    onTap: () {
                       Routes.navigateToScreen(context, Routes.event);
                     },
                   ),

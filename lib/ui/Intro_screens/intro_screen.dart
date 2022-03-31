@@ -98,7 +98,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
     return IntroductionScreen(
       key: introKey,
-      globalBackgroundColor: AppColors.pageBackgroundColour,
+      globalBackgroundColor: AppColors.pageBackgroundColor,
       // globalHeader: activeScreen == 2 ? Text('Go Back'):Align(
       //   alignment: Alignment.topRight,
       //   child: SafeArea(

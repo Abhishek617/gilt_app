@@ -189,7 +189,7 @@ class _BookEventDetailsState extends State<BookEventDetails> {
                         backgroundColor:
                         MaterialStateColor.resolveWith(
                                 (states) =>
-                            AppColors.primaryColour),
+                            AppColors.primaryColor),
                         shape: MaterialStateProperty.all<
                             RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -217,7 +217,7 @@ class _BookEventDetailsState extends State<BookEventDetails> {
                         backgroundColor:
                         MaterialStateColor.resolveWith(
                                 (states) =>
-                            AppColors.primaryColour),
+                            AppColors.primaryColor),
                         shape: MaterialStateProperty.all<
                             RoundedRectangleBorder>(
                             RoundedRectangleBorder(

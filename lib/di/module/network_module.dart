@@ -1,6 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
-import 'package:dio/dio.dart';
 
 abstract class NetworkModule {
   /// A singleton dio provider.
@@ -26,9 +26,10 @@ abstract class NetworkModule {
               RequestInterceptorHandler handler) async {
             // getting token
             var token = await sharedPrefHelper.authToken;
-            print('token' + token.toString());
+
             if (token != null) {
               options.headers.putIfAbsent('Authorization', () => token);
+              options.headers.putIfAbsent('Cookies', () => 'authorization=Bearer%20$token; Path=/;');
             } else {
               print('Auth token is null');
             }
