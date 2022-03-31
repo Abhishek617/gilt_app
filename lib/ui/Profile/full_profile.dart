@@ -27,6 +27,7 @@ class _FullProfileState extends State<FullProfile> {
     // check to see if already called api
     if (!_profileStore.loading) {
       _profileStore.getProfile();
+      isEdit = false;
     }
   }
 
@@ -168,8 +169,9 @@ class _FullProfileState extends State<FullProfile> {
         Padding(
           padding: const EdgeInsets.only(
               left: 00.0, top: 20.0, bottom: 00.0, right: 00.0),
-          child: Text(
-            'USER NAME',
+          child: Text(_profileStore.Profile_data!.user!.firstname.toString() +
+              '  ' +
+            _profileStore.Profile_data!.user!.lastname.toString(),
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
             textAlign: TextAlign.center,
           ),
@@ -178,7 +180,7 @@ class _FullProfileState extends State<FullProfile> {
           padding: const EdgeInsets.only(
               left: 00.0, top: 5.0, bottom: 00.0, right: 00.0),
           child: Text(
-            'test@gmail.com',
+            _profileStore.Profile_data!.user!.email.toString(),
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
@@ -202,7 +204,9 @@ class _FullProfileState extends State<FullProfile> {
   }
 checkProfile()
 {
-  return isEdit ? get_profile_input() : get_edit_profile_button();
+  // return isEdit ? get_profile_input() : get_edit_profile_button();
+  return get_edit_profile_button();
+
 }
   @override
   Widget build(BuildContext context) {
@@ -291,8 +295,7 @@ checkProfile()
           Padding(
             padding: EdgeInsets.only(
                 left: 20.0, top: 20.0, bottom: 20.0, right: 20.0),
-            child: Text(
-              'please write you description         \n\n                                                                                                                      \n\n                                                                                           ',
+            child: Text(_profileStore.Profile_data!.user!.aboutme.toString(),
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
@@ -345,7 +348,12 @@ checkProfile()
             padding: EdgeInsets.only(
                 left: 20.0, top: 20.0, bottom: 20.0, right: 10.0),
             child: Text(
-              'phone number            \n\nAddress                                    ',
+              _profileStore.Profile_data!.user!.phone.toString()
+              + '\n' + _profileStore.Profile_data!.user!.address.toString()
+                  + '\n' + _profileStore.Profile_data!.user!.city.toString()
+              + '\n' + _profileStore.Profile_data!.user!.state.toString()
+                  + '\n' + _profileStore.Profile_data!.user!.country.toString()
+                  + '\n' + _profileStore.Profile_data!.user!.zip.toString(),
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,

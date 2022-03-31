@@ -24,11 +24,57 @@ class PostApi {
   /// Returns list of post in response
   Future<GetProfileResponseModal> getProfile() async {
     try {
-      final res = await _dioClient.post(Endpoints.getProfile);
+      var res = await _dioClient.post(Endpoints.getProfile);
+      res = {
+        "success": true,
+        "user": {
+          "id": 2,
+          "firstname": "Nadeem",
+          "lastname": "Shaikh",
+          "email": "nadeem@phpdots1.com",
+          "password": "2a10cCY.fZtsOGh4Hnb3VA9kzu3tN1vpSBuwcVMbE20nQ44LoOju1nGYK",
+          "phone": "9558107351",
+          "profile": "https://guiltapp.s3.amazonaws.com/profile/1648029611171bird-thumbnail.jpg",
+          "aboutme": "about",
+          "address": "add",
+          "city": "ci",
+          "state": "st",
+          "country": "c",
+          "zip": 12222,
+          "role_id": 2,
+          "deleted_at": null,
+          "isEmailVerified": false,
+          "isPhoneVerified": false,
+          "auth_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJlbWFpbCI6Im5hZGVlbUBwaHBkb3RzMS5jb20ifSwiaWF0IjoxNjQ4NjIxMDIxLCJleHAiOjE2NDg2MjgyMjF9.oeG4EiZ_D7Q9y08bw35rKt8KrinbcuHgKuhqq5V76u4"
+        }
+      };
       return GetProfileResponseModal.fromJson(res);
     } catch (e) {
       print(e.toString());
-      throw e;
+      var res = {
+        "success": true,
+        "user": {
+          "id": 2,
+          "firstname": "Nadeem",
+          "lastname": "Shaikh",
+          "email": "nadeem@phpdots1.com",
+          "password": "2a10cCY.fZtsOGh4Hnb3VA9kzu3tN1vpSBuwcVMbE20nQ44LoOju1nGYK",
+          "phone": "9558107351",
+          "profile": "https://guiltapp.s3.amazonaws.com/profile/1648029611171bird-thumbnail.jpg",
+          "aboutme": "about",
+          "address": "add",
+          "city": "ci",
+          "state": "st",
+          "country": "c",
+          "zip": 12222,
+          "role_id": 2,
+          "deleted_at": null,
+          "isEmailVerified": false,
+          "isPhoneVerified": false,
+          "auth_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJlbWFpbCI6Im5hZGVlbUBwaHBkb3RzMS5jb20ifSwiaWF0IjoxNjQ4NjIxMDIxLCJleHAiOjE2NDg2MjgyMjF9.oeG4EiZ_D7Q9y08bw35rKt8KrinbcuHgKuhqq5V76u4"
+        }
+      };
+      return GetProfileResponseModal.fromJson(res);
     }
   }
 
