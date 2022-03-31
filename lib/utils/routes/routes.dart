@@ -9,6 +9,7 @@ import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
 import 'package:guilt_app/ui/Profile/main_profile.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
+import 'package:guilt_app/ui/Setting/setting.dart';
 import 'package:guilt_app/ui/common/about_screen.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
 import 'package:guilt_app/ui/common/faqs.dart';
@@ -26,6 +27,7 @@ import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/ui/Event/event.dart';
+import '../../ui/Messages/message.dart';
 import '../../ui/attendees/attendees.dart';
 import '../../ui/notification/notification.dart';
 
@@ -36,6 +38,8 @@ class Routes {
   Routes._();
 
   //static variables
+  static const String message = '/message';
+  static const String setting = '/setting';
   static const String splash = '/splash';
   static const String login = '/login';
   static const String welcome_login = '/welcome_login';
@@ -70,6 +74,8 @@ class Routes {
 
 
   static final routes = <String, WidgetBuilder>{
+    message: (BuildContext context) => Messages(),
+    setting: (BuildContext context) => Setting(),
     splash: (BuildContext context) => SplashScreen(),
     intro: (BuildContext context) => OnBoardingPage(),
     welcome_login: (BuildContext context) => WelcomeLogin(),

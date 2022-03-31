@@ -60,16 +60,16 @@ class _Before_LoginScreenState extends State<Before_LoginScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 25),
                 child: ElevatedButtonWidget(
-                  buttonColor: AppColors.primaryColour,
+                  buttonColor: AppColors.primaryColor,
                   buttonText: 'Business Owner',
                   onPressed: () {
-                    Routes.navigateToScreen(context, Routes.prof);
+                    Routes.navigateToScreen(context, Routes.login);
                   },
                 ),
               ),
               ElevatedButtonWidget(
                 buttonText: 'Individual User',
-                buttonColor: AppColors.primaryColour,
+                buttonColor: AppColors.primaryColor,
                 onPressed: () {
                   Routes.navigateToScreen(context, Routes.login);
                 },

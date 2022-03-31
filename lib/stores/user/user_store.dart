@@ -26,11 +26,56 @@ abstract class _UserStore with Store {
   // bool to check if current user is logged in
   bool isLoggedIn = false;
   bool isFirst = true;
-  GetProfileResponseModal? Profile_data;
+  String? authToken;
+  GetProfileResponseModal? Profile_data = GetProfileResponseModal.fromJson({
+    "success": true,
+    "user": {
+      "id": 4,
+      "firstname": "test",
+      "lastname": "user",
+      "email": "test@gmail.com",
+      "password": "",
+      "phone": "1122334455",
+      "profile": null,
+      "aboutme": null,
+      "address": null,
+      "city": null,
+      "state": null,
+      "country": null,
+      "zip": null,
+      "role_id": 2,
+      "deleted_at": null,
+      "isEmailVerified": false,
+      "isPhoneVerified": false,
+      "auth_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJlbWFpbCI6Im5hZGVlbUBwaHBkb3RzMi5jb20ifSwiaWF0IjoxNjQ4NzI1MTg1LCJleHAiOjE2NDg3MzIzODV9.pazM0rmmzXQpRKbP6O4p1YuOa15OX94zZaLyhNuYhSI"
+    }
+  });
 
 
   static ObservableFuture<GetProfileResponseModal?> emptyPostResponse =
-  ObservableFuture.value(null);
+  ObservableFuture.value(GetProfileResponseModal.fromJson({
+    "success": true,
+    "user": {
+      "id": 4,
+      "firstname": "test",
+      "lastname": "user",
+      "email": "test@gmail.com",
+      "password": "",
+      "phone": "1122334455",
+      "profile": null,
+      "aboutme": null,
+      "address": null,
+      "city": null,
+      "state": null,
+      "country": null,
+      "zip": null,
+      "role_id": 2,
+      "deleted_at": null,
+      "isEmailVerified": false,
+      "isPhoneVerified": false,
+      "auth_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJlbWFpbCI6Im5hZGVlbUBwaHBkb3RzMi5jb20ifSwiaWF0IjoxNjQ4NzI1MTg1LCJleHAiOjE2NDg3MzIzODV9.pazM0rmmzXQpRKbP6O4p1YuOa15OX94zZaLyhNuYhSI"
+    }
+  }));
 
   // constructor:---------------------------------------------------------------
   _UserStore(Repository repository) : this._repository = repository {
@@ -87,6 +132,7 @@ abstract class _UserStore with Store {
         if (value.user?.authToken != null) {
           print(value.user?.authToken!);
           _repository.saveAuthToken(value.user?.authToken!);
+          authToken = value.user?.authToken;
         }
         this.isFirst = false;
         this.success = true;
@@ -140,7 +186,8 @@ abstract class _UserStore with Store {
     future.then((profileData) {
       this.Profile_data = profileData;
     }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
+      print(error.toString());
+      // errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }
 

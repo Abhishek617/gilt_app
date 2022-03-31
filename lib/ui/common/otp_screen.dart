@@ -114,7 +114,7 @@ class _Otp_screenState extends State<Otp_screen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: ElevatedButtonWidget(
-                    buttonColor: AppColors.primaryColour,
+                    buttonColor: AppColors.primaryColor,
                     buttonText: 'Continue',
                     onPressed: () {
                       Routes.navigateToScreen(context, Routes.reset_password);

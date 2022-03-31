@@ -477,7 +477,7 @@ class _Create_eventState extends State<Create_event> {
                     padding: const EdgeInsets.only(left: 10, top: 20),
                     child: ElevatedButtonWidget(
                       buttonText: 'Continue',
-                      buttonColor: AppColors.primaryColour,
+                      buttonColor: AppColors.primaryColor,
                       onPressed: () {
                         Routes.navigateToScreen(
                             context, Routes.expense_screen);

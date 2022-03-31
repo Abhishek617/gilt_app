@@ -39,7 +39,8 @@ class Repository {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _postApi.getProfile().then((profileData) {
+    var token = await authToken;
+    return await _postApi.getProfile(token).then((profileData) {
 
 
       return profileData;
@@ -79,6 +80,10 @@ class Repository {
   Future<void> saveIsFirst(bool value) => _sharedPrefsHelper.saveIsFirst(value);
 
   Future<bool> get isFirst => _sharedPrefsHelper.isFirst;
+
+  Future<void> saveProfileData(GetProfileResponseModal value) => _sharedPrefsHelper.saveProfileData(value);
+
+  Future<Object?> get profileData => _sharedPrefsHelper.profileData;
 
   // Login:---------------------------------------------------------------------
   Future<LoginModal> login(String email, String password) async {

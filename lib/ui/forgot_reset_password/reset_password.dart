@@ -118,7 +118,7 @@ class _Reset_passwordState extends State<Reset_password> {
                 ),
                 ElevatedButtonWidget(
                   buttonText: 'Reset Password',
-                  buttonColor: AppColors.primaryColour,
+                  buttonColor: AppColors.primaryColor,
                   onPressed: () {
                     if (formkey.currentState!.validate()) {
                       _userStore.Send_Otp(_userEmailController.value.text, (value) {

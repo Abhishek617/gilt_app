@@ -1,10 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
+import 'package:provider/provider.dart';
 import '../common/menu_drawer.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+
 class MainProfile extends StatefulWidget {
   const MainProfile({Key? key}) : super(key: key);
 
@@ -13,6 +18,30 @@ class MainProfile extends StatefulWidget {
 }
 
 class _MainProfileState extends State<MainProfile> {
+  late UserStore _profileStore;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   initSetup();
+  // }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    initSetup();
+  }
+
+  void initSetup() {
+    // initializing stores
+    _profileStore = Provider.of<UserStore>(context);
+
+    // check to see if already called api
+    if (!_profileStore.loading) {
+      _profileStore.getProfile();
+    }
+  }
+
   Widget box(String title, Color backgroundcolor, Image demo) {
     return Padding(
       padding: EdgeInsets.only(left: 0, top: 0, right: 10, bottom: 0),
@@ -42,7 +71,10 @@ class _MainProfileState extends State<MainProfile> {
                       child: Icon(
                         Icons.supervised_user_circle,
                         size: 20,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme
+                            .of(context)
+                            .colorScheme
+                            .primary,
                       )),
                   Padding(
                     padding: EdgeInsets.only(
@@ -66,7 +98,10 @@ class _MainProfileState extends State<MainProfile> {
                           left: 00.0, top: 5.0, bottom: 00.0, right: 0.0),
                       child: Icon(Icons.location_on,
                           size: 20,
-                          color: Theme.of(context).colorScheme.primary)),
+                          color: Theme
+                              .of(context)
+                              .colorScheme
+                              .primary)),
                   Padding(
                     padding: EdgeInsets.only(
                         left: 10.0, top: 5.0, bottom: 00.0, right: 0.0),
@@ -89,6 +124,36 @@ class _MainProfileState extends State<MainProfile> {
 
   List<String> item = [' b', 'c ', ' d', ' d', 'd ', 'd '];
 
+  Widget getSearchBar() {
+    return Container(
+      width: double.infinity,
+      height: 40,
+      decoration: BoxDecoration(
+          color: Colors.transparent, borderRadius: BorderRadius.circular(5)),
+      child: Center(
+        child: TextField(
+          decoration: InputDecoration(
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  Icons.clear,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  /* Clear the search field */
+                },
+              ),
+              hintText: 'Search...',
+              hintStyle: TextStyle(color: Colors.white),
+              suffixIconColor: Colors.white,
+              border: InputBorder.none),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,28 +161,9 @@ class _MainProfileState extends State<MainProfile> {
       isMenu: true,
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: Container(
-          width: double.infinity,
-          height: 40,
-          decoration: BoxDecoration(
-              color: Colors.transparent, borderRadius: BorderRadius.circular(5)),
-          child: Center(
-            child: TextField(
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search, color: Colors.white,),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.clear, color: Colors.white,),
-                    onPressed: () {
-                      /* Clear the search field */
-                    },
-                  ),
-                  hintText: 'Search...',
-                  hintStyle: TextStyle(color: Colors.white),
-                  suffixIconColor: Colors.white,
-                  border: InputBorder.none),
-            ),
-          ),
-        ),
+        title: Text(_profileStore.Profile_data!.user!.firstname.toString() +
+            '  ' +
+            _profileStore.Profile_data!.user!.lastname.toString()),
         actions: [
           IconButton(
             padding: EdgeInsets.only(
@@ -127,13 +173,11 @@ class _MainProfileState extends State<MainProfile> {
               Routes.navigateToScreen(context, Routes.notifi);
             },
           ),
-
         ],
-
       ),
       child: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Align(
               alignment: Alignment.center,
@@ -142,64 +186,50 @@ class _MainProfileState extends State<MainProfile> {
                   Container(
                     padding: const EdgeInsets.only(
                         left: 00.0, top: 30.0, bottom: 00.0, right: 00.0),
-                    child: Image.network(
-                      'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50.0),
+                      child: Image.network(_profileStore.Profile_data!.user!.profile == null ? 'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0':
+                        _profileStore.Profile_data!.user!.profile.toString(),
+                        width: DeviceUtils.getScaledWidth(context, 0.30),
+                        height: DeviceUtils.getScaledWidth(context, 0.30),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: 50.0, top: 20.0, bottom: 5.0, right: 50.0),
-              child: SizedBox(
-                height: 20,
-                child: TextField(
-                  decoration: new InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(10.0),
-                      ),
-                    ),
-                    filled: true,
-                    labelStyle:
-                        new TextStyle(fontSize: 12, color: Colors.white),
-                    labelText: '                        Add Your Business',
-                    fillColor: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
+            SizedBox(
+              height: 12,
+            ),
+            Center(
+              child: Text(
+                _profileStore.Profile_data!.user!.email.toString(),
+                style: TextStyle(
+                    color: AppColors.primaryColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600),
               ),
             ),
             Padding(
               padding: EdgeInsets.only(
                   left: 40.0, top: 10.0, bottom: 5.0, right: 40.0),
               child: SizedBox(
-                height: 10,
-                child: TextField(
-                  decoration: new InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(8.0),
-                      ),
-                    ),
-                    filled: true,
-                    labelStyle: new TextStyle(fontSize: 8, color: Colors.black),
-                    labelText:
-                        '                                                 Description Here',
+                height: 15,
+                child: Center(
+                  child: Text(
+                    'Description Here',
                   ),
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: 80.0, top: 10.0, bottom: 5.0, right: 80.0),
+            Center(
               child: ElevatedButtonWidget(
-                buttonColor: AppColors.primaryColour,
-                onPressed: () {},
-                buttonText: ('Edit Profile'),
+                buttonColor: AppColors.primaryColor,
+                onPressed: () {
+                  Routes.navigateToScreen(context, Routes.add_business);
+                },
+                buttonText: ('Add Business'),
               ),
             ),
             Padding(
@@ -251,7 +281,9 @@ class _MainProfileState extends State<MainProfile> {
                             left: 30.0, top: 10.0, bottom: 0.0, right: 0.0),
                         child: Icon(
                           Icons.image,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
                           size: 40,
                         ),
                       ),
@@ -285,20 +317,19 @@ class _MainProfileState extends State<MainProfile> {
                   padding: EdgeInsets.only(
                       left: 140.0, top: 5.0, bottom: 10.0, right: 5.0),
                   child: GestureDetector(
-                    child: Text(
-                      'see all',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        decoration: TextDecoration.underline,
-                        color: Colors.blueAccent,
+                      child: Text(
+                        'See all',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          decoration: TextDecoration.underline,
+                          color: Colors.blueAccent,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    onTap: (){
-                      Routes.navigateToScreen(context, Routes.event);
-                      }
-                  ),
+                      onTap: () {
+                        Routes.navigateToScreen(context, Routes.event);
+                      }),
                 ),
               ],
             ),
@@ -338,7 +369,7 @@ class _MainProfileState extends State<MainProfile> {
                       left: 182.0, top: 10.0, bottom: 10.0, right: 0.0),
                   child: GestureDetector(
                     child: Text(
-                      'see all',
+                      'See all',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
@@ -347,7 +378,7 @@ class _MainProfileState extends State<MainProfile> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    onTap: (){
+                    onTap: () {
                       Routes.navigateToScreen(context, Routes.event);
                     },
                   ),

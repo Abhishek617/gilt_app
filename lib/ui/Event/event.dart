@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/constants/dimens.dart';
 import 'package:guilt_app/ui/Event/event_detail.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/widgets/custom_scaffold.dart';
 
 import '../../utils/routes/routes.dart';
 
@@ -14,223 +17,215 @@ class Event extends StatefulWidget {
 
 class _EventState extends State<Event> {
   int segmentedControlValue = 0;
+
   Widget segmentedControl() {
-    return Padding(padding: EdgeInsets.only(left: 40, top: 10, bottom: 5),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 15.0),
       child: Container(
-        width: 250,
         child: CupertinoSlidingSegmentedControl(
+          padding:  EdgeInsets.all(5),
             groupValue: segmentedControlValue,
-            backgroundColor: AppColors.primaryColour,
             children: <int, Widget>{
-              0: Text('Upcomming'),
-              1: Text('Past Event')
+              0: _segmentTextBox('Upcoming'),
+              1: _segmentTextBox('Past Events')
             },
             onValueChanged: (value) {
               setState(() {
                 segmentedControlValue = value as int;
               });
-            }
-        ),
+            }),
       ),
     );
   }
+
+  Widget _segmentTextBox(String title){
+    return Padding(
+      padding : EdgeInsets.all(8),
+      child: Text(
+          title,
+          style: TextStyle(fontSize: 18, color: AppColors.primaryColor)),
+    );
+  }
+
   Widget box(String title, Color backgroundcolor, Image demo) {
-    return  Column(children:[
-      Padding(
-        padding: EdgeInsets.only(left: 0, top: 0, right: 00, bottom: 10),
-        child: GestureDetector(
-        onTap:()=> Routes.navigateToScreen(context, Routes.event_details),
-          child: Card(
-            child: Container(
-              margin: EdgeInsets.all(5),
-              width: 370,
-              color: backgroundcolor,
-              alignment: Alignment.center,
-              child: Row(
-                children: [
-                  Column(children: [
-                     Image.network(
-                    'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
-                    width: 80,
-                    height: 80,
-                ),
-                  ],
-                  ),
-                  Padding(padding: EdgeInsets.only(left: 15),
-                    child: Column(
-                      children: [
-
-                        Padding(padding: EdgeInsets.only(right: 45, bottom: 3, top: 3),
-                          child: Text('13 JAN 2022, 2:00PM', textAlign: TextAlign.left,
-                            style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400)
-                          ),
-                        ),
-
-
-                           Text('A Virtual Evening of \nSmooth Jazz ',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700)),
-
-
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(5),
+          child: GestureDetector(
+            onTap: () => Routes.navigateToScreen(context, Routes.event_details),
+            child: Card(
+              shadowColor: AppColors.grayTextColor,
+              elevation: 2.5,
+              child: Container(
+                margin: EdgeInsets.all(5),
+                width: DeviceUtils.getScaledWidth(context, 0.90),
+                color: backgroundcolor,
+                alignment: Alignment.center,
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.network(
+                        'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                        width: DeviceUtils.getScaledWidth(context, 0.20),
+                        height: DeviceUtils.getScaledWidth(context, 0.20),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: Dimens.horizontal_padding),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('13 JAN 2022, 2:00PM - Upcoming',
+                                style: TextStyle(
+                                    color: AppColors.primaryColor,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400)),
+                            Text('A Virtual Evening of \nSmooth Jazz ',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w700)),
                             Row(
                               children: [
-                                Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 00.0, top: 3.0, bottom: 00.0, right: 0.0),
-                                    child: Icon(Icons.location_on,
-                                        size: 20,
-                                        color: Theme.of(context).colorScheme.primary)),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 0.0, top: 3.0, bottom: 00.0, right: 40.0),
-                                  child: Text(
-                                    '36, guild street, london, uk',
-                                    style: TextStyle(
-                                      fontSize: 10,
+                                Icon(
+                                  Icons.location_on,
+                                  size: 12,
+                                  color: AppColors.grayTextColor,
+                                ),
+                                Text(
+                                  '36, guild street, london, uk',
+                                  style: TextStyle(
+                                      fontSize: 12,
                                       fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
+                                      color: AppColors.grayTextColor),
                                 ),
                               ],
                             ),
-                      ],
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    ],
+      ],
     );
   }
+
   Widget pastbox(String title, Color backgroundcolor, Image demo) {
-    return  Column(children:[
-      Padding(
-        padding: EdgeInsets.only(left: 0, top: 0, right: 00, bottom: 10),
-        child: GestureDetector(
-          onTap:()=> Routes.navigateToScreen(context, Routes.event_details),
-          child: Card(
-            child: Container(
-              margin: EdgeInsets.all(5),
-              width: 370,
-              color: backgroundcolor,
-              alignment: Alignment.center,
-              child: Row(
-                children: [
-                  Column(children: [
-                    Image.network(
-                      'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
-                      width: 80,
-                      height: 80,
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(5),
+          child: GestureDetector(
+            onTap: () => Routes.navigateToScreen(context, Routes.event_details),
+            child: Card(
+              shadowColor: AppColors.grayTextColor,
+              elevation: 2.5,
+              child: Container(
+                margin: EdgeInsets.all(5),
+                width: DeviceUtils.getScaledWidth(context, 0.90),
+                color: backgroundcolor,
+                alignment: Alignment.center,
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.network(
+                        'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                        width: DeviceUtils.getScaledWidth(context, 0.20),
+                        height: DeviceUtils.getScaledWidth(context, 0.20),
+                      ),
                     ),
-                  ],
-                  ),
-                  Padding(padding: EdgeInsets.only(left: 15),
-                    child: Column(
-                      children: [
-
-                        Padding(padding: EdgeInsets.only(right: 45, bottom: 3, top: 3),
-                          child: Text('13 JAN 2022, 2:00PM', textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400)
-                          ),
-                        ),
-
-
-                        Text('A Virtual Evening of \nSmooth Jazz ',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700)),
-
-
-                        Row(
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: Dimens.horizontal_padding),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    left: 00.0, top: 3.0, bottom: 00.0, right: 0.0),
-                                child: Icon(Icons.location_on,
-                                    size: 20,
-                                    color: Theme.of(context).colorScheme.primary)),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 0.0, top: 3.0, bottom: 00.0, right: 40.0),
-                              child: Text(
-                                '36, guild street, london, uk',
+                            Text('13 JAN 2022, 2:00PM - Past Event',
                                 style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
+                                    color: AppColors.primaryColor,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400)),
+                            Text('A Virtual Evening of \nSmooth Jazz ',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w700)),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  size: 12,
+                                  color: AppColors.grayTextColor,
                                 ),
-                              ),
+                                Text(
+                                  '36, guild street, london, uk',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.grayTextColor),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    ],
+      ],
     );
   }
-  List<String> item = [' b', 'c ', ' d', ' d', 'd ','c','f','s'];
+
+  List<String> item = [' b', 'c ', ' d', ' d', 'd ', 'c', 'f', 's'];
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-        shadowColor: Colors.transparent,
-        title: Text('EVENT'),
-        ),
-      backgroundColor: Colors.white,
-      body: Container(
-
-        padding: EdgeInsets.only(
-            left: 15.0, top: 5.0, bottom: 5.0, right: 15.0),
-
-        child: Column(children: [
-          Row(children: [
-            segmentedControl(),
-          ],
-          ),
-
-           Column(
-            children: [
-              Container(
-                  height: 600,
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    children: item.map((iteml) {
-
-                      return segmentedControlValue==1 ?
-                      box(
-                         iteml,
+    return ScaffoldWrapper(
+      appBar: AppBar(
+        title: Text('Upcoming Events'),
+      ),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            horizontal: Dimens.horizontal_padding,
+            vertical: Dimens.vertical_padding + 8),
+        child: Column(
+          children: [
+            Center(
+              child: segmentedControl(),
+            ),
+            Container(
+              height: DeviceUtils.getScaledHeight(context, 0.75),
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: item.map((iteml) {
+                  return segmentedControlValue == 0
+                      ? box(
+                          iteml,
                           Colors.white,
                           Image.network(
                               'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0'))
-                          : pastbox(
+                      : pastbox(
                           iteml,
                           Colors.white,
                           Image.network(
                               'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0'));
-                    }).toList(),
-                  ),
+                }).toList(),
               ),
-            ],
-          ),
-      ],
+            ),
+          ],
         ),
       ),
     );

@@ -439,7 +439,7 @@ class _Add_businessState extends State<Add_business> {
                     padding: const EdgeInsets.only(left: 10, top: 20),
                     child: ElevatedButtonWidget(
                       buttonText: 'Add Now',
-                      buttonColor: AppColors.primaryColour,
+                      buttonColor: AppColors.primaryColor,
                       onPressed: () {
                         Routes.navigateToScreen(
                             context, Routes.business_list);

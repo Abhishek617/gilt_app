@@ -23,7 +23,7 @@ class _EventDetailsState extends State<EventDetails> {
        },
 
           icon: Icon(Icons.supervised_user_circle_rounded, color: Colors.grey,),
-          label: Text('+20 Attendees', style: TextStyle(color: AppColors.primaryColour, fontSize: 12),),
+          label: Text('+20 Attendees', style: TextStyle(color: AppColors.primaryColor, fontSize: 12),),
 
 
          backgroundColor: Colors.white,

@@ -14,7 +14,7 @@ class ElevatedButtonWidget extends StatelessWidget {
     required this.buttonText,
     required this.buttonColor,
     required this.onPressed,
-    this.textColor = AppColors.buttonTextColour,
+    this.textColor = AppColors.buttonTextColor,
   }) : super(key: key);
 
   @override

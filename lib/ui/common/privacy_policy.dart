@@ -170,7 +170,7 @@ class _Privacy_PolicyState extends State<Privacy_Policy> {
                     padding: const EdgeInsets.only(left: 10, top: 20),
                     child: ElevatedButtonWidget(
                       buttonText: 'Accept',
-                      buttonColor: AppColors.primaryColour,
+                      buttonColor: AppColors.primaryColor,
                       onPressed: () {
                         Routes.navigateToScreen(
                             context, Routes.terms_conditions);
