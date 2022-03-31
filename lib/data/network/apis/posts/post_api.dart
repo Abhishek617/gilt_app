@@ -21,17 +21,13 @@ class PostApi {
 
   // rest-client instance
   final RestClient _restClient;
-  final SharedPreferenceHelper _sharedPrefHelper;
-
-  final UserStore _userStore = UserStore(getIt<Repository>());
 
   // injecting dio instance
-  PostApi(this._dioClient, this._restClient, this._sharedPrefHelper);
+  PostApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future<GetProfileResponseModal> getProfile() async {
+  Future<GetProfileResponseModal> getProfile(token) async {
     try {
-      var token = await _sharedPrefHelper.authToken;
       final res = await _dioClient.post(Endpoints.getProfile,
           options: Options(headers: {'Authorization': 'Bearer ' + token!}));
       return GetProfileResponseModal.fromJson(res);
