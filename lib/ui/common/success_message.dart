@@ -146,6 +146,7 @@ class _Success_messageState extends State<Success_message> {
                     buttonColor: AppColors.primaryColour,
                     buttonText: 'Send',
                     onPressed: ()async {
+                      Routes.navigateToScreen(context, Routes.message);
                     },
                   ),
                 ]

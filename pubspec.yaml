@@ -83,6 +83,7 @@ dependencies:
 
   #Text size automation
   auto_size_text: ^3.0.0
+  flutter_switch: ^0.3.2
 
 dev_dependencies:
   flutter_test:

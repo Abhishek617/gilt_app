@@ -235,7 +235,7 @@ class MenuDrawer extends StatelessWidget {
                           'Settings',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => { Routes.navigateToScreen(context, Routes.setting)},
                       ),
                       ListTile(
                         horizontalTitleGap: -10,
