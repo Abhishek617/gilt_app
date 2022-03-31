@@ -156,7 +156,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                   padding: const EdgeInsets.only(top: 20),
                   child: ElevatedButtonWidget(
                     buttonText: 'Conform',
-                    buttonColor: AppColors.primaryColour,
+                    buttonColor: AppColors.primaryColor,
                     onPressed: () {
                     },
                   ),
