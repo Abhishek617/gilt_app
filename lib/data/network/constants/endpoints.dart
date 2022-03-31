@@ -27,4 +27,17 @@ class Endpoints {
 
   // update profile details
   static const String updateProfile = baseUrl + "profile";
+
+
+
+  //---------ResetPassword
+  // update send otp
+  static const String sendOtp = baseUrl + "admin/fp-send-otp";
+
+  // Valid Otp
+  static const String validOtp = baseUrl + "admin/fp-send-otp";
+
+
+
+
 }

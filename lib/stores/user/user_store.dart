@@ -1,6 +1,7 @@
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
+import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../data/repository.dart';
@@ -50,6 +51,7 @@ abstract class _UserStore with Store {
     }
   });
 
+
   static ObservableFuture<GetProfileResponseModal?> emptyPostResponse =
   ObservableFuture.value(GetProfileResponseModal.fromJson({
     "success": true,
@@ -98,14 +100,15 @@ abstract class _UserStore with Store {
       reaction((_) => success, (_) => success = false, delay: 200),
     ];
   }
+  // store variables:-----------------------------------------------------------
+
+
 
   // store variables:-----------------------------------------------------------
   @observable
   bool success = false;
-
   @observable
   late ObservableFuture<LoginModal> loginFuture;
-
   @observable
   ObservableFuture<GetProfileResponseModal?> fetchPostsFuture =
   ObservableFuture<GetProfileResponseModal?>(emptyPostResponse);
@@ -148,6 +151,31 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
+
+
+  Future Send_Otp(
+      String email, successCallback, errorCallback) async {
+    // final future = _repository.login(email, password);
+
+    // loginFuture = ObservableFuture(future);
+    _repository.Send_Otp(email).then((value) async {
+      if (value != null) {
+        successCallback(value);
+      } else {
+        print('failed to Reset Password');
+      }
+    }, onError: (error) {
+      print(error.toString());
+      errorCallback(error.response);
+    }).catchError((e) {
+      print(e);
+      throw e;
+    });
+  }
+
+
+
+
   @computed
   bool get loading => fetchPostsFuture.status == FutureStatus.pending;
   @action
@@ -162,6 +190,7 @@ abstract class _UserStore with Store {
       // errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }
+
 
   @action
   Future logout(successCallback, errorCallback) async {
@@ -197,6 +226,7 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
+
 
   @action
   Future signUp(
@@ -234,6 +264,16 @@ abstract class _UserStore with Store {
       return e;
     });
   }
+
+
+
+
+
+
+
+
+
+
 
   // general methods:-----------------------------------------------------------
   void dispose() {

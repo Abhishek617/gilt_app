@@ -43,7 +43,10 @@ class _About_screenState extends State<About_screen> {
             size: 15,
           ),
         ),
-        title: Center(child: Text('Success')),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 60),
+          child: Text('     About'),
+        ),
         shadowColor: Colors.transparent,
       ),
       child: Padding(
@@ -56,7 +59,7 @@ class _About_screenState extends State<About_screen> {
                     height: 120.0,
                   ),
                   Text(
-                    'Send Us a Message',
+                    'Gult Trip',
                     style: TextStyle(
                         fontSize: 16.0,fontWeight: FontWeight.bold, color: Colors.pinkAccent
                     ),
@@ -67,7 +70,7 @@ class _About_screenState extends State<About_screen> {
                   Text(
                     'Lorem ipsum dolor sit amet, consectetur adipiscing.',
                     style: TextStyle(
-                        fontSize: 13.0,color: Colors.pinkAccent
+                        fontSize: 13.0,color: Colors.black
                     ),
                   ),
                   SizedBox(
@@ -76,7 +79,7 @@ class _About_screenState extends State<About_screen> {
                   Text(
                     'Lorem ipsum dolor sit amet, consectetur.',
                     style: TextStyle(
-                        fontSize: 13.0,color: Colors.pinkAccent
+                        fontSize: 13.0,color: Colors.black
                     ),
                   ),
                   SizedBox(
@@ -85,7 +88,7 @@ class _About_screenState extends State<About_screen> {
                   Text(
                     'Developed By',
                     style: TextStyle(
-                        fontSize: 14.0,fontWeight: FontWeight.bold, color: Colors.pinkAccent
+                        fontSize: 14.0,fontWeight: FontWeight.bold, color: Colors.black
                     ),
                   ),
 
@@ -93,9 +96,9 @@ class _About_screenState extends State<About_screen> {
             height: 8,
           ),
           Text(
-            'Abhishek Singh.',
+            'Abc.',
             style: TextStyle(
-                fontSize: 12.0,color: Colors.pinkAccent
+                fontSize: 12.0,color: Colors.black
             ),
           ),
                   SizedBox(
@@ -104,7 +107,7 @@ class _About_screenState extends State<About_screen> {
                   Text(
                     'Version Info',
                     style: TextStyle(
-                        fontSize: 14.0,fontWeight: FontWeight.bold, color: Colors.pinkAccent
+                        fontSize: 14.0,fontWeight: FontWeight.bold, color: Colors.black
                     ),
                   ),
 
@@ -114,7 +117,7 @@ class _About_screenState extends State<About_screen> {
                   Text(
                     'Android version 5.0 to 5.1.1: Lollipop',
                     style: TextStyle(
-                        fontSize: 12.0,color: Colors.pinkAccent
+                        fontSize: 12.0,color: Colors.black
                     ),
                   ),
                   SizedBox(
@@ -123,7 +126,7 @@ class _About_screenState extends State<About_screen> {
                   Text(
                     'Follow Us On',
                     style: TextStyle(
-                        fontSize: 14.0,fontWeight: FontWeight.bold, color: Colors.pinkAccent
+                        fontSize: 14.0,fontWeight: FontWeight.bold, color: Colors.black
                     ),
                   ),
 
@@ -149,13 +152,13 @@ class _About_screenState extends State<About_screen> {
                         decoration: BoxDecoration(
                           //color: Colors.green,
                           image: DecorationImage(
-                            image: NetworkImage('https://cdn-icons.flaticon.com/png/128/665/premium/665228.png?token=exp=1648546791~hmac=2237084837658f1b18bea2991486ecf0'),
+                            image: NetworkImage('https://img.icons8.com/ios/344/facebook-new.png'),
                             fit: BoxFit.fill,
                           ),
                         ),
                       ),
                       SizedBox(
-                        width: 25,
+                        width: 15,
                       ),
                       Container(
                         height: 35,
@@ -164,13 +167,13 @@ class _About_screenState extends State<About_screen> {
                         decoration: BoxDecoration(
                           //color: Colors.green,
                           image: DecorationImage(
-                            image: NetworkImage('https://cdn-icons.flaticon.com/png/128/665/premium/665209.png?token=exp=1648546860~hmac=eff53a1424c76c5eb3bf8aafa49d47d5'),
+                            image: NetworkImage('https://img.icons8.com/ios/344/twitter-circled--v1.png'),
                             fit: BoxFit.fill,
                           ),
                         ),
                       ),
                       SizedBox(
-                        width: 25,
+                        width: 15,
                       ),
                       Container(
                         height: 35,
@@ -184,18 +187,23 @@ class _About_screenState extends State<About_screen> {
                           ),
                         ),
                       ),
+                      SizedBox(
+                        width: 15,
+                      ),
                       Container(
-                        height: 35,
+                        height: 40,
                         width: 35,
                         // color: Colors.green,
                         decoration: BoxDecoration(
                           //color: Colors.green,
                           image: DecorationImage(
-                            image: NetworkImage('https://www.flaticon.com/premium-icon/youtube_3669688'),
+                            image: NetworkImage('https://img.icons8.com/ios/344/youtube-play--v1.png'),
                             fit: BoxFit.fill,
                           ),
                         ),
                       ),
+
+
                     ],
                   ),
 
