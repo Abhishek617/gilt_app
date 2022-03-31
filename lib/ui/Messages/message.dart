@@ -40,7 +40,7 @@ class _MessagesState extends State<Messages> {
                   Text(
                     'David Siliba',
                     style: TextStyle(
-                      color: AppColors.primaryColour,
+                      color: AppColors.primaryColor,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
@@ -89,7 +89,7 @@ class _MessagesState extends State<Messages> {
                       ),
                       margin: EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
-                          color: AppColors.primaryColour,
+                          color: AppColors.primaryColor,
                           shape: BoxShape.circle),
                     ),
                   )
@@ -128,7 +128,7 @@ class _MessagesState extends State<Messages> {
                   Text(
                     'David Siliba',
                     style: TextStyle(
-                      color: AppColors.primaryColour,
+                      color: AppColors.primaryColor,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),

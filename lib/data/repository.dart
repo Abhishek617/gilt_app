@@ -74,6 +74,10 @@ class Repository {
 
   Future<bool> get isFirst => _sharedPrefsHelper.isFirst;
 
+  Future<void> saveProfileData(GetProfileResponseModal value) => _sharedPrefsHelper.saveProfileData(value);
+
+  Future<Object?> get profileData => _sharedPrefsHelper.profileData;
+
   // Login:---------------------------------------------------------------------
   Future<LoginModal> login(String email, String password) async {
     return await _postApi

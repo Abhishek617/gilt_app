@@ -211,57 +211,48 @@ class _FullProfileState extends State<FullProfile> {
   }
 
   about() {
-    return Row(
-      children: <Widget>[
-        Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 20.0, top: 10.0, bottom: 00.0, right: 80.0),
-              child: Text(
-                'About Me',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
-                textAlign: TextAlign.center,
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'About Me',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: 00.0, top: 2.0, bottom: 2.0, right: 90.0),
-              child: Text(
-                _profileStore.Profile_data!.user!.aboutme.toString(),
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  setState(() {
+                    isAboutEdit = true;
+                  });
+                },
+                icon: Icon(
+                  Icons.edit,
+                  size: 12,
+                  color: Colors.white,
+                ),
+                label: Text(
+                  'Change',
+                  style: TextStyle(fontSize: 12, color: Colors.white),
                 ),
               ),
             ),
           ],
         ),
-        Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 70.0, top: 0.0, bottom: 00.0, right: 00.0),
-              child: SizedBox(
-                width: 110.0,
-                height: 25.0,
-                child: ElevatedButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        isAboutEdit = true;
-                      });
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                    ),
-                    label: Text(
-                      'Change',
-                      style: TextStyle(fontSize: 12, color: Colors.white),
-                    )),
-              ),
-            ),
-          ],
+        Text(
+          _profileStore.Profile_data!.user!.aboutme.toString(),
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+          ),
         ),
       ],
     );
@@ -270,39 +261,37 @@ class _FullProfileState extends State<FullProfile> {
   edit_about() {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.only(left: 20, right: 280, bottom: 20),
+        Align(
+          alignment: Alignment.centerLeft,
           child: Text(
             'About Me',
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
+            textAlign: TextAlign.center,
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 20, right: 20),
-          child: TextField(
-            decoration: InputDecoration(),
-          ),
+        SizedBox(
+          height: 10,
         ),
-        Padding(
-          padding: const EdgeInsets.only(
-              left: 120.0, top: 20.0, bottom: 10.0, right: 120.0),
-          child: SizedBox(
-            width: 100.0,
-            height: 30.0,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                setState(() {
-                  isAboutEdit = false;
-                });
-              },
-              icon: Icon(
-                Icons.save,
-                color: Colors.white,
-              ),
-              label: Text(
-                'Save',
-                style: TextStyle(fontSize: 12, color: Colors.white),
-              ),
+        TextField(
+          decoration: InputDecoration(),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          child: ElevatedButton.icon(
+            onPressed: () {
+              setState(() {
+                isAboutEdit = false;
+              });
+            },
+            icon: Icon(
+              Icons.save,
+              color: Colors.white,
+            ),
+            label: Text(
+              'Save',
+              style: TextStyle(fontSize: 12, color: Colors.white),
             ),
           ),
         ),
@@ -311,49 +300,24 @@ class _FullProfileState extends State<FullProfile> {
   }
 
   contact() {
-    return Row(
-      children: <Widget>[
-        Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 20.0, top: 10.0, bottom: 00.0, right: 40.0),
-              child: Text(
-                'Contact Details',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: 00.0, top: 10.0, bottom: 20.0, right: 48.0),
-              child: Text(
-                _profileStore.Profile_data!.user!.phone.toString() +
-                    '\n' +
-                    _profileStore.Profile_data!.user!.address.toString() +
-                    '\n' +
-                    _profileStore.Profile_data!.user!.city.toString() +
-                    '\n' +
-                    _profileStore.Profile_data!.user!.state.toString() +
-                    '\n' +
-                    _profileStore.Profile_data!.user!.country.toString() +
-                    '\n' +
-                    _profileStore.Profile_data!.user!.zip.toString(),
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Contact Details',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(
-              left: 75.0, top: 10.0, bottom: 100.0, right: 00.0),
-          child: SizedBox(
-            width: 110.0,
-            height: 25.0,
-            child: ElevatedButton.icon(
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton.icon(
                 onPressed: () {
                   setState(() {
                     isContactEdit = true;
@@ -361,12 +325,32 @@ class _FullProfileState extends State<FullProfile> {
                 },
                 icon: Icon(
                   Icons.edit,
+                  size: 12,
                   color: Colors.white,
                 ),
                 label: Text(
                   'Change',
                   style: TextStyle(fontSize: 12, color: Colors.white),
-                )),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Text(
+          _profileStore.Profile_data!.user!.phone.toString() +
+              '\n' +
+              _profileStore.Profile_data!.user!.address.toString() +
+              '\n' +
+              _profileStore.Profile_data!.user!.city.toString() +
+              '\n' +
+              _profileStore.Profile_data!.user!.state.toString() +
+              '\n' +
+              _profileStore.Profile_data!.user!.country.toString() +
+              '\n' +
+              _profileStore.Profile_data!.user!.zip.toString(),
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
           ),
         ),
       ],
@@ -376,119 +360,117 @@ class _FullProfileState extends State<FullProfile> {
   edit_contact() {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-          child: Container(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 5, right:5),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.call,
-                          size: 30, color: AppColors.primaryColour),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Contact Details',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
+            textAlign: TextAlign.center,
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-          child: Container(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 5, right:5),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.house,
-                          size: 30, color: AppColors.primaryColour),
-                    ),
-                  ),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          margin: EdgeInsets.all(5),
+          child: Column(
+            children: [
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Contact Number',
+                  prefixIcon:
+                      Icon(Icons.call, size: 30, color: AppColors.primaryColor),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 10, top: 20),
-              child: Container(
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: Row(
-                  children: [Text('               City                ')],
+        Container(
+          margin: EdgeInsets.all(5),
+          child: Column(
+            children: [
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Address',
+                  prefixIcon: Icon(Icons.house,
+                      size: 30, color: AppColors.primaryColor),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 10, right: 20, top: 20),
-              child: Container(
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: Row(
-                  children: [Text('             State             ')],
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 10, top: 20),
-              child: Container(
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: Row(
-                  children: [Text('             Country           ')],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 10, right: 20, top: 20),
-              child: Container(
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: Row(
-                  children: [Text('           ZipCode         ')],
+        Container(
+          margin: EdgeInsets.all(5),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    labelText: 'City',
+                    prefixIcon: Icon(Icons.apartment,
+                        size: 30, color: AppColors.primaryColor),
+                  ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    labelText: 'State',
+                    prefixIcon: Icon(Icons.location_city,
+                        size: 30, color: AppColors.primaryColor),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(
-              left: 120.0, top: 20.0, bottom: 10.0, right: 120.0),
-          child: SizedBox(
-            width: 100.0,
-            height: 30.0,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                setState(() {
-                  isContactEdit = false;
-                });
-              },
-              icon: Icon(
-                Icons.save,
-                color: Colors.white,
+        Container(
+          margin: EdgeInsets.all(5),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Country',
+                    prefixIcon: Icon(Icons.public,
+                        size: 30, color: AppColors.primaryColor),
+                  ),
+                ),
               ),
-              label: Text(
-                'Save',
-                style: TextStyle(fontSize: 12, color: Colors.white),
+              SizedBox(
+                width: 10,
               ),
-            ),
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Zip Code',
+                    prefixIcon: Icon(Icons.local_post_office,
+                        size: 30, color: AppColors.primaryColor),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        ElevatedButton.icon(
+          onPressed: () {
+            setState(() {
+              isContactEdit = false;
+            });
+          },
+          icon: Icon(
+            Icons.save,
+            color: Colors.white,
+          ),
+          label: Text(
+            'Save',
+            style: TextStyle(fontSize: 12, color: Colors.white),
           ),
         ),
       ],
@@ -517,6 +499,7 @@ class _FullProfileState extends State<FullProfile> {
       ),
       child: SingleChildScrollView(
         child: Container(
+          padding: EdgeInsets.all(16.0),
           height: DeviceUtils.getScaledHeight(context, 1.10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
