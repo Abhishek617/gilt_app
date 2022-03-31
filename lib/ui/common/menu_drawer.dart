@@ -3,12 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/data/sharedpref/constants/preferences.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MenuDrawer extends StatelessWidget {
+  // late Repository _repository;
+  // late GetProfileResponseModal profileData = _repository.profileData.then((value) => value) as GetProfileResponseModal;
   final UserStore _userStore = UserStore(getIt<Repository>());
   @override
   Widget build(BuildContext context) {
@@ -68,12 +73,14 @@ class MenuDrawer extends StatelessWidget {
                         children: [
                           Padding(padding: EdgeInsets.only(bottom: 4),
                             child: Text(
-                                'Michael Scott',
+                              _userStore.Profile_data!.user!.firstname.toString()! +
+                                  '  ' +
+                                  _userStore.Profile_data!.user!.lastname.toString(),
                                 style: TextStyle(color: Colors.white, fontSize: 18),
                                 ),
                           ),
                           Text(
-                            'Michael.scott@gmail.com',
+                            _userStore.Profile_data!.user!.email.toString()!,
                             style: TextStyle(color: Colors.white, fontSize: 14),
                           ),
                         ],
@@ -189,7 +196,7 @@ class MenuDrawer extends StatelessWidget {
                     'FAQS',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {Routes.navigateToScreen(context, Routes.faqs)},
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 70, bottom: 10),
@@ -221,7 +228,9 @@ class MenuDrawer extends StatelessWidget {
                           'Change Password',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => {
+                          Routes.navigateToScreen(context, Routes.reset_password)
+                        },
                       ),
                       ListTile(
                         horizontalTitleGap: -10,
@@ -277,7 +286,9 @@ class MenuDrawer extends StatelessWidget {
                           'Terms and Conditions',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => {
+                          Routes.navigateToScreen(context, Routes.terms_conditions)
+                        },
                       ),
                       ListTile(
                         horizontalTitleGap: -10,
@@ -291,7 +302,9 @@ class MenuDrawer extends StatelessWidget {
                           'Privacy Policy',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => {
+                          Routes.navigateToScreen(context, Routes.privacy_policy)
+                        },
                       ),
                       ListTile(
                         horizontalTitleGap: -10,

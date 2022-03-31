@@ -4,13 +4,20 @@ import 'package:guilt_app/data/local/datasources/post/post_datasource.dart';
 import 'package:guilt_app/data/network/apis/Auth/auth.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
+import 'package:guilt_app/models/Auth/otp_send.dart';
+import 'package:guilt_app/models/Auth/otp_send.dart';
+import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
+import 'package:guilt_app/models/Auth/valid_otp.dart';
 import 'package:guilt_app/models/post/post.dart';
 import 'package:guilt_app/models/post/post_list.dart';
+import 'package:guilt_app/ui/common/otp_screen.dart';
+import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:sembast/sembast.dart';
 
+import '../models/Auth/otp_send.dart';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
 
@@ -74,6 +81,10 @@ class Repository {
 
   Future<bool> get isFirst => _sharedPrefsHelper.isFirst;
 
+  Future<void> saveProfileData(GetProfileResponseModal value) => _sharedPrefsHelper.saveProfileData(value);
+
+  Future<Object?> get profileData => _sharedPrefsHelper.profileData;
+
   // Login:---------------------------------------------------------------------
   Future<LoginModal> login(String email, String password) async {
     return await _postApi
@@ -88,6 +99,28 @@ class Repository {
         .then((logoutData) => logoutData)
         .catchError((error) => throw error);
   }
+
+
+  // OtpSend:---------------------------------------------------------------------
+
+  Future<OtpSendModel> Send_Otp(String email) async {
+    return await _postApi
+        .Send_Otp(email)
+        .then((otpSendData) => otpSendData)
+        .catchError((error) => throw error);
+  }
+  // Valid Otp:---------------------------------------------------------------------
+
+  Future<Valid_Otp_Model> Valid_Otp(String email, int otp) async {
+    return await _postApi
+        .Valid_Otp(email, otp)
+        .then((otpSendData) => otpSendData)
+        .catchError((error) => throw error);
+  }
+
+
+
+
 // SignUp:---------------------------------------------------------------------
   Future<SignUpResponseModal> signUp(SignUpRequestModal signUpData) async {
     return await _postApi

@@ -61,10 +61,10 @@ class _Create_eventState extends State<Create_event> {
             child: Icon(
               Icons.arrow_back_ios_outlined,
               //color: Colors.black,
-              size: 15,
+              size: 10,
             ),
           ),
-          title: Center(child: Text('Create Event')),
+          title: Text('            Create Event'),
           shadowColor: Colors.transparent,
         ),
         child: SingleChildScrollView(
@@ -158,51 +158,53 @@ class _Create_eventState extends State<Create_event> {
                 ),
                 Row(
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 200,
-                          height: 40,
-                          child: TextField(
-                            autocorrect: true,
-                            decoration: InputDecoration(
-                              hintText: 'Enter Your Address',
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
+                    Container(
+                      width: 220,
+                      height: 40,
+                      child:TextFormField(
+                        cursorColor: Colors.black,
+                        decoration: new InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding:
+                            EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                            hintText: 'Enter Location'),
+                      )
+
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 0),
+                      child: Container(
+                        height: 30,
+                        width: 115,
+                        child: ElevatedButton(
+                          child: Row(
+                            children: [
+                              Icon(Icons.location_on_outlined , size: 13,),
+                              SizedBox(
+                                width: 2,
                               ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
+                              Text('Set on Map',style: TextStyle(color: Colors.white, fontSize: 13),),
+                            ],
+                          ),
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(32.0),
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(),
-                          child: Container(
-                            height: 40,
-                            width: 130,
-                            child: ElevatedButton(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.location_on_outlined),
-                                  SizedBox(
-                                    width: 2,
-                                  ),
-                                  Text('Set on Map',style: TextStyle(color: Colors.white),),
-                                ],
-                              ),
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(32.0),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 1, // Thickness
+                  color: Colors.grey,
                 ),
                 SizedBox(
                   height: 10,
@@ -218,51 +220,54 @@ class _Create_eventState extends State<Create_event> {
                 ),
                 Row(
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 200,
-                          height: 40,
-                          child: TextField(
-                            autocorrect: true,
-                            decoration: InputDecoration(
-                              hintText: 'Select data or time',
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
+                    Container(
+                        width: 220,
+                        height: 40,
+                        child:TextFormField(
+                          cursorColor: Colors.black,
+                          decoration: new InputDecoration(
+
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding:
+                              EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                              hintText: 'Select date or time'),
+                        )
+
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 0),
+                      child: Container(
+                        height: 30,
+                        width: 115,
+                        child: ElevatedButton(
+                          child: Row(
+                            children: [
+                              Icon(Icons.location_on_outlined , size: 13,),
+                              SizedBox(
+                                width: 2,
                               ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
+                              Text('Date Picker',style: TextStyle(color: Colors.white, fontSize: 13),),
+                            ],
+                          ),
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(32.0),
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(),
-                          child: Container(
-                            height: 40,
-                            width: 130,
-                            child: ElevatedButton(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.date_range),
-                                  SizedBox(
-                                    width: 2,
-                                  ),
-                                  Text('Data Picker',style: TextStyle(color: Colors.white),),
-                                ],
-                              ),
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(32.0),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 1, // Thickness
+                  color: Colors.grey,
                 ),
 
                 SizedBox(
@@ -363,16 +368,16 @@ class _Create_eventState extends State<Create_event> {
                 Padding(
                   padding: const EdgeInsets.only(left: 200),
                   child: Container(
-                    height: 40,
-                    width: 120,
+                    height: 30,
+                    width: 105,
                     child: ElevatedButton(
                       child: Row(
                         children: [
-                          Icon(Icons.cloud_upload_outlined),
+                          Icon(Icons.cloud_upload_outlined, size: 13,),
                           SizedBox(
                             width: 10,
                           ),
-                          Text('Browser',style: TextStyle(color: Colors.white),),
+                          Text('Browser',style: TextStyle(color: Colors.white, fontSize: 13),),
                         ],
                       ),
                       onPressed: () {
@@ -417,12 +422,12 @@ class _Create_eventState extends State<Create_event> {
                     Padding(
                       padding: const EdgeInsets.only(left: 90),
                       child: Container(
-                        height: 40,
+                        height: 30,
                         width: 110,
                         child: ElevatedButton(
                           child: Row(
                             children: [
-                              Icon(Icons.edit_note_sharp ),
+                              Icon(Icons.edit_note_sharp, size: 13, ),
                               SizedBox(
                                 width: 5,
                               ),
@@ -442,12 +447,12 @@ class _Create_eventState extends State<Create_event> {
                     Padding(
                       padding: const EdgeInsets.only(left: 5),
                       child: Container(
-                        height: 40,
-                        width: 135,
+                        height: 30,
+                        width: 130,
                         child: ElevatedButton(
                           child: Row(
                             children: [
-                              Icon(Icons.person),
+                              Icon(Icons.person, size: 13,),
                               SizedBox(
                                 width: 5,
                               ),
@@ -467,10 +472,6 @@ class _Create_eventState extends State<Create_event> {
                   ],
                 ),
 
-
-
-
-
                 Container(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10, top: 20),
@@ -479,7 +480,7 @@ class _Create_eventState extends State<Create_event> {
                       buttonColor: AppColors.primaryColor,
                       onPressed: () {
                         Routes.navigateToScreen(
-                            context, Routes.business_list);
+                            context, Routes.expense_screen);
                       },
                     ),
                   ),

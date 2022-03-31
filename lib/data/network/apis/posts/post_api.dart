@@ -9,9 +9,11 @@ import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
+import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
+import 'package:guilt_app/models/Auth/valid_otp.dart';
 import 'package:guilt_app/models/post/post_list.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 
@@ -59,6 +61,40 @@ class PostApi {
       throw e;
     }
   }
+
+
+  // Send Otp
+
+  Future Send_Otp(email) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.sendOtp, data: {"email_phone": email});
+      return OtpSendModel.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Valid Otp
+
+
+  Future Valid_Otp(email, otp) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.validOtp, data: {"email_phone": email, "otp": otp});
+      return Valid_Otp_Model.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+
+
+
+
+
 
   Future<SignUpResponseModal> signup(SignUpRequestModal signUpData) async {
     try {
