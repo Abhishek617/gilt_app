@@ -71,7 +71,10 @@ class _Add_businessState extends State<Add_business> {
               size: 15,
             ),
           ),
-          title: Center(child: Text('Add Business')),
+          title: Padding(
+            padding: const EdgeInsets.only(left: 55),
+            child: Text('Add Business'),
+          ),
           shadowColor: Colors.transparent,
         ),
         child: SingleChildScrollView(
@@ -205,9 +208,13 @@ class _Add_businessState extends State<Add_business> {
 
                 Row(
                   children: [
+
                     Text("Add Price"),
                     Column(
                       children: [
+                        SizedBox(
+                          width: 30,
+                        ),
                         Container(
                             margin: EdgeInsets.only(bottom: 15, left: 140),
                             height: 10,
@@ -258,51 +265,53 @@ class _Add_businessState extends State<Add_business> {
                 ),
                 Row(
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 200,
-                          height: 40,
-                          child: TextField(
-                              autocorrect: true,
-                              decoration: InputDecoration(
-                                hintText: 'Enter Your Address',
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
+                    Container(
+                        width: 220,
+                        height: 40,
+                        child:TextFormField(
+                          cursorColor: Colors.black,
+                          decoration: new InputDecoration(
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding:
+                              EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                              hintText: 'Enter your address'),
+                        )
+
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 0),
+                      child: Container(
+                        height: 30,
+                        width: 115,
+                        child: ElevatedButton(
+                          child: Row(
+                            children: [
+                              Icon(Icons.location_on_outlined , size: 13,),
+                              SizedBox(
+                                width: 2,
                               ),
+                              Text('Set on Map',style: TextStyle(color: Colors.white, fontSize: 13),),
+                            ],
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(),
-                          child: Container(
-                            height: 40,
-                            width: 130,
-                            child: ElevatedButton(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.location_on_outlined),
-                                  SizedBox(
-                                    width: 2,
-                                  ),
-                                  Text('Set on Map',style: TextStyle(color: Colors.white),),
-                                ],
-                              ),
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(32.0),
-                                ),
-                              ),
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(32.0),
                             ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ],
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 1, // Thickness
+                  color: Colors.grey,
                 ),
                 SizedBox(
                   height: 20,
@@ -402,16 +411,16 @@ class _Add_businessState extends State<Add_business> {
                 Padding(
                   padding: const EdgeInsets.only(left: 200),
                   child: Container(
-                    height: 40,
+                    height: 30,
                     width: 120,
                     child: ElevatedButton(
                       child: Row(
                         children: [
-                          Icon(Icons.cloud_upload_outlined),
+                          Icon(Icons.cloud_upload_outlined, size: 13),
                           SizedBox(
                             width: 10,
                           ),
-                          Text('Browser',style: TextStyle(color: Colors.white),),
+                          Text('Browser',style: TextStyle(color: Colors.white, fontSize: 13),),
                         ],
                       ),
                       onPressed: () {
@@ -441,6 +450,7 @@ class _Add_businessState extends State<Add_business> {
               ],
             ),
           ),
-        ));
+        )
+    );
   }
 }

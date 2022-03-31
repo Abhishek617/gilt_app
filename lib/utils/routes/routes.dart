@@ -4,6 +4,7 @@ import 'package:guilt_app/ui/Event/create_event.dart';
 import 'package:guilt_app/ui/Event/book_event.dart';
 import 'package:guilt_app/ui/Event/book_event_details.dart';
 import 'package:guilt_app/ui/Event/event_detail.dart';
+import 'package:guilt_app/ui/Event/expense_screen.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
 import 'package:guilt_app/ui/Profile/main_profile.dart';
@@ -64,6 +65,7 @@ class Routes {
   static const  String success_message = '/success';
   static const  String about_screen = '/about_screen';
   static const  String create_event = '/createevent';
+  static const  String expense_screen = '/expense_screen';
 
 
 
@@ -100,6 +102,7 @@ class Routes {
     success_message: (BuildContext context) => Success_message(),
     about_screen: (BuildContext context) => About_screen(),
     create_event: (BuildContext context) => Create_event(),
+    expense_screen: (BuildContext context) => Expense_Screen(),
 
 
 

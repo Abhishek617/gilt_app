@@ -49,7 +49,10 @@ class _Business_listState extends State<Business_list> {
               size: 15,
             ),
           ),
-          title: Text('Business Listing'),
+          title: Padding(
+            padding: const EdgeInsets.only(left: 55),
+            child: Text('Business Listing'),
+          ),
           shadowColor: Colors.transparent,
         ),
         child: SingleChildScrollView(
@@ -551,7 +554,7 @@ class _Business_listState extends State<Business_list> {
                       buttonText: 'Accept',
                       buttonColor: AppColors.primaryColour,
                       onPressed: () {
-                        Routes.navigateToScreen(context, Routes.faqs);
+
                       },
                     ),
                   ),

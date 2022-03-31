@@ -43,7 +43,10 @@ class _Success_messageState extends State<Success_message> {
               size: 15,
             ),
           ),
-          title: Center(child: Text('Success')),
+          title: Padding(
+            padding: const EdgeInsets.only(left: 80),
+            child: Text('Success'),
+          ),
           shadowColor: Colors.transparent,
         ),
         child: SingleChildScrollView(
