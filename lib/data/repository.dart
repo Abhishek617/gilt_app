@@ -10,6 +10,7 @@ import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
+import 'package:guilt_app/models/Auth/valid_otp.dart';
 import 'package:guilt_app/models/post/post.dart';
 import 'package:guilt_app/models/post/post_list.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
@@ -97,9 +98,17 @@ class Repository {
 
   // OtpSend:---------------------------------------------------------------------
 
-  Future<OtpSendModel> Send_Otp() async {
+  Future<OtpSendModel> Send_Otp(String email) async {
     return await _postApi
-        .Reset_password()
+        .Send_Otp(email)
+        .then((otpSendData) => otpSendData)
+        .catchError((error) => throw error);
+  }
+  // Valid Otp:---------------------------------------------------------------------
+
+  Future<Valid_Otp_Model> Valid_Otp(String email, int otp) async {
+    return await _postApi
+        .Valid_Otp(email, otp)
         .then((otpSendData) => otpSendData)
         .catchError((error) => throw error);
   }

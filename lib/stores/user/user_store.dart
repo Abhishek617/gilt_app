@@ -28,6 +28,7 @@ abstract class _UserStore with Store {
   bool isFirst = true;
   GetProfileResponseModal? Profile_data;
 
+
   static ObservableFuture<GetProfileResponseModal?> emptyPostResponse =
   ObservableFuture.value(null);
 
@@ -61,10 +62,8 @@ abstract class _UserStore with Store {
   // store variables:-----------------------------------------------------------
   @observable
   bool success = false;
-
   @observable
   late ObservableFuture<LoginModal> loginFuture;
-
   @observable
   ObservableFuture<GetProfileResponseModal?> fetchPostsFuture =
   ObservableFuture<GetProfileResponseModal?>(emptyPostResponse);
@@ -105,6 +104,31 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
+
+
+  Future Send_Otp(
+      String email, successCallback, errorCallback) async {
+    // final future = _repository.login(email, password);
+
+    // loginFuture = ObservableFuture(future);
+    _repository.Send_Otp(email).then((value) async {
+      if (value != null) {
+        successCallback(value);
+      } else {
+        print('failed to Reset Password');
+      }
+    }, onError: (error) {
+      print(error.toString());
+      errorCallback(error.response);
+    }).catchError((e) {
+      print(e);
+      throw e;
+    });
+  }
+
+
+
+
   @computed
   bool get loading => fetchPostsFuture.status == FutureStatus.pending;
   @action
@@ -118,6 +142,7 @@ abstract class _UserStore with Store {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }
+
 
   @action
   Future logout(successCallback, errorCallback) async {
@@ -153,10 +178,6 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
-
-
-
-
 
 
   @action

@@ -8,6 +8,7 @@ import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
+import 'package:guilt_app/models/Auth/valid_otp.dart';
 import 'package:guilt_app/models/post/post_list.dart';
 
 class PostApi {
@@ -58,16 +59,36 @@ class PostApi {
 
   // Send Otp
 
-  Future Reset_password() async {
+  Future Send_Otp(email) async {
     try {
       final res = await _dioClient
-          .post(Endpoints.sendOtp, data: {});
+          .post(Endpoints.sendOtp, data: {"email_phone": email});
       return OtpSendModel.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
     }
   }
+
+  // Valid Otp
+
+
+  Future Valid_Otp(email, otp) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.validOtp, data: {"email_phone": email, "otp": otp});
+      return Valid_Otp_Model.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+
+
+
+
+
 
   Future<SignUpResponseModal> signup(SignUpRequestModal signUpData) async {
     try {

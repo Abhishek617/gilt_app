@@ -1,6 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/dimens.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/stores/theme/theme_store.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
@@ -16,7 +23,12 @@ class Reset_password extends StatefulWidget {
 }
 
 class _Reset_passwordState extends State<Reset_password> {
+
+  TextEditingController _userEmailController = TextEditingController();
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
+  ThemeStore _themeStore = ThemeStore(getIt<Repository>());
+  final UserStore _userStore = UserStore(getIt<Repository>());
 
   bool passenable = true;
 
@@ -74,14 +86,13 @@ class _Reset_passwordState extends State<Reset_password> {
                   height: 25,
                 ),
 
-
                 Padding(
                   padding: const EdgeInsets.only(left: 5, top: 30),
                   child: Container(
                     // height: 50,
                     width: 310,
                     child: TextFormField(
-                      // controller: nameController,
+                       controller: _userEmailController,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.mail,),
                         border: OutlineInputBorder(),
@@ -101,6 +112,7 @@ class _Reset_passwordState extends State<Reset_password> {
                 ),
 
 
+
                 SizedBox(
                   height: 15,
                 ),
@@ -108,12 +120,31 @@ class _Reset_passwordState extends State<Reset_password> {
                   buttonText: 'Reset Password',
                   buttonColor: AppColors.primaryColour,
                   onPressed: () {
-                    if(formkey.currentState!.validate()){
-                      Routes.navigateToScreen(context, Routes.otp);
-                      }else{
+                    if (formkey.currentState!.validate()) {
+                      _userStore.Send_Otp(_userEmailController.value.text, (value) {
+                            Routes.navigateRootToScreen(context, Routes.otp);
+                            // Routes.navigateToScreenWithArgs(
+                            //     context,
+                            //     Routes.success_error_validate,
+                            //     SuccessErrorValidationPageArgs(
+                            //         isSuccess: true,
+                            //         description: 'Logged in successfully',
+                            //         title: 'Success',
+                            //         isPreviousLogin: false));
+                          },
+
+                              (error) {
+                            print(error);
+                            final data = json.decode(json.encode(error.data)) ;
+                            // Map<String, dynamic> map = json.decode(error.data);
+                            GlobalMethods.showErrorMessage(context,data['error'], 'Forgot Password');
+                          }).then((value) {
+                        print(value);
+                      });
+                    } else {
                       print('Eroor');
                     }
-                    //Routes.navigateToScreen(context, Routes.otp);
+                    //Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
                   },
                 ),
               ],

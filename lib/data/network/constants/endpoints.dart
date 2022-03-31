@@ -32,7 +32,11 @@ class Endpoints {
 
   //---------ResetPassword
   // update send otp
-  static const String sendOtp = baseUrl + "Send_Otp";
+  static const String sendOtp = baseUrl + "admin/fp-send-otp";
+
+  // Valid Otp
+  static const String validOtp = baseUrl + "admin/fp-send-otp";
+
 
 
 
