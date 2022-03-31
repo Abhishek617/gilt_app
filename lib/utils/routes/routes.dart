@@ -5,6 +5,7 @@ import 'package:guilt_app/ui/Event/book_event.dart';
 import 'package:guilt_app/ui/Event/book_event_details.dart';
 import 'package:guilt_app/ui/Event/event_detail.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
+import 'package:guilt_app/ui/Messages/ChatScreen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
 import 'package:guilt_app/ui/Profile/main_profile.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
@@ -37,6 +38,7 @@ class Routes {
   Routes._();
 
   //static variables
+  static const String chat = '/chat';
   static const String message = '/message';
   static const String setting = '/setting';
   static const String splash = '/splash';
@@ -72,6 +74,7 @@ class Routes {
 
 
   static final routes = <String, WidgetBuilder>{
+    chat: (BuildContext context) => ChatScreen(),
     message: (BuildContext context) => Messages(),
     setting: (BuildContext context) => Setting(),
     splash: (BuildContext context) => SplashScreen(),

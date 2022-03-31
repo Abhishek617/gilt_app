@@ -386,7 +386,7 @@ class _FullProfileState extends State<FullProfile> {
                   child: TextField(
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.call,
-                          size: 30, color: AppColors.primaryColour),
+                          size: 30, color: AppColors.primaryColor),
                     ),
                   ),
                 ),
@@ -404,7 +404,7 @@ class _FullProfileState extends State<FullProfile> {
                   child: TextField(
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.house,
-                          size: 30, color: AppColors.primaryColour),
+                          size: 30, color: AppColors.primaryColor),
                     ),
                   ),
                 ),

@@ -68,7 +68,7 @@ class _SettingState extends State<Setting> {
                       height: 27.0,
                       valueFontSize: 25.0,
                       borderRadius: 30.0,
-                      activeToggleColor: AppColors.primaryColour,
+                      activeToggleColor: AppColors.primaryColor,
                       inactiveToggleColor: Colors.grey,
                       switchBorder: Border.all(
                         color: Colors.black,
@@ -121,7 +121,7 @@ class _SettingState extends State<Setting> {
                       height: 27.0,
                       valueFontSize: 25.0,
                       borderRadius: 30.0,
-                      activeToggleColor: AppColors.primaryColour,
+                      activeToggleColor: AppColors.primaryColor,
                       inactiveToggleColor: Colors.grey,
                       switchBorder: Border.all(
                         color: Colors.black,
@@ -185,7 +185,7 @@ class _SettingState extends State<Setting> {
                       height: 27.0,
                       valueFontSize: 25.0,
                       borderRadius: 30.0,
-                      activeToggleColor: AppColors.primaryColour,
+                      activeToggleColor: AppColors.primaryColor,
                       inactiveToggleColor: Colors.grey,
                       switchBorder: Border.all(
                         color: Colors.black,
@@ -224,7 +224,7 @@ class _SettingState extends State<Setting> {
                       height: 27.0,
                       valueFontSize: 25.0,
                       borderRadius: 30.0,
-                      activeToggleColor: AppColors.primaryColour,
+                      activeToggleColor: AppColors.primaryColor,
                       inactiveToggleColor: Colors.grey,
                       switchBorder: Border.all(
                         color: Colors.black,
@@ -263,7 +263,7 @@ class _SettingState extends State<Setting> {
                       height: 27.0,
                       valueFontSize: 25.0,
                       borderRadius: 30.0,
-                      activeToggleColor: AppColors.primaryColour,
+                      activeToggleColor: AppColors.primaryColor,
                       inactiveToggleColor: Colors.grey,
                       switchBorder: Border.all(
                         color: Colors.black,
@@ -302,7 +302,7 @@ class _SettingState extends State<Setting> {
                       height: 27.0,
                       valueFontSize: 25.0,
                       borderRadius: 30.0,
-                      activeToggleColor: AppColors.primaryColour,
+                      activeToggleColor: AppColors.primaryColor,
                       inactiveToggleColor: Colors.grey,
                       switchBorder: Border.all(
                         color: Colors.black,
@@ -341,7 +341,7 @@ class _SettingState extends State<Setting> {
                       height: 27.0,
                       valueFontSize: 25.0,
                       borderRadius: 30.0,
-                      activeToggleColor: AppColors.primaryColour,
+                      activeToggleColor: AppColors.primaryColor,
                       inactiveToggleColor: Colors.grey,
                       switchBorder: Border.all(
                         color: Colors.black,
