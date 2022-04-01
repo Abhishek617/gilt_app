@@ -40,7 +40,7 @@ class Routes {
   Routes._();
 
   //static variables
-  static const String oprof = '/oprof';
+  static const String organizerprof = '/organizerprof';
   static const String chat = '/chat';
   static const String message = '/message';
   static const String setting = '/setting';
@@ -76,9 +76,8 @@ class Routes {
   static const  String expense_screen = '/expense_screen';
 
 
-
   static final routes = <String, WidgetBuilder>{
-    oprof: (BuildContext context) => OrganizerProfile(),
+    organizerprof: (BuildContext context) => OrganizerProfile(),
     chat: (BuildContext context) => ChatScreen(),
     message: (BuildContext context) => Messages(),
     setting: (BuildContext context) => Setting(),
