@@ -9,6 +9,7 @@ import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Messages/ChatScreen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
 import 'package:guilt_app/ui/Profile/main_profile.dart';
+import 'package:guilt_app/ui/Profile/organizer_profile.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
 import 'package:guilt_app/ui/Setting/setting.dart';
 import 'package:guilt_app/ui/common/about_screen.dart';
@@ -39,6 +40,7 @@ class Routes {
   Routes._();
 
   //static variables
+  static const String oprof = '/oprof';
   static const String chat = '/chat';
   static const String message = '/message';
   static const String setting = '/setting';
@@ -76,6 +78,7 @@ class Routes {
 
 
   static final routes = <String, WidgetBuilder>{
+    oprof: (BuildContext context) => OrganizerProfile(),
     chat: (BuildContext context) => ChatScreen(),
     message: (BuildContext context) => Messages(),
     setting: (BuildContext context) => Setting(),

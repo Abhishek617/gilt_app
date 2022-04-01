@@ -500,7 +500,7 @@ class _FullProfileState extends State<FullProfile> {
       child: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(16.0),
-          height: DeviceUtils.getScaledHeight(context, 1.10),
+          height: DeviceUtils.getScaledHeight(context, 1.20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
