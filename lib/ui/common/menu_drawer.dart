@@ -196,7 +196,7 @@ class MenuDrawer extends StatelessWidget {
                     'FAQS',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {Routes.navigateToScreen(context, Routes.faqs)},
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 70, bottom: 10),
@@ -228,7 +228,9 @@ class MenuDrawer extends StatelessWidget {
                           'Change Password',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => {
+                          Routes.navigateToScreen(context, Routes.reset_password)
+                        },
                       ),
                       ListTile(
                         horizontalTitleGap: -10,
@@ -284,7 +286,9 @@ class MenuDrawer extends StatelessWidget {
                           'Terms and Conditions',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => {
+                          Routes.navigateToScreen(context, Routes.terms_conditions)
+                        },
                       ),
                       ListTile(
                         horizontalTitleGap: -10,
@@ -298,7 +302,9 @@ class MenuDrawer extends StatelessWidget {
                           'Privacy Policy',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => {
+                          Routes.navigateToScreen(context, Routes.privacy_policy)
+                        },
                       ),
                       ListTile(
                         horizontalTitleGap: -10,
