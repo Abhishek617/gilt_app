@@ -105,12 +105,10 @@ class _Otp_screenState extends State<Otp_screen> {
                               );
                             }
                         );
-
                       }, // end onSubmit
                     ),
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: ElevatedButtonWidget(
