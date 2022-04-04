@@ -25,6 +25,7 @@ import 'package:guilt_app/widgets/textfield_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import '../../widgets/rounded_button_widget.dart';
 
 
@@ -37,8 +38,22 @@ class Create_event extends StatefulWidget {
 
 class _Create_eventState extends State<Create_event> {
 
+  final imagePicker = ImagePicker();
+  File? imageFile;
+
+  Future getImage() async {
+    var image = await imagePicker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      imageFile = File(image!.path);
+    });
+  }
+
+
+
   String dropdownvalue = 'Item 1';
   String? valueChange;
+
 
   // List of items in our dropdown menu
   var items = [
@@ -201,6 +216,7 @@ class _Create_eventState extends State<Create_event> {
                     ),
                   ],
                 ),
+
                 Container(
                   width: double.infinity,
                   height: 1, // Thickness
@@ -347,6 +363,7 @@ class _Create_eventState extends State<Create_event> {
                           color: Colors.grey,
                           borderRadius: BorderRadius.all(Radius.circular(5))
                       ),
+                        child: imageFile != null ? Image.file(imageFile!, fit: BoxFit.cover,) : Text('')
                     ),
                     SizedBox(
                       width: 5,
@@ -354,10 +371,15 @@ class _Create_eventState extends State<Create_event> {
                     Container(
                       height: 80,
                       width: 70,
+
                       decoration: BoxDecoration(
+
                           color: Colors.grey,
                           borderRadius: BorderRadius.all(Radius.circular(5))
                       ),
+                      child: imageFile != null ? Image.file(imageFile!,  fit: BoxFit.cover,) : Text(''),
+
+
                     ),
                   ],
                 ),
@@ -368,8 +390,10 @@ class _Create_eventState extends State<Create_event> {
                 Padding(
                   padding: const EdgeInsets.only(left: 200),
                   child: Container(
-                    height: 30,
-                    width: 105,
+                   // height: 30,
+                   // width: 105,
+                    height: MediaQuery.of(context).size.height / 23.10,
+                    width: MediaQuery.of(context).size.width / 3.6,
                     child: ElevatedButton(
                       child: Row(
                         children: [
@@ -381,6 +405,7 @@ class _Create_eventState extends State<Create_event> {
                         ],
                       ),
                       onPressed: () {
+                        getImage();
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
