@@ -40,13 +40,12 @@ class _About_screenState extends State<About_screen> {
           child: Icon(
             Icons.arrow_back_ios_outlined,
             //color: Colors.black,
-            size: 15,
+            size: 13,
           ),
         ),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 60),
-          child: Text('     About'),
-        ),
+        title: Align(
+            alignment: Alignment.center,
+            child: Text('About')),
         shadowColor: Colors.transparent,
       ),
       child: Padding(
@@ -136,9 +135,10 @@ class _About_screenState extends State<About_screen> {
                   ),
 
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: 100,
+
                         height: 30,
                       ),
                       SizedBox(
