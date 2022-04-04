@@ -25,6 +25,7 @@ import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/home/home.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/login/login.dart';
+import 'package:guilt_app/ui/payment/Payment_history.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class Routes {
   Routes._();
 
   //static variables
+  static const String paymenthistory = '/paymenthistory';
   static const String organizerprof = '/organizerprof';
   static const String chat = '/chat';
   static const String message = '/message';
@@ -77,6 +79,7 @@ class Routes {
 
 
   static final routes = <String, WidgetBuilder>{
+    paymenthistory: (BuildContext context) => PaymentHistory(),
     organizerprof: (BuildContext context) => OrganizerProfile(),
     chat: (BuildContext context) => ChatScreen(),
     message: (BuildContext context) => Messages(),

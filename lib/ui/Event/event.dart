@@ -50,11 +50,7 @@ class _EventState extends State<Event> {
   Widget box(String title, Color backgroundcolor, Image demo) {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.all(5),
-          child: GestureDetector(
-            onTap: () => Routes.navigateToScreen(context, Routes.event_details),
-            child: Card(
+             Card(
               shadowColor: AppColors.grayTextColor,
               elevation: 2.5,
               child: Container(
@@ -108,24 +104,22 @@ class _EventState extends State<Event> {
                         ),
                       ),
                     ),
+
                   ],
                 ),
               ),
+
             ),
-          ),
-        ),
+
       ],
     );
+
   }
 
   Widget pastbox(String title, Color backgroundcolor, Image demo) {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.all(5),
-          child: GestureDetector(
-            onTap: () => Routes.navigateToScreen(context, Routes.event_details),
-            child: Card(
+             Card(
               shadowColor: AppColors.grayTextColor,
               elevation: 2.5,
               child: Container(
@@ -183,7 +177,17 @@ class _EventState extends State<Event> {
                 ),
               ),
             ),
-          ),
+
+        Divider(
+          color: Colors.black12,
+          //color of divider
+          height: 20,
+          //height spacing of divider
+          thickness: 1,
+          //thickness of divier line
+          indent: 20,
+          //spacing at the start of divider
+          endIndent: 20, //spacing at the end of divider
         ),
       ],
     );
