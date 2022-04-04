@@ -128,10 +128,10 @@ class MenuDrawer extends StatelessWidget {
                     size: 20,
                   ),
                   title: Text(
-                    'PAYMENT HISTORY',
+                    'EXPENSE HISTORY',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {Routes.navigateToScreen(context, Routes.expensehistory)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
