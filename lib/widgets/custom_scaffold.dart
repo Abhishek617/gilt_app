@@ -52,6 +52,7 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
               //Floating action button on Scaffold
               onPressed: () {
                 //code to execute on button press
+                Routes.navigateToScreen(context, Routes.create_event);
               },
               child: IconWithText(Icons.calendar_month, 'Add Event',
                   fontSize: 8), //icon inside button
