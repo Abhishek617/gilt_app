@@ -86,285 +86,259 @@ class MenuDrawer extends StatelessWidget {
           ),
           Expanded(
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ListTile(
-                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 20,
-                    ),
-                    title: Text(
-                      'ADD EVENT',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    onTap: () => {
-                      Routes.navigateToScreen(context, Routes.create_event),
-                    },
+            child:Column(
+              children: [
+                ListTile(
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20,
                   ),
-                  ListTile(
-                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 20,
-                    ),
-                    title: Text(
-                      'INVITE FRIENDS',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    onTap: () => {Navigator.of(context).pop()},
+                  title: Text(
+                    'ADD EVENT',
+                    style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  ListTile(
-                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 20,
-                    ),
-                    title: Text(
-                      'PAYMENT HISTORY',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {Routes.navigateToScreen(
+                      context, Routes.create_event)},
+                ),
+                ListTile(
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20,
                   ),
-                  ListTile(
-                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 20),
-                    title: Text(
-                      'BOOK EVENT',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    onTap: () =>
-                        {Routes.navigateToScreen(context, Routes.book_event)},
+                  title: Text(
+                    'INVITE FRIENDS',
+                    style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  ListTile(
-                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 20),
-                    title: Text(
-                      'BECOME A BUSINESS',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    onTap: () =>
-                        {Routes.navigateToScreen(context, Routes.add_business)},
+                  onTap: () => {Routes.navigateToScreen(
+                      context, Routes.attendees_profile)},
+                ),
+                ListTile(
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20,
                   ),
-                  ListTile(
-                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 20),
-                    title: Text(
-                      'MESSAGE',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    onTap: () => {
-                      Routes.navigateToScreen(context, Routes.success_message)
-                    },
+                  title: Text(
+                    'EXPENSE HISTORY',
+                    style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  ListTile(
-                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 20),
-                    title: Text(
-                      'ABOUT APP',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    onTap: () =>
-                        {Routes.navigateToScreen(context, Routes.about_screen)},
+                  onTap: () => {Routes.navigateToScreen(context, Routes.expensehistory)},
+                ),
+                ListTile(
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  title: Text(
+                    'BOOK EVENT',
+                    style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  ListTile(
-                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 20),
-                    title: Text(
-                      'PAYMENT METHOD',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    onTap: () => {
-                      Routes.navigateToScreen(context, Routes.organizerprof)
-                    },
+                  onTap: () => {Routes.navigateToScreen(context, Routes.book_event)},
+                ),
+                ListTile(
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  title: Text(
+                    'BECOME A BUSINESS',
+                    style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  ListTile(
-                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 20),
-                    title: Text(
-                      'PAYMENT HISTORY',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    onTap: () => {
-                      Routes.navigateToScreen(context, Routes.paymenthistory)
-                    },
+                  onTap: () => {  Routes.navigateToScreen(
+                  context, Routes.add_business)},
+                ),
+                ListTile(
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  title: Text(
+                    'MESSAGE',
+                    style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  ListTile(
-                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 20),
-                    title: Text(
-                      'HELP & SUPPORT',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {Routes.navigateToScreen(
+                      context, Routes.success_message)},
+                ),
+                ListTile(
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  title: Text(
+                    'ABOUT APP',
+                    style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  ListTile(
-                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 20),
-                    title: Text(
-                      'FAQS',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    onTap: () =>
-                        {Routes.navigateToScreen(context, Routes.faqs)},
+                  onTap: () => {Routes.navigateToScreen(
+                      context, Routes.about_screen)},
+                ),
+                ListTile(
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  title: Text(
+                    'PAYMENT METHOD',
+                    style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 70, bottom: 10),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          horizontalTitleGap: -10,
-                          visualDensity:
-                              VisualDensity(horizontal: 0, vertical: -4),
-                          leading: Icon(
-                            Icons.settings,
-                            size: 20,
-                            color: AppColors.primaryColor,
-                          ),
-                          title: Text(
-                            'Notification',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          onTap: () =>
-                              {Routes.navigateToScreen(context, Routes.notifi)},
+                  onTap: () => {Routes.navigateToScreen(
+                      context, Routes.organizerprof)},
+                ),
+                ListTile(
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  title: Text(
+                    'PAYMENT HISTORY',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  onTap: () => {Routes.navigateToScreen(
+                      context, Routes.paymenthistory)},
+                ),
+                ListTile(
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  title: Text(
+                    'HELP & SUPPORT',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  onTap: () => {Navigator.of(context).pop()},
+                ),
+                ListTile(
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  title: Text(
+                    'FAQS',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  onTap: () => {Routes.navigateToScreen(context, Routes.faqs)},
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 70, bottom: 10),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        horizontalTitleGap: -10,
+                        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                        leading: Icon(
+                          Icons.settings,
+                          size: 20,
+                          color: AppColors.primaryColor,
                         ),
-                        ListTile(
-                          horizontalTitleGap: -10,
-                          visualDensity:
-                              VisualDensity(horizontal: 0, vertical: -4),
-                          leading: Icon(
-                            Icons.settings,
-                            size: 20,
-                            color: AppColors.primaryColor,
-                          ),
-                          title: Text(
-                            'Change Password',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          onTap: () => {
-                            Routes.navigateToScreen(
-                                context, Routes.reset_password)
-                          },
+                        title: Text(
+                          'Notification',
+                          style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        ListTile(
-                          horizontalTitleGap: -10,
-                          visualDensity:
-                              VisualDensity(horizontal: 0, vertical: -4),
-                          leading: Icon(
-                            Icons.settings,
-                            size: 20,
-                            color: AppColors.primaryColor,
-                          ),
-                          title: Text(
-                            'Settings',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          onTap: () => {
-                            Routes.navigateToScreen(context, Routes.setting)
-                          },
+                        onTap: () => {  Routes.navigateToScreen(context, Routes.notifi)},
+                      ),
+                      ListTile(
+                        horizontalTitleGap: -10,
+                        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                        leading: Icon(
+                          Icons.settings,
+                          size: 20,
+                          color: AppColors.primaryColor,
                         ),
-                        ListTile(
-                          horizontalTitleGap: -10,
-                          visualDensity:
-                              VisualDensity(horizontal: 0, vertical: -4),
-                          leading: Icon(
-                            Icons.settings,
-                            size: 20,
-                            color: AppColors.primaryColor,
-                          ),
-                          title: Text(
-                            'Profile',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          onTap: () => {
-                            Routes.navigateToScreen(
-                                context, Routes.view_profile)
-                          },
+                        title: Text(
+                          'Change Password',
+                          style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        ListTile(
-                          horizontalTitleGap: -10,
-                          visualDensity:
-                              VisualDensity(horizontal: 0, vertical: -4),
-                          leading: Icon(
-                            Icons.settings,
-                            size: 20,
-                            color: AppColors.primaryColor,
-                          ),
-                          title: Text(
-                            'Rate The App',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => {
+                          Routes.navigateToScreen(context, Routes.reset_password)
+                        },
+                      ),
+                      ListTile(
+                        horizontalTitleGap: -10,
+                        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                        leading: Icon(
+                          Icons.settings,
+                          size: 20,
+                          color: AppColors.primaryColor,
                         ),
-                        ListTile(
-                          horizontalTitleGap: -10,
-                          visualDensity:
-                              VisualDensity(horizontal: 0, vertical: -4),
-                          leading: Icon(
-                            Icons.settings,
-                            size: 20,
-                            color: AppColors.primaryColor,
-                          ),
-                          title: Text(
-                            'Terms and Conditions',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          onTap: () => {
-                            Routes.navigateToScreen(
-                                context, Routes.terms_conditions)
-                          },
+                        title: Text(
+                          'Settings',
+                          style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        ListTile(
-                          horizontalTitleGap: -10,
-                          visualDensity:
-                              VisualDensity(horizontal: 0, vertical: -4),
-                          leading: Icon(
-                            Icons.settings,
-                            size: 20,
-                            color: AppColors.primaryColor,
-                          ),
-                          title: Text(
-                            'Privacy Policy',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          onTap: () => {
-                            Routes.navigateToScreen(
-                                context, Routes.privacy_policy)
-                          },
+                        onTap: () => { Routes.navigateToScreen(context, Routes.setting)},
+                      ),
+                      ListTile(
+                        horizontalTitleGap: -10,
+                        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                        leading: Icon(
+                          Icons.settings,
+                          size: 20,
+                          color: AppColors.primaryColor,
                         ),
-                        ListTile(
-                          horizontalTitleGap: -10,
-                          visualDensity:
-                              VisualDensity(horizontal: 0, vertical: -4),
-                          leading: Icon(
-                            Icons.settings,
-                            size: 20,
-                            color: AppColors.primaryColor,
-                          ),
-                          title: Text(
-                            'Log Out',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          onTap: () => {
-                            _userStore.logout(
-                              (response) {
-                                print(response);
-                                Routes.navigateRootToScreen(
-                                    context, Routes.login);
-                              },
-                              (error) {
-                                Routes.navigateRootToScreen(
-                                    context, Routes.login);
-                                // GlobalMethods.showErrorMessage(context, error.message.toString(), 'Logout Error');
-                              },
-                            ),
-                          },
+                        title: Text(
+                          'Profile',
+                          style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                      ],
-                    ),
+                        onTap: () => {Routes.navigateToScreen(context, Routes.view_profile)},
+                      ),
+                      ListTile(
+                        horizontalTitleGap: -10,
+                        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                        leading: Icon(
+                          Icons.settings,
+                          size: 20,
+                          color: AppColors.primaryColor,
+                        ),
+                        title: Text(
+                          'Rate The App',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                        onTap: () => {Navigator.of(context).pop()},
+                      ),
+                      ListTile(
+                        horizontalTitleGap: -10,
+                        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                        leading: Icon(
+                          Icons.settings,
+                          size: 20,
+                          color: AppColors.primaryColor,
+                        ),
+                        title: Text(
+                          'Terms and Conditions',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                        onTap: () => {
+                          Routes.navigateToScreen(context, Routes.terms_conditions)
+                        },
+                      ),
+                      ListTile(
+                        horizontalTitleGap: -10,
+                        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                        leading: Icon(
+                          Icons.settings,
+                          size: 20,
+                          color: AppColors.primaryColor,
+                        ),
+                        title: Text(
+                          'Privacy Policy',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                        onTap: () => {
+                          Routes.navigateToScreen(context, Routes.privacy_policy)
+                        },
+                      ),
+                      ListTile(
+                        horizontalTitleGap: -10,
+                        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                        leading: Icon(
+                          Icons.settings,
+                          size: 20,
+                          color: AppColors.primaryColor,
+                        ),
+                        title: Text(
+                          'Log Out',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                        onTap: () => {
+                          _userStore.logout((response){
+                            print(response);
+                            Routes.navigateRootToScreen(context, Routes.login);
+                          }, (error){
+                            Routes.navigateRootToScreen(context, Routes.login);
+                            // GlobalMethods.showErrorMessage(context, error.message.toString(), 'Logout Error');
+                          })
+
+                        },
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
             ),
           ),
         ],

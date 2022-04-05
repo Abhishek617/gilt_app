@@ -12,6 +12,8 @@ import 'package:guilt_app/ui/Profile/main_profile.dart';
 import 'package:guilt_app/ui/Profile/organizer_profile.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
 import 'package:guilt_app/ui/Setting/setting.dart';
+import 'package:guilt_app/ui/attendees/add_contacts.dart';
+import 'package:guilt_app/ui/attendees/addendees_profile.dart';
 import 'package:guilt_app/ui/common/about_screen.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
 import 'package:guilt_app/ui/common/faqs.dart';
@@ -36,11 +38,13 @@ import '../../ui/notification/notification.dart';
 
 import '../../ui/Business/add_business.dart';
 import '../../ui/Business/business_list.dart';
+import '../../ui/payment/expense.dart';
 
 class Routes {
   Routes._();
 
   //static variables
+  static const String expensehistory = '/expensehistory';
   static const String paymenthistory = '/paymenthistory';
   static const String organizerprof = '/organizerprof';
   static const String chat = '/chat';
@@ -76,9 +80,13 @@ class Routes {
   static const  String about_screen = '/about_screen';
   static const  String create_event = '/createevent';
   static const  String expense_screen = '/expense_screen';
+  static const  String attendees_profile= '/attendees_profile';
+  static const  String add_contacts= '/add_contacts';
+
 
 
   static final routes = <String, WidgetBuilder>{
+    expensehistory: (BuildContext context) => Expense(),
     paymenthistory: (BuildContext context) => PaymentHistory(),
     organizerprof: (BuildContext context) => OrganizerProfile(),
     chat: (BuildContext context) => ChatScreen(),
@@ -117,6 +125,9 @@ class Routes {
     about_screen: (BuildContext context) => About_screen(),
     create_event: (BuildContext context) => Create_event(),
     expense_screen: (BuildContext context) => Expense_Screen(),
+    attendees_profile: (BuildContext context) => Attendees_profile(),
+    add_contacts: (BuildContext context) => Add_contacts(),
+
 
 
 
