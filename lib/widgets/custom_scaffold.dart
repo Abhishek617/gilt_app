@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/constants/dimens.dart';
 import 'package:guilt_app/ui/common/menu_drawer.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 
 class ScaffoldWrapper extends StatefulWidget {
@@ -52,8 +53,8 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
               onPressed: () {
                 //code to execute on button press
               },
-              child: IconWithText(
-                  Icons.calendar_month, 'Add Event', fontSize: 8), //icon inside button
+              child: IconWithText(Icons.calendar_month, 'Add Event',
+                  fontSize: 8), //icon inside button
             )
           : null,
       floatingActionButtonLocation: widget.isTab == true
@@ -82,21 +83,27 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
                     ),
                     InkWell(
                       onTap: () {
-                        Routes.navigateToScreen(context, Routes.events_home);
+                        Routes.navigateToScreen(context, Routes.wallet);
                       },
-                      child: IconWithText(Icons.account_balance_wallet, 'Wallet'),
+                      child:
+                          IconWithText(Icons.account_balance_wallet, 'Wallet'),
+                    ),
+                    SizedBox(
+                      width: DeviceUtils.getScaledWidth(context, 0.20),
                     ),
                     InkWell(
                       onTap: () {
                         Routes.navigateToScreen(context, Routes.message);
                       },
-                      child: IconWithText(Icons.question_answer_rounded, 'Chat'),
+                      child:
+                          IconWithText(Icons.question_answer_rounded, 'Chat'),
                     ),
                     InkWell(
                       onTap: () {
                         Routes.navigateToScreen(context, Routes.view_profile);
                       },
-                      child: IconWithText(Icons.account_circle_rounded, 'Profile'),
+                      child:
+                          IconWithText(Icons.account_circle_rounded, 'Profile'),
                     ),
                   ],
                 ),
