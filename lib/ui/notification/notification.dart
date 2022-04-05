@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../utils/device/device_utils.dart';
+
 class Notifications extends StatefulWidget {
   @override
   State<Notifications> createState() => _NotificationsState();
@@ -8,16 +10,15 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsState extends State<Notifications> {
   With_Button() => Container(
-        padding: EdgeInsets.only(top: 15),
+        padding: EdgeInsets.only(top: 5),
         child: Row(
           children: [
+            SizedBox(width: 15),
             Align(
               alignment: Alignment.center,
               child: Stack(
                 children: [
                   Container(
-                    padding: const EdgeInsets.only(
-                        left: 10.0, top: 10.0, bottom: 00.0, right: 5.0),
                     child: Image.network(
                       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
                       width: 70,
@@ -28,66 +29,66 @@ class _NotificationsState extends State<Notifications> {
                 ],
               ),
             ),
+            SizedBox(
+              width: 10,
+            ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: 5.0, top: 15.0, bottom: 00.0, right: 00.0),
-                  child: Text(
-                    'David Siliba invite to JO Malone',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'David Siliba invite to JO Malone',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: 5.0, top: 3.0, bottom: 00.0, right: 90.0),
-                  child: Text(
-                    'iliba invite to JO Ma',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
+                Text(
+                  'iliba invite to JO Ma',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 Row(
                   children: [
-                    Padding(
-                        padding: EdgeInsets.only(left: 0, right: 10),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text('Accept'),
-                          style: ButtonStyle(
-
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Accept'),
+                      style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50.0),
-                                  ))),
-                        )),
-                    Padding(
-                        padding: EdgeInsets.only(left: 0, right: 10),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Reject',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ))),
+                    ),
+                    SizedBox(width: 15),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Reject',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateColor.resolveWith(
+                              (states) => Colors.white),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50.0),
-                                  ))),
-                        )),
+                            borderRadius: BorderRadius.circular(50.0),
+                          ))),
+                    ),
                   ],
                 ),
               ],
             ),
+            SizedBox(
+              width: 30,
+            ),
             Padding(
-              padding: EdgeInsets.only(
-                  left: 30.0, top: 10.0, bottom: 60.0, right: 25.0),
+              padding: EdgeInsets.only(bottom: 45),
               child: Text(
                 'Just Now',
                 style: TextStyle(
@@ -101,16 +102,15 @@ class _NotificationsState extends State<Notifications> {
       );
 
   Without_Button() => Container(
-        padding: EdgeInsets.only(top: 15),
+        padding: EdgeInsets.only(top: 10),
         child: Row(
           children: [
+            SizedBox(width: 15),
             Align(
               alignment: Alignment.center,
               child: Stack(
                 children: [
                   Container(
-                    padding: const EdgeInsets.only(
-                        left: 10.0, top: 10.0, bottom: 00.0, right: 5.0),
                     child: Image.network(
                       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
                       width: 70,
@@ -121,35 +121,33 @@ class _NotificationsState extends State<Notifications> {
                 ],
               ),
             ),
+            SizedBox(
+              width: 10,
+            ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: 5.0, top: 15.0, bottom: 00.0, right: 00.0),
-                  child: Text(
-                    'David Siliba invite to JO Malone',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
+                Text(
+                  'David Siliba invite to JO Malone',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: 5.0, top: 3.0, bottom: 20.0, right: 90.0),
-                  child: Text(
-                    'iliba invite to JO Ma',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
+                Text(
+                  'iliba invite to JO Ma',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
             ),
+            SizedBox(
+              width: 30,
+            ),
             Padding(
-              padding: EdgeInsets.only(
-                  left: 30.0, top: 20.0, bottom: 40.0, right: 25.0),
+              padding: EdgeInsets.only(bottom: 10.0),
               child: Text(
                 'Just Now',
                 style: TextStyle(
@@ -161,6 +159,22 @@ class _NotificationsState extends State<Notifications> {
           ],
         ),
       );
+  List<String> item = [
+    ' b',
+    'c ',
+    ' d',
+    ' b',
+    'c ',
+    ' d',
+    ' r',
+    'n ',
+    'y',
+    'f',
+    'm' ' b',
+    'c ',
+    ' d',
+    ' r'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -170,38 +184,20 @@ class _NotificationsState extends State<Notifications> {
         title: Text('Notification'),
       ),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              child: With_Button(),
+      body: Column(
+        children: [
+          SingleChildScrollView(
+            child: Container(
+              width: DeviceUtils.getScaledWidth(context, 1.10),
+              height: DeviceUtils.getScaledHeight(context, 0.85),
+              child: ListView.builder(
+                itemCount: item.length,
+                itemBuilder: (context, index) =>
+                    index.isOdd ? With_Button() : Without_Button(),
+              ),
             ),
-            Container(
-              child: Without_Button(),
-            ),
-            Container(
-              child: With_Button(),
-            ),
-            Container(
-              child: With_Button(),
-            ),
-            Container(
-              child: Without_Button(),
-            ),
-            Container(
-              child: Without_Button(),
-            ),
-            Container(
-              child: Without_Button(),
-            ),
-            Container(
-              child: With_Button(),
-            ),
-            Container(
-              child: Without_Button(),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
