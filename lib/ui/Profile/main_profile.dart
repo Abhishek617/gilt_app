@@ -159,6 +159,7 @@ class _MainProfileState extends State<MainProfile> {
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
       isMenu: true,
+      isTab: true,
       appBar: AppBar(
         shadowColor: Colors.transparent,
         title: Text(_profileStore.Profile_data!.user!.firstname.toString() +

@@ -15,16 +15,14 @@ class MenuDrawer extends StatelessWidget {
   // late Repository _repository;
   // late GetProfileResponseModal profileData = _repository.profileData.then((value) => value) as GetProfileResponseModal;
   final UserStore _userStore = UserStore(getIt<Repository>());
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       elevation: 20.0,
       child: Column(
-        
         children: <Widget>[
-
           Container(
-
             height: 180,
             child: DrawerHeader(
               decoration: BoxDecoration(
@@ -32,24 +30,14 @@ class MenuDrawer extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  // Row(children: [
-                  //  Padding(padding:EdgeInsets.only(left: 220.0, top: 0.0, bottom: 00.0, right: 00.0),
-                  //    child: IconButton(icon: Icon(Icons.close, size: 20,),
-                  //        onPressed: (){
-                  //          Navigator.of(context).pop();
-                  //       },
-                  //      color: Colors.white,
-
-                  // ),
-                  //),
-                  //]),
-                  Row(children: [
-                    Column(
-                      children: [
-                         Stack(
+                  Row(
+                    children: [
+                      Column(
+                        children: [
+                          Stack(
                             children: [
                               Container(
-                                padding:EdgeInsets.only(
+                                padding: EdgeInsets.only(
                                     left: 2.0,
                                     top: 20.0,
                                     bottom: 00.0,
@@ -62,31 +50,36 @@ class MenuDrawer extends StatelessWidget {
                               ),
                             ],
                           ),
-                      ],
-                    ),
-                    Container(
-
-                      padding:  EdgeInsets.only(
-                          left: 15.0, top: 23.0, bottom: 00.0, right: 00.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(padding: EdgeInsets.only(bottom: 4),
-                            child: Text(
-                              _userStore.Profile_data!.user!.firstname.toString()! +
-                                  '  ' +
-                                  _userStore.Profile_data!.user!.lastname.toString(),
-                                style: TextStyle(color: Colors.white, fontSize: 18),
-                                ),
-                          ),
-                          Text(
-                            _userStore.Profile_data!.user!.email.toString()!,
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          ),
                         ],
                       ),
-                    ),
-                  ]),
+                      Container(
+                        padding: EdgeInsets.only(
+                            left: 15.0, top: 23.0, bottom: 00.0, right: 00.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 4),
+                              child: Text(
+                                _userStore.Profile_data!.user!.firstname
+                                        .toString() +
+                                    '  ' +
+                                    _userStore.Profile_data!.user!.lastname
+                                        .toString(),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                            ),
+                            Text(
+                              _userStore.Profile_data!.user!.email.toString(),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
