@@ -175,9 +175,10 @@ class _MessagesState extends State<Messages> {
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
       isMenu: true,
+      isTab: true,
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: Text('            Messages'),
+        title: Center(child: Text('Messages')),
         actions: [
           IconButton(
             padding: EdgeInsets.only(
