@@ -39,11 +39,13 @@ import '../../ui/notification/notification.dart';
 import '../../ui/Business/add_business.dart';
 import '../../ui/Business/business_list.dart';
 import '../../ui/payment/expense.dart';
+import '../../ui/payment/wallet.dart';
 
 class Routes {
   Routes._();
 
   //static variables
+  static const String wallet = '/wallet';
   static const String expensehistory = '/expensehistory';
   static const String paymenthistory = '/paymenthistory';
   static const String organizerprof = '/organizerprof';
@@ -86,6 +88,7 @@ class Routes {
 
 
   static final routes = <String, WidgetBuilder>{
+    wallet: (BuildContext context) => Wallet(),
     expensehistory: (BuildContext context) => Expense(),
     paymenthistory: (BuildContext context) => PaymentHistory(),
     organizerprof: (BuildContext context) => OrganizerProfile(),
