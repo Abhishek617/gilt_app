@@ -1,8 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/stores/theme/theme_store.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
+
+import '../../constants/colors.dart';
 
 class Otp_screen extends StatefulWidget {
   const Otp_screen({Key? key}) : super(key: key);
@@ -12,6 +21,10 @@ class Otp_screen extends StatefulWidget {
 }
 
 class _Otp_screenState extends State<Otp_screen> {
+  ThemeStore _themeStore = ThemeStore(getIt<Repository>());
+  final UserStore _userStore = UserStore(getIt<Repository>());
+  var verificationCode;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +47,6 @@ class _Otp_screenState extends State<Otp_screen> {
       body: SingleChildScrollView(
         child: Center(
           child: Form(
-
             child: Column(
               children: [
                 Padding(
@@ -73,22 +85,41 @@ class _Otp_screenState extends State<Otp_screen> {
                       //borderColor: Color(0xFF512DA8),
                       showFieldAsBox: false,
                       //set to true to show as box or false to show as dash
+
                       onCodeChanged: (String code) {
+
                         //handle validation or checks here
                         //https://pub.dev/packages/flutter_otp_text_field
                       },
-                      onSubmit: (String verificationCode) {}, // end onSubmit
+                      onSubmit: (String verificationCode) {
+                        setState(() {
+
+
+                        });
+                        showDialog(
+                            context: context,
+                            builder: (context){
+                              return AlertDialog(
+                                title: Text("Verification Code"),
+                                  content: Text('Code entered is $verificationCode'),
+                              );
+                            }
+                        );
+                      }, // end onSubmit
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: ElevatedButtonWidget(
-                    buttonColor: Theme.of(context).colorScheme.primary,
+                    buttonColor: AppColors.primaryColor,
                     buttonText: 'Continue',
                     onPressed: () {
                       Routes.navigateToScreen(context, Routes.reset_password);
-                    },
+                        //Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
+    }
+                     // Routes.navigateToScreen(context, Routes.reset_password);
+
                   ),
                 ),
                 Padding(

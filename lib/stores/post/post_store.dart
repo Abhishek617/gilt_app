@@ -37,14 +37,14 @@ abstract class _PostStore with Store {
 
   // actions:-------------------------------------------------------------------
   @action
-  Future getPosts() async {
-    final future = _repository.getPosts();
-    fetchPostsFuture = ObservableFuture(future);
-
-    future.then((postList) {
-      this.postList = postList;
-    }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    });
+  Future getProfile() async {
+    // final future = _repository.getProfile();
+    // fetchPostsFuture = ObservableFuture(future);
+    //
+    // future.then((postList) {
+    //   this.postList = postList;
+    // }).catchError((error) {
+    //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+    // });
   }
 }

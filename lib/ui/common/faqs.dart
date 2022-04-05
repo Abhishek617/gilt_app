@@ -1,96 +1,133 @@
+import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
-import 'package:guilt_app/widgets/rounded_button_widget.dart';
+import 'package:guilt_app/widgets/custom_scaffold.dart';
 
-import '../../models/PageModals/success_error_args.dart';
 import '../../utils/routes/routes.dart';
 
+class FaqScreen extends StatefulWidget {
+  const FaqScreen({Key? key}) : super(key: key);
 
-class Faqs extends StatefulWidget {
   @override
-  State<Faqs> createState() => new _FaqsState();
+  _FaqScreenState createState() => _FaqScreenState();
 }
 
-class _FaqsState extends State<Faqs> {
+class _FaqScreenState extends State<FaqScreen> {
+  List<Vehicle> vehicleData = [];
+
+  addData() {
+    vehicleData.add(Vehicle(
+        titleText: "How to manage an event?",
+        subTitle:
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+        show: false));
+    vehicleData.add(Vehicle(
+        titleText: "How to manage a payment?",
+        subTitle:
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+        show: false));
+    vehicleData.add(Vehicle(
+        titleText: "How to stay updated?",
+        subTitle:
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+        show: false));
+    vehicleData.add(Vehicle(
+        titleText: "How to create an account?",
+        subTitle:
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+        show: false));
+    vehicleData.add(Vehicle(
+        titleText: "How to protect privacy of account?",
+        subTitle:
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+        show: false));
+    vehicleData.add(Vehicle(
+        titleText: "How to create manage an event?",
+        subTitle:
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+        show: false));
+    vehicleData.add(Vehicle(
+        titleText: "How to invite friends?",
+        subTitle:
+            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+        show: false));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    addData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return ScaffoldWrapper(
+      //isMenu: false,
       appBar: AppBar(
-
-        title: Text('FAQ\'S'),
+        leading: GestureDetector(
+          onTap: () {
+            Routes.goBack(context);
+          },
+          child: Icon(
+            Icons.arrow_back_ios_outlined,
+            //color: Colors.black,
+            size: 15,
+          ),
+        ),
+        shadowColor: Colors.transparent,
+        title: const Text("FAQ'S"),
+       //leading: Icon(Icons.arrow_back_ios_outlined,size: 15,),
       ),
-      body: new ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (context, i) {
-          return new ExpansionTile(
-            title: new Text(data[i].title, style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, ),),
-            children: <Widget>[
-              new Column(
-                children: _buildExpandableContent(data[i]),
-              ),
-            ],
-          );
-        },
-      ),
+      child: ListView.builder(
+          itemCount: vehicleData.length,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                ListTile(
+                  leading: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        vehicleData[index].show = !vehicleData[index].show;
+                      });
+                    },
+                    icon: Icon(
+                      vehicleData[index].show
+                          ? Icons.remove_circle_outline
+                          : Icons.add_circle_outline,
+                      color: vehicleData[index].show
+                          ? Theme.of(context).primaryColor
+                          : Colors.black,
+                    ),
+                  ),
+                  title: Text(
+                    vehicleData[index].titleText,
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: vehicleData[index].show
+                            ? Theme.of(context).primaryColor
+                            : Colors.black),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 80.0, right: 25.0, bottom: 10.0),
+                  child: vehicleData[index].show
+                      ? Column(
+                          children: [
+                            Text(
+                              vehicleData[index].subTitle,
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            const SizedBox(height: 5),
+                            const Divider()
+                          ],
+                        )
+                      : SizedBox.shrink(),
+                ),
+              ],
+            );
+          }),
     );
   }
-
-  _buildExpandableContent(Vehicle data) {
-    List<Widget> columnContent = [];
-
-    for (String content in data.contents)
-      columnContent.add(
-        new ListTile(
-          title: new Text(content, style: new TextStyle(fontSize: 18.0),),
-
-        ),
-      );
-
-    return columnContent;
-  }
 }
-
-class Vehicle {
-  final String title;
-  List<String> contents = [];
-
-
-  Vehicle(this.title, this.contents,);
-}
-
-List<Vehicle> data = [
-  new Vehicle(
-    'How To Mange a event?',
-    [' you want the arrow in the left side for auto suggestion and import the suggested imports'],
-
-  ),
-  new Vehicle(
-    'How to manage a payment?',
-    ['you want the arrow in the left side for auto suggestion and import the suggested imports'],
-
-  ),
-  new Vehicle(
-    'How to stay update?',
-    ['you want the arrow in the left side for auto suggestion and import the suggested imports'],
-
-  ),
-  new Vehicle(
-    'How to create account?',
-    ['you want the arrow in the left side for auto suggestion and import the suggested imports'],
-
-  ),
-  new Vehicle(
-    'How to protect privacy a account',
-    ['you want the arrow in the left side for auto suggestion and import the suggested imports'],
-
-  ),
-  new Vehicle(
-    'How to create a event',
-    ['you want the arrow in the left side for auto suggestion and import the suggested imports'],
-
-  ),
-  new Vehicle(
-    'How to invite friends',
-    ['you want the arrow in the left side for auto suggestion and import the suggested imports'],
-
-  ),
-];

@@ -45,7 +45,7 @@ dependencies:
   validators: ^3.0.0
 
   # A powerful Http client for Dart
-  dio: ^4.0.0
+  dio: ^4.0.5
 
   # A flexible widget for user notification. Customize your text, button, duration, animations
   # and much more. For Android devs, it is made to replace Snackbars and Toasts.
@@ -70,6 +70,20 @@ dependencies:
 
   flutter_otp_text_field: ^1.0.0
   introduction_screen: ^3.0.0
+  google_sign_in: ^5.2.4
+  firebase_auth: ^3.3.10
+  image_picker: ^0.8.4+11
+  get: ^4.6.1
+  file: ^6.1.2
+  material_floating_search_bar: ^0.3.7
+  full_screen_image: ^1.0.2
+
+  #Botton Tab Navigation bar
+  animated_bottom_navigation_bar: ^0.3.2
+
+  #Text size automation
+  auto_size_text: ^3.0.0
+  flutter_switch: ^0.3.2
 
 dev_dependencies:
   flutter_test:

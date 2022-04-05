@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants/preferences.dart';
@@ -22,6 +24,19 @@ class SharedPreferenceHelper {
 
   Future<bool> removeAuthToken() async {
     return _sharedPreference.remove(Preferences.auth_token);
+  }
+
+  Future<Object?> get profileData async {
+    return _sharedPreference.get(Preferences.profileData);
+  }
+
+  Future<bool> saveProfileData(GetProfileResponseModal profileData) async {
+    return _sharedPreference.setString(
+        Preferences.profileData, jsonEncode(profileData));
+  }
+
+  Future<bool> removeProfileData() async {
+    return _sharedPreference.remove(Preferences.profileData);
   }
 
   Future<bool> get isFirst async {

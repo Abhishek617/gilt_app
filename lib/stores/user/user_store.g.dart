@@ -34,13 +34,13 @@ mixin _$UserStore on _UserStore, Store {
   final _$loginFutureAtom = Atom(name: '_UserStore.loginFuture');
 
   @override
-  ObservableFuture<bool> get loginFuture {
+  ObservableFuture<LoginModal> get loginFuture {
     _$loginFutureAtom.reportRead();
     return super.loginFuture;
   }
 
   @override
-  set loginFuture(ObservableFuture<bool> value) {
+  set loginFuture(ObservableFuture<LoginModal> value) {
     _$loginFutureAtom.reportWrite(value, super.loginFuture, () {
       super.loginFuture = value;
     });
@@ -49,8 +49,8 @@ mixin _$UserStore on _UserStore, Store {
   final _$loginAsyncAction = AsyncAction('_UserStore.login');
 
   @override
-  Future<dynamic> login(String email, String password) {
-    return _$loginAsyncAction.run(() => super.login(email, password));
+  Future<dynamic> login(String email, String password, successCallback, errorCallback) {
+    return _$loginAsyncAction.run(() => super.login(email, password, successCallback, errorCallback));
   }
 
   @override

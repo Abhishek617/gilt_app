@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
+import 'package:http/http.dart';
+
+import '../../constants/colors.dart';
+
 
 class Before_LoginScreen extends StatefulWidget {
   const Before_LoginScreen({Key? key}) : super(key: key);
@@ -55,7 +60,7 @@ class _Before_LoginScreenState extends State<Before_LoginScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 25),
                 child: ElevatedButtonWidget(
-                  buttonColor: Theme.of(context).colorScheme.primary,
+                  buttonColor: AppColors.primaryColor,
                   buttonText: 'Business Owner',
                   onPressed: () {
                     Routes.navigateToScreen(context, Routes.login);
@@ -64,7 +69,7 @@ class _Before_LoginScreenState extends State<Before_LoginScreen> {
               ),
               ElevatedButtonWidget(
                 buttonText: 'Individual User',
-                buttonColor: Theme.of(context).colorScheme.primary,
+                buttonColor: AppColors.primaryColor,
                 onPressed: () {
                   Routes.navigateToScreen(context, Routes.login);
                 },
