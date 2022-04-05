@@ -196,6 +196,16 @@ class MenuDrawer extends StatelessWidget {
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                   trailing: Icon(Icons.arrow_forward_ios, size: 20),
                   title: Text(
+                    'Wallet',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  onTap: () => {Routes.navigateToScreen(
+                      context, Routes.wallet)},
+                ),
+                ListTile(
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  title: Text(
                     'HELP & SUPPORT',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
