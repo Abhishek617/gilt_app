@@ -82,7 +82,7 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
                     ),
                     InkWell(
                       onTap: () {
-                        Routes.navigateToScreen(context, Routes.events_home);
+                        Routes.navigateToScreen(context, Routes.wallet);
                       },
                       child: IconWithText(Icons.account_balance_wallet, 'Wallet'),
                     ),

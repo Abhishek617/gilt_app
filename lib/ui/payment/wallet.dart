@@ -193,6 +193,7 @@ class _WalletState extends State<Wallet> {
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
       isMenu: true,
+      isTab: true,
       appBar: AppBar(
         shadowColor: Colors.transparent,
         title: Text('                Wallet'),
