@@ -24,18 +24,17 @@ class ScaffoldWrapper extends StatefulWidget {
 }
 
 class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
-  Widget IconWithText(icon, text) {
+  Widget IconWithText(icon, text, {double fontSize = 12}) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
           icon,
-          size: 25,
+          color: Colors.white,
         ),
         Text(
           text,
-          style: TextStyle(fontSize: 9, letterSpacing: 0.3),
+          style: TextStyle(fontSize: fontSize, color: Colors.white),
         )
       ],
     );
@@ -54,7 +53,7 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
                 //code to execute on button press
               },
               child: IconWithText(
-                  Icons.calendar_month, 'Add Event'), //icon inside button
+                  Icons.calendar_month, 'Add Event', fontSize: 8), //icon inside button
             )
           : null,
       floatingActionButtonLocation: widget.isTab == true
@@ -66,50 +65,41 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
               //bottom navigation bar on scaffold
               shape: CircularNotchedRectangle(),
               //shape of notch
-              notchMargin: 6,
+              notchMargin: 4,
               //notch margin between floating button and bottom appbar
-              child: Row(
-                //children inside bottom appbar
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(
-                      Icons.explore,
-                      color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  //children inside bottom appbar
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () {
+                        Routes.navigateToScreen(context, Routes.events_home);
+                      },
+                      child: IconWithText(Icons.explore, 'Explore'),
                     ),
-                    onPressed: () {
-                      Routes.navigateToScreen(context, Routes.events_home);
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.account_balance_wallet,
-                      color: Colors.white,
+                    InkWell(
+                      onTap: () {
+                        Routes.navigateToScreen(context, Routes.events_home);
+                      },
+                      child: IconWithText(Icons.account_balance_wallet, 'Wallet'),
                     ),
-                    onPressed: () {
-                      Routes.navigateToScreen(context, Routes.events_home);
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.question_answer_rounded,
-                      color: Colors.white,
+                    InkWell(
+                      onTap: () {
+                        Routes.navigateToScreen(context, Routes.message);
+                      },
+                      child: IconWithText(Icons.question_answer_rounded, 'Chat'),
                     ),
-                    onPressed: () {
-                      Routes.navigateToScreen(context, Routes.message);
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.account_circle_rounded,
-                      color: Colors.white,
+                    InkWell(
+                      onTap: () {
+                        Routes.navigateToScreen(context, Routes.view_profile);
+                      },
+                      child: IconWithText(Icons.account_circle_rounded, 'Profile'),
                     ),
-                    onPressed: () {
-                      Routes.navigateToScreen(context, Routes.view_profile);
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           : null,
