@@ -292,7 +292,7 @@ class _WalletState extends State<Wallet> {
             ),
             ElevatedButtonWidget(
               buttonColor: AppColors.primaryColor,
-              onPressed: () {},
+              onPressed: () => {  Routes.navigateToScreen(context, Routes.addmoney)},
               buttonText: ('Add Money'),
             ),
             Divider(

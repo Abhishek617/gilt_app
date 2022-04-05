@@ -27,6 +27,7 @@ import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/home/home.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/login/login.dart';
+import 'package:guilt_app/ui/payment/AddMoney.dart';
 import 'package:guilt_app/ui/payment/Payment_history.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
@@ -45,6 +46,7 @@ class Routes {
   Routes._();
 
   //static variables
+  static const String addmoney = '/addmoney';
   static const String wallet = '/wallet';
   static const String expensehistory = '/expensehistory';
   static const String paymenthistory = '/paymenthistory';
@@ -88,6 +90,7 @@ class Routes {
 
 
   static final routes = <String, WidgetBuilder>{
+    addmoney: (BuildContext context) => AddMoney(),
     wallet: (BuildContext context) => Wallet(),
     expensehistory: (BuildContext context) => Expense(),
     paymenthistory: (BuildContext context) => PaymentHistory(),
