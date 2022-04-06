@@ -15,16 +15,14 @@ class MenuDrawer extends StatelessWidget {
   // late Repository _repository;
   // late GetProfileResponseModal profileData = _repository.profileData.then((value) => value) as GetProfileResponseModal;
   final UserStore _userStore = UserStore(getIt<Repository>());
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       elevation: 20.0,
       child: Column(
-        
         children: <Widget>[
-
           Container(
-
             height: 180,
             child: DrawerHeader(
               decoration: BoxDecoration(
@@ -32,24 +30,14 @@ class MenuDrawer extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  // Row(children: [
-                  //  Padding(padding:EdgeInsets.only(left: 220.0, top: 0.0, bottom: 00.0, right: 00.0),
-                  //    child: IconButton(icon: Icon(Icons.close, size: 20,),
-                  //        onPressed: (){
-                  //          Navigator.of(context).pop();
-                  //       },
-                  //      color: Colors.white,
-
-                  // ),
-                  //),
-                  //]),
-                  Row(children: [
-                    Column(
-                      children: [
-                         Stack(
+                  Row(
+                    children: [
+                      Column(
+                        children: [
+                          Stack(
                             children: [
                               Container(
-                                padding:EdgeInsets.only(
+                                padding: EdgeInsets.only(
                                     left: 2.0,
                                     top: 20.0,
                                     bottom: 00.0,
@@ -62,31 +50,36 @@ class MenuDrawer extends StatelessWidget {
                               ),
                             ],
                           ),
-                      ],
-                    ),
-                    Container(
-
-                      padding:  EdgeInsets.only(
-                          left: 15.0, top: 23.0, bottom: 00.0, right: 00.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(padding: EdgeInsets.only(bottom: 4),
-                            child: Text(
-                              _userStore.Profile_data!.user!.firstname.toString()! +
-                                  '  ' +
-                                  _userStore.Profile_data!.user!.lastname.toString(),
-                                style: TextStyle(color: Colors.white, fontSize: 18),
-                                ),
-                          ),
-                          Text(
-                            _userStore.Profile_data!.user!.email.toString()!,
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          ),
                         ],
                       ),
-                    ),
-                  ]),
+                      Container(
+                        padding: EdgeInsets.only(
+                            left: 15.0, top: 23.0, bottom: 00.0, right: 00.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 4),
+                              child: Text(
+                                _userStore.Profile_data!.user!.firstname
+                                        .toString() +
+                                    '  ' +
+                                    _userStore.Profile_data!.user!.lastname
+                                        .toString(),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                            ),
+                            Text(
+                              _userStore.Profile_data!.user!.email.toString(),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -127,10 +120,10 @@ class MenuDrawer extends StatelessWidget {
                     size: 20,
                   ),
                   title: Text(
-                    'PAYMENT HISTORY',
+                    'EXPENSE HISTORY',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {Routes.navigateToScreen(context, Routes.expensehistory)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
@@ -194,6 +187,16 @@ class MenuDrawer extends StatelessWidget {
                   ),
                   onTap: () => {Routes.navigateToScreen(
                       context, Routes.paymenthistory)},
+                ),
+                ListTile(
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  title: Text(
+                    'Wallet',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  onTap: () => {Routes.navigateToScreen(
+                      context, Routes.wallet)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),

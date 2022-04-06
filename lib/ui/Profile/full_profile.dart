@@ -492,6 +492,8 @@ class _FullProfileState extends State<FullProfile> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
+      isTab: true,
+      isMenu: true,
       appBar: AppBar(
         shadowColor: Colors.transparent,
         centerTitle: true,

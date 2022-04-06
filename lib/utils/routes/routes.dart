@@ -27,6 +27,7 @@ import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/home/home.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/login/login.dart';
+import 'package:guilt_app/ui/payment/AddMoney.dart';
 import 'package:guilt_app/ui/payment/Payment_history.dart';
 import 'package:guilt_app/ui/payment/bank_lists.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
@@ -39,11 +40,16 @@ import '../../ui/notification/notification.dart';
 
 import '../../ui/Business/add_business.dart';
 import '../../ui/Business/business_list.dart';
+import '../../ui/payment/expense.dart';
+import '../../ui/payment/wallet.dart';
 
 class Routes {
   Routes._();
 
   //static variables
+  static const String addmoney = '/addmoney';
+  static const String wallet = '/wallet';
+  static const String expensehistory = '/expensehistory';
   static const String paymenthistory = '/paymenthistory';
   static const String organizerprof = '/organizerprof';
   static const String chat = '/chat';
@@ -87,6 +93,9 @@ class Routes {
 
 
   static final routes = <String, WidgetBuilder>{
+    addmoney: (BuildContext context) => AddMoney(),
+    wallet: (BuildContext context) => Wallet(),
+    expensehistory: (BuildContext context) => Expense(),
     paymenthistory: (BuildContext context) => PaymentHistory(),
     organizerprof: (BuildContext context) => OrganizerProfile(),
     chat: (BuildContext context) => ChatScreen(),
