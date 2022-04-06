@@ -15,10 +15,13 @@ class _FaqScreenState extends State<FaqScreen> {
   List<Vehicle> vehicleData = [];
 
   addData() {
+
     vehicleData.add(Vehicle(
         titleText: "How to manage an event?",
-        subTitle:
-            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+       subTitle:
+         "You want the arrow in the left side for auto suggestion and import the suggested imports.",
+
+
         show: false));
     vehicleData.add(Vehicle(
         titleText: "How to manage a payment?",
@@ -127,7 +130,8 @@ class _FaqScreenState extends State<FaqScreen> {
                 ),
               ],
             );
-          }),
+          }
+          ),
     );
   }
 }

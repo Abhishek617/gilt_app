@@ -34,13 +34,18 @@ class Add_contacts extends StatefulWidget {
 }
 
 class _Add_contactsState extends State<Add_contacts> {
+
   static int _len = 10;
   List<bool> isChecked = List.generate(_len, (index) => false);
 
   bool checked = true;
 
   String _getTitle() =>
-      "Checkbox Demo : Checked = ${isChecked.where((check) => check == true).length}, Unchecked = ${isChecked.where((check) => check == false).length}";
+      "Checkbox : Checked = ${isChecked.where((check) => check == true).length}, "
+          "Unchecked = ${isChecked.where((check) => check == false).length}";
+
+
+
   String _title = "Checkbox Demo";
   int selectedRadio = -1;
 

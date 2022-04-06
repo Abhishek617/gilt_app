@@ -179,7 +179,10 @@ class MenuDrawer extends StatelessWidget {
                     'PAYMENT METHOD',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {
+                  Routes.navigateRootToScreen(context, Routes.bank_lists),
+                  // GlobalMethods.showErrorMessage(context, error.message.toString(), 'Logout Error');
+                },
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),

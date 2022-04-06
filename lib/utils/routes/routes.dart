@@ -26,6 +26,7 @@ import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/home/home.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/login/login.dart';
+import 'package:guilt_app/ui/payment/bank_lists.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +77,8 @@ class Routes {
   static const  String expense_screen = '/expense_screen';
   static const  String attendees_profile= '/attendees_profile';
   static const  String add_contacts= '/add_contacts';
+  static const  String bank_lists= '/Bank_lists';
+
 
 
 
@@ -119,6 +122,7 @@ class Routes {
     expense_screen: (BuildContext context) => Expense_Screen(),
     attendees_profile: (BuildContext context) => Attendees_profile(),
     add_contacts: (BuildContext context) => Add_contacts(),
+    bank_lists: (BuildContext context) => Bank_lists(),
 
 
 
