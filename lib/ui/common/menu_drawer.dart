@@ -111,8 +111,7 @@ class MenuDrawer extends StatelessWidget {
                     'INVITE FRIENDS',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Routes.navigateToScreen(
-                      context, Routes.attendees_profile)},
+                  onTap: () => {Navigator.of(context).pop()},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
@@ -172,6 +171,10 @@ class MenuDrawer extends StatelessWidget {
                     'PAYMENT METHOD',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
+                  onTap: () => {
+                  Routes.navigateRootToScreen(context, Routes.bank_lists),
+                  // GlobalMethods.showErrorMessage(context, error.message.toString(), 'Logout Error');
+                },
                   onTap: () => {Routes.navigateToScreen(
                       context, Routes.organizerprof)},
                 ),

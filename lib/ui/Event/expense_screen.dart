@@ -44,14 +44,13 @@ class _Expense_ScreenState extends State<Expense_Screen> {
   TextEditingController _amount = TextEditingController();
   bool isChecked = false;
 
-  bool _value = false;
+  //bool _value = false;
   int val = -1;
   int _count = 0;
   void _incrementCounter(){
     setState(() {
       _count++;
       _amount.text = _count.toString();
-
     });
   }
   disableButton() {
@@ -274,6 +273,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                     ),
                   ],
                 ),
+
                 SizedBox(
                   height: 15,
                 ),
