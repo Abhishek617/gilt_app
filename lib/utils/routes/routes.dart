@@ -9,6 +9,7 @@ import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Messages/ChatScreen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
 import 'package:guilt_app/ui/Profile/main_profile.dart';
+import 'package:guilt_app/ui/Profile/organizer_profile.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
 import 'package:guilt_app/ui/Setting/setting.dart';
 import 'package:guilt_app/ui/attendees/add_contacts.dart';
@@ -26,6 +27,7 @@ import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/home/home.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/login/login.dart';
+import 'package:guilt_app/ui/payment/Payment_history.dart';
 import 'package:guilt_app/ui/payment/bank_lists.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
@@ -42,6 +44,8 @@ class Routes {
   Routes._();
 
   //static variables
+  static const String paymenthistory = '/paymenthistory';
+  static const String organizerprof = '/organizerprof';
   static const String chat = '/chat';
   static const String message = '/message';
   static const String setting = '/setting';
@@ -82,8 +86,9 @@ class Routes {
 
 
 
-
   static final routes = <String, WidgetBuilder>{
+    paymenthistory: (BuildContext context) => PaymentHistory(),
+    organizerprof: (BuildContext context) => OrganizerProfile(),
     chat: (BuildContext context) => ChatScreen(),
     message: (BuildContext context) => Messages(),
     setting: (BuildContext context) => Setting(),
