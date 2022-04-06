@@ -175,8 +175,6 @@ class MenuDrawer extends StatelessWidget {
                   Routes.navigateRootToScreen(context, Routes.bank_lists),
                   // GlobalMethods.showErrorMessage(context, error.message.toString(), 'Logout Error');
                 },
-                  onTap: () => {Routes.navigateToScreen(
-                      context, Routes.organizerprof)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
