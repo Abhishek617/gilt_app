@@ -115,8 +115,8 @@ class _Bank_listsState extends State<Bank_lists> {
 
           ExpansionTile(
             leading: Container(
-              height: 40,
-              width: 40,
+              width: DeviceUtils.getScaledWidth(context, 0.10),
+              height: DeviceUtils.getScaledHeight(context, 0.10),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
@@ -290,7 +290,7 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
                   //  controller: _userEmailController,
                   decoration: const InputDecoration(
@@ -529,7 +529,7 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     //height: 50,
-                    width: DeviceUtils.getScaledWidth(context, 0.10),
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       // controller: _fNameController,
                       decoration: const InputDecoration(
@@ -546,7 +546,7 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     // height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       ///controller: _lNameController,
                       decoration: const InputDecoration(
