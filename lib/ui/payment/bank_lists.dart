@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import '../../constants/colors.dart';
@@ -82,9 +83,7 @@ class _Bank_listsState extends State<Bank_lists> {
   bool _customTileExpanded6 = false;
   bool _customTileExpanded7 = false;
 
-  abhi(){
-    Text('Abhis');
-  }
+
 
   //late List<bool> _isChecked;
 
@@ -108,8 +107,8 @@ class _Bank_listsState extends State<Bank_lists> {
         children: <Widget>[
           Center(
             child: AppLogoWidget(
-              width: 140.0,
-              height: 120.0,
+              width: DeviceUtils.getScaledWidth(context, 0.10),
+              height:  DeviceUtils.getScaledWidth(context, 0.10),
 
             ),
           ),
@@ -136,12 +135,14 @@ class _Bank_listsState extends State<Bank_lists> {
             ),
             children:[
              Row(
-               children: [Text("         Credit on Card")],
+               children: [
+                 Text("         Credit on Card")],
              ),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
+               // height: DeviceUtils.getScaledHeight(context, 0.06),
                 child: TextFormField(
                   //  controller: _userEmailController,
                   decoration: const InputDecoration(
@@ -161,7 +162,7 @@ class _Bank_listsState extends State<Bank_lists> {
               Row(
                 children: [
                   SizedBox(
-                    width: 30,
+                    width: 25,
                   ),
                   Text(
                     'Credit Card number ',
@@ -175,7 +176,7 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
 
                   //  controller: _userEmailController,
@@ -185,24 +186,16 @@ class _Bank_listsState extends State<Bank_lists> {
                     border: OutlineInputBorder(),
 
                   ),
-                  validator: (val) {
-                    if (val!.isEmpty ||
-                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(val)) {
-                      return "Enter a Valid Email";
-                    } else {
-                      return null;
-                    }
-                  },
+
                 ),
               ),
               Row(
                 children: [
                   SizedBox(
-                    width: 40 ,
+                    width: 25,
                   ),
                   Text(
-                    'Expire date',
+                    '   Expire date',
                     style: TextStyle(
                       fontSize: 14,
 
@@ -211,9 +204,7 @@ class _Bank_listsState extends State<Bank_lists> {
                   SizedBox(
                     width: 100,
                   ),
-                  Text(
-                    'CCV',
-                    style: TextStyle(
+                  Text('CCV', style: TextStyle(
                       fontSize: 14,
                     ),
                   ),
@@ -225,20 +216,14 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     //height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       // controller: _fNameController,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintStyle: TextStyle(fontSize: 15),
                       ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Enter valid First Name";
-                        } else {
-                          return null;
-                        }
-                      },
+
                     ),
                   ),
                   SizedBox(
@@ -248,7 +233,7 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     // height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       ///controller: _lNameController,
                       decoration: const InputDecoration(
@@ -256,13 +241,7 @@ class _Bank_listsState extends State<Bank_lists> {
                         border: OutlineInputBorder(),
 
                       ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Enter Valid Last Name";
-                        } else {
-                          return null;
-                        }
-                      },
+
                     ),
                   ),
                 ],
@@ -286,8 +265,8 @@ class _Bank_listsState extends State<Bank_lists> {
           ),
           ExpansionTile(
             leading: Container(
-              height: 40,
-              width: 40,
+              height: DeviceUtils.getScaledWidth(context, 0.10),
+              width: DeviceUtils.getScaledWidth(context, 0.10),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
@@ -345,7 +324,7 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
 
                   //  controller: _userEmailController,
@@ -395,20 +374,14 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     //height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       // controller: _fNameController,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintStyle: TextStyle(fontSize: 15),
                       ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Enter valid First Name";
-                        } else {
-                          return null;
-                        }
-                      },
+
                     ),
                   ),
                   SizedBox(
@@ -418,7 +391,7 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     // height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       ///controller: _lNameController,
                       decoration: const InputDecoration(
@@ -457,8 +430,8 @@ class _Bank_listsState extends State<Bank_lists> {
           ),
           ExpansionTile(
             leading: Container(
-              height: 40,
-              width: 40,
+              width: DeviceUtils.getScaledWidth(context, 0.10),
+              height: DeviceUtils.getScaledHeight(context, 0.10),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
@@ -480,7 +453,7 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
                   //  controller: _userEmailController,
                   decoration: const InputDecoration(
@@ -514,7 +487,7 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
 
                   //  controller: _userEmailController,
@@ -524,15 +497,7 @@ class _Bank_listsState extends State<Bank_lists> {
                     border: OutlineInputBorder(),
 
                   ),
-                  validator: (val) {
-                    if (val!.isEmpty ||
-                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(val)) {
-                      return "Enter a Valid Email";
-                    } else {
-                      return null;
-                    }
-                  },
+
                 ),
               ),
               Row(
@@ -564,20 +529,14 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     //height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.10),
                     child: TextFormField(
                       // controller: _fNameController,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintStyle: TextStyle(fontSize: 15),
                       ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Enter valid First Name";
-                        } else {
-                          return null;
-                        }
-                      },
+
                     ),
                   ),
                   SizedBox(
@@ -595,13 +554,7 @@ class _Bank_listsState extends State<Bank_lists> {
                         border: OutlineInputBorder(),
 
                       ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Enter Valid Last Name";
-                        } else {
-                          return null;
-                        }
-                      },
+
                     ),
                   ),
                 ],
@@ -625,8 +578,8 @@ class _Bank_listsState extends State<Bank_lists> {
           ),
           ExpansionTile(
             leading: Container(
-              height: 40,
-              width: 40,
+              width: DeviceUtils.getScaledWidth(context, 0.10),
+              height: DeviceUtils.getScaledHeight(context, 0.10),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
@@ -643,27 +596,24 @@ class _Bank_listsState extends State<Bank_lists> {
                   : Icons.radio_button_unchecked_sharp,
             ),
             children:[
+
               Row(
-                children: [Text("         Credit on Card")],
+                children: [
+                  SizedBox(
+                    width: 30,
+                  ),
+                  Text("Credit on Card")],
               ),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
                   //  controller: _userEmailController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
-                  validator: (val) {
-                    if (val!.isEmpty ||
-                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(val)) {
-                      return "Enter a Valid Email";
-                    } else {
-                      return null;
-                    }
-                  },
+
                 ),
               ),
               Row(
@@ -683,7 +633,7 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
 
                   //  controller: _userEmailController,
@@ -693,15 +643,7 @@ class _Bank_listsState extends State<Bank_lists> {
                     border: OutlineInputBorder(),
 
                   ),
-                  validator: (val) {
-                    if (val!.isEmpty ||
-                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(val)) {
-                      return "Enter a Valid Email";
-                    } else {
-                      return null;
-                    }
-                  },
+
                 ),
               ),
               Row(
@@ -733,20 +675,14 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     //height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       // controller: _fNameController,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintStyle: TextStyle(fontSize: 15),
                       ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Enter valid First Name";
-                        } else {
-                          return null;
-                        }
-                      },
+
                     ),
                   ),
                   SizedBox(
@@ -756,7 +692,7 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     // height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       ///controller: _lNameController,
                       decoration: const InputDecoration(
@@ -764,13 +700,7 @@ class _Bank_listsState extends State<Bank_lists> {
                         border: OutlineInputBorder(),
 
                       ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Enter Valid Last Name";
-                        } else {
-                          return null;
-                        }
-                      },
+
                     ),
                   ),
                 ],
@@ -797,8 +727,8 @@ class _Bank_listsState extends State<Bank_lists> {
 
           ExpansionTile(
             leading: Container(
-              height: 40,
-              width: 40,
+              width: DeviceUtils.getScaledWidth(context, 0.10),
+              height: DeviceUtils.getScaledHeight(context, 0.10),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
@@ -822,21 +752,13 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
                   //  controller: _userEmailController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
-                  validator: (val) {
-                    if (val!.isEmpty ||
-                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(val)) {
-                      return "Enter a Valid Email";
-                    } else {
-                      return null;
-                    }
-                  },
+
                 ),
               ),
               Row(
@@ -856,7 +778,7 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
 
                   //  controller: _userEmailController,
@@ -866,15 +788,7 @@ class _Bank_listsState extends State<Bank_lists> {
                     border: OutlineInputBorder(),
 
                   ),
-                  validator: (val) {
-                    if (val!.isEmpty ||
-                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(val)) {
-                      return "Enter a Valid Email";
-                    } else {
-                      return null;
-                    }
-                  },
+
                 ),
               ),
               Row(
@@ -906,7 +820,7 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     //height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       // controller: _fNameController,
                       decoration: const InputDecoration(
@@ -929,7 +843,7 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     // height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       ///controller: _lNameController,
                       decoration: const InputDecoration(
@@ -967,8 +881,8 @@ class _Bank_listsState extends State<Bank_lists> {
           ),
           ExpansionTile(
             leading:Container(
-              height: 40,
-              width: 40,
+              width: DeviceUtils.getScaledWidth(context, 0.10),
+              height: DeviceUtils.getScaledHeight(context, 0.10),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
@@ -991,7 +905,7 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
                   //  controller: _userEmailController,
                   decoration: const InputDecoration(
@@ -1025,7 +939,7 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
 
                   //  controller: _userEmailController,
@@ -1082,13 +996,7 @@ class _Bank_listsState extends State<Bank_lists> {
                         border: OutlineInputBorder(),
                         hintStyle: TextStyle(fontSize: 15),
                       ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Enter valid First Name";
-                        } else {
-                          return null;
-                        }
-                      },
+
                     ),
                   ),
                   SizedBox(
@@ -1098,7 +1006,7 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     // height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       ///controller: _lNameController,
                       decoration: const InputDecoration(
@@ -1106,13 +1014,7 @@ class _Bank_listsState extends State<Bank_lists> {
                         border: OutlineInputBorder(),
 
                       ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Enter Valid Last Name";
-                        } else {
-                          return null;
-                        }
-                      },
+
                     ),
                   ),
                 ],
@@ -1136,8 +1038,8 @@ class _Bank_listsState extends State<Bank_lists> {
           ),
           ExpansionTile(
             leading: Container(
-              height: 40,
-              width: 40,
+              width: DeviceUtils.getScaledWidth(context, 0.10),
+              height: DeviceUtils.getScaledHeight(context, 0.10),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
@@ -1160,21 +1062,13 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
                   //  controller: _userEmailController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
-                  validator: (val) {
-                    if (val!.isEmpty ||
-                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(val)) {
-                      return "Enter a Valid Email";
-                    } else {
-                      return null;
-                    }
-                  },
+
                 ),
               ),
               Row(
@@ -1194,7 +1088,7 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
 
                   //  controller: _userEmailController,
@@ -1204,15 +1098,7 @@ class _Bank_listsState extends State<Bank_lists> {
                     border: OutlineInputBorder(),
 
                   ),
-                  validator: (val) {
-                    if (val!.isEmpty ||
-                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(val)) {
-                      return "Enter a Valid Email";
-                    } else {
-                      return null;
-                    }
-                  },
+
                 ),
               ),
               Row(
@@ -1244,7 +1130,7 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     //height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       // controller: _fNameController,
                       decoration: const InputDecoration(
@@ -1267,7 +1153,7 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     // height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       ///controller: _lNameController,
                       decoration: const InputDecoration(
@@ -1275,13 +1161,7 @@ class _Bank_listsState extends State<Bank_lists> {
                         border: OutlineInputBorder(),
 
                       ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Enter Valid Last Name";
-                        } else {
-                          return null;
-                        }
-                      },
+
                     ),
                   ),
                 ],
@@ -1305,8 +1185,8 @@ class _Bank_listsState extends State<Bank_lists> {
           ),
           ExpansionTile(
             leading: Container(
-              height: 40,
-              width: 40,
+              width: DeviceUtils.getScaledWidth(context, 0.10),
+              height: DeviceUtils.getScaledHeight(context, 0.10),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
@@ -1328,21 +1208,13 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
                   //  controller: _userEmailController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
-                  validator: (val) {
-                    if (val!.isEmpty ||
-                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(val)) {
-                      return "Enter a Valid Email";
-                    } else {
-                      return null;
-                    }
-                  },
+
                 ),
               ),
               Row(
@@ -1362,7 +1234,7 @@ class _Bank_listsState extends State<Bank_lists> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 // height: 50,
-                width: 330,
+                width: DeviceUtils.getScaledWidth(context, 0.85),
                 child: TextFormField(
 
                   //  controller: _userEmailController,
@@ -1372,15 +1244,7 @@ class _Bank_listsState extends State<Bank_lists> {
                     border: OutlineInputBorder(),
 
                   ),
-                  validator: (val) {
-                    if (val!.isEmpty ||
-                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(val)) {
-                      return "Enter a Valid Email";
-                    } else {
-                      return null;
-                    }
-                  },
+
                 ),
               ),
               Row(
@@ -1412,20 +1276,14 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     //height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       // controller: _fNameController,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintStyle: TextStyle(fontSize: 15),
                       ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Enter valid First Name";
-                        } else {
-                          return null;
-                        }
-                      },
+
                     ),
                   ),
                   SizedBox(
@@ -1435,7 +1293,7 @@ class _Bank_listsState extends State<Bank_lists> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     // height: 50,
-                    width: 162,
+                    width: DeviceUtils.getScaledWidth(context, 0.42),
                     child: TextFormField(
                       ///controller: _lNameController,
                       decoration: const InputDecoration(

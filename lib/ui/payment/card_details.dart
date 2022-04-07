@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import '../../constants/colors.dart';
@@ -76,12 +77,12 @@ class _Card_detailsState extends State<Card_details> {
                 icon: Icon(Icons.credit_card),
               ),
               suffixIcon: Container(
-                width: 100,
+                width: DeviceUtils.getScaledWidth(context, 0.23),
                 child: Row(
                   children: [
                     Container(
-                      height: 35,
-                      width: 35,
+                      width: DeviceUtils.getScaledWidth(context, 0.09),
+                      height: DeviceUtils.getScaledHeight(context, 0.06),
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.blue),
@@ -97,8 +98,8 @@ class _Card_detailsState extends State<Card_details> {
                       width: 5,
                     ),
                     Container(
-                      height: 35,
-                      width: 35,
+                      width: DeviceUtils.getScaledWidth(context, 0.09),
+                      height: DeviceUtils.getScaledHeight(context, 0.06),
 
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -122,7 +123,7 @@ class _Card_detailsState extends State<Card_details> {
             height: 15,
           ),
           Container(
-          width: 350,
+            width: DeviceUtils.getScaledWidth(context, 0.88),
     child: TextField(
       decoration: InputDecoration(
         hintText: "visa****2525",
@@ -134,12 +135,12 @@ class _Card_detailsState extends State<Card_details> {
           icon: Icon(Icons.credit_card),
         ),
         suffixIcon: Container(
-          width: 100,
+          width: DeviceUtils.getScaledWidth(context, 0.23),
           child: Row(
             children: [
               Container(
-                height: 35,
-                width: 35,
+                width: DeviceUtils.getScaledWidth(context, 0.09),
+                height: DeviceUtils.getScaledHeight(context, 0.06),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.blue),
@@ -155,8 +156,8 @@ class _Card_detailsState extends State<Card_details> {
                 width: 5,
               ),
               Container(
-                height: 35,
-                width: 35,
+                width: DeviceUtils.getScaledWidth(context, 0.09),
+                height: DeviceUtils.getScaledHeight(context, 0.06),
 
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -179,11 +180,12 @@ class _Card_detailsState extends State<Card_details> {
             height: 10,
           ),
           Container(
-            height: 100,
+            //width: DeviceUtils.getScaledWidth(context, 0.09),
+            height: DeviceUtils.getScaledHeight(context, 0.30),
             child: ListTile(
               leading: Container(
-                height: 40,
-                width: 40,
+                  width: DeviceUtils.getScaledWidth(context, 0.09),
+                  height: DeviceUtils.getScaledHeight(context, 0.06),
                   decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage('assets/images/card.png'),
