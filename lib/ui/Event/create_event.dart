@@ -465,6 +465,7 @@ class _Create_eventState extends State<Create_event> {
                             ],
                           ),
                           onPressed: () {
+                            Routes.navigateToScreen(context, Routes.add_contacts);
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(

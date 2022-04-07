@@ -54,6 +54,14 @@ class _Add_contactsState extends State<Add_contacts> {
       selectedRadio = val;
     });
   }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    GlobalMethods.askPermissions(context, Routes.atendees);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(

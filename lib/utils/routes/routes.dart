@@ -90,9 +90,6 @@ class Routes {
   static const  String add_contacts= '/add_contacts';
   static const  String bank_lists= '/Bank_lists';
 
-
-
-
   static final routes = <String, WidgetBuilder>{
     map: (BuildContext context) => Map(),
     addmoney: (BuildContext context) => AddMoney(),
