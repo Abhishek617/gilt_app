@@ -11,6 +11,7 @@ import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Auth/valid_otp.dart';
+import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
 import 'package:guilt_app/models/post/post.dart';
 import 'package:guilt_app/models/post/post_list.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
@@ -118,8 +119,14 @@ class Repository {
         .catchError((error) => throw error);
   }
 
-
-
+//UpcomingPastEvent
+  Future<UpcomingPastEventModal> getUpcomingPastEventList(String filterby,int page, int size) async {
+    var token = await authToken;
+    return await _postApi
+        .getUpcomingPastEventList(filterby, page, size, token)
+        .then((eventData) => eventData)
+        .catchError((error) => throw error);
+  }
 
 // SignUp:---------------------------------------------------------------------
   Future<SignUpResponseModal> signUp(SignUpRequestModal signUpData) async {
