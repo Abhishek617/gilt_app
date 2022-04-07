@@ -145,6 +145,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           shadowColor: Colors.transparent,
+          centerTitle: true,
           title: Column(
             children: [
               Text('Evening of Smooth Jazz        '),

@@ -79,6 +79,7 @@ class _FaqScreenState extends State<FaqScreen> {
         ),
         shadowColor: Colors.transparent,
         title: const Text("FAQ'S"),
+       centerTitle: true,
        //leading: Icon(Icons.arrow_back_ios_outlined,size: 15,),
       ),
       child: ListView.builder(

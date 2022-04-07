@@ -199,7 +199,8 @@ SizedBox(
           ),
         ),
         shadowColor: Colors.transparent,
-        title: Text('       Payment History'),
+        title: Text('Payment History'),
+        centerTitle: true,
       ),
 
       child:Column(children: [

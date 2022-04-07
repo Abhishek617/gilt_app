@@ -124,7 +124,8 @@ class _MessagesState extends State<Messages> {
         onTap: () => {Routes.navigateToScreen(context, Routes.chat)},
       );
 
-  Message_list_withoutcount() => Column(
+  Message_list_withoutcount() => GestureDetector(
+      child: Column(
         children: [
           Container(
             child: Row(
@@ -210,7 +211,8 @@ class _MessagesState extends State<Messages> {
             endIndent: 20, //spacing at the end of divider
           ),
         ],
-      );
+      ),
+      onTap: () => {Routes.navigateToScreen(context, Routes.chat)});
   List<String> item = [
     ' b',
     'c ',
@@ -233,6 +235,7 @@ class _MessagesState extends State<Messages> {
       appBar: AppBar(
         shadowColor: Colors.transparent,
         title: Center(child: Text('Messages')),
+        centerTitle: true,
         actions: [
           IconButton(
             padding: EdgeInsets.only(

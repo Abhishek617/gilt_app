@@ -1,7 +1,11 @@
+import 'dart:io';
+import 'dart:convert';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'dart:io';
+
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:flutter/rendering.dart';
@@ -108,7 +112,8 @@ class _Create_eventState extends State<Create_event> {
               size: 16,
             ),
           ),
-          title: Text('            Create Event'),
+          title: Text('Create Event'),
+          centerTitle: true,
           shadowColor: Colors.transparent,
         ),
         child: SingleChildScrollView(

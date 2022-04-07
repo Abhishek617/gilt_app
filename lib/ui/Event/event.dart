@@ -200,6 +200,7 @@ class _EventState extends State<Event> {
     return ScaffoldWrapper(
       appBar: AppBar(
         title: Text('Upcoming Events'),
+        centerTitle: true,
       ),
       child: Container(
         padding: EdgeInsets.symmetric(

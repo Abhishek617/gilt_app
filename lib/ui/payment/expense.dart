@@ -312,7 +312,8 @@ class _ExpenseState extends State<Expense> {
           ),
         ),
         shadowColor: Colors.transparent,
-        title: Text('       Expenses History'),
+        title: Text('Expenses History'),
+        centerTitle: true,
       ),
       child: Column(
         children: [
