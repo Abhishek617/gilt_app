@@ -111,7 +111,7 @@ class MenuDrawer extends StatelessWidget {
                     'INVITE FRIENDS',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {  Routes.navigateToScreen(context, Routes.map)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
@@ -123,7 +123,7 @@ class MenuDrawer extends StatelessWidget {
                     'EXPENSE HISTORY',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Routes.navigateToScreen(context, Routes.expensehistory)},
+                  onTap: () => {Navigator.of(context).pop()},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),

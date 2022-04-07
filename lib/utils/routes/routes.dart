@@ -38,7 +38,7 @@ import 'package:guilt_app/ui/Event/event.dart';
 import '../../ui/Messages/message.dart';
 import '../../ui/attendees/attendees.dart';
 import '../../ui/notification/notification.dart';
-
+import 'package:guilt_app/Map/map.dart';
 import '../../ui/Business/add_business.dart';
 import '../../ui/Business/business_list.dart';
 import '../../ui/payment/expense.dart';
@@ -48,6 +48,7 @@ class Routes {
   Routes._();
 
   //static variables
+  static const String map = '/map';
   static const String addmoney = '/addmoney';
   static const String wallet = '/wallet';
   static const String expensehistory = '/expensehistory';
@@ -91,10 +92,8 @@ class Routes {
   static const  String bank_lists= '/Bank_lists';
   static const  String card_details= '/card_details';
 
-
-
-
   static final routes = <String, WidgetBuilder>{
+    map: (BuildContext context) => Map(),
     addmoney: (BuildContext context) => AddMoney(),
     wallet: (BuildContext context) => Wallet(),
     expensehistory: (BuildContext context) => Expense(),

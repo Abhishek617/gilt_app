@@ -15,6 +15,12 @@ mixin _$UserStore on _UserStore, Store {
   bool get isLoading => (_$isLoadingComputed ??=
           Computed<bool>(() => super.isLoading, name: '_UserStore.isLoading'))
       .value;
+  Computed<bool>? _$loadingComputed;
+
+  @override
+  bool get loading => (_$loadingComputed ??=
+          Computed<bool>(() => super.loading, name: '_UserStore.loading'))
+      .value;
 
   final _$successAtom = Atom(name: '_UserStore.success');
 
@@ -46,11 +52,52 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  final _$fetchPostsFutureAtom = Atom(name: '_UserStore.fetchPostsFuture');
+
+  @override
+  ObservableFuture<GetProfileResponseModal?> get fetchPostsFuture {
+    _$fetchPostsFutureAtom.reportRead();
+    return super.fetchPostsFuture;
+  }
+
+  @override
+  set fetchPostsFuture(ObservableFuture<GetProfileResponseModal?> value) {
+    _$fetchPostsFutureAtom.reportWrite(value, super.fetchPostsFuture, () {
+      super.fetchPostsFuture = value;
+    });
+  }
+
   final _$loginAsyncAction = AsyncAction('_UserStore.login');
 
   @override
-  Future<dynamic> login(String email, String password, successCallback, errorCallback) {
-    return _$loginAsyncAction.run(() => super.login(email, password, successCallback, errorCallback));
+  Future<dynamic> login(String email, String password, dynamic successCallback,
+      dynamic errorCallback) {
+    return _$loginAsyncAction.run(
+        () => super.login(email, password, successCallback, errorCallback));
+  }
+
+  final _$getProfileAsyncAction = AsyncAction('_UserStore.getProfile');
+
+  @override
+  Future<dynamic> getProfile() {
+    return _$getProfileAsyncAction.run(() => super.getProfile());
+  }
+
+  final _$logoutAsyncAction = AsyncAction('_UserStore.logout');
+
+  @override
+  Future<dynamic> logout(dynamic successCallback, dynamic errorCallback) {
+    return _$logoutAsyncAction
+        .run(() => super.logout(successCallback, errorCallback));
+  }
+
+  final _$signUpAsyncAction = AsyncAction('_UserStore.signUp');
+
+  @override
+  Future<dynamic> signUp(SignUpRequestModal signUpData, dynamic successCallback,
+      dynamic errorCallback) {
+    return _$signUpAsyncAction
+        .run(() => super.signUp(signUpData, successCallback, errorCallback));
   }
 
   @override
@@ -58,7 +105,9 @@ mixin _$UserStore on _UserStore, Store {
     return '''
 success: ${success},
 loginFuture: ${loginFuture},
-isLoading: ${isLoading}
+fetchPostsFuture: ${fetchPostsFuture},
+isLoading: ${isLoading},
+loading: ${loading}
     ''';
   }
 }

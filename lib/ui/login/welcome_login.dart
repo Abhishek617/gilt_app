@@ -38,7 +38,7 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                 height: 15,
               ),
               ElevatedButtonWidget(
-                buttonText: 'Log In',
+                buttonText: 'Login',
                 buttonColor: AppColors.primaryColor,
                 onPressed: () {
                   Routes.navigateToScreen(context, Routes.before_login);
