@@ -30,6 +30,7 @@ import 'package:guilt_app/ui/login/login.dart';
 import 'package:guilt_app/ui/payment/AddMoney.dart';
 import 'package:guilt_app/ui/payment/Payment_history.dart';
 import 'package:guilt_app/ui/payment/bank_lists.dart';
+import 'package:guilt_app/ui/payment/card_details.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
@@ -89,9 +90,7 @@ class Routes {
   static const  String attendees_profile= '/attendees_profile';
   static const  String add_contacts= '/add_contacts';
   static const  String bank_lists= '/Bank_lists';
-
-
-
+  static const  String card_details= '/card_details';
 
   static final routes = <String, WidgetBuilder>{
     map: (BuildContext context) => Map(),
@@ -139,6 +138,7 @@ class Routes {
     attendees_profile: (BuildContext context) => Attendees_profile(),
     add_contacts: (BuildContext context) => Add_contacts(),
     bank_lists: (BuildContext context) => Bank_lists(),
+    card_details: (BuildContext context) => Card_details(),
 
 
 
