@@ -217,6 +217,7 @@ class _ExpenseState extends State<Expense> {
                   ),
                 ],
               ),
+
               Row(
                 children: [
                   Column(
@@ -281,6 +282,7 @@ class _ExpenseState extends State<Expense> {
     return expandedItem == index ? detailldata(index) : Expenselist(index);
   }
 
+
   List<String> item = [
     ' b',
     'c ',
@@ -325,6 +327,7 @@ class _ExpenseState extends State<Expense> {
             height: DeviceUtils.getScaledHeight(context, 0.83),
             child: ListView.builder(
               itemCount: item.length,
+
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index) =>
               checkdata(index),

@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 // import 'package:full_screen_image/full_screen_image.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/rounded_button_with_icon.dart';
+import 'package:provider/provider.dart';
 
+import '../../stores/user/user_store.dart';
+import '../../utils/Global_methods/global.dart';
 import '../../utils/routes/routes.dart';
 
 class EventDetails extends StatefulWidget {
@@ -13,7 +18,9 @@ class EventDetails extends StatefulWidget {
   State<EventDetails> createState() => _EventDetailsState();
 }
 
+
 class _EventDetailsState extends State<EventDetails> {
+
   @override
   Widget build(BuildContext context) {
    return Scaffold(

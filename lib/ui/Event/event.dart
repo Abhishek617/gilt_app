@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
@@ -5,7 +7,11 @@ import 'package:guilt_app/constants/dimens.dart';
 import 'package:guilt_app/ui/Event/event_detail.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
+import 'package:provider/provider.dart';
 
+import '../../models/Event/upcoming_past_event_modal.dart';
+import '../../stores/user/user_store.dart';
+import '../../utils/Global_methods/global.dart';
 import '../../utils/routes/routes.dart';
 
 class Event extends StatefulWidget {
@@ -16,6 +22,30 @@ class Event extends StatefulWidget {
 }
 
 class _EventState extends State<Event> {
+  bool isEdit = false;
+  UpcomingPastEventModal? event_list_data = UpcomingPastEventModal.fromJson({
+
+  });
+  late UserStore _eventStore;
+  getevent() => _eventStore.getUpcomingPastEventList('upcoming',0, 10, (value) {
+    this.event_list_data = value;
+  },(error) {
+    print(error);
+    final data = json.decode(json.encode(error.data)) as Map<String, dynamic>;
+    // Map<String, dynamic> map = json.decode(error.data);
+    GlobalMethods.showErrorMessage(context,data['message'], 'Log In Exception');
+  });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _eventStore = Provider.of<UserStore>(context);
+    // check to see if already called api
+    if (!_eventStore.loading) {
+      getevent();
+      isEdit = false;
+    }
+  }
   int segmentedControlValue = 0;
 
   Widget segmentedControl() {
@@ -212,7 +242,7 @@ class _EventState extends State<Event> {
               child: segmentedControl(),
             ),
             Container(
-              height: DeviceUtils.getScaledHeight(context, 0.75),
+              height: DeviceUtils.getScaledHeight(context, 0.71),
               child: ListView(
                 scrollDirection: Axis.vertical,
                 children: item.map((iteml) {

@@ -16,6 +16,8 @@ import 'package:guilt_app/models/Auth/valid_otp.dart';
 import 'package:guilt_app/models/post/post_list.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 
+import '../../../../models/Event/upcoming_past_event_modal.dart';
+
 class PostApi {
   // dio instance
   final DioClient _dioClient;
@@ -89,6 +91,19 @@ class PostApi {
     }
   }
 
+  //UpcomingPastEvent
+  Future getUpcomingPastEventList(filterby, page, size, token) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.upcomingPast,
+          options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+          data: {"Filterby": filterby, "page": page, "size": size});
+      return UpcomingPastEventModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
 
 
 
