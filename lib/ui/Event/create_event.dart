@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
-
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'dart:io';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:flutter/rendering.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../utils/device/device_utils.dart';
-
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 class Create_event extends StatefulWidget {
   const Create_event({Key? key}) : super(key: key);
 
@@ -18,15 +19,65 @@ class Create_event extends StatefulWidget {
 }
 
 class _Create_eventState extends State<Create_event> {
-  final imagePicker = ImagePicker();
-  File? imageFile;
+  File? pickedImage;
 
-  Future getImage() async {
-    var image = await imagePicker.getImage(source: ImageSource.camera);
+  void imagePickerOption() {
+    Get.bottomSheet(
+      SingleChildScrollView(
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10.0),
+            topRight: Radius.circular(10.0),
+          ),
+          child: Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    "Select a Photo",
+                    style: TextStyle(fontSize: 20, color: Colors.grey),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Divider(
+                    height: 1,
+                    color: Colors.grey,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      pickImage(ImageSource.gallery);
+                    },
+                    child: Text("Choose from Library...",
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.center),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-    setState(() {
-      imageFile = File(image!.path);
-    });
+  pickImage(ImageSource imageType) async {
+    try {
+      final photo = await ImagePicker().pickImage(source: imageType);
+      if (photo == null) return;
+      final tempImage = File(photo.path);
+      setState(() {
+        pickedImage = tempImage;
+      });
+
+      Get.back();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
   }
 
   String dropdownvalue = 'Item 1';
@@ -40,6 +91,7 @@ class _Create_eventState extends State<Create_event> {
     'Item 4',
     'Item 5',
   ];
+  final format = DateFormat("yyyy-MM-dd HH:mm");
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +224,8 @@ class _Create_eventState extends State<Create_event> {
                             ),
                           ],
                         ),
-                        onPressed: () =>{  Routes.navigateToScreen(context, Routes.map)},
+                        onPressed: () =>
+                            {Routes.navigateToScreen(context, Routes.map)},
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(32.0),
@@ -204,20 +257,30 @@ class _Create_eventState extends State<Create_event> {
                 Row(
                   children: [
                     Container(
-                        width: DeviceUtils.getScaledWidth(context, 0.54),
-                        height: DeviceUtils.getScaledHeight(context, 0.06),
-                        child: TextFormField(
-                          cursorColor: Colors.black,
-                          decoration: new InputDecoration(
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              hintText: 'Select date or time'),
-                        )),
+                        width: DeviceUtils.getScaledWidth(context, 0.55),
+                        height: DeviceUtils.getScaledHeight(context, 0.08),
+                        child:  DateTimeField(
+                          format: format,
+                          onShowPicker: (context, currentValue) async {
+                            final date = await showDatePicker(
+                                context: context,
+                                firstDate: DateTime(1900),
+                                initialDate: currentValue ?? DateTime.now(),
+                                lastDate: DateTime(2100));
+                            if (date != null) {
+                              final time = await showTimePicker(
+                                context: context,
+                                initialTime:
+                                TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                              );
+                              return DateTimeField.combine(date, time);
+                            } else {
+                              return currentValue;
+                            }
+                          },
+                        ),),
                     Container(
-                      width: DeviceUtils.getScaledWidth(context, 0.32),
+                      width: DeviceUtils.getScaledWidth(context, 0.31),
                       height: DeviceUtils.getScaledHeight(context, 0.05),
                       child: ElevatedButton(
                         child: Row(
@@ -232,11 +295,11 @@ class _Create_eventState extends State<Create_event> {
                             Text(
                               'Date Picker',
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 13),
+                                  TextStyle(color: Colors.white, fontSize: 12),
                             ),
                           ],
                         ),
-                        onPressed: () {},
+                        onPressed: (){},
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(32.0),
@@ -297,12 +360,33 @@ class _Create_eventState extends State<Create_event> {
                 ),
                 Row(
                   children: [
-                    Container(
-                      width: DeviceUtils.getScaledWidth(context, 0.20),
-                      height: DeviceUtils.getScaledHeight(context, 0.10),
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: AppColors.primaryColor, width: 2),
+                            ),
+                            child: ClipRect(
+                              child: pickedImage != null
+                                  ? Image.file(
+                                      pickedImage!,
+                                      width: 70,
+                                      height: 70,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.network(
+                                      'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                                      width: 60,
+                                      height: 60,
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -329,9 +413,7 @@ class _Create_eventState extends State<Create_event> {
                             ),
                           ],
                         ),
-                        onPressed: () {
-                          getImage();
-                        },
+                        onPressed: imagePickerOption,
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(32.0),
@@ -351,7 +433,8 @@ class _Create_eventState extends State<Create_event> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Column(crossAxisAlignment: CrossAxisAlignment.start,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Invite Attended",
