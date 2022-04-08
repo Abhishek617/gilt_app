@@ -31,8 +31,6 @@ class _Privacy_PolicyState extends State<Privacy_Policy> {
     _postStore.getAppContent('privacy_policy').then((value) {
       setState(() {
         policyData = PrivacyPolicyModal.fromJson(value);
-        print('policyData');
-        print(policyData?.data?.title.toString());
       });
     }).catchError((error) {
       print(error.toString());

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:guilt_app/models/PageModals/TermsAndConditionsModal.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants/colors.dart';
 import '../../utils/routes/routes.dart';
@@ -13,6 +16,57 @@ class Terms_Condition extends StatefulWidget {
 }
 
 class _Terms_ConditionState extends State<Terms_Condition> {
+
+  late UserStore _postStore;
+  TermsAndConditionsModal? contentData;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _postStore = Provider.of<UserStore>(context);
+    _postStore.getAppContent('terms_and_conditions').then((value) {
+      setState(() {
+        contentData = TermsAndConditionsModal.fromJson(value);
+        print('Terms and Conditions');
+        print(contentData!.data!.title!.toString());
+      });
+    }).catchError((error) {
+      print(error.toString());
+    });
+  }
+
+  Widget getConditionsWidgets() {
+    if (contentData != null) {
+      return Column(
+        children: contentData!.data!.data!
+            .map(
+              (item) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                item.title!,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                item.description!,
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+        )
+            .toList(),
+      );
+    } else {
+      return Text('No Data found');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
@@ -28,153 +82,14 @@ class _Terms_ConditionState extends State<Terms_Condition> {
               size: 15,
             ),
           ),
-          title: Text('Terms and Conditions'),
+          title: Text(contentData!.data!.title ?? 'Terms and Conditions'),
           shadowColor: Colors.transparent,
         ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(25),
+        child: Padding(
+          padding: const EdgeInsets.all(25),
+          child: SingleChildScrollView(
             child: Center(
-              child: Column(
-                children: [
-                  Text(
-                    'Please Read the Terms and Conditions carefully!',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                      'On sait depuis longtemps que travailler avec du texte lisible et contenant du sens est source de distractions, et empêche de se concentrer sur la mise en '
-                      'page elle-même. Lavantage du Lorem Ipsum sur un texte générique comme Du texte. Du texte. Du texte.est quil possède une distribution de lettres plus ou '
-                      'moins normale, et en tout cas comparable avec celle du français standard. De nombreuses suites logicielles de mise en page ou éditeurs de sites Web ont'
-                      ' faitencore quà leur phase deconstruction. Plusieurs versions sont apparueavec le temps, parfois par accident, souvent',
-                      style: TextStyle(color: Colors.grey)),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '2.Accepting this terms',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Plusieurs variations de Lorem Ipsum peuvent être trouvées ici ou là, mais la majeure partieentre elles a été altérée par laddition dhumour ou de mots aléatoires qui ne '
-                    'ressemblent pas unseconde à du texte standard. Si vous voulez utiliser un passage du Lorem Ipsum, vous devez être sûr quil ny a rien'
-                    'dembarrassant caché dans le texte. Tous les générateurs de Lorem Ipsum sur Internet tendent à reproduire le même extrait sans fince qui fait ',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '3.Strictly follow these',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'On sait depuis longtemps que travailler avec du texte lisible et contenant du sens est source de distractions, et empêche de se concentrer sur la mise en '
-                    'page elle-même. Lavantage du Lorem Ipsum sur un texte générique comme Du texte. Du texte. Du texte.est quil possède une distribution de lettres plus ou '
-                    'moins normale, et en tout cas comparable avec celle du français standard. De nombreuses suites logicielles de mise en page ou éditeurs de sites Web ont'
-                    ' faitencore quà leur phase deconstruction. Plusieurs versions sont apparueavec '
-                    'le temps, parfois par accident, souvent',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '3.Strictly follow these',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    'age elle-même. Lavantage du Lorem Ipsum sur un texte générique comme Du texte. Du texte.'
-                    ' Du texte.est quil possède une distribution de lettres plus ou '
-                    'moins normale, et en tout cas comparable avec celle du français standard',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '4.Strictly follow these',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    'age elle-même. Lavantage du Lorem Ipsum sur un texte générique comme Du texte. Du texte.'
-                    ' Du texte.est quil possède une distribution de lettres plus ou '
-                    'moins normale, et en tout cas comparable avec celle du français standard',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '5.Strictly follow these',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    'age elle-même. Lavantage du Lorem Ipsum sur un texte générique comme Du texte. Du texte.'
-                    ' Du texte.est quil possède une distribution de lettres plus ou '
-                    'moins normale, et en tout cas comparable avec celle du français standard',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 20),
-                    child: ElevatedButtonWidget(
-                      buttonText: 'Accept',
-                      buttonColor: AppColors.primaryColor,
-                      onPressed: () {
-                        Routes.navigateToScreen(context, Routes.faqs);
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              child: getConditionsWidgets(),
             ),
           ),
         )
