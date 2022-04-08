@@ -49,10 +49,8 @@ class _Business_listState extends State<Business_list> {
               size: 15,
             ),
           ),
-          title: Padding(
-            padding: const EdgeInsets.only(left: 55),
-            child: Text('Business Listing'),
-          ),
+          title: Text('Business Listing'),
+          centerTitle: true,
           shadowColor: Colors.transparent,
         ),
         child: SingleChildScrollView(

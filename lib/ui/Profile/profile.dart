@@ -1,9 +1,12 @@
+import 'dart:io';
+import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+
 import '../../widgets/rounded_button_with_icon.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';

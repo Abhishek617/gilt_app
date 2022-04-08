@@ -31,6 +31,7 @@ class _Privacy_PolicyState extends State<Privacy_Policy> {
           ),
           shadowColor: Colors.transparent,
           title: Text('Privacy & Policy'),
+          centerTitle: true,
         ),
         child: Padding(
           padding: const EdgeInsets.all(25),

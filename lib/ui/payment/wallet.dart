@@ -196,7 +196,8 @@ class _WalletState extends State<Wallet> {
       isTab: true,
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: Text('                Wallet'),
+        title: Text('Wallet'),
+        centerTitle: true,
         actions: [
           IconButton(
             padding: EdgeInsets.only(

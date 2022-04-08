@@ -162,6 +162,7 @@ class _MainProfileState extends State<MainProfile> {
       isTab: true,
       appBar: AppBar(
         shadowColor: Colors.transparent,
+        centerTitle: true,
         title: Text(_profileStore.Profile_data!.user!.firstname.toString() +
             '  ' +
             _profileStore.Profile_data!.user!.lastname.toString()),

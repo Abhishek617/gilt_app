@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -108,7 +108,8 @@ class _Expense_ScreenState extends State<Expense_Screen> {
               size: 15,
             ),
           ),
-          title: Text('               Expense'),
+          title: Text('Expense'),
+          centerTitle: true,
           shadowColor: Colors.transparent,
         ),
         child: Padding(

@@ -1,5 +1,7 @@
 
 import 'dart:io';
+import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
@@ -71,10 +73,8 @@ class _Add_businessState extends State<Add_business> {
               size: 15,
             ),
           ),
-          title: Padding(
-            padding: const EdgeInsets.only(left: 55),
-            child: Text('Add Business'),
-          ),
+          title: Text('Add Business'),
+          centerTitle: true,
           shadowColor: Colors.transparent,
         ),
         child: SingleChildScrollView(

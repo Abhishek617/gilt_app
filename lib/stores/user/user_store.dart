@@ -191,6 +191,27 @@ abstract class _UserStore with Store {
     });
   }
 
+  Future getUpcomingPastEventList(
+      String filterby,int page, int size, successCallback, errorCallback) async {
+    // final future = _repository.login(email, password);
+
+    // loginFuture = ObservableFuture(future);
+    _repository.getUpcomingPastEventList(filterby, page, size).then((value) async {
+      if (value != null) {
+        successCallback(value);
+      } else {
+        print('failed to Reset Password');
+      }
+    }, onError: (error) {
+      print(error.toString());
+      errorCallback(error.response);
+    }).catchError((e) {
+      print(e);
+      throw e;
+    });
+  }
+
+
 
   @action
   Future logout(successCallback, errorCallback) async {

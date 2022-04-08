@@ -92,7 +92,8 @@ class _AddMoneyState extends State<AddMoney> {
           ),
         ),
         shadowColor: Colors.transparent,
-        title: Text('            Add Money'),
+        title: Text('Add Money'),
+        centerTitle: true,
       ),
       child: SingleChildScrollView(
         child: Column(

@@ -28,6 +28,7 @@ class _SettingState extends State<Setting> {
       appBar: AppBar(
         shadowColor: Colors.transparent,
         title: Text('Settings'),
+        centerTitle: true,
       ),
       child: Column(
         children: [
