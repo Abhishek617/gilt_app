@@ -9,17 +9,17 @@ part of 'user_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$UserStore on _UserStore, Store {
-  Computed<bool>? _$isLoadingComputed;
-
-  @override
-  bool get isLoading => (_$isLoadingComputed ??=
-          Computed<bool>(() => super.isLoading, name: '_UserStore.isLoading'))
-      .value;
   Computed<bool>? _$loadingComputed;
 
   @override
   bool get loading => (_$loadingComputed ??=
           Computed<bool>(() => super.loading, name: '_UserStore.loading'))
+      .value;
+  Computed<bool>? _$isLoadingComputed;
+
+  @override
+  bool get isLoading => (_$isLoadingComputed ??=
+          Computed<bool>(() => super.isLoading, name: '_UserStore.isLoading'))
       .value;
 
   final _$successAtom = Atom(name: '_UserStore.success');
@@ -67,6 +67,13 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  final _$getAppContentAsyncAction = AsyncAction('_UserStore.getAppContent');
+
+  @override
+  Future<dynamic> getAppContent(dynamic type) {
+    return _$getAppContentAsyncAction.run(() => super.getAppContent(type));
+  }
+
   final _$loginAsyncAction = AsyncAction('_UserStore.login');
 
   @override
@@ -106,8 +113,8 @@ mixin _$UserStore on _UserStore, Store {
 success: ${success},
 loginFuture: ${loginFuture},
 fetchPostsFuture: ${fetchPostsFuture},
-isLoading: ${isLoading},
-loading: ${loading}
+loading: ${loading},
+isLoading: ${isLoading}
     ''';
   }
 }

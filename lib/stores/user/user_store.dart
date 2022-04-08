@@ -23,6 +23,8 @@ abstract class _UserStore with Store {
   // store for handling error messages
   final ErrorStore errorStore = ErrorStore();
 
+  @computed
+  bool get loading => fetchPostsFuture.status == FutureStatus.pending;
   // bool to check if current user is logged in
   bool isLoggedIn = false;
   bool isFirst = true;
@@ -116,6 +118,15 @@ abstract class _UserStore with Store {
   @computed
   bool get isLoading => loginFuture.status == FutureStatus.pending;
 
+
+  @action
+  Future getAppContent(type) async {
+    return await _repository
+        .getAppContent(type)
+        .then((contentData) => contentData)
+        .catchError((error) => throw error);
+  }
+
   // actions:-------------------------------------------------------------------
   @action
   Future login(
@@ -173,11 +184,6 @@ abstract class _UserStore with Store {
     });
   }
 
-
-
-
-  @computed
-  bool get loading => fetchPostsFuture.status == FutureStatus.pending;
   @action
   Future getProfile() async {
     final future = _repository.getProfile();

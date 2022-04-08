@@ -47,4 +47,5 @@ abstract class _PostStore with Store {
     //   errorStore.errorMessage = DioErrorUtil.handleError(error);
     // });
   }
+
 }
