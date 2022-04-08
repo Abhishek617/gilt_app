@@ -34,7 +34,7 @@ class Add_business extends StatefulWidget {
 }
 
 class _Add_businessState extends State<Add_business> {
-  late File imageFile;
+
   final picker = ImagePicker();
   ChooseImage(ImageSource source) async{
     final pickerFile  = await picker.getImage(source:  source);

@@ -288,7 +288,9 @@ class MenuDrawer extends StatelessWidget {
                           'Rate The App',
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        onTap: () => {Navigator.of(context).pop()},
+                        onTap: () => {
+                          Routes.navigateToScreen(context, Routes.add_feedback)
+                        },
                       ),
                       ListTile(
                         horizontalTitleGap: -10,
