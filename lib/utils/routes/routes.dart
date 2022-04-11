@@ -22,6 +22,8 @@ import 'package:guilt_app/ui/common/privacy_policy.dart';
 import 'package:guilt_app/ui/common/success_error_validation.dart';
 import 'package:guilt_app/ui/common/help_and_support.dart';
 import 'package:guilt_app/ui/common/terms_conditions.dart';
+import 'package:guilt_app/ui/feedback/add_feedback.dart';
+import 'package:guilt_app/ui/feedback/feedback_list.dart';
 import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/home/home.dart';
@@ -91,6 +93,10 @@ class Routes {
   static const  String add_contacts= '/add_contacts';
   static const  String bank_lists= '/Bank_lists';
   static const  String card_details= '/card_details';
+  static const  String add_feedback= '/add_feedback';
+  static const  String feedback_list= '/feedback_list';
+
+
 
   static final routes = <String, WidgetBuilder>{
     map: (BuildContext context) => Map(),
@@ -139,6 +145,8 @@ class Routes {
     add_contacts: (BuildContext context) => Add_contacts(),
     bank_lists: (BuildContext context) => Bank_lists(),
     card_details: (BuildContext context) => Card_details(),
+    add_feedback: (BuildContext context) => Add_feedback(),
+    feedback_list: (BuildContext context) => Feedback_list(),
 
 
 
