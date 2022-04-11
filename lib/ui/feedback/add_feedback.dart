@@ -115,6 +115,7 @@ class _Add_feedbackState extends State<Add_feedback> {
                           ),
                           onTap: () {
                             setState(() {
+
                               good = true;
                               excellent = false;
                               verygood = false;
@@ -151,6 +152,7 @@ class _Add_feedbackState extends State<Add_feedback> {
                             ),
                             onTap: () {
                               setState(() {
+
                                 good = false;
                                 excellent = true;
                                 verygood = false;
@@ -207,6 +209,9 @@ class _Add_feedbackState extends State<Add_feedback> {
                       buttonText: 'Submit',
                       buttonColor: AppColors.primaryColor,
                       onPressed: () {
+                        
+
+
                         Routes.navigateToScreen(context, Routes.feedback_list);
                       },
                     ),
@@ -218,3 +223,13 @@ class _Add_feedbackState extends State<Add_feedback> {
         ));
   }
 }
+class Item {
+  String name;
+  String title;
+  String url;
+
+  Item({required this.url, required this.name, required this.title});
+}
+
+
+
