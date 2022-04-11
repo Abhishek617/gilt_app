@@ -1,7 +1,7 @@
-class Vehicle{
+class Faqs{
   String titleText;
   String subTitle;
   bool show = false;
 
-  Vehicle({required this.titleText,required this.subTitle,required this.show});
+  Faqs({required this.titleText,required this.subTitle,required this.show});
 }
