@@ -1,7 +1,11 @@
+import 'dart:io';
+import 'dart:convert';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'dart:io';
+
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:flutter/rendering.dart';
@@ -11,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../utils/device/device_utils.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+
 class Create_event extends StatefulWidget {
   const Create_event({Key? key}) : super(key: key);
 
@@ -80,18 +85,15 @@ class _Create_eventState extends State<Create_event> {
     }
   }
 
-  String dropdownvalue = 'Item 1';
-  String? valueChange;
-
-  // List of items in our dropdown menu
-  var items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-  ];
   final format = DateFormat("yyyy-MM-dd HH:mm");
+
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController _eventNameController = TextEditingController();
+  TextEditingController _eventCategoryController = TextEditingController();
+  TextEditingController _eventLocationController = TextEditingController();
+  TextEditingController _eventDateAndTimeController = TextEditingController();
+  TextEditingController _eventPlaceDescriptionController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +110,8 @@ class _Create_eventState extends State<Create_event> {
               size: 16,
             ),
           ),
-          title: Text('            Create Event'),
+          title: Text('Create Event'),
+          centerTitle: true,
           shadowColor: Colors.transparent,
         ),
         child: SingleChildScrollView(
@@ -135,8 +138,9 @@ class _Create_eventState extends State<Create_event> {
                     Container(
                         width: DeviceUtils.getScaledWidth(context, 0.85),
                         height: DeviceUtils.getScaledHeight(context, 0.08),
-                        child: TextField(
+                        child: TextFormField(
                           autocorrect: true,
+                          controller: _eventCategoryController,
                           decoration: InputDecoration(
                             hintText: 'Enter Event Name',
                             enabledBorder: UnderlineInputBorder(
@@ -163,7 +167,8 @@ class _Create_eventState extends State<Create_event> {
                 Container(
                     width: DeviceUtils.getScaledWidth(context, 0.85),
                     height: DeviceUtils.getScaledHeight(context, 0.08),
-                    child: TextField(
+                    child: TextFormField(
+                      controller: _eventCategoryController,
                       autocorrect: true,
                       decoration: InputDecoration(
                         hintText: 'Enter Category',
@@ -195,6 +200,7 @@ class _Create_eventState extends State<Create_event> {
                         width: DeviceUtils.getScaledWidth(context, 0.54),
                         height: DeviceUtils.getScaledHeight(context, 0.06),
                         child: TextFormField(
+                          controller: _eventLocationController,
                           cursorColor: Colors.black,
                           decoration: new InputDecoration(
                               border: InputBorder.none,
@@ -257,28 +263,30 @@ class _Create_eventState extends State<Create_event> {
                 Row(
                   children: [
                     Container(
-                        width: DeviceUtils.getScaledWidth(context, 0.55),
-                        height: DeviceUtils.getScaledHeight(context, 0.08),
-                        child:  DateTimeField(
-                          format: format,
-                          onShowPicker: (context, currentValue) async {
-                            final date = await showDatePicker(
-                                context: context,
-                                firstDate: DateTime(1900),
-                                initialDate: currentValue ?? DateTime.now(),
-                                lastDate: DateTime(2100));
-                            if (date != null) {
-                              final time = await showTimePicker(
-                                context: context,
-                                initialTime:
-                                TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-                              );
-                              return DateTimeField.combine(date, time);
-                            } else {
-                              return currentValue;
-                            }
-                          },
-                        ),),
+                      width: DeviceUtils.getScaledWidth(context, 0.55),
+                      height: DeviceUtils.getScaledHeight(context, 0.08),
+                      child: DateTimeField(
+                        controller: _eventDateAndTimeController,
+                        format: format,
+                        onShowPicker: (context, currentValue) async {
+                          final date = await showDatePicker(
+                              context: context,
+                              firstDate: DateTime(1900),
+                              initialDate: currentValue ?? DateTime.now(),
+                              lastDate: DateTime(2100));
+                          if (date != null) {
+                            final time = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.fromDateTime(
+                                  currentValue ?? DateTime.now()),
+                            );
+                            return DateTimeField.combine(date, time);
+                          } else {
+                            return currentValue;
+                          }
+                        },
+                      ),
+                    ),
                     Container(
                       width: DeviceUtils.getScaledWidth(context, 0.31),
                       height: DeviceUtils.getScaledHeight(context, 0.05),
@@ -299,7 +307,7 @@ class _Create_eventState extends State<Create_event> {
                             ),
                           ],
                         ),
-                        onPressed: (){},
+                        onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(32.0),
@@ -534,5 +542,15 @@ class _Create_eventState extends State<Create_event> {
             ),
           ),
         ));
+  }
+
+  @override
+  void dispose() {
+    _eventDateAndTimeController.dispose();
+    _eventPlaceDescriptionController.dispose();
+    _eventCategoryController.dispose();
+    _eventLocationController.dispose();
+    _eventNameController.dispose();
+    super.dispose();
   }
 }

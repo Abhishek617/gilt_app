@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
@@ -14,6 +13,7 @@ import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Auth/valid_otp.dart';
+import 'package:guilt_app/models/PageModals/privacyPolicyModal.dart';
 import 'package:guilt_app/models/post/post_list.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 
@@ -42,7 +42,7 @@ class PostApi {
   }
 
 // Login POST API
-  Future login(email, pass) async {
+  Future<LoginModal> login(email, pass) async {
     try {
       final res = await _dioClient
           .post(Endpoints.login, data: {"username": email, "password": pass});
@@ -53,8 +53,39 @@ class PostApi {
     }
   }
 
+  // Common Content Get API
+  Future getAppContent(type) async {
+    try {
+      var url = Endpoints.terms_and_conditions;
+      switch(type){
+        case 'terms_and_conditions':{
+          url = Endpoints.terms_and_conditions;
+          break;
+        }
+        case 'faqs':{
+          url = Endpoints.faqs;
+          break;
+        }
+        case 'privacy_policy':{
+          url = Endpoints.privacy_policy;
+          break;
+        }
+        case 'app_version':{
+          url = Endpoints.about_app_version;
+          break;
+        }
+      }
+      final res = await _dioClient
+          .get(url);
+      return res;
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
 // Login POST API
-  Future logout() async {
+  Future<LogOutModal> logout() async {
     try {
       final res = await _dioClient.post(Endpoints.logout);
       return LogOutModal.fromJson(res);
@@ -67,7 +98,7 @@ class PostApi {
 
   // Send Otp
 
-  Future Send_Otp(email) async {
+  Future<OtpSendModel> Send_Otp(email) async {
     try {
       final res = await _dioClient
           .post(Endpoints.sendOtp, data: {"email_phone": email});
@@ -81,7 +112,7 @@ class PostApi {
   // Valid Otp
 
 
-  Future Valid_Otp(email, otp) async {
+  Future<Valid_Otp_Model> Valid_Otp(email, otp) async {
     try {
       final res = await _dioClient
           .post(Endpoints.validOtp, data: {"email_phone": email, "otp": otp});
@@ -93,7 +124,7 @@ class PostApi {
   }
 
   //UpcomingPastEvent
-  Future getUpcomingPastEventList(filterby, page, size, token) async {
+  Future<UpcomingPastEventModal> getUpcomingPastEventList(filterby, page, size, token) async {
     try {
       final res = await _dioClient
           .post(Endpoints.upcomingPast,

@@ -263,11 +263,8 @@ class _BookEventDetailsState extends State<BookEventDetails> {
       isMenu: false,
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: Row(
-          children: [
-            Text('Book Event Details'),
-          ],
-        ),
+        title: Text('Book Event Details'),
+        centerTitle: true,
       ),
 
         child: Column(children: [

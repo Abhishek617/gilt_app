@@ -100,6 +100,13 @@ class Repository {
         .then((logoutData) => logoutData)
         .catchError((error) => throw error);
   }
+// Common Content GET API :---------------------------------------------------------------------
+  Future getAppContent(type) async {
+    return await _postApi
+        .getAppContent(type)
+        .then((contentData) => contentData)
+        .catchError((error) => throw error);
+  }
 
 
   // OtpSend:---------------------------------------------------------------------

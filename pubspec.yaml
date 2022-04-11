@@ -76,7 +76,6 @@ dependencies:
   get: ^4.6.1
   file: ^6.1.2
   material_floating_search_bar: ^0.3.7
-  full_screen_image: ^1.0.2
 
   #Botton Tab Navigation bar
   animated_bottom_navigation_bar: ^0.3.2
@@ -88,7 +87,10 @@ dependencies:
   geolocator: ^8.2.0
   permission_handler: ^9.2.0
   fluttertoast: ^8.0.9
-  flutter_datetime_picker: ^1.5.1
+  flutter_datetime_picker:
+    git:
+      url: https://github.com/Realank/flutter_datetime_picker.git
+      ref: master
   datetime_picker_formfield: ^2.0.0
 
   #get contacts

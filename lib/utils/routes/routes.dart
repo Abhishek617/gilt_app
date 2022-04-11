@@ -20,11 +20,12 @@ import 'package:guilt_app/ui/common/faqs.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
 import 'package:guilt_app/ui/common/privacy_policy.dart';
 import 'package:guilt_app/ui/common/success_error_validation.dart';
-import 'package:guilt_app/ui/common/success_message.dart';
+import 'package:guilt_app/ui/common/help_and_support.dart';
 import 'package:guilt_app/ui/common/terms_conditions.dart';
 import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/home/home.dart';
+import 'package:guilt_app/ui/Map/map.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/login/login.dart';
 import 'package:guilt_app/ui/payment/AddMoney.dart';
@@ -38,7 +39,6 @@ import 'package:guilt_app/ui/Event/event.dart';
 import '../../ui/Messages/message.dart';
 import '../../ui/attendees/attendees.dart';
 import '../../ui/notification/notification.dart';
-import 'package:guilt_app/Map/map.dart';
 import '../../ui/Business/add_business.dart';
 import '../../ui/Business/business_list.dart';
 import '../../ui/payment/expense.dart';
@@ -83,7 +83,7 @@ class Routes {
   static const  String notifi = '/notifi';
   static const  String book_event = '/book_event ';
   static const  String book_event_details = '/book_event_details ';
-  static const  String success_message = '/success';
+  static const  String help_and_support = '/help_and_support';
   static const  String about_screen = '/about_screen';
   static const  String create_event = '/createevent';
   static const  String expense_screen = '/expense_screen';
@@ -131,7 +131,7 @@ class Routes {
     book_event: (BuildContext context) => BookEvent(),
     book_event_details: (BuildContext context) => BookEventDetails(),
     notifi: (BuildContext context) => Notifications(),
-    success_message: (BuildContext context) => Success_message(),
+    help_and_support: (BuildContext context) => HelpAndSupport(),
     about_screen: (BuildContext context) => About_screen(),
     create_event: (BuildContext context) => Create_event(),
     expense_screen: (BuildContext context) => Expense_Screen(),

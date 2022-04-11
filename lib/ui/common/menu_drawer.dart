@@ -111,7 +111,7 @@ class MenuDrawer extends StatelessWidget {
                     'INVITE FRIENDS',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {  Routes.navigateToScreen(context, Routes.map)},
+                  onTap: () => {  Routes.navigateToScreen(context, Routes.add_contacts)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
@@ -123,7 +123,9 @@ class MenuDrawer extends StatelessWidget {
                     'EXPENSE HISTORY',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {
+                    Routes.navigateToScreen(context, Routes.expensehistory)
+                  },
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
@@ -152,7 +154,7 @@ class MenuDrawer extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
                   onTap: () => {Routes.navigateToScreen(
-                      context, Routes.success_message)},
+                      context, Routes.message)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
@@ -172,7 +174,8 @@ class MenuDrawer extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
                   onTap: () => {
-                  Routes.navigateRootToScreen(context, Routes.bank_lists),
+                    Navigator.of(context).pop()
+                  // Routes.navigateRootToScreen(context, Routes.bank_lists),
                   // GlobalMethods.showErrorMessage(context, error.message.toString(), 'Logout Error');
                 },
                 ),
@@ -190,20 +193,10 @@ class MenuDrawer extends StatelessWidget {
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                   trailing: Icon(Icons.arrow_forward_ios, size: 20),
                   title: Text(
-                    'Wallet',
-                    style: TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                  onTap: () => {Routes.navigateToScreen(
-                      context, Routes.wallet)},
-                ),
-                ListTile(
-                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
-                  title: Text(
                     'HELP & SUPPORT',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {Routes.navigateToScreen(context, Routes.help_and_support)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),

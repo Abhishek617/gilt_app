@@ -14,6 +14,19 @@ class Endpoints {
   // login endpoints
   static const String login = baseUrl + "admin/login";
 
+  //Terms and conditions
+  static const String terms_and_conditions =
+      baseUrl + "api/home/term-condition";
+
+  // Privacy policy
+  static const String privacy_policy = baseUrl + "api/home/privacy-policy";
+
+  // Get FAQs List
+  static const String faqs = baseUrl + "api/home/faqs";
+
+// Get Latest App Version Details
+  static const String about_app_version = baseUrl + "api/home/about-version";
+
   //---------Auth
   //logout
   static const String logout = baseUrl + "admin/logout";
@@ -28,8 +41,6 @@ class Endpoints {
   // update profile details
   static const String updateProfile = baseUrl + "profile";
 
-
-
   //---------ResetPassword
   // update send otp
   static const String sendOtp = baseUrl + "admin/fp-send-otp";
@@ -37,7 +48,6 @@ class Endpoints {
   // Valid Otp
   static const String validOtp = baseUrl + "admin/fp-send-otp";
 
-
 // UpComing and Past Event
-  static const String upcomingPast =  baseUrl +'api/event/upcomingAndPast';
+  static const String upcomingPast = baseUrl + 'api/event/upcomingAndPast';
 }
