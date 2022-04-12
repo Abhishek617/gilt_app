@@ -232,6 +232,7 @@ class _ChangeOldPasswordState extends State<ChangeOldPassword> {
                                 .then((value) {
                                   print(value);
                                   GlobalMethods.showErrorMessage(context, value.message, 'Success');
+                                  Routes.navigateToScreen(context, Routes.view_profile);
                             })
                                 .onError((error, stackTrace) {
                                   print(error);
