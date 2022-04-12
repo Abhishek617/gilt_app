@@ -1,16 +1,14 @@
-class OtpSendModel {
+class ValidOtpModel {
   bool? success;
   String? emailPhone;
   String? message;
-  String? otp;
 
-  OtpSendModel({this.success, this.emailPhone, this.message, this.otp});
+  ValidOtpModel({this.success, this.emailPhone, this.message});
 
-  OtpSendModel.fromJson(Map<String, dynamic> json) {
+  ValidOtpModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     emailPhone = json['email_phone'];
     message = json['message'];
-    otp = json['otp'];
   }
 
   Map<String, dynamic> toJson() {
@@ -18,8 +16,6 @@ class OtpSendModel {
     data['success'] = this.success;
     data['email_phone'] = this.emailPhone;
     data['message'] = this.message;
-    data['otp'] = this.otp;
     return data;
   }
 }
-

@@ -46,7 +46,7 @@ class Endpoints {
   static const String sendOtp = baseUrl + "admin/fp-send-otp";
 
   // Valid Otp
-  static const String validOtp = baseUrl + "admin/fp-send-otp";
+  static const String validOtp = baseUrl + "admin/fp-validate";
 
 // UpComing and Past Event
   static const String upcomingPast = baseUrl + 'api/event/upcomingAndPast';

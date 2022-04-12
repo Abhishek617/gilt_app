@@ -1,21 +1,14 @@
 import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/network/dio_client.dart';
 import 'package:guilt_app/data/network/rest_client.dart';
-import 'package:guilt_app/data/repository.dart';
-import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
-import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
-import 'package:guilt_app/models/Auth/valid_otp.dart';
-import 'package:guilt_app/models/PageModals/privacyPolicyModal.dart';
-import 'package:guilt_app/models/post/post_list.dart';
-import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/models/Auth/valid_otp_model.dart';
 
 import '../../../../models/Event/upcoming_past_event_modal.dart';
 
@@ -57,26 +50,29 @@ class PostApi {
   Future getAppContent(type) async {
     try {
       var url = Endpoints.terms_and_conditions;
-      switch(type){
-        case 'terms_and_conditions':{
-          url = Endpoints.terms_and_conditions;
-          break;
-        }
-        case 'faqs':{
-          url = Endpoints.faqs;
-          break;
-        }
-        case 'privacy_policy':{
-          url = Endpoints.privacy_policy;
-          break;
-        }
-        case 'app_version':{
-          url = Endpoints.about_app_version;
-          break;
-        }
+      switch (type) {
+        case 'terms_and_conditions':
+          {
+            url = Endpoints.terms_and_conditions;
+            break;
+          }
+        case 'faqs':
+          {
+            url = Endpoints.faqs;
+            break;
+          }
+        case 'privacy_policy':
+          {
+            url = Endpoints.privacy_policy;
+            break;
+          }
+        case 'app_version':
+          {
+            url = Endpoints.about_app_version;
+            break;
+          }
       }
-      final res = await _dioClient
-          .get(url);
+      final res = await _dioClient.get(url);
       return res;
     } catch (e) {
       print(e.toString());
@@ -95,7 +91,6 @@ class PostApi {
     }
   }
 
-
   // Send Otp
 
   Future<OtpSendModel> Send_Otp(email) async {
@@ -111,12 +106,11 @@ class PostApi {
 
   // Valid Otp
 
-
-  Future<Valid_Otp_Model> Valid_Otp(email, otp) async {
+  Future<ValidOtpModel> Valid_Otp(email, otp) async {
     try {
       final res = await _dioClient
           .post(Endpoints.validOtp, data: {"email_phone": email, "otp": otp});
-      return Valid_Otp_Model.fromJson(res);
+      return ValidOtpModel.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
@@ -124,10 +118,10 @@ class PostApi {
   }
 
   //UpcomingPastEvent
-  Future<UpcomingPastEventModal> getUpcomingPastEventList(filterby, page, size, token) async {
+  Future<UpcomingPastEventModal> getUpcomingPastEventList(
+      filterby, page, size, token) async {
     try {
-      final res = await _dioClient
-          .post(Endpoints.upcomingPast,
+      final res = await _dioClient.post(Endpoints.upcomingPast,
           options: Options(headers: {'Authorization': 'Bearer ' + token!}),
           data: {"Filterby": filterby, "page": page, "size": size});
       return UpcomingPastEventModal.fromJson(res);
@@ -136,11 +130,6 @@ class PostApi {
       throw e;
     }
   }
-
-
-
-
-
 
   Future<SignUpResponseModal> signup(SignUpRequestModal signUpData) async {
     try {
