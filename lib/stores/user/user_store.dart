@@ -1,4 +1,5 @@
 import 'package:guilt_app/models/Auth/login_modal.dart';
+import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
@@ -193,6 +194,25 @@ abstract class _UserStore with Store {
     });
   }
 
+  Future Valid_Otp(
+      String email, String otp,successCallback, errorCallback) async {
+    // final future = _repository.login(email, password);
+
+    // loginFuture = ObservableFuture(future);
+    _repository.Valid_Otp(email,otp).then((value) async {
+      if (value != null) {
+        successCallback(value);
+      } else {
+        print('failed to Reset Password');
+      }
+    }, onError: (error) {
+      print(error.toString());
+      errorCallback(error.response);
+    }).catchError((e) {
+      print(e);
+      throw e;
+    });
+  }
   @action
   Future getProfile() async {
     final future = _repository.getProfile();

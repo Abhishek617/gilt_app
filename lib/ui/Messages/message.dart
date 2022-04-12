@@ -103,6 +103,7 @@ class _MessagesState extends State<Messages> {
                             color: AppColors.primaryColor,
                             shape: BoxShape.circle),
                       ),
+
                     ],
                   ),
                 ],

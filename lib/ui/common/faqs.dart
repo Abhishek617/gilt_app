@@ -2,6 +2,11 @@ import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 
+import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/PageModals/faqs_model.dart';
+
 import '../../utils/routes/routes.dart';
 
 class FaqScreen extends StatefulWidget {
@@ -12,127 +17,145 @@ class FaqScreen extends StatefulWidget {
 }
 
 class _FaqScreenState extends State<FaqScreen> {
-  List<Vehicle> vehicleData = [];
-
-
-
-  addData() {
-
-    vehicleData.add(Vehicle(
-        titleText: "How to manage an event?",
-       subTitle:
-         "You want the arrow in the left side for auto suggestion and import the suggested imports.",
-        show: false));
-    vehicleData.add(Vehicle(
-        titleText: "How to manage a payment?",
-        subTitle:
-            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
-        show: false));
-    vehicleData.add(Vehicle(
-        titleText: "How to stay updated?",
-        subTitle:
-            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
-        show: false));
-    vehicleData.add(Vehicle(
-        titleText: "How to create an account?",
-        subTitle:
-            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
-        show: false));
-    vehicleData.add(Vehicle(
-        titleText: "How to protect privacy of account?",
-        subTitle:
-            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
-        show: false));
-    vehicleData.add(Vehicle(
-        titleText: "How to create manage an event?",
-        subTitle:
-            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
-        show: false));
-    vehicleData.add(Vehicle(
-        titleText: "How to invite friends?",
-        subTitle:
-            "You want the arrow in the left side for auto suggestion and import the suggested imports.",
-        show: false));
+  late UserStore _postStore;
+  FaqModel? contentData;
+  
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _postStore = Provider.of<UserStore>(context);
+    _postStore.getAppContent('faqs').then((value) {
+      print(value);
+      setState(() {
+       contentData = FaqModel.fromJson(value);
+        print('faqs');
+        print(contentData!.data?.title.toString());
+      });
+    }).catchError((error) {
+      print(error.toString());
+    });
   }
+  Widget getConditionsWidgets() {
+    if (contentData != null) {
+      return Column(
+        children: contentData!.data!.data!
+            .map(
+              (item) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                item.question as String,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                item.answer as String,
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+        )
+            .toList(),
+      );
+    }
+    else {
+      return Text('No Data found');
+    }
+  }
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    addData();
   }
 
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
-      //isMenu: false,
-      appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            Routes.goBack(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios_outlined,
-            //color: Colors.black,
-            size: 15,
+        isMenu: false,
+        appBar: AppBar(
+          leading: GestureDetector(
+            onTap: () {
+              Routes.goBack(context);
+            },
+            child: Icon(
+              Icons.arrow_back_ios_outlined,
+              //color: Colors.black,
+              size: 15,
+            ),
           ),
+          title: Text(contentData?.data?.title ?? 'Faq'),
+          shadowColor: Colors.transparent,
         ),
-        shadowColor: Colors.transparent,
-        title: const Text("FAQ'S"),
-       centerTitle: true,
-       //leading: Icon(Icons.arrow_back_ios_outlined,size: 15,),
-      ),
-      child: ListView.builder(
-          itemCount: vehicleData.length,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                ListTile(
-                  leading: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        vehicleData[index].show = !vehicleData[index].show;
-                      });
-                    },
-                    icon: Icon(
-                      vehicleData[index].show
-                          ? Icons.remove_circle_outline
-                          : Icons.add_circle_outline,
-                      color: vehicleData[index].show
-                          ? Theme.of(context).primaryColor
-                          : Colors.black,
-                    ),
-                  ),
-                  title: Text(
-                    vehicleData[index].titleText,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: vehicleData[index].show
-                            ? Theme.of(context).primaryColor
-                            : Colors.black),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 80.0, right: 25.0, bottom: 10.0),
-                  child: vehicleData[index].show
-                      ? Column(
-                          children: [
-                            Text(
-                              vehicleData[index].subTitle,
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            const SizedBox(height: 5),
-                            const Divider()
-                          ],
-                        )
-                      : SizedBox.shrink(),
-                ),
-              ],
-            );
-          }
+        child: Padding(
+          padding: const EdgeInsets.all(25),
+          child: SingleChildScrollView(
+            child: Center(
+              child: getConditionsWidgets(),
+            ),
           ),
+        )
     );
+
+    // child: ListView.builder(
+    //     // itemCount: FaqsData.length,
+    //     // itemBuilder: (context, index) {
+    //     //   return Column(
+    //     //     children: [
+    //     //       ListTile(
+    //     //         leading: IconButton(
+    //     //           onPressed: () {
+    //     //             setState(() {
+    //     //               FaqsData[index].success = !FaqsData[index].success;
+    //     //             });
+    //     //           },
+    //     //           icon: Icon(
+    //     //             FaqsData[index].success
+    //     //                 ? Icons.remove_circle_outline
+    //     //                 : Icons.add_circle_outline,
+    //     //             color: FaqsData[index].success
+    //     //                 ? Theme.of(context).primaryColor
+    //     //                 : Colors.black,
+    //     //           ),
+    //     //         ),
+    //     //         title: Text(
+    //     //           FaqsData[index].message,
+    //     //           style: TextStyle(
+    //     //               fontSize: 18,
+    //     //               fontWeight: FontWeight.bold,
+    //     //               color: FaqsData[index].success
+    //     //                   ? Theme.of(context).primaryColor
+    //     //                   : Colors.black),
+    //     //         ),
+    //     //       ),
+    //     //       Padding(
+    //     //         padding: const EdgeInsets.only(
+    //     //             left: 80.0, right: 25.0, bottom: 10.0),
+    //     //         child: FaqsData[index].success
+    //     //             ? Column(
+    //     //                 children: [
+    //     //                   Text(
+    //     //                     FaqsData[index].data as String,
+    //     //                     style: TextStyle(fontSize: 14),
+    //     //                   ),
+    //     //                   const SizedBox(height: 5),
+    //     //                   const Divider()
+    //     //                 ],
+    //     //               )
+    //     //             : SizedBox.shrink(),
+    //     //       ),
+    //     //     ],
+    //     //   );
+    //     // }
+    //     ),
   }
-}
+  }
+
+
+
