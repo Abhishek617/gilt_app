@@ -118,6 +118,15 @@ abstract class _UserStore with Store {
   @computed
   bool get isLoading => loginFuture.status == FutureStatus.pending;
 
+  handleError(error) async {
+    if(error.response.statusCode == 401){
+      _repository.saveIsLoggedIn(false);
+      this.isLoggedIn = false;
+      return error;
+    }else{
+      return error;
+    }
+  }
 
   @action
   Future getAppContent(type) async {
@@ -291,16 +300,6 @@ abstract class _UserStore with Store {
       return e;
     });
   }
-
-
-
-
-
-
-
-
-
-
 
   // general methods:-----------------------------------------------------------
   void dispose() {

@@ -23,18 +23,18 @@ class Event extends StatefulWidget {
 
 class _EventState extends State<Event> {
   bool isEdit = false;
-  UpcomingPastEventModal? event_list_data = UpcomingPastEventModal.fromJson({
-
-  });
+  // UpcomingPastEventModal? event_list_data = UpcomingPastEventModal.fromJson({
+  //
+  // });
   late UserStore _eventStore;
-  getevent() => _eventStore.getUpcomingPastEventList('upcoming',0, 10, (value) {
-    this.event_list_data = value;
-  },(error) {
-    print(error);
-    final data = json.decode(json.encode(error.data)) as Map<String, dynamic>;
-    // Map<String, dynamic> map = json.decode(error.data);
-    GlobalMethods.showErrorMessage(context,data['message'], 'Log In Exception');
-  });
+  // getevent() => _eventStore.getUpcomingPastEventList('upcoming',0, 10, (value) {
+  //   this.event_list_data = value;
+  // },(error) {
+  //   print(error);
+  //   final data = json.decode(json.encode(error.data)) as Map<String, dynamic>;
+  //   // Map<String, dynamic> map = json.decode(error.data);
+  //   GlobalMethods.showErrorMessage(context,data['message'], 'Log In Exception');
+  // });
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -42,7 +42,7 @@ class _EventState extends State<Event> {
     _eventStore = Provider.of<UserStore>(context);
     // check to see if already called api
     if (!_eventStore.loading) {
-      getevent();
+      // getevent();
       isEdit = false;
     }
   }

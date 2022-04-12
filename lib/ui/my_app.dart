@@ -58,6 +58,10 @@ class MyApp extends StatelessWidget {
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             child: GetMaterialApp(
               debugShowCheckedModeBanner: false,
+              onReady: () {
+                print('---------------onReady--------------');
+                _userStore.getProfile();
+              },
               title: Strings.appName,
               theme: _themeStore.darkMode ? themeDataDark : themeData,
               routes: Routes.routes,
@@ -75,7 +79,9 @@ class MyApp extends StatelessWidget {
                 // Built-in localization of basic text for Cupertino widgets
                 GlobalCupertinoLocalizations.delegate,
               ],
-              home:(_userStore.isFirst ? OnBoardingPage() : (_userStore.isLoggedIn ? MainProfile() : WelcomeLogin())),
+              home: (_userStore.isFirst
+                  ? OnBoardingPage()
+                  : (_userStore.isLoggedIn ? MainProfile() : WelcomeLogin())),
               // home:(_userStore.isFirst ? Login() : (_userStore.isLoggedIn ? SignUp() : WelcomeLogin())),
             ),
           );
