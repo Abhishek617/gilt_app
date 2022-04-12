@@ -106,7 +106,7 @@ class _EventState extends State<Event> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('13 JAN 2022, 2:00PM - Upcoming',
+                            Text( '13 JAN 2022, 2:00PM - UpComing Event',
                                 style: TextStyle(
                                     color: AppColors.primaryColor,
                                     fontSize: 12,
@@ -121,6 +121,7 @@ class _EventState extends State<Event> {
                                   size: 12,
                                   color: AppColors.grayTextColor,
                                 ),
+
                                 Text(
                                   '36, guild street, london, uk',
                                   style: TextStyle(
