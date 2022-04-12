@@ -135,6 +135,13 @@ abstract class _UserStore with Store {
         .getAppContent(type)
         .then((contentData) => contentData)
         .catchError((error) => throw error);
+  } 
+  @action
+  Future changePassword(oldPassword,newPassword) async {
+    return await _repository
+        .changePassword(oldPassword, newPassword)
+        .then((contentData) => contentData)
+        .catchError((error) => throw error);
   }
 
   // actions:-------------------------------------------------------------------

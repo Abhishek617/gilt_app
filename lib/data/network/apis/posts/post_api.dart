@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/network/dio_client.dart';
 import 'package:guilt_app/data/network/rest_client.dart';
+import 'package:guilt_app/models/Auth/changePasswordModal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
@@ -85,6 +86,22 @@ class PostApi {
     try {
       final res = await _dioClient.post(Endpoints.logout);
       return LogOutModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Change Password POST API
+  Future<ChangePasswordResponseModal> changePassword(
+      oldPassword, newPassword, token) async {
+    try {
+      final res = await _dioClient.post(Endpoints.changePassword,
+          options: Options(headers: {'Authorization': 'Bearer ' + token!}),data: {
+        "old_password": oldPassword,
+        "new_password": newPassword
+      });
+      return ChangePasswordResponseModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
