@@ -238,7 +238,7 @@ class MenuDrawer extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
                         onTap: () => {
-                          Routes.navigateToScreen(context, Routes.reset_password)
+                          Routes.navigateToScreen(context, Routes.change_old_password)
                         },
                       ),
                       ListTile(

@@ -36,6 +36,7 @@ class _EventState extends State<Event> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    // initializing stores
     _eventStore = Provider.of<UserStore>(context);
     // check to see if already called api
     if (!_eventStore.loading) {
@@ -119,7 +120,7 @@ class _EventState extends State<Event> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(eventData.startDate,
+                            Text('13 JAN 2022, 2:00PM - Past Event',
                                 style: TextStyle(
                                     color: AppColors.primaryColor,
                                     fontSize: 12,
@@ -154,6 +155,17 @@ class _EventState extends State<Event> {
 
             ),
 
+        Divider(
+          color: Colors.black12,
+          //color of divider
+          height: 20,
+          //height spacing of divider
+          thickness: 1,
+          //thickness of divier line
+          indent: 20,
+          //spacing at the start of divider
+          endIndent: 20, //spacing at the end of divider
+        ),
       ],
     );
 

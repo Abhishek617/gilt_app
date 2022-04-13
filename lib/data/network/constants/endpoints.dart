@@ -37,6 +37,9 @@ class Endpoints {
   //signup
   static const String register = baseUrl + "api/admin";
 
+  //change password
+  static const String changePassword = baseUrl + "api/admin/changepassword";
+
   //---------Profile
   // get profile details
   static const String getProfile = baseUrl + "profile";
@@ -53,4 +56,6 @@ class Endpoints {
 
 // UpComing and Past Event
   static const String upcomingPast = baseUrl + 'api/event/upcomingAndPast';
+
+
 }

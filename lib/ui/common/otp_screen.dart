@@ -94,15 +94,6 @@ class _Otp_screenState extends State<Otp_screen> {
                         setState(() {
                           otpCode = verificationCode;
                         });
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text("Verification Code"),
-                                content:
-                                    Text('Code entered is $verificationCode'),
-                              );
-                            });
                       }, // end onSubmit
                     ),
                   ),

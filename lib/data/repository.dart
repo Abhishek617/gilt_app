@@ -115,6 +115,14 @@ class Repository {
         .catchError((error) => throw error);
   }
 
+  // Common Content GET API :---------------------------------------------------------------------
+  Future changePassword(oldPassword,newPassword) async {
+    var token = await authToken;
+    return await _postApi
+        .changePassword(oldPassword, newPassword,token)
+        .then((contentData) => contentData)
+        .catchError((error) => throw error);
+  }
 
   // OtpSend:---------------------------------------------------------------------
 

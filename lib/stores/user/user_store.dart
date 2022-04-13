@@ -119,11 +119,27 @@ abstract class _UserStore with Store {
   @computed
   bool get isLoading => loginFuture.status == FutureStatus.pending;
 
+  handleError(error) async {
+    if(error.response.statusCode == 401){
+      _repository.saveIsLoggedIn(false);
+      this.isLoggedIn = false;
+      return error;
+    }else{
+      return error;
+    }
+  }
 
   @action
   Future getAppContent(type) async {
     return await _repository
         .getAppContent(type)
+        .then((contentData) => contentData)
+        .catchError((error) => throw error);
+  } 
+  @action
+  Future changePassword(oldPassword,newPassword) async {
+    return await _repository
+        .changePassword(oldPassword, newPassword)
         .then((contentData) => contentData)
         .catchError((error) => throw error);
   }
@@ -344,16 +360,6 @@ abstract class _UserStore with Store {
       return e;
     });
   }
-
-
-
-
-
-
-
-
-
-
 
   // general methods:-----------------------------------------------------------
   void dispose() {

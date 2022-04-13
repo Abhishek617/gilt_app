@@ -52,6 +52,8 @@ class DioClient{
       );
       return response.data;
     } catch (e) {
+      print('catched error in dio_client post:');
+      print(e);
       throw e;
     }
   }
