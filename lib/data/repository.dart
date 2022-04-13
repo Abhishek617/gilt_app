@@ -9,7 +9,7 @@ import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/models/Auth/feedback_add_model.dart';
 import 'package:guilt_app/models/Auth/feedback_list_model.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
-import 'package:guilt_app/models/Auth/oauth_model.dart';
+import 'package:guilt_app/models/Auth/oauth_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
@@ -99,7 +99,7 @@ class Repository {
         .then((loginData) => loginData)
         .catchError((error) => throw error);
   }
-  Future<OauthModel> oauth(String email, String firstname, String lastname) async {
+  Future<OauthModal> oauth(String email, String firstname, String lastname) async {
     return await _postApi
         .oauth(email, firstname, lastname)
         .then((oauthData) => oauthData)

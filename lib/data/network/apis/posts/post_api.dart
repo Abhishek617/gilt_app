@@ -10,7 +10,7 @@ import 'package:guilt_app/models/Auth/feedback_add_model.dart';
 import 'package:guilt_app/models/Auth/feedback_list_model.dart';
 import 'package:guilt_app/models/Auth/changePasswordModal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
-import 'package:guilt_app/models/Auth/oauth_model.dart';
+import 'package:guilt_app/models/Auth/oauth_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
@@ -53,11 +53,11 @@ class PostApi {
     }
   }
 //google login Oauth Api
-  Future<OauthModel> oauth(email, firstname, lastname) async {
+  Future<OauthModal> oauth(email, firstname, lastname) async {
     try {
       final res = await _dioClient
           .post(Endpoints.oauth, data: {"email": email, "firstName":firstname, "lastName":lastname });
-      return OauthModel.fromJson(res);
+      return OauthModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;

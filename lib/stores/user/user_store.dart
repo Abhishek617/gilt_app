@@ -248,10 +248,10 @@ abstract class _UserStore with Store {
         _repository.saveIsLoggedIn(true);
         this.isLoggedIn = true;
         _repository.saveIsFirst(false);
-        if (value.data.user?.authToken != null) {
-          print(value.data.user?.authToken!);
-          _repository.saveAuthToken(value.data.user?.authToken!);
-          authToken = value.data.user?.authToken;
+        if (value.data?.user?.authToken != null) {
+          print(value.data?.user?.authToken!);
+          _repository.saveAuthToken(value.data?.user?.authToken!);
+          authToken = value.data?.user?.authToken;
         }
         this.isFirst = false;
         this.success = true;
