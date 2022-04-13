@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/Auth/valid_otp_model.dart';
 import 'package:guilt_app/stores/theme/theme_store.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
-
 import '../../constants/colors.dart';
 
 class Otp_screen extends StatefulWidget {
@@ -23,12 +23,12 @@ class Otp_screen extends StatefulWidget {
 class _Otp_screenState extends State<Otp_screen> {
   ThemeStore _themeStore = ThemeStore(getIt<Repository>());
   final UserStore _userStore = UserStore(getIt<Repository>());
-  var verificationCode;
+  var otpCode;
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
-
       appBar: AppBar(
         toolbarHeight: 50,
         leading: GestureDetector(
@@ -87,24 +87,13 @@ class _Otp_screenState extends State<Otp_screen> {
                       //set to true to show as box or false to show as dash
 
                       onCodeChanged: (String code) {
-
                         //handle validation or checks here
                         //https://pub.dev/packages/flutter_otp_text_field
                       },
                       onSubmit: (String verificationCode) {
                         setState(() {
-
-
+                          otpCode = verificationCode;
                         });
-                        showDialog(
-                            context: context,
-                            builder: (context){
-                              return AlertDialog(
-                                title: Text("Verification Code"),
-                                  content: Text('Code entered is $verificationCode'),
-                              );
-                            }
-                        );
                       }, // end onSubmit
                     ),
                   ),
@@ -112,15 +101,25 @@ class _Otp_screenState extends State<Otp_screen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: ElevatedButtonWidget(
-                    buttonColor: AppColors.primaryColor,
-                    buttonText: 'Continue',
-                    onPressed: () {
-                      Routes.navigateToScreen(context, Routes.reset_password);
-                        //Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
-    }
-                     // Routes.navigateToScreen(context, Routes.reset_password);
-
-                  ),
+                      buttonColor: AppColors.primaryColor,
+                      buttonText: 'Continue',
+                      onPressed: () {
+                        _userStore.Valid_Otp(args, otpCode,
+                            (ValidOtpModel value) {
+                          Routes.navigateToScreenWithArgs(
+                              context, Routes.reset_password, args);
+                          //Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
+                        }, (error) {
+                          print(error);
+                          final data = json.decode(json.encode(error.data));
+                          // Map<String, dynamic> map = json.decode(error.data);
+                          GlobalMethods.showErrorMessage(
+                              context, data['error'], 'Forgot Password');
+                        }).then((value) {
+                          print(value);
+                        });
+                        // Routes.navigateToScreen(context, Routes.reset_password);
+                      }),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20),

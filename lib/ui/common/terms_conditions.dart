@@ -82,7 +82,7 @@ class _Terms_ConditionState extends State<Terms_Condition> {
               size: 15,
             ),
           ),
-          title: Text(contentData!.data!.title ?? 'Terms and Conditions'),
+          title: Text(contentData?.data?.title?.toString() ?? 'Terms and Conditions'),
           shadowColor: Colors.transparent,
         ),
         child: Padding(

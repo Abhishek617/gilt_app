@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 
 abstract class NetworkModule {
   /// A singleton dio provider.
@@ -29,12 +31,21 @@ abstract class NetworkModule {
 
             if (token != null) {
               options.headers.putIfAbsent('Authorization', () => token);
-              options.headers.putIfAbsent('Cookies', () => 'authorization=Bearer%20$token; Path=/;');
+              options.headers.putIfAbsent(
+                  'Cookies', () => 'authorization=Bearer%20$token; Path=/;');
             } else {
               print('Auth token is null');
             }
 
             return handler.next(options);
+          },
+          onError: (error, errorInterceptorHandler) {
+            print('Interceptor onError:');
+            print(error.message);
+            if (error.response?.statusCode == 401) {
+              print('Unauthenticated, Need to refresh token');
+            }
+            return errorInterceptorHandler.next(error);
           },
         ),
       );
