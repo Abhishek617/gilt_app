@@ -31,8 +31,10 @@ class _LoginState extends State<Login> {
 
   TextEditingController _userEmailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+
   ThemeStore _themeStore = ThemeStore(getIt<Repository>());
   final UserStore _userStore = UserStore(getIt<Repository>());
+
   FocusNode? _passwordFocusNode;
 
   final _store = FormStore();

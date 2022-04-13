@@ -3,6 +3,11 @@ import 'package:dio/dio.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/network/dio_client.dart';
 import 'package:guilt_app/data/network/rest_client.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/Auth/feedback_add_model.dart';
+import 'package:guilt_app/models/Auth/feedback_list_model.dart';
 import 'package:guilt_app/models/Auth/changePasswordModal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/oauth_model.dart';
@@ -109,6 +114,7 @@ class PostApi {
     }
   }
 
+
   // Send Otp
 
   Future<OtpSendModel> Send_Otp(email) async {
@@ -134,6 +140,39 @@ class PostApi {
       throw e;
     }
   }
+
+  //feedback Add
+  Future<Feedback_add_Model> Feedback_add(description,eventId, rate, token) async{
+    try {
+      final res = await _dioClient
+          .post(Endpoints.feedbackadd, data: {"description": description, "eventId": eventId, "rate": rate});
+      return Feedback_add_Model.fromJson(res);
+    }catch(e){
+      print(e.toString());
+      throw e;
+    }
+
+  }
+
+
+  //feedback List
+
+  Future<Feedback_add_Model> Feedback_list(description,eventId, rate, token) async{
+    try {
+      final res = await _dioClient
+          .post(Endpoints.feedbacklist, data: {"description": description, "eventId": eventId, "rate": rate});
+      return Feedback_add_Model.fromJson(res);
+    }catch(e){
+      print(e.toString());
+      throw e;
+    }
+  }
+
+
+
+
+
+
 
   //UpcomingPastEvent
   Future<UpcomingPastEventModal> getUpcomingPastEventList(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
@@ -34,14 +36,37 @@ class Add_feedback extends StatefulWidget {
 }
 
 class _Add_feedbackState extends State<Add_feedback> {
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  TextEditingController _DescripationController = TextEditingController();
+  ThemeStore _themeStore = ThemeStore(getIt<Repository>());
+  final UserStore _userStore = UserStore(getIt<Repository>());
+  late UserStore _feedbackStore;
+
+  String? rate;
+
+  void selectRate(value){
+    setState(() {
+      rate = value;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _feedbackStore = Provider.of<UserStore>(context);
+
+    // check to see if already called api
+  }
+
   //bool isSelected = true;
   bool good = false;
   bool verygood = false;
   bool excellent = false;
 
-  bool _value = false;
-  int val = -1;
-  Color _iconColor = Colors.red;
+  //bool _value = false;
+ // int val = -1;
+  //Color _iconColor = Colors.red;
 
   //BestTutorSite _site = BestTutorSite.javatpoint;
 
@@ -115,19 +140,17 @@ class _Add_feedbackState extends State<Add_feedback> {
                           ),
                           onTap: () {
                             setState(() {
-
+                              selectRate(rate);
                               good = true;
                               excellent = false;
                               verygood = false;
                             });
                           },
                         ),
-
-
                         SizedBox(
                           width: 5,
                         ),
-                        Text('Good'),
+                        Text("Good"),
                         SizedBox(
                           width: 20,
                         ),
@@ -152,7 +175,7 @@ class _Add_feedbackState extends State<Add_feedback> {
                             ),
                             onTap: () {
                               setState(() {
-
+                                selectRate(rate);
                                 good = false;
                                 excellent = true;
                                 verygood = false;
@@ -162,8 +185,9 @@ class _Add_feedbackState extends State<Add_feedback> {
                           SizedBox(
                             width: 5,
                           ),
-                          Text('Very Good'),
+                          Text("Very Good"),
                         ]),
+
                         SizedBox(
                           width: 20,
                         ),
@@ -189,6 +213,7 @@ class _Add_feedbackState extends State<Add_feedback> {
                             ),
                             onTap: () {
                               setState(() {
+                                selectRate(rate);
                                 good = false;
                                 excellent = false;
                                 verygood = true;
@@ -200,22 +225,75 @@ class _Add_feedbackState extends State<Add_feedback> {
                           ),
                           Text('Excellent'),
                         ]),
+
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 15,
+                    width: 25,
+                  ),
+                  TextFormField(
+                    controller: _DescripationController,
+                    minLines: 2,
+                    maxLines: 10,
+                    keyboardType: TextInputType.multiline,
+
+                    decoration: InputDecoration(
+                      hintText: 'description...',
+                      hintStyle: TextStyle(
+                          color: Colors.grey
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      ),
+                    ),
+                  ),
+
+
                   Padding(
                     padding: const EdgeInsets.only(left: 10, top: 20),
                     child: ElevatedButtonWidget(
                       buttonText: 'Submit',
                       buttonColor: AppColors.primaryColor,
                       onPressed: () {
-                        
+                        {
 
+                            _feedbackStore.Feedback_add(
+                                _DescripationController.value.text, 27, rate!,(value) {
 
-                        Routes.navigateToScreen(context, Routes.feedback_list);
+                              Routes.navigateRootToScreen(
+                                  context, Routes.feedback_list);
+                              // Routes.navigateToScreenWithArgs(
+                              //     context,
+                              //     Routes.success_error_validate,
+                              //     SuccessErrorValidationPageArgs(
+                              //         isSuccess: true,
+                              //         description: 'Logged in successfully',
+                              //         title: 'Success',
+                              //         isPreviousLogin: false));
+                            },
+
+                                    (error) {
+                                  print(error);
+                                  final data = json.decode(
+                                      json.encode(error.data));
+                                  // Map<String, dynamic> map = json.decode(error.data);
+                                  GlobalMethods.showErrorMessage(
+                                      context, data['error'],
+                                      'Enter Discripation');
+                                }).then((value) {
+                              print(value);
+                            });
+
+                         //Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
+                        }
+
+                       Routes.navigateToScreen(context, Routes.feedback_list);
                       },
                     ),
                   ),
+               
                 ],
               ),
             ),

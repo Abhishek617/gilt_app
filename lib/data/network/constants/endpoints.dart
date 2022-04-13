@@ -58,4 +58,20 @@ class Endpoints {
   static const String upcomingPast = baseUrl + 'api/event/upcomingAndPast';
 
 
+
+  //feedback_add
+  static const String feedbackadd = baseUrl + 'api/eventFeedback/add';
+
+
+  //Feddback List
+  static const String feedbacklist = baseUrl + 'api/eventFeedback/';
+
+
+
+
+
+
+
+
+
 }
