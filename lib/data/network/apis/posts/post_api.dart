@@ -47,6 +47,17 @@ class PostApi {
       throw e;
     }
   }
+//google login Oauth Api
+  Future<OauthModel> oauth(email, firstname, lastname) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.oauth, data: {"email": email, "firstName":firstname, "lastName":lastname });
+      return OauthModel.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
 
   // Common Content Get API
   Future getAppContent(type) async {
