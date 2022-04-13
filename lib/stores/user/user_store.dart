@@ -200,6 +200,39 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
+  Future oauth(
+      String email, String firstname, String lastname,successCallback, errorCallback) async {
+    // final future = _repository.login(email, password);
+
+    // loginFuture = ObservableFuture(future);
+    _repository.oauth(email, lastname, firstname ).then((value) async {
+      if (value != null) {
+        print('isFirst : false');
+        _repository.saveIsLoggedIn(true);
+        this.isLoggedIn = true;
+        _repository.saveIsFirst(false);
+        if (value.data.user?.authToken != null) {
+          print(value.data.user?.authToken!);
+          _repository.saveAuthToken(value.data.user?.authToken!);
+          authToken = value.data.user?.authToken;
+        }
+        this.isFirst = false;
+        this.success = true;
+        getProfile();
+        successCallback(value);
+      } else {
+        print('failed to login');
+      }
+    }, onError: (error) {
+      print(error.toString());
+      errorCallback(error.response);
+    }).catchError((e) {
+      print(e);
+      this.isLoggedIn = false;
+      this.success = false;
+      throw e;
+    });
+  }
 
   Future Valid_Otp(
       String email, String otp,successCallback, errorCallback) async {

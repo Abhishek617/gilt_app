@@ -14,6 +14,9 @@ class Endpoints {
   // login endpoints
   static const String login = baseUrl + "admin/login";
 
+  static const String oauth = baseUrl + "admin/oauth";
+
+
   //Terms and conditions
   static const String terms_and_conditions =
       baseUrl + "api/home/term-condition";
