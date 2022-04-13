@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/models/Auth/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
@@ -32,9 +33,36 @@ class Feedback_list extends StatefulWidget {
 
   @override
   State<Feedback_list> createState() => _Feedback_listState();
+
+  static Feedback? fromJson(value) {}
 }
 
 class _Feedback_listState extends State<Feedback_list> {
+
+  late UserStore _postStore;
+  Feedback? contentData;
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _postStore = Provider.of<UserStore>(context);
+    _postStore.getAppContent('Feedback').then((value) {
+      print(value);
+      setState(() {
+        contentData = Feedback_list.fromJson(value);
+        print('feedback');
+
+       // print(contentData!.?.title.toString());
+      });
+    }).catchError((error) {
+      print(error.toString());
+    });
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(

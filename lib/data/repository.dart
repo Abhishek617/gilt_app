@@ -1,8 +1,13 @@
 import 'dart:async';
+import 'dart:async';
+import 'dart:core';
 
 import 'package:guilt_app/data/local/datasources/post/post_datasource.dart';
 import 'package:guilt_app/data/network/apis/Auth/auth.dart';
+import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
+import 'package:guilt_app/models/Auth/feedback_add_model.dart';
+import 'package:guilt_app/models/Auth/feedback_list_model.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
@@ -15,6 +20,7 @@ import 'package:guilt_app/models/post/post.dart';
 import 'package:guilt_app/models/post/post_list.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:sembast/sembast.dart';
 
 import '../models/Auth/otp_send.dart';
@@ -42,11 +48,10 @@ class Repository {
     // later use
     var token = await authToken;
     return await _postApi.getProfile(token).then((profileData) {
-
-
       return profileData;
     }).catchError((error) => throw error);
   }
+
 
   Future<List<Post>> findPostById(int id) {
     //creating filter
@@ -117,6 +122,28 @@ class Repository {
         .then((otpSendData) => otpSendData)
         .catchError((error) => throw error);
   }
+
+  //feedback add
+
+  Future<Feedback_add_Model>Feedback_add(String description,int eventId, String rate) async{
+    var token = await authToken;
+    return await _postApi
+        .Feedback_add(description, eventId, rate, token)
+        .then((feedbackAdd) => feedbackAdd)
+        .catchError((error)=> throw error);
+  }
+
+  // Feedback list
+  Future<Feedback_add_Model>Feedback_list(String description, int eventId, String rate) async{
+    var token = await authToken;
+    return await _postApi
+        .Feedback_list(description, eventId, rate, token )
+        .then((Feedback_list) => Feedback_list)
+        .catchError((error)=> throw error);
+
+  }
+
+
   // Valid Otp:---------------------------------------------------------------------
 
   Future<ValidOtpModel> Valid_Otp(String email, String otp) async {
