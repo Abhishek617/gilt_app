@@ -8,7 +8,9 @@ import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/feedback_add_model.dart';
 import 'package:guilt_app/models/Auth/feedback_list_model.dart';
+import 'package:guilt_app/models/Auth/changePasswordModal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
+import 'package:guilt_app/models/Auth/oauth_model.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
@@ -90,6 +92,22 @@ class PostApi {
     try {
       final res = await _dioClient.post(Endpoints.logout);
       return LogOutModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Change Password POST API
+  Future<ChangePasswordResponseModal> changePassword(
+      oldPassword, newPassword, token) async {
+    try {
+      final res = await _dioClient.post(Endpoints.changePassword,
+          options: Options(headers: {'Authorization': 'Bearer ' + token!}),data: {
+        "old_password": oldPassword,
+        "new_password": newPassword
+      });
+      return ChangePasswordResponseModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;

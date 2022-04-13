@@ -16,6 +16,7 @@ import 'package:guilt_app/ui/attendees/add_contacts.dart';
 import 'package:guilt_app/ui/attendees/addendees_profile.dart';
 import 'package:guilt_app/ui/common/about_screen.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
+import 'package:guilt_app/ui/common/change_old_password.dart';
 import 'package:guilt_app/ui/common/faqs.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
 import 'package:guilt_app/ui/common/privacy_policy.dart';
@@ -67,6 +68,7 @@ class Routes {
   static const String intro = '/intro';
   static const String forgot_password = '/forgot_password';
   static const String reset_password = '/reset_password';
+  static const String change_old_password = '/change_old_password';
   static const String otp = '/otp';
   static const String signup = '/signup';
   static const String success_error_validate = '/success_error_validate';
@@ -117,6 +119,7 @@ class Routes {
     otp: (BuildContext context) => Otp_screen(),
     forgot_password: (BuildContext context) => Reset_password(),
     reset_password: (BuildContext context) => Change_password(),
+    change_old_password: (BuildContext context) => ChangeOldPassword(),
     signup: (BuildContext context) => SignUp(),
     success_error_validate: (BuildContext context) =>
         SuccessErrorValidateScreen(),

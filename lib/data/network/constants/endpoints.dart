@@ -14,6 +14,9 @@ class Endpoints {
   // login endpoints
   static const String login = baseUrl + "admin/login";
 
+  static const String oauth = baseUrl + "admin/oauth";
+
+
   //Terms and conditions
   static const String terms_and_conditions =
       baseUrl + "api/home/term-condition";
@@ -34,6 +37,9 @@ class Endpoints {
   //signup
   static const String register = baseUrl + "api/admin";
 
+  //change password
+  static const String changePassword = baseUrl + "api/admin/changepassword";
+
   //---------Profile
   // get profile details
   static const String getProfile = baseUrl + "profile";
@@ -50,6 +56,8 @@ class Endpoints {
 
 // UpComing and Past Event
   static const String upcomingPast = baseUrl + 'api/event/upcomingAndPast';
+
+
 
   //feedback_add
   static const String feedbackadd = baseUrl + 'api/eventFeedback/add';
