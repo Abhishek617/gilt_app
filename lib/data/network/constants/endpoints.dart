@@ -40,6 +40,13 @@ class Endpoints {
   //change password
   static const String changePassword = baseUrl + "api/admin/changepassword";
 
+
+  //---------Business
+  //Get Business Places
+  static const String getBusinessPlaces = baseUrl + "api/business-places";
+  //Get Business Spaces
+  static const String getBusinessSpaces = baseUrl + "api/business-spaces";
+
   //---------Profile
   // get profile details
   static const String getProfile = baseUrl + "profile";

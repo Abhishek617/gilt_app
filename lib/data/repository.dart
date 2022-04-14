@@ -108,6 +108,20 @@ class Repository {
         .then((contentData) => contentData)
         .catchError((error) => throw error);
   }
+  Future getBusinessPlaces() async {
+    var token = await authToken;
+    return await _postApi
+        .getBusinessPlaces(token)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+  Future getBusinessSpaces() async {
+    var token = await authToken;
+    return await _postApi
+        .getBusinessSpaces(token)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
 
   // Common Content GET API :---------------------------------------------------------------------
   Future changePassword(oldPassword,newPassword) async {

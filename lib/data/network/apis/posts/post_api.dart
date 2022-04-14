@@ -54,11 +54,12 @@ class PostApi {
       throw e;
     }
   }
+
 //google login Oauth Api
   Future<OauthModal> oauth(email, firstname, lastname) async {
     try {
-      final res = await _dioClient
-          .post(Endpoints.oauth, data: {"email": email, "firstName":firstname, "lastName":lastname });
+      final res = await _dioClient.post(Endpoints.oauth,
+          data: {"email": email, "firstName": firstname, "lastName": lastname});
       return OauthModal.fromJson(res);
     } catch (e) {
       print(e.toString());
@@ -100,6 +101,32 @@ class PostApi {
     }
   }
 
+  Future getBusinessPlaces(token) async {
+    try {
+      return await _dioClient.get(
+        Endpoints.getBusinessPlaces,
+        queryParameters: {"page": 0, "size": 20},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future getBusinessSpaces(token) async {
+    try {
+      return await _dioClient.get(
+        Endpoints.getBusinessSpaces,
+        queryParameters: {"page": 0, "size": 20},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
 // Login POST API
   Future<LogOutModal> logout() async {
     try {
@@ -116,17 +143,14 @@ class PostApi {
       oldPassword, newPassword, token) async {
     try {
       final res = await _dioClient.post(Endpoints.changePassword,
-          options: Options(headers: {'Authorization': 'Bearer ' + token!}),data: {
-        "old_password": oldPassword,
-        "new_password": newPassword
-      });
+          options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+          data: {"old_password": oldPassword, "new_password": newPassword});
       return ChangePasswordResponseModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
     }
   }
-
 
   // Send Otp
 
@@ -165,37 +189,31 @@ class PostApi {
     }
   }
   //feedback Add
-  Future<Feedback_add_Model> Feedback_add(description,eventId, rate, token) async{
+  Future<Feedback_add_Model> Feedback_add(
+      description, eventId, rate, token) async {
     try {
-      final res = await _dioClient
-          .post(Endpoints.feedbackadd, data: {"description": description, "eventId": eventId, "rate": rate});
+      final res = await _dioClient.post(Endpoints.feedbackadd,
+          data: {"description": description, "eventId": eventId, "rate": rate});
       return Feedback_add_Model.fromJson(res);
-    }catch(e){
+    } catch (e) {
       print(e.toString());
       throw e;
     }
-
   }
-
 
   //feedback List
 
-  Future<Feedback_add_Model> Feedback_list(description,eventId, rate, token) async{
+  Future<Feedback_add_Model> Feedback_list(
+      description, eventId, rate, token) async {
     try {
-      final res = await _dioClient
-          .post(Endpoints.feedbacklist, data: {"description": description, "eventId": eventId, "rate": rate});
+      final res = await _dioClient.post(Endpoints.feedbacklist,
+          data: {"description": description, "eventId": eventId, "rate": rate});
       return Feedback_add_Model.fromJson(res);
-    }catch(e){
+    } catch (e) {
       print(e.toString());
       throw e;
     }
   }
-
-
-
-
-
-
 
   //UpcomingPastEvent
   Future<UpcomingPastEventModal> getUpcomingPastEventList(
