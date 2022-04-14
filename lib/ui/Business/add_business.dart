@@ -4,8 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Business/BusinessPlaceLostModal.dart';
 import 'package:guilt_app/models/Business/BusinessSpaceListModal.dart';
+import 'package:guilt_app/stores/post/post_store.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import '../../constants/colors.dart';
@@ -23,6 +26,7 @@ class Add_business extends StatefulWidget {
 }
 
 class _Add_businessState extends State<Add_business> {
+  final PostStore _postStore = PostStore(getIt<Repository>());
   List<BusinessSpaces> spaceList = [];
   List<BusinessPlaces> placeList = [];
   File? pickedImage;
@@ -40,6 +44,7 @@ class _Add_businessState extends State<Add_business> {
     // TODO: implement initState
     super.initState();
     _businessPriceController.text = '0';
+    getPlacesAndSpaces();
   }
 
   void imagePickerOption() {
@@ -101,6 +106,38 @@ class _Add_businessState extends State<Add_business> {
     }
   }
 
+  getPlacesAndSpaces() {
+    // Get Places
+    _postStore.getBusinessPlaces().then((placeData) {
+      if (BusinessPlaceListModal.fromJson(placeData).businessPlaces != null) {
+        setState(() {
+          placeList =
+              BusinessPlaceListModal.fromJson(placeData).businessPlaces!;
+          selectedPlace = placeList[0];
+        });
+      }
+    }).onError((error, stackTrace) {
+      setState(() {
+        placeList = [];
+      });
+    });
+
+    //Get Spaces
+    _postStore.getBusinessSpaces().then((placeData) {
+      if (BusinessSpaceListModal.fromJson(placeData).businessSpaces != null) {
+        setState(() {
+          spaceList =
+          BusinessSpaceListModal.fromJson(placeData).businessSpaces!;
+          selectedSpace = spaceList[0];
+        });
+      }
+    }).onError((error, stackTrace) {
+      setState(() {
+        spaceList = [];
+      });
+    });
+  }
+
   addNewBusiness() {
     // TODO : Add Form Validations
     // TODO : Call Add New Business
@@ -151,7 +188,7 @@ class _Add_businessState extends State<Add_business> {
                 ),
                 DropdownButton(
                   // Initial Value
-                  value: selectedPlace?.name ?? 'Select Option',
+                  value: selectedPlace ?? 'Select Option',
                   isExpanded: true,
                   hint: Text('Select option'),
                   style: TextStyle(fontSize: 13),
@@ -161,7 +198,7 @@ class _Add_businessState extends State<Add_business> {
                   items: placeList.map((BusinessPlaces item) {
                     return DropdownMenuItem(
                       value: item,
-                      child: Text(item.name ?? item.id.toString()),
+                      child: Text(item.name ?? item.id.toString(),style: TextStyle(color: Colors.black),),
                     );
                   }).toList(),
                   // After selecting the desired option,it will
@@ -181,7 +218,7 @@ class _Add_businessState extends State<Add_business> {
                 ),
                 DropdownButton(
                   // Initial Value
-                  value: selectedSpace?.name ?? 'Select Option',
+                  value: selectedSpace ?? 'Select Option',
                   isExpanded: true,
                   hint: Text('Select option'),
                   style: TextStyle(fontSize: 13),
@@ -191,7 +228,7 @@ class _Add_businessState extends State<Add_business> {
                   items: spaceList.map((BusinessSpaces item) {
                     return DropdownMenuItem(
                       value: item,
-                      child: Text(item.name ?? item.id.toString()),
+                      child: Text(item.name ?? item.id.toString(),style: TextStyle(color: Colors.black),),
                     );
                   }).toList(),
                   // After selecting the desired option,it will

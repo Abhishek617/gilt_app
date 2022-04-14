@@ -47,5 +47,18 @@ abstract class _PostStore with Store {
     //   errorStore.errorMessage = DioErrorUtil.handleError(error);
     // });
   }
-
+  @action
+  Future getBusinessPlaces() async {
+    return await _repository
+        .getBusinessPlaces()
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+  @action
+  Future getBusinessSpaces() async {
+    return await _repository
+        .getBusinessSpaces()
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
 }
