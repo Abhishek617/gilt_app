@@ -12,6 +12,8 @@ import 'package:guilt_app/models/Auth/changePasswordModal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/oauth_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
+import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
+
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
@@ -151,7 +153,17 @@ class PostApi {
       throw e;
     }
   }
-
+//otpvalidate
+  Future<OtpValidateModel> OtpValidate(email, otp) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.OtpValidate, data: {"email_phone": email, "otp": otp});
+      return OtpValidateModel.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
   //feedback Add
   Future<Feedback_add_Model> Feedback_add(description,eventId, rate, token) async{
     try {

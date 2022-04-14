@@ -246,19 +246,20 @@ class _SignUpState extends State<SignUp> {
                           });
                           _userStore.signUp(signUpData, (val) {
                             print(val);
-                            if (val.success) {
-                              Routes.navigateToScreenWithArgs(
-                                  context,
-                                  Routes.success_error_validate,
-                                  SuccessErrorValidationPageArgs(
-                                      isSuccess: true,
-                                      description: 'SignUp Success',
-                                      title: 'Success',
-                                      isPreviousLogin: true));
-                            } else {
-                              GlobalMethods.showErrorMessage(context,
-                                  'Something went wrong', 'Sign Up Exception');
-                            }
+                            (val.success == true && val.user != null)
+                                ? Routes.navigateRootToScreen(
+                                    context, Routes.otpvalidate)
+                                : Routes.navigateToScreenWithArgs(
+                                    context,
+                                    Routes.success_error_validate,
+                                    SuccessErrorValidationPageArgs(
+                                        isSuccess: true,
+                                        description: 'SignUp Success',
+                                        title: 'Success',
+                                        isPreviousLogin: true));
+
+                            GlobalMethods.showErrorMessage(context,
+                                'Something went wrong', 'Sign Up Exception');
                           }, (error) {
                             print(error.data.toString());
                             final data = json.decode(json.encode(error.data))

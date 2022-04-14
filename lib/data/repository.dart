@@ -1,29 +1,18 @@
 import 'dart:async';
-import 'dart:async';
 import 'dart:core';
-
 import 'package:guilt_app/data/local/datasources/post/post_datasource.dart';
-import 'package:guilt_app/data/network/apis/Auth/auth.dart';
-import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/models/Auth/feedback_add_model.dart';
-import 'package:guilt_app/models/Auth/feedback_list_model.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/oauth_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
-import 'package:guilt_app/models/Auth/otp_send.dart';
-import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
+import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
 import 'package:guilt_app/models/post/post.dart';
-import 'package:guilt_app/models/post/post_list.dart';
-import 'package:guilt_app/ui/common/otp_screen.dart';
-import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
-import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:sembast/sembast.dart';
-
 import '../models/Auth/otp_send.dart';
 import '../models/Auth/valid_otp_model.dart';
 import 'local/constants/db_constants.dart';
@@ -164,6 +153,15 @@ class Repository {
   Future<ValidOtpModel> Valid_Otp(String email, String otp) async {
     return await _postApi
         .Valid_Otp(email, otp)
+        .then((otpSendData) => otpSendData)
+        .catchError((error) => throw error);
+  }
+
+  //otpvalidate
+
+  Future<OtpValidateModel> OtpValidate(String email, String otp) async {
+    return await _postApi
+        .OtpValidate(email, otp)
         .then((otpSendData) => otpSendData)
         .catchError((error) => throw error);
   }
