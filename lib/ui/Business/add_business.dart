@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -22,11 +23,24 @@ class Add_business extends StatefulWidget {
 }
 
 class _Add_businessState extends State<Add_business> {
+  List<BusinessSpaces> spaceList = [];
+  List<BusinessPlaces> placeList = [];
   File? pickedImage;
   BusinessSpaces? selectedSpace;
   BusinessPlaces? selectedPlace;
-  List<BusinessSpaces> spaceList = [];
-  List<BusinessPlaces> placeList = [];
+  Map<String, double> businessLocation = {"Latitude": 0, "Longitude": 0};
+  TextEditingController _businessNameController = TextEditingController();
+  TextEditingController _businessPriceController = TextEditingController();
+  TextEditingController _businessLocationController = TextEditingController();
+  TextEditingController _businessDescriptionController =
+      TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _businessPriceController.text = '0';
+  }
 
   void imagePickerOption() {
     Get.bottomSheet(
@@ -71,6 +85,7 @@ class _Add_businessState extends State<Add_business> {
       ),
     );
   }
+
   pickImage(ImageSource imageType) async {
     try {
       final photo = await ImagePicker().pickImage(source: imageType);
@@ -85,7 +100,12 @@ class _Add_businessState extends State<Add_business> {
       debugPrint(error.toString());
     }
   }
-  
+
+  addNewBusiness() {
+    // TODO : Add Form Validations
+    // TODO : Call Add New Business
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
@@ -109,7 +129,8 @@ class _Add_businessState extends State<Add_business> {
                   "Entre your business name",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                TextField(
+                TextFormField(
+                  controller: _businessNameController,
                   autocorrect: true,
                   decoration: InputDecoration(
                     hintText: 'Business name',
@@ -190,28 +211,44 @@ class _Add_businessState extends State<Add_business> {
                         child: Text("Add Price",
                             style: TextStyle(fontWeight: FontWeight.bold))),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        var price = int.parse(_businessPriceController.text);
+                        if (price > 0) {
+                          setState(() {
+                            _businessPriceController.text =
+                                (price - 1).toString();
+                          });
+                        }
+                      },
                       icon: Icon(
-                        Icons.minimize,
-                        size: 15,
+                        Icons.remove,
                       ),
                     ),
                     Container(
                       width: DeviceUtils.getScaledWidth(context, 0.30),
-                      height: 30,
                       child: TextFormField(
+                        textAlign: TextAlign.center,
+                        textAlignVertical: TextAlignVertical.center,
+                        controller: _businessPriceController,
                         keyboardType:
                             TextInputType.numberWithOptions(decimal: true),
                         decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(5),
+                          isDense: true,
                           border: OutlineInputBorder(),
                         ),
                       ),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        var price = int.parse(_businessPriceController.text);
+                        setState(() {
+                          _businessPriceController.text =
+                              (price + 1).toString();
+                        });
+                      },
                       icon: Icon(
                         Icons.add,
-                        size: 15,
                       ),
                     ),
                   ],
@@ -273,11 +310,13 @@ class _Add_businessState extends State<Add_business> {
                 TextFormField(
                   minLines: 2,
                   maxLines: 10,
+                  controller: _businessDescriptionController,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    label:  Text(
+                    label: Text(
                       "Describe your place",
-                      style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
                     ),
                     hintText: 'Enter your description',
                     enabledBorder: UnderlineInputBorder(
@@ -317,17 +356,17 @@ class _Add_businessState extends State<Add_business> {
                               child: ClipRect(
                                 child: pickedImage != null
                                     ? Image.file(
-                                  pickedImage!,
-                                  width: 70,
-                                  height: 70,
-                                  fit: BoxFit.cover,
-                                )
+                                        pickedImage!,
+                                        width: 70,
+                                        height: 70,
+                                        fit: BoxFit.cover,
+                                      )
                                     : Image.network(
-                                  'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
-                                  width: 60,
-                                  height: 60,
-                                  fit: BoxFit.cover,
-                                ),
+                                        'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                                        width: 60,
+                                        height: 60,
+                                        fit: BoxFit.cover,
+                                      ),
                               ),
                             ),
                           ],
@@ -366,9 +405,7 @@ class _Add_businessState extends State<Add_business> {
                   child: ElevatedButtonWidget(
                     buttonText: 'Add Now',
                     buttonColor: AppColors.primaryColor,
-                    onPressed: () {
-                      Routes.navigateToScreen(context, Routes.business_list);
-                    },
+                    onPressed: addNewBusiness,
                   ),
                 ),
               ],
