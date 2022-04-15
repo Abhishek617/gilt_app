@@ -296,7 +296,7 @@ abstract class _UserStore with Store {
     fetchPostsFuture = ObservableFuture(future);
 
     future.then((profileData) {
-      this.Profile_data = profileData;
+      Profile_data = profileData;
     }).catchError((error) {
       print(error.toString());
       // errorStore.errorMessage = DioErrorUtil.handleError(error);
