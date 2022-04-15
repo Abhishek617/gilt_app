@@ -34,6 +34,9 @@ class Endpoints {
   //logout
   static const String logout = baseUrl + "admin/logout";
 
+  //Refresh Token
+  static const String refreshToken = baseUrl + "admin/refreshToken";
+
   //signup
   static const String register = baseUrl + "api/admin";
 
