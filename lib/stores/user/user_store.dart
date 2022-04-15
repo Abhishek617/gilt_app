@@ -1,17 +1,11 @@
 import 'package:guilt_app/models/Auth/login_modal.dart';
-import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
-import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:mobx/mobx.dart';
-
 import '../../data/repository.dart';
 import '../../models/Auth/profile_modal.dart';
-import '../../utils/dio/dio_error_util.dart';
 import '../form/form_store.dart';
-
 part 'user_store.g.dart';
-
 class UserStore = _UserStore with _$UserStore;
 
 abstract class _UserStore with Store {
@@ -152,7 +146,7 @@ abstract class _UserStore with Store {
     //
     // loginFuture = ObservableFuture(future);
     _repository.login(email, password).then((value) async {
-      if (value != null) {
+      if (value.success == true && value.user != null) {
         print('isFirst : false');
         _repository.saveIsLoggedIn(true);
         this.isLoggedIn = true;
@@ -167,7 +161,7 @@ abstract class _UserStore with Store {
         getProfile();
         successCallback(value);
       } else {
-        print('failed to login');
+        successCallback(value);
       }
     }, onError: (error) {
       print(error.toString());
@@ -270,7 +264,7 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
-
+//after fargot password
   Future Valid_Otp(
       String email, String otp,successCallback, errorCallback) async {
     // final future = _repository.login(email, password);
@@ -278,6 +272,38 @@ abstract class _UserStore with Store {
     // loginFuture = ObservableFuture(future);
     _repository.Valid_Otp(email,otp).then((value) async {
       if (value != null) {
+        successCallback(value);
+      } else {
+        print('failed to Reset Password');
+      }
+    }, onError: (error) {
+      print(error.toString());
+      errorCallback(error.response);
+    }).catchError((e) {
+      print(e);
+      throw e;
+    });
+  }
+
+  //after signup login
+  Future OtpValidate(
+      String email, String otp,successCallback, errorCallback) async {
+    // final future = _repository.login(email, password);
+
+    // loginFuture = ObservableFuture(future);
+    _repository.OtpValidate(email,otp).then((value) async {
+      if (value.success == true && value.data.user != null) {
+        _repository.saveIsLoggedIn(true);
+        this.isLoggedIn = true;
+        _repository.saveIsFirst(false);
+        if (value.data.user?.authToken != null) {
+          print(value.data.user?.authToken!);
+          _repository.saveAuthToken(value.data.user?.authToken!);
+          authToken = value.data.user?.authToken;
+        }
+        this.isFirst = false;
+        this.success = true;
+        getProfile();
         successCallback(value);
       } else {
         print('failed to Reset Password');
@@ -366,7 +392,7 @@ abstract class _UserStore with Store {
       SignUpRequestModal signUpData, successCallback, errorCallback) async {
     _repository.signUp(signUpData).then(
       (value) async {
-        if (value != null) {
+        if (value.success == true && value.data!.user != null) {
           print('isFirst : false');
           _repository.saveIsLoggedIn(true);
           this.isLoggedIn = true;
