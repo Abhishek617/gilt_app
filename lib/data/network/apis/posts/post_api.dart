@@ -3,11 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/network/dio_client.dart';
 import 'package:guilt_app/data/network/rest_client.dart';
-import 'package:guilt_app/data/repository.dart';
-import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
-import 'package:guilt_app/di/components/service_locator.dart';
+
+import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
 import 'package:guilt_app/models/Auth/feedback_add_model.dart';
-import 'package:guilt_app/models/Auth/feedback_list_model.dart';
 import 'package:guilt_app/models/Auth/changePasswordModal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/oauth_modal.dart';
@@ -223,6 +221,27 @@ class PostApi {
           options: Options(headers: {'Authorization': 'Bearer ' + token!}),
           data: {"Filterby": filterby, "page": page, "size": size});
       return UpcomingPastEventModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<UpdateProfileResponseModal> updateprofile(UpdateProfileRequestModal UpdateProfileData) async {
+    try {
+      final res = await _dioClient.put(Endpoints.updateProfile, data: {
+        "email": UpdateProfileData.email,
+        "firstname": UpdateProfileData.firstname,
+        "lastname": UpdateProfileData.lastname,
+        "phone": UpdateProfileData.phone,
+        "aboutme": UpdateProfileData.aboutme,
+        "address": UpdateProfileData.address,
+        "city": UpdateProfileData.city,
+        "state": UpdateProfileData.state,
+        "country": UpdateProfileData.country,
+        "zip": UpdateProfileData.zip,
+      });
+      return UpdateProfileResponseModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;

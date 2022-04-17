@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:core';
 import 'package:guilt_app/data/local/datasources/post/post_datasource.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
+import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
 import 'package:guilt_app/models/Auth/feedback_add_model.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/oauth_modal.dart';
@@ -171,8 +172,7 @@ class Repository {
         .catchError((error) => throw error);
   }
 
-  //otpvalidate
-
+  //otp validate
   Future<OtpValidateModel> OtpValidate(String email, String otp) async {
     return await _postApi
         .OtpValidate(email, otp)
@@ -186,6 +186,14 @@ class Repository {
     return await _postApi
         .getUpcomingPastEventList(filterby, page, size, token)
         .then((eventData) => eventData)
+        .catchError((error) => throw error);
+  }
+
+//updateprofile
+  Future<UpdateProfileResponseModal> updateprofile(UpdateProfileRequestModal UpdateProfileData) async {
+    return await _postApi
+        .updateprofile(UpdateProfileData)
+        .then((profileData) => profileData)
         .catchError((error) => throw error);
   }
 
