@@ -21,6 +21,21 @@ class GlobalMethods {
     return SizedBox.shrink();
   }
 
+  static showSuccessMessage(context, String message, String title) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title: title,
+          duration: Duration(seconds: 3),
+        )..show(context);
+      }
+    });
+
+    return SizedBox.shrink();
+  }
+
+
   static Future<void> askPermissions(context, String routeName) async {
     PermissionStatus permissionStatus = await getContactPermission();
     if (permissionStatus == PermissionStatus.granted) {

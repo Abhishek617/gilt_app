@@ -43,7 +43,6 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
-
   Future<List<Post>> findPostById(int id) {
     //creating filter
     List<Filter> filters = [];
@@ -78,7 +77,8 @@ class Repository {
 
   Future<bool> get isFirst => _sharedPrefsHelper.isFirst;
 
-  Future<void> saveProfileData(GetProfileResponseModal value) => _sharedPrefsHelper.saveProfileData(value);
+  Future<void> saveProfileData(GetProfileResponseModal value) =>
+      _sharedPrefsHelper.saveProfileData(value);
 
   Future<Object?> get profileData => _sharedPrefsHelper.profileData;
 
@@ -89,12 +89,15 @@ class Repository {
         .then((loginData) => loginData)
         .catchError((error) => throw error);
   }
-  Future<OauthModal> oauth(String email, String firstname, String lastname) async {
+
+  Future<OauthModal> oauth(
+      String email, String firstname, String lastname) async {
     return await _postApi
         .oauth(email, firstname, lastname)
         .then((oauthData) => oauthData)
         .catchError((error) => throw error);
   }
+
   // Logout:---------------------------------------------------------------------
   Future<LogOutModal> logout() async {
     return await _postApi
@@ -102,6 +105,7 @@ class Repository {
         .then((logoutData) => logoutData)
         .catchError((error) => throw error);
   }
+
 // Common Content GET API :---------------------------------------------------------------------
   Future getAppContent(type) async {
     return await _postApi
@@ -109,6 +113,7 @@ class Repository {
         .then((contentData) => contentData)
         .catchError((error) => throw error);
   }
+
   Future getBusinessPlaces() async {
     var token = await authToken;
     return await _postApi
@@ -116,6 +121,7 @@ class Repository {
         .then((placeData) => placeData)
         .catchError((error) => throw error);
   }
+
   Future getBusinessSpaces() async {
     var token = await authToken;
     return await _postApi
@@ -125,10 +131,10 @@ class Repository {
   }
 
   // Common Content GET API :---------------------------------------------------------------------
-  Future changePassword(oldPassword,newPassword) async {
+  Future changePassword(oldPassword, newPassword) async {
     var token = await authToken;
     return await _postApi
-        .changePassword(oldPassword, newPassword,token)
+        .changePassword(oldPassword, newPassword, token)
         .then((contentData) => contentData)
         .catchError((error) => throw error);
   }
@@ -136,52 +142,48 @@ class Repository {
   // OtpSend:---------------------------------------------------------------------
 
   Future<OtpSendModel> Send_Otp(String email) async {
-    return await _postApi
-        .Send_Otp(email)
+    return await _postApi.Send_Otp(email)
         .then((otpSendData) => otpSendData)
         .catchError((error) => throw error);
   }
 
   //feedback add
 
-  Future<Feedback_add_Model>Feedback_add(String description,int eventId, String rate) async{
+  Future<Feedback_add_Model> Feedback_add(
+      String description, int eventId, String rate) async {
     var token = await authToken;
-    return await _postApi
-        .Feedback_add(description, eventId, rate, token)
+    return await _postApi.Feedback_add(description, eventId, rate, token)
         .then((feedbackAdd) => feedbackAdd)
-        .catchError((error)=> throw error);
+        .catchError((error) => throw error);
   }
 
   // Feedback list
-  Future<Feedback_add_Model>Feedback_list(String description, int eventId, String rate) async{
+  Future<Feedback_add_Model> Feedback_list(
+      String description, int eventId, String rate) async {
     var token = await authToken;
-    return await _postApi
-        .Feedback_list(description, eventId, rate, token )
+    return await _postApi.Feedback_list(description, eventId, rate, token)
         .then((Feedback_list) => Feedback_list)
-        .catchError((error)=> throw error);
-
+        .catchError((error) => throw error);
   }
-
 
   // Valid Otp:---------------------------------------------------------------------
 
   Future<ValidOtpModel> Valid_Otp(String email, String otp) async {
-    return await _postApi
-        .Valid_Otp(email, otp)
+    return await _postApi.Valid_Otp(email, otp)
         .then((otpSendData) => otpSendData)
         .catchError((error) => throw error);
   }
 
   //otp validate
   Future<OtpValidateModel> OtpValidate(String email, String otp) async {
-    return await _postApi
-        .OtpValidate(email, otp)
+    return await _postApi.OtpValidate(email, otp)
         .then((otpSendData) => otpSendData)
         .catchError((error) => throw error);
   }
 
 //UpcomingPastEvent
-  Future<UpcomingPastEventModal> getUpcomingPastEventList(String filterby,int page, int size) async {
+  Future<UpcomingPastEventModal> getUpcomingPastEventList(
+      String filterby, int page, int size) async {
     var token = await authToken;
     return await _postApi
         .getUpcomingPastEventList(filterby, page, size, token)
@@ -204,6 +206,7 @@ class Repository {
         .then((registerData) => registerData)
         .catchError((error) => throw error);
   }
+
   Future<void> saveIsLoggedIn(bool value) =>
       _sharedPrefsHelper.saveIsLoggedIn(value);
 
@@ -214,6 +217,10 @@ class Repository {
 
   Future<String?> get authToken => _sharedPrefsHelper.authToken;
 
+  Future<void> saveRefreshToken(String? value) =>
+      _sharedPrefsHelper.saveRefreshToken(value!);
+
+  Future<String?> get refreshToken => _sharedPrefsHelper.refreshToken;
 
   // Theme: --------------------------------------------------------------------
   Future<void> changeBrightnessToDark(bool value) =>

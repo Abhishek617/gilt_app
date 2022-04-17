@@ -74,6 +74,14 @@ mixin _$UserStore on _UserStore, Store {
     return _$getAppContentAsyncAction.run(() => super.getAppContent(type));
   }
 
+  final _$changePasswordAsyncAction = AsyncAction('_UserStore.changePassword');
+
+  @override
+  Future<dynamic> changePassword(dynamic oldPassword, dynamic newPassword) {
+    return _$changePasswordAsyncAction
+        .run(() => super.changePassword(oldPassword, newPassword));
+  }
+
   final _$loginAsyncAction = AsyncAction('_UserStore.login');
 
   @override

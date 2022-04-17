@@ -68,6 +68,22 @@ mixin _$PostStore on _PostStore, Store {
     return _$getProfileAsyncAction.run(() => super.getProfile());
   }
 
+  final _$getBusinessPlacesAsyncAction =
+      AsyncAction('_PostStore.getBusinessPlaces');
+
+  @override
+  Future<dynamic> getBusinessPlaces() {
+    return _$getBusinessPlacesAsyncAction.run(() => super.getBusinessPlaces());
+  }
+
+  final _$getBusinessSpacesAsyncAction =
+      AsyncAction('_PostStore.getBusinessSpaces');
+
+  @override
+  Future<dynamic> getBusinessSpaces() {
+    return _$getBusinessSpacesAsyncAction.run(() => super.getBusinessSpaces());
+  }
+
   @override
   String toString() {
     return '''

@@ -25,6 +25,7 @@ abstract class _UserStore with Store {
   bool isLoggedIn = false;
   bool isFirst = true;
   String? authToken;
+  String? refreshToken;
   GetProfileResponseModal? Profile_data = GetProfileResponseModal.fromJson({
     "success": true,
     "user": {
@@ -156,6 +157,11 @@ abstract class _UserStore with Store {
           print(value.user?.authToken!);
           _repository.saveAuthToken(value.user?.authToken!);
           authToken = value.user?.authToken;
+        }
+        if (value.refreshToken != null) {
+          print(value.refreshToken);
+          _repository.saveRefreshToken(value.refreshToken);
+          refreshToken = value.refreshToken;
         }
         this.isFirst = false;
         this.success = true;
@@ -323,7 +329,7 @@ abstract class _UserStore with Store {
     fetchPostsFuture = ObservableFuture(future);
 
     future.then((profileData) {
-      this.Profile_data = profileData;
+      Profile_data = profileData;
     }).catchError((error) {
       print(error.toString());
       // errorStore.errorMessage = DioErrorUtil.handleError(error);

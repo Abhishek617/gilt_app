@@ -14,6 +14,7 @@ class SharedPreferenceHelper {
   SharedPreferenceHelper(this._sharedPreference);
 
   // General Methods: ----------------------------------------------------------
+  //Auth Token
   Future<String?> get authToken async {
     return _sharedPreference.getString(Preferences.auth_token);
   }
@@ -24,6 +25,18 @@ class SharedPreferenceHelper {
 
   Future<bool> removeAuthToken() async {
     return _sharedPreference.remove(Preferences.auth_token);
+  }
+  // Refresh Token
+  Future<String?> get refreshToken async {
+    return _sharedPreference.getString(Preferences.refresh_token);
+  }
+
+  Future<bool> saveRefreshToken(String refreshToken) async {
+    return _sharedPreference.setString(Preferences.refresh_token, refreshToken);
+  }
+
+  Future<bool> removeRefreshToken() async {
+    return _sharedPreference.remove(Preferences.refresh_token);
   }
 
   Future<Object?> get profileData async {

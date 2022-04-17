@@ -26,13 +26,27 @@ class _EventState extends State<Event> {
   UpcomingPastEventModal? event_list_data;
   late UserStore _eventStore;
   getevent() => _eventStore.getUpcomingPastEventList(segmentedControlValue==0 ? 'upcoming' : 'past',0, 10, (value) {
-    this.event_list_data = value;
+    setState(() {
+      this.event_list_data = value;
+    });
+
   },(error) {
     print(error);
     final data = json.decode(json.encode(error.data)) as Map<String, dynamic>;
     // Map<String, dynamic> map = json.decode(error.data);
     GlobalMethods.showErrorMessage(context,data['message'], 'Log In Exception');
   });
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration(milliseconds: 3000), () {
+      print("Wait for 3000 milliseconds");
+      getevent();
+    });
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -60,6 +74,7 @@ class _EventState extends State<Event> {
             onValueChanged: (value) {
               setState(() {
                 segmentedControlValue = value as int;
+                getevent();
               });
             }),
       ),
@@ -120,7 +135,7 @@ class _EventState extends State<Event> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('13 JAN 2022, 2:00PM - Past Event',
+                            Text('14 APR 2022, 2:00PM',
                                 style: TextStyle(
                                     color: AppColors.primaryColor,
                                     fontSize: 12,
