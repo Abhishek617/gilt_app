@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
+import 'package:guilt_app/models/Auth/refresh_token_modal.dart';
 
 abstract class NetworkModule {
   /// A singleton dio provider.
@@ -8,19 +9,23 @@ abstract class NetworkModule {
   /// Calling it multiple times will return the same instance.
   static Dio provideDio(SharedPreferenceHelper sharedPrefHelper) {
     final dio = Dio();
+    String? newToken = '';
     var aToken = sharedPrefHelper.authToken.then((value) => value);
 
     Future<void> refreshToken() async {
       var refreshToken = await sharedPrefHelper.refreshToken;
       final response =
       await dio.post(Endpoints.refreshToken, data: {'refreshToken': refreshToken});
-
+var refreshResponse = await RefreshTokenModal.fromJson(response.data);
       if (response.statusCode == 200) {
-        aToken = response.data['authToken'];
+        newToken = refreshResponse.accessToken;
+        sharedPrefHelper.saveAuthToken(newToken!);
+        sharedPrefHelper.saveRefreshToken(refreshResponse.refreshToken!);
       }
     }
 
     Future _retry(RequestOptions requestOptions) async {
+      requestOptions.headers['Authorization'] = 'Bearer ' + newToken!;
       final options = new Options(
         method: requestOptions.method,
         headers: requestOptions.headers,
@@ -64,7 +69,7 @@ abstract class NetworkModule {
             RequestOptions origin = error.requestOptions;
             if (error.response?.statusCode == 401) {
                 await refreshToken();
-                return _retry(error.requestOptions);
+                return await _retry(error.requestOptions);
               print('Unauthenticated, Need to refresh token');
             }
             return errorInterceptorHandler.next(error);
