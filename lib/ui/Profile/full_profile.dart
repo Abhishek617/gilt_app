@@ -44,7 +44,7 @@ class _FullProfileState extends State<FullProfile> {
   final UserStore _userStore = UserStore(getIt<Repository>());
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async{
     super.didChangeDependencies();
 
     // initializing stores
@@ -52,7 +52,7 @@ class _FullProfileState extends State<FullProfile> {
 
     // check to see if already called api
 
-    _profileStore.getProfile();
+   await  _profileStore.getProfile();
     setState(() {
       _userEmailController.text =
           _profileStore.Profile_data!.user!.email.toString();
@@ -80,7 +80,6 @@ class _FullProfileState extends State<FullProfile> {
   }
 
   updatedata() {
-    if (formkey.currentState!.validate()) {
       final UpdateProfileData = UpdateProfileRequestModal.fromJson({
         "firstname": _userFirstNameController.value.text,
         "lastname": _userLastNameController.value.text,
@@ -91,7 +90,7 @@ class _FullProfileState extends State<FullProfile> {
         "city": _userCityController.value.text,
         "state": _userStateController.value.text,
         "country": _userCountryController.value.text,
-        "zip": _userZipController.value.text,
+        "zip": int.parse(_userZipController.value.text),
       });
       _userStore.updateprofile(UpdateProfileData, (val) {
         print(val);
@@ -122,9 +121,7 @@ class _FullProfileState extends State<FullProfile> {
             'Sign Up Exception');
       });
       // Routes.navigateToScreen(context, Routes.before_login);
-    } else {
-      print('Eroor');
-    }
+
   }
 
   get_profile_input() {
@@ -182,6 +179,7 @@ class _FullProfileState extends State<FullProfile> {
             onPressed: () {
               setState(() {
                 updatedata();
+                isEdit = false;
               });
             },
             icon: Icon(
@@ -498,6 +496,7 @@ class _FullProfileState extends State<FullProfile> {
         ElevatedButton.icon(
           onPressed: () {
             setState(() {
+              updatedata();
               isContactEdit = false;
             });
           },
