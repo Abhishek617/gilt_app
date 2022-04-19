@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
+import 'package:contacts_service/contacts_service.dart';
 
 import '../../widgets/custom_scaffold.dart';
 
@@ -10,6 +12,24 @@ class Attendees extends StatefulWidget {
 }
 
 class _AttendeesState extends State<Attendees> {
+  late Iterable<Contact> _contacts;
+  @override
+  void initState() {
+    // TODO: implement initState
+    getContacts();
+    super.initState();
+  }
+
+  Future<void> getContacts() async {
+    //We already have permissions for contact when we get to this page, so we
+    // are now just retrieving it
+    final Iterable<Contact> contacts = await ContactsService.getContacts();
+    setState(() {
+      _contacts = contacts;
+      print('_contacts');
+      print(_contacts);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
