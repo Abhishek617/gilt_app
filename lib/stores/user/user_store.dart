@@ -2,9 +2,11 @@ import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
+import 'package:guilt_app/ui/notification/notification.dart';
 import 'package:mobx/mobx.dart';
 import '../../data/repository.dart';
 import '../../models/Auth/profile_modal.dart';
+import '../../models/PageModals/setting_model.dart';
 import '../form/form_store.dart';
 part 'user_store.g.dart';
 class UserStore = _UserStore with _$UserStore;
@@ -131,7 +133,15 @@ abstract class _UserStore with Store {
         .getAppContent(type)
         .then((contentData) => contentData)
         .catchError((error) => throw error);
-  } 
+  }
+
+  @action
+  Future settingGet() async {
+    return await _repository
+        .settingGet()
+        .then((settingData) => settingData)
+        .catchError((error) => throw error);
+  }
   @action
   Future changePassword(oldPassword,newPassword) async {
     return await _repository
@@ -180,6 +190,8 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
+
+  //SETTING
 
   Future Feedback_add(
       String description, int eventId, String rate, successCallback, errorCallback) async{

@@ -12,6 +12,7 @@ import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
+import 'package:guilt_app/models/PageModals/setting_model.dart';
 import 'package:guilt_app/models/post/post.dart';
 import 'package:sembast/sembast.dart';
 import '../models/Auth/otp_send.dart';
@@ -97,6 +98,13 @@ class Repository {
         .then((oauthData) => oauthData)
         .catchError((error) => throw error);
   }
+//setting
+  Future<SettingGetModal> settingGet() async {
+    var token = await authToken;
+    return await _postApi.settingGet(token).then((settingData) {
+      return settingData;
+    }).catchError((error) => throw error);
+  }
 
   // Logout:---------------------------------------------------------------------
   Future<LogOutModal> logout() async {
@@ -113,6 +121,9 @@ class Repository {
         .then((contentData) => contentData)
         .catchError((error) => throw error);
   }
+
+  //setting
+
 
   Future getBusinessPlaces() async {
     var token = await authToken;

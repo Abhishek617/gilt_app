@@ -70,7 +70,8 @@ class Endpoints {
 // UpComing and Past Event
   static const String upcomingPast = baseUrl + 'api/event/upcomingAndPast';
 
-
+  // setting
+  static const String setting = baseUrl + 'api/settings';
 
   //feedback_add
   static const String feedbackadd = baseUrl + 'api/eventFeedback/add';
