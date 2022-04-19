@@ -171,9 +171,9 @@ class Routes {
   }
 
   static navigateToScreenWithArgs(
-      BuildContext context, route, successErrorValidationPageArgs) {
+      BuildContext context, route, pageArgs) {
     Navigator.of(context)
-        .pushNamed(route, arguments: successErrorValidationPageArgs);
+        .pushNamed(route, arguments: pageArgs);
   }
 
   static goBack(BuildContext context) {

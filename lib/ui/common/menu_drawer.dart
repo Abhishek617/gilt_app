@@ -111,7 +111,8 @@ class MenuDrawer extends StatelessWidget {
                     'INVITE FRIENDS',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  onTap: () => {  Routes.navigateToScreen(context, Routes.add_contacts)},
+                  onTap: () => {
+                  GlobalMethods.askPermissions(context,Routes.add_contacts)},
                 ),
                 ListTile(
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
