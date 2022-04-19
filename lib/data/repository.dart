@@ -201,7 +201,13 @@ class Repository {
         .then((eventData) => eventData)
         .catchError((error) => throw error);
   }
-
+  //updatesetting
+  Future<SettingGetModal> settingpost(SettingPostModal UpdateSettingData) async {
+    return await _postApi
+        .settingpost(UpdateSettingData)
+        .then((settingData) => settingData)
+        .catchError((error) => throw error);
+  }
 //updateprofile
   Future<UpdateProfileResponseModal> updateprofile(UpdateProfileRequestModal UpdateProfileData) async {
     return await _postApi

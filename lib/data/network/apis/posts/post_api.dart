@@ -77,6 +77,24 @@ class PostApi {
       throw e;
     }
   }
+
+  Future<SettingGetModal> settingpost(SettingPostModal UpdateSettingData) async {
+    try {
+      final res = await _dioClient.post(Endpoints.setting, data: {
+        "is_push_notification": UpdateSettingData.isPushNotification,
+        "is_email_notification": UpdateSettingData.isEmailNotification,
+        "is_show_app_icon": UpdateSettingData.isShowAppIcon,
+        "is_floating_notification": UpdateSettingData.isFloatingNotification,
+        "is_lock_screen_notification": UpdateSettingData.isLockScreenNotification,
+        "is_allow_sound": UpdateSettingData.isAllowSound,
+        "is_allow_vibration":UpdateSettingData.isAllowVibration,
+      });
+      return SettingGetModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
   // Common Content Get API
   Future getAppContent(type) async {
     try {

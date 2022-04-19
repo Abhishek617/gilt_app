@@ -404,6 +404,25 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
+  //update setting
+  @action
+  Future settingpost(
+      SettingPostModal UpdateSettingData, successCallback, errorCallback) async {
+    _repository.settingpost(UpdateSettingData).then(
+          (value) async {
+        successCallback(value);
+      }
+      ,onError: (exception) {
+      print('onError : exception');
+      errorCallback(exception.response);
+      //Handle exception message
+      if (exception.message != null) {
+        print(exception
+            .message); // Here you get : "Connection  Timeout Exception" or even handled 500 errors on your backend.
+      }
+    },
+    );
+  }
 
   @action
   Future updateprofile(
