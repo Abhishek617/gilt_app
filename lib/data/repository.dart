@@ -29,6 +29,38 @@ class Repository {
   // shared pref object
   final SharedPreferenceHelper _sharedPrefsHelper;
 
+  Future<void> saveIsLoggedIn(bool value) =>
+      _sharedPrefsHelper.saveIsLoggedIn(value);
+
+  Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
+
+  Future<void> saveUserRole(String value) =>
+      _sharedPrefsHelper.saveUserRole(value);
+
+  Future<String> get userRole => _sharedPrefsHelper.userRole;
+
+  Future<void> saveAuthToken(String? value) =>
+      _sharedPrefsHelper.saveAuthToken(value!);
+
+  Future<String?> get authToken => _sharedPrefsHelper.authToken;
+
+  Future<void> saveRefreshToken(String? value) =>
+      _sharedPrefsHelper.saveRefreshToken(value!);
+
+  Future<String?> get refreshToken => _sharedPrefsHelper.refreshToken;
+
+  // Theme: --------------------------------------------------------------------
+  Future<void> changeBrightnessToDark(bool value) =>
+      _sharedPrefsHelper.changeBrightnessToDark(value);
+
+  bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
+
+  // Language: -----------------------------------------------------------------
+  Future<void> changeLanguage(String value) =>
+      _sharedPrefsHelper.changeLanguage(value);
+
+  String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
+
   // constructor
   Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource);
 
@@ -99,9 +131,10 @@ class Repository {
   }
 
   // Logout:---------------------------------------------------------------------
-  Future<LogOutModal> logout() async {
+  Future logout() async {
+    var token = await authToken;
     return await _postApi
-        .logout()
+        .logout(token)
         .then((logoutData) => logoutData)
         .catchError((error) => throw error);
   }
@@ -216,30 +249,5 @@ class Repository {
         .catchError((error) => throw error);
   }
 
-  Future<void> saveIsLoggedIn(bool value) =>
-      _sharedPrefsHelper.saveIsLoggedIn(value);
 
-  Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
-
-  Future<void> saveAuthToken(String? value) =>
-      _sharedPrefsHelper.saveAuthToken(value!);
-
-  Future<String?> get authToken => _sharedPrefsHelper.authToken;
-
-  Future<void> saveRefreshToken(String? value) =>
-      _sharedPrefsHelper.saveRefreshToken(value!);
-
-  Future<String?> get refreshToken => _sharedPrefsHelper.refreshToken;
-
-  // Theme: --------------------------------------------------------------------
-  Future<void> changeBrightnessToDark(bool value) =>
-      _sharedPrefsHelper.changeBrightnessToDark(value);
-
-  bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
-
-  // Language: -----------------------------------------------------------------
-  Future<void> changeLanguage(String value) =>
-      _sharedPrefsHelper.changeLanguage(value);
-
-  String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
 }

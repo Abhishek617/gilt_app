@@ -26,6 +26,7 @@ abstract class _UserStore with Store {
   bool isFirst = true;
   String? authToken;
   String? refreshToken;
+
   GetProfileResponseModal? Profile_data = GetProfileResponseModal.fromJson({
     "success": true,
     "user": {
@@ -162,6 +163,11 @@ abstract class _UserStore with Store {
           print(value.refreshToken);
           _repository.saveRefreshToken(value.refreshToken);
           refreshToken = value.refreshToken;
+        }
+        if (value.user?.roleId != null) {
+          var role = value.user!.roleId.toString();
+          print('roleID : '+ role);
+          _repository.saveUserRole(role);
         }
         this.isFirst = false;
         this.success = true;

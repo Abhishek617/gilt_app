@@ -142,10 +142,10 @@ class PostApi {
   }
 
 // Login POST API
-  Future<LogOutModal> logout() async {
+  Future logout(token) async {
     try {
-      final res = await _dioClient.post(Endpoints.logout);
-      return LogOutModal.fromJson(res);
+      return await _dioClient.post(Endpoints.logout,
+          options: Options(headers: {'Authorization': 'Bearer ' + token!}));
     } catch (e) {
       print(e.toString());
       throw e;

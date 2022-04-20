@@ -68,6 +68,14 @@ class SharedPreferenceHelper {
   Future<bool> saveIsLoggedIn(bool value) async {
     return _sharedPreference.setBool(Preferences.is_logged_in, value);
   }
+  // User Role:---------------------------------------------------------------------
+  Future<String> get userRole async {
+    return _sharedPreference.getString(Preferences.userRole) ?? '1';
+  }
+
+  Future<bool> saveUserRole(String value) async {
+    return _sharedPreference.setString(Preferences.userRole, value);
+  }
 
   // Theme:------------------------------------------------------
   bool get isDarkMode {
