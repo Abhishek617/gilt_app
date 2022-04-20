@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:guilt_app/constants/colors.dart';
-
-import '../../widgets/custom_scaffold.dart';
+import 'package:guilt_app/models/PageModals/setting_model.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/widgets/custom_scaffold.dart';
+import 'package:provider/provider.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
@@ -13,13 +14,40 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
-  bool _switchValue1 = true;
-  bool _switchValue2 = true;
-  bool _switchValue3 = true;
-  bool _switchValue4 = true;
-  bool _switchValue5 = true;
-  bool _switchValue6 = true;
-  bool _switchValue7 = true;
+  bool _switch_isEmailNotification = true;
+  bool _switch_isPushNotification = true;
+  bool _switch_isShowAppIcon = true;
+  bool _switch_isFloatingNotification = true;
+  bool _switch_isLockScreenNotification = true;
+  bool _switch_isAllowSound = true;
+  bool _switch_isAllowVibration = true;
+  late UserStore _settingStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    initSetup();
+  }
+
+  initSetup() async {
+    // initializing stores
+    _settingStore = Provider.of<UserStore>(context);
+    await _settingStore.settingGet().then((settingData) {
+      setState(() {
+        var setingnotification = settingData.adminSettings.notification;
+        _switch_isEmailNotification =
+            setingnotification.isEmailNotification == 1;
+        _switch_isPushNotification = setingnotification.isPushNotification == 1;
+        _switch_isShowAppIcon = setingnotification.isShowAppIcon == 1;
+        _switch_isFloatingNotification =
+            setingnotification.isFloatingNotification == 1;
+        _switch_isLockScreenNotification =
+            setingnotification.isLockScreenNotification == 1;
+        _switch_isAllowSound = setingnotification.isAllowSound == 1;
+        _switch_isAllowVibration = setingnotification.isAllowVibration == 1;
+      });
+    }).catchError((error) => throw error);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,10 +106,10 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue1,
+                      value: _switch_isPushNotification,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue1 = Value;
+                          _switch_isPushNotification = Value;
                         });
                       }),
                 )
@@ -131,10 +159,10 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue2,
+                      value: _switch_isEmailNotification,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue2 = Value;
+                          _switch_isEmailNotification = Value;
                         });
                       }),
                 )
@@ -195,10 +223,10 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue3,
+                      value: _switch_isShowAppIcon,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue3 = Value;
+                          _switch_isShowAppIcon = Value;
                         });
                       }),
                 )
@@ -234,10 +262,10 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue4,
+                      value: _switch_isFloatingNotification,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue4 = Value;
+                          _switch_isFloatingNotification = Value;
                         });
                       }),
                 )
@@ -273,10 +301,10 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue5,
+                      value: _switch_isLockScreenNotification,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue5 = Value;
+                          _switch_isLockScreenNotification = Value;
                         });
                       }),
                 )
@@ -312,10 +340,10 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue6,
+                      value: _switch_isAllowSound,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue6 = Value;
+                          _switch_isAllowSound = Value;
                         });
                       }),
                 )
@@ -351,10 +379,10 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue7,
+                      value: _switch_isAllowVibration,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue7 = Value;
+                          _switch_isAllowVibration = Value;
                         });
                       }),
                 )

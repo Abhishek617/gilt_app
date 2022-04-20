@@ -16,6 +16,7 @@ import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Auth/valid_otp_model.dart';
+import 'package:guilt_app/models/PageModals/setting_model.dart';
 
 import '../../../../models/Event/upcoming_past_event_modal.dart';
 
@@ -59,6 +60,18 @@ class PostApi {
       final res = await _dioClient.post(Endpoints.oauth,
           data: {"email": email, "firstName": firstname, "lastName": lastname});
       return OauthModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //get setting
+  Future<SettingGetModal> settingGet(token) async {
+    try {
+      final res = await _dioClient.post(Endpoints.setting,
+          options: Options(headers: {'Authorization': 'Bearer ' + token!}));
+      return SettingGetModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
