@@ -16,6 +16,8 @@ import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Auth/valid_otp_model.dart';
+import 'package:guilt_app/models/PageModals/notification_list_model.dart';
+import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 
 import '../../../../models/Event/upcoming_past_event_modal.dart';
@@ -78,6 +80,7 @@ class PostApi {
     }
   }
 
+  //post setting
   Future<SettingGetModal> settingpost(SettingPostModal UpdateSettingData) async {
     try {
       final res = await _dioClient.post(Endpoints.setting, data: {
@@ -95,6 +98,7 @@ class PostApi {
       throw e;
     }
   }
+
   // Common Content Get API
   Future getAppContent(type) async {
     try {
@@ -129,6 +133,7 @@ class PostApi {
     }
   }
 
+  // Get Business Places
   Future getBusinessPlaces(token) async {
     try {
       return await _dioClient.get(
@@ -142,9 +147,7 @@ class PostApi {
     }
   }
 
-  //setting
-
-
+  // Get Business Spaces
   Future getBusinessSpaces(token) async {
     try {
       return await _dioClient.get(
@@ -158,11 +161,25 @@ class PostApi {
     }
   }
 
-// Login POST API
-  Future<LogOutModal> logout() async {
+  // Check Registered Users from Contacts
+  Future checkContacts(contacts,token) async {
     try {
-      final res = await _dioClient.post(Endpoints.logout);
-      return LogOutModal.fromJson(res);
+      return await _dioClient.post(
+        Endpoints.checkContacts,
+        data: {"contact":contacts},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+// Login POST API
+  Future logout(token) async {
+    try {
+      return await _dioClient.post(Endpoints.logout,
+          options: Options(headers: {'Authorization': 'Bearer ' + token!}));
     } catch (e) {
       print(e.toString());
       throw e;
@@ -182,6 +199,7 @@ class PostApi {
       throw e;
     }
   }
+
 
   // Send Otp
 
@@ -223,7 +241,7 @@ class PostApi {
   Future<Feedback_add_Model> Feedback_add(
       description, eventId, rate, token) async {
     try {
-      final res = await _dioClient.post(Endpoints.feedbackadd,
+     final res = await _dioClient.post(Endpoints.feedbackadd,
           data: {"description": description, "eventId": eventId, "rate": rate});
       return Feedback_add_Model.fromJson(res);
     } catch (e) {
@@ -232,15 +250,27 @@ class PostApi {
     }
   }
 
+  //notification_list
+  Future<NotificationListModal> Notification_list(token) async{
+    try {
+      final res = await _dioClient
+          .get(Endpoints.notificationlist,options: Options(headers: {'Authorization': 'Bearer ' + token!}),);
+
+      return NotificationListModal.fromJson(res);
+    }catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
   //feedback List
 
-  Future<Feedback_add_Model> Feedback_list(
-      description, eventId, rate, token) async {
+  Future<FeedbackListModel> Feedback_list(eventId,token) async{
     try {
-      final res = await _dioClient.post(Endpoints.feedbacklist,
-          data: {"description": description, "eventId": eventId, "rate": rate});
-      return Feedback_add_Model.fromJson(res);
-    } catch (e) {
+      final res = await _dioClient
+          .get(Endpoints.feedbacklist, queryParameters: {"eventId": eventId,},options: Options(headers: {'Authorization': 'Bearer ' + token!}),);
+
+      return FeedbackListModel.fromJson(res);
+    }catch (e) {
       print(e.toString());
       throw e;
     }

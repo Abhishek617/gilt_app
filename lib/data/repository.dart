@@ -11,6 +11,7 @@ import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
+import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 import 'package:guilt_app/models/post/post.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
@@ -138,6 +139,13 @@ class Repository {
       return settingData;
     }).catchError((error) => throw error);
   }
+//update setting
+  Future<SettingGetModal> settingpost(SettingPostModal UpdateSettingData) async {
+    return await _postApi
+        .settingpost(UpdateSettingData)
+        .then((settingData) => settingData)
+        .catchError((error) => throw error);
+  }
 
   // Logout:---------------------------------------------------------------------
   Future logout() async {
@@ -197,6 +205,16 @@ class Repository {
         .then((otpSendData) => otpSendData)
         .catchError((error) => throw error);
   }
+
+
+  //notification list
+  Future<NotificationListModal> Notification_list() async {
+    var token = await authToken;
+    return await _postApi.Notification_list(token)
+        .then((NotificationData) => NotificationData)
+        .catchError((error) => throw error);
+  }
+
 
   //feedback add
 

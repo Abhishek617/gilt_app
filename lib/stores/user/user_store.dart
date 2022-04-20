@@ -211,8 +211,25 @@ abstract class _UserStore with Store {
 
   }
 
+  Future Notification_list(successCallback, errorCallback)
+  async{
+    _repository.Notification_list().then((value)async{
+      if(value != null){
+        successCallback(value);
+      }else{
+        print("Faild to Feedback List");
+      }
+    }, onError: (error){
+      print(error.toString());
+      errorCallback(error.respone);
+    }).catchError((e){
+      print(e);
+      throw e;
+    });
+  }
+
   Future Feedback_list( String description, int eventId, String rate, successCallback, errorCallback) async{
-    _repository.Feedback_list(description, eventId, rate).then((value)async{
+    _repository.Feedback_list(eventId).then((value)async{
       if(value != null){
         successCallback(value);
       }else{

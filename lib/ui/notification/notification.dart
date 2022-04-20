@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/models/PageModals/notification_list_model.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils/device/device_utils.dart';
 
@@ -9,7 +12,25 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-  With_Button() => Container(
+  late UserStore _notificationStore;
+  NotificationListModal? contentData;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _notificationStore = Provider.of<UserStore>(context);
+    _notificationStore.Notification_list((value) {
+      print(value);
+      setState(() {
+        contentData = value;
+        print('notification');
+      });
+    }, (error) {
+      print(error.toString());
+    });
+  }
+
+  With_Button(notificationData) => Container(
         padding: EdgeInsets.only(top: 5),
         child: Row(
           children: [
@@ -21,8 +42,8 @@ class _NotificationsState extends State<Notifications> {
                   Container(
                     child: Image.network(
                       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                      width: 70,
-                      height: 70,
+                      width: 60,
+                      height: 60,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -39,14 +60,14 @@ class _NotificationsState extends State<Notifications> {
                   height: 15,
                 ),
                 Text(
-                  'David Siliba invite to JO Malone',
+                  notificationData.message,
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
-                  'iliba invite to JO Ma',
+                  notificationData.username,
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w500,
@@ -85,12 +106,12 @@ class _NotificationsState extends State<Notifications> {
               ],
             ),
             SizedBox(
-              width: 30,
+              width: 5,
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 45),
               child: Text(
-                'Just Now',
+                notificationData.createdAt,
                 style: TextStyle(
                   fontSize: 8,
                   fontWeight: FontWeight.w500,
@@ -101,7 +122,7 @@ class _NotificationsState extends State<Notifications> {
         ),
       );
 
-  Without_Button() => Container(
+  Without_Button(notificationData) => Container(
         padding: EdgeInsets.only(top: 10),
         child: Row(
           children: [
@@ -113,8 +134,8 @@ class _NotificationsState extends State<Notifications> {
                   Container(
                     child: Image.network(
                       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                      width: 70,
-                      height: 70,
+                      width: 60,
+                      height: 60,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -128,14 +149,14 @@ class _NotificationsState extends State<Notifications> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'David Siliba invite to JO Malone',
+                  notificationData.message,
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
-                  'iliba invite to JO Ma',
+                  notificationData.username,
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w500,
@@ -144,12 +165,12 @@ class _NotificationsState extends State<Notifications> {
               ],
             ),
             SizedBox(
-              width: 30,
+              width: 5,
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 10.0),
               child: Text(
-                'Just Now',
+                notificationData.createdAt,
                 style: TextStyle(
                   fontSize: 8,
                   fontWeight: FontWeight.w500,
@@ -159,22 +180,6 @@ class _NotificationsState extends State<Notifications> {
           ],
         ),
       );
-  List<String> item = [
-    ' b',
-    'c ',
-    ' d',
-    ' b',
-    'c ',
-    ' d',
-    ' r',
-    'n ',
-    'y',
-    'f',
-    'm' ' b',
-    'c ',
-    ' d',
-    ' r'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -188,15 +193,20 @@ class _NotificationsState extends State<Notifications> {
       body: Column(
         children: [
           SingleChildScrollView(
-            child: Container(
-              width: DeviceUtils.getScaledWidth(context, 1.10),
-              height: DeviceUtils.getScaledHeight(context, 0.85),
-              child: ListView.builder(
-                itemCount: item.length,
-                itemBuilder: (context, index) =>
-                    index.isOdd ? With_Button() : Without_Button(),
-              ),
-            ),
+            child: (contentData != null)
+                ? Container(
+                    width: DeviceUtils.getScaledWidth(context, 1.10),
+                    height: DeviceUtils.getScaledHeight(context, 0.85),
+                    child: ListView.builder(
+                      itemCount: contentData?.notification.length,
+                      itemBuilder: (context, index) => contentData
+                                  ?.notification[index].isButton ==
+                              'Yes'
+                          ? With_Button(contentData?.notification[index])
+                          : Without_Button(contentData?.notification[index]),
+                    ),
+                  )
+                : Text('No Data found'),
           ),
         ],
       ),

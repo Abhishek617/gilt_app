@@ -30,6 +30,9 @@ class Endpoints {
 // Get Latest App Version Details
   static const String about_app_version = baseUrl + "api/home/about-version";
 
+  // Get Registered Users of contact List
+  static const String checkContacts = baseUrl + "api/contact/check";
+
   //---------Auth
   //logout
   static const String logout = baseUrl + "admin/logout";
@@ -81,7 +84,8 @@ class Endpoints {
   static const String feedbacklist = baseUrl + 'api/eventFeedback/';
 
 
-
+//Notificationlist
+  static const String notificationlist = baseUrl + 'api/notification';
 
 
 
