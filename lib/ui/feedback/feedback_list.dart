@@ -60,7 +60,7 @@ class _Feedback_listState extends State<Feedback_list> {
   List<dynamic> Feedback_list_data = [];
   late UserStore _feedbackStore;
   Feedback? contentData;
-   get_feedback_list() => _feedbackStore.Feedback_list( 5,(value) {
+   get_feedback_list() => _feedbackStore.Feedback_list(5,(value) {
      setState(() {
        this.Feedback_list_data = value.eventFeedbacks;
      });

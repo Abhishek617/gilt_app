@@ -235,7 +235,7 @@ class PostApi {
   //feedback List
 
   Future<FeedbackListModel> Feedback_list(eventId,token) async{
-  Future<Feedback_add_Model> Feedback_list(
+  Future<Object> Feedback_list(
       description, eventId, rate, token) async {
     try {
       final res = await _dioClient
