@@ -7,7 +7,6 @@ import 'package:guilt_app/models/Auth/feedback_add_model.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/oauth_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
-import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
@@ -77,7 +76,6 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
-
   Future<List<Post>> findPostById(int id) {
     //creating filter
     List<Filter> filters = [];
@@ -132,6 +130,7 @@ class Repository {
         .then((oauthData) => oauthData)
         .catchError((error) => throw error);
   }
+
 //setting
   Future<SettingGetModal> settingGet() async {
     var token = await authToken;
@@ -161,7 +160,7 @@ class Repository {
   Future checkContacts(contacts) async {
     var token = await authToken;
     return await _postApi
-        .checkContacts(contacts,token)
+        .checkContacts(contacts, token)
         .then((placeData) => placeData)
         .catchError((error) => throw error);
   }
@@ -183,10 +182,10 @@ class Repository {
   }
 
   // Common Content GET API :---------------------------------------------------------------------
-  Future changePassword(oldPassword,newPassword) async {
+  Future changePassword(oldPassword, newPassword) async {
     var token = await authToken;
     return await _postApi
-        .changePassword(oldPassword, newPassword,token)
+        .changePassword(oldPassword, newPassword, token)
         .then((contentData) => contentData)
         .catchError((error) => throw error);
   }
@@ -210,10 +209,9 @@ class Repository {
   }
 
   // Feedback list
-  Future<FeedbackListModel>Feedback_list(int eventId) async{
+  Future<FeedbackListModel> Feedback_list(int eventId) async {
     var token = await authToken;
-    return await _postApi
-        .Feedback_list(eventId, token )
+    return await _postApi.Feedback_list(eventId, token)
         .then((Feedback_list) => Feedback_list)
         .catchError((error) => throw error);
   }
@@ -244,7 +242,8 @@ class Repository {
   }
 
 //updateprofile
-  Future<UpdateProfileResponseModal> updateprofile(UpdateProfileRequestModal UpdateProfileData) async {
+  Future<UpdateProfileResponseModal> updateprofile(
+      UpdateProfileRequestModal UpdateProfileData) async {
     return await _postApi
         .updateprofile(UpdateProfileData)
         .then((profileData) => profileData)
@@ -258,5 +257,4 @@ class Repository {
         .then((registerData) => registerData)
         .catchError((error) => throw error);
   }
-
 }
