@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:guilt_app/constants/app_settings.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
@@ -63,7 +64,7 @@ class _Before_LoginScreenState extends State<Before_LoginScreen> {
                   buttonColor: AppColors.primaryColor,
                   buttonText: 'Business Owner',
                   onPressed: () {
-                    Routes.navigateToScreen(context, Routes.login);
+                    Routes.navigateToScreenWithArgs(context, Routes.signup,AppSettings.businessUserRole);
                   },
                 ),
               ),
@@ -71,7 +72,7 @@ class _Before_LoginScreenState extends State<Before_LoginScreen> {
                 buttonText: 'Individual User',
                 buttonColor: AppColors.primaryColor,
                 onPressed: () {
-                  Routes.navigateToScreen(context, Routes.login);
+                  Routes.navigateToScreenWithArgs(context, Routes.signup,AppSettings.IndividualUserRole);
                 },
               ),
             ],

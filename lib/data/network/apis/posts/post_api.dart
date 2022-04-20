@@ -78,6 +78,7 @@ class PostApi {
       throw e;
     }
   }
+
   // Common Content Get API
   Future getAppContent(type) async {
     try {
@@ -112,6 +113,7 @@ class PostApi {
     }
   }
 
+  // Get Business Places
   Future getBusinessPlaces(token) async {
     try {
       return await _dioClient.get(
@@ -125,9 +127,7 @@ class PostApi {
     }
   }
 
-  //setting
-
-
+  // Get Business Spaces
   Future getBusinessSpaces(token) async {
     try {
       return await _dioClient.get(
@@ -141,11 +141,25 @@ class PostApi {
     }
   }
 
-// Login POST API
-  Future<LogOutModal> logout() async {
+  // Check Registered Users from Contacts
+  Future checkContacts(contacts,token) async {
     try {
-      final res = await _dioClient.post(Endpoints.logout);
-      return LogOutModal.fromJson(res);
+      return await _dioClient.post(
+        Endpoints.checkContacts,
+        data: {"contact":contacts},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+// Login POST API
+  Future logout(token) async {
+    try {
+      return await _dioClient.post(Endpoints.logout,
+          options: Options(headers: {'Authorization': 'Bearer ' + token!}));
     } catch (e) {
       print(e.toString());
       throw e;
