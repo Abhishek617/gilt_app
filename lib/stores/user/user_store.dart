@@ -217,8 +217,8 @@ abstract class _UserStore with Store {
 
   }
 
-  Future Feedback_list( String description, int eventId, String rate, successCallback, errorCallback) async{
-    _repository.Feedback_list(description, eventId, rate).then((value)async{
+  Future Feedback_list(int eventId, successCallback, errorCallback) async{
+    _repository.Feedback_list(eventId).then((value)async{
       if(value != null){
         successCallback(value);
       }else{
