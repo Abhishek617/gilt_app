@@ -7,13 +7,13 @@ import 'package:guilt_app/models/Auth/feedback_add_model.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/oauth_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
-import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 import 'package:guilt_app/models/post/post.dart';
+import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:sembast/sembast.dart';
 import '../models/Auth/otp_send.dart';
 import '../models/Auth/valid_otp_model.dart';
@@ -29,6 +29,38 @@ class Repository {
 
   // shared pref object
   final SharedPreferenceHelper _sharedPrefsHelper;
+
+  Future<void> saveIsLoggedIn(bool value) =>
+      _sharedPrefsHelper.saveIsLoggedIn(value);
+
+  Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
+
+  Future<void> saveUserRole(String value) =>
+      _sharedPrefsHelper.saveUserRole(value);
+
+  Future<String> get userRole => _sharedPrefsHelper.userRole;
+
+  Future<void> saveAuthToken(String? value) =>
+      _sharedPrefsHelper.saveAuthToken(value!);
+
+  Future<String?> get authToken => _sharedPrefsHelper.authToken;
+
+  Future<void> saveRefreshToken(String? value) =>
+      _sharedPrefsHelper.saveRefreshToken(value!);
+
+  Future<String?> get refreshToken => _sharedPrefsHelper.refreshToken;
+
+  // Theme: --------------------------------------------------------------------
+  Future<void> changeBrightnessToDark(bool value) =>
+      _sharedPrefsHelper.changeBrightnessToDark(value);
+
+  bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
+
+  // Language: -----------------------------------------------------------------
+  Future<void> changeLanguage(String value) =>
+      _sharedPrefsHelper.changeLanguage(value);
+
+  String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
 
   // constructor
   Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource);
@@ -98,6 +130,7 @@ class Repository {
         .then((oauthData) => oauthData)
         .catchError((error) => throw error);
   }
+
 //setting
   Future<SettingGetModal> settingGet() async {
     var token = await authToken;
@@ -107,9 +140,10 @@ class Repository {
   }
 
   // Logout:---------------------------------------------------------------------
-  Future<LogOutModal> logout() async {
+  Future logout() async {
+    var token = await authToken;
     return await _postApi
-        .logout()
+        .logout(token)
         .then((logoutData) => logoutData)
         .catchError((error) => throw error);
   }
@@ -122,8 +156,14 @@ class Repository {
         .catchError((error) => throw error);
   }
 
-  //setting
-
+  // Check Registered Users from Contacts
+  Future checkContacts(contacts) async {
+    var token = await authToken;
+    return await _postApi
+        .checkContacts(contacts, token)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
 
   Future getBusinessPlaces() async {
     var token = await authToken;
@@ -169,10 +209,9 @@ class Repository {
   }
 
   // Feedback list
-  Future<Feedback_add_Model> Feedback_list(
-      String description, int eventId, String rate) async {
+  Future<FeedbackListModel> Feedback_list(int eventId) async {
     var token = await authToken;
-    return await _postApi.Feedback_list(description, eventId, rate, token)
+    return await _postApi.Feedback_list(eventId, token)
         .then((Feedback_list) => Feedback_list)
         .catchError((error) => throw error);
   }
@@ -201,15 +240,10 @@ class Repository {
         .then((eventData) => eventData)
         .catchError((error) => throw error);
   }
-  //updatesetting
-  Future<SettingGetModal> settingpost(SettingPostModal UpdateSettingData) async {
-    return await _postApi
-        .settingpost(UpdateSettingData)
-        .then((settingData) => settingData)
-        .catchError((error) => throw error);
-  }
+
 //updateprofile
-  Future<UpdateProfileResponseModal> updateprofile(UpdateProfileRequestModal UpdateProfileData) async {
+  Future<UpdateProfileResponseModal> updateprofile(
+      UpdateProfileRequestModal UpdateProfileData) async {
     return await _postApi
         .updateprofile(UpdateProfileData)
         .then((profileData) => profileData)
@@ -223,31 +257,4 @@ class Repository {
         .then((registerData) => registerData)
         .catchError((error) => throw error);
   }
-
-  Future<void> saveIsLoggedIn(bool value) =>
-      _sharedPrefsHelper.saveIsLoggedIn(value);
-
-  Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
-
-  Future<void> saveAuthToken(String? value) =>
-      _sharedPrefsHelper.saveAuthToken(value!);
-
-  Future<String?> get authToken => _sharedPrefsHelper.authToken;
-
-  Future<void> saveRefreshToken(String? value) =>
-      _sharedPrefsHelper.saveRefreshToken(value!);
-
-  Future<String?> get refreshToken => _sharedPrefsHelper.refreshToken;
-
-  // Theme: --------------------------------------------------------------------
-  Future<void> changeBrightnessToDark(bool value) =>
-      _sharedPrefsHelper.changeBrightnessToDark(value);
-
-  bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
-
-  // Language: -----------------------------------------------------------------
-  Future<void> changeLanguage(String value) =>
-      _sharedPrefsHelper.changeLanguage(value);
-
-  String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
 }

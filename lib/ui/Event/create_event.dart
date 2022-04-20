@@ -2,9 +2,10 @@ import 'dart:io';
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:date_time_picker/date_time_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
@@ -14,7 +15,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../utils/device/device_utils.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 class Create_event extends StatefulWidget {
   const Create_event({Key? key}) : super(key: key);
@@ -252,7 +252,7 @@ class _Create_eventState extends State<Create_event> {
                 Row(
                   children: [
                     Text(
-                      "Date & Time or time",
+                      "Date & Time",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -263,58 +263,33 @@ class _Create_eventState extends State<Create_event> {
                 Row(
                   children: [
                     Container(
-                      width: DeviceUtils.getScaledWidth(context, 0.55),
-                      height: DeviceUtils.getScaledHeight(context, 0.08),
-                      child: DateTimeField(
-                        controller: _eventDateAndTimeController,
-                        format: format,
-                        onShowPicker: (context, currentValue) async {
-                          final date = await showDatePicker(
-                              context: context,
-                              firstDate: DateTime(1900),
-                              initialDate: currentValue ?? DateTime.now(),
-                              lastDate: DateTime(2100));
-                          if (date != null) {
-                            final time = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.fromDateTime(
-                                  currentValue ?? DateTime.now()),
-                            );
-                            return DateTimeField.combine(date, time);
-                          } else {
-                            return currentValue;
+                      width: DeviceUtils.getScaledWidth(context, 0.85),
+                      child: DateTimePicker(
+                        decoration: InputDecoration(border: InputBorder.none, focusedBorder: InputBorder.none, contentPadding: EdgeInsets.all(0)),
+                        type: DateTimePickerType.dateTime,
+                        dateMask: 'd MMM, yyyy HH:mm',
+                        initialValue: DateTime.now().toString(),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime(2100),
+                        icon: Icon(Icons.event),
+
+                        selectableDayPredicate: (date) {
+                          // Disable weekend days to select from the calendar
+                          if (date.weekday == 6 || date.weekday == 7) {
+                            return false;
                           }
+
+                          return true;
                         },
-                      ),
+                        onChanged: (val) => print(val),
+                        validator: (val) {
+                          print(val);
+                          return null;
+                        },
+                        onSaved: (val) => print(val),
+                      )
                     ),
-                    Container(
-                      width: DeviceUtils.getScaledWidth(context, 0.31),
-                      height: DeviceUtils.getScaledHeight(context, 0.05),
-                      child: ElevatedButton(
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.location_on_outlined,
-                              size: 13,
-                            ),
-                            SizedBox(
-                              width: 2,
-                            ),
-                            Text(
-                              'Date Picker',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(32.0),
-                          ),
-                        ),
-                      ),
-                    ),
+
                   ],
                 ),
                 Container(

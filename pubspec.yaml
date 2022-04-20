@@ -87,11 +87,9 @@ dependencies:
   geolocator: ^8.2.0
   permission_handler: ^9.2.0
   fluttertoast: ^8.0.9
-  flutter_datetime_picker:
-    git:
-      url: https://github.com/Realank/flutter_datetime_picker.git
-      ref: master
-  datetime_picker_formfield: ^2.0.0
+
+  #date and time picker
+  date_time_picker: ^2.1.0
 
   #get contacts
   contacts_service: ^0.6.3
