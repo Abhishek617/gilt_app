@@ -99,6 +99,7 @@ class PostApi {
     }
   }
 
+  // Get Business Places
   Future getBusinessPlaces(token) async {
     try {
       return await _dioClient.get(
@@ -112,11 +113,26 @@ class PostApi {
     }
   }
 
+  // Get Business Spaces
   Future getBusinessSpaces(token) async {
     try {
       return await _dioClient.get(
         Endpoints.getBusinessSpaces,
         queryParameters: {"page": 0, "size": 20},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Check Registered Users from Contacts
+  Future checkContacts(contacts,token) async {
+    try {
+      return await _dioClient.post(
+        Endpoints.checkContacts,
+        data: {"contact":contacts},
         options: Options(headers: {'Authorization': 'Bearer ' + token}),
       );
     } catch (e) {

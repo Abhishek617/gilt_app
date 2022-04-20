@@ -114,6 +114,15 @@ class Repository {
         .catchError((error) => throw error);
   }
 
+  // Check Registered Users from Contacts
+  Future checkContacts(contacts) async {
+    var token = await authToken;
+    return await _postApi
+        .checkContacts(contacts,token)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+
   Future getBusinessPlaces() async {
     var token = await authToken;
     return await _postApi
