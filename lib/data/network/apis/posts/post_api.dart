@@ -16,6 +16,7 @@ import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Auth/valid_otp_model.dart';
+import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 
 import '../../../../models/Event/upcoming_past_event_modal.dart';
 
@@ -156,7 +157,7 @@ class PostApi {
   Future<Feedback_add_Model> Feedback_add(description,eventId, rate, token) async{
     try {
       final res = await _dioClient
-          .post(Endpoints.feedbackadd, data: {"description": description, "eventId": eventId, "rate": rate});
+          .post(Endpoints.feedbackadd, data: {"description": description, "eventId": eventId, "rate": rate},options: Options(headers: {'Authorization': 'Bearer ' + token!}),);
       return Feedback_add_Model.fromJson(res);
     }catch(e){
       print(e.toString());
@@ -168,11 +169,12 @@ class PostApi {
 
   //feedback List
 
-  Future<Feedback_add_Model> Feedback_list(description,eventId, rate, token) async{
+  Future<FeedbackListModel> Feedback_list(eventId,token) async{
     try {
       final res = await _dioClient
-          .post(Endpoints.feedbacklist, data: {"description": description, "eventId": eventId, "rate": rate});
-      return Feedback_add_Model.fromJson(res);
+          .get(Endpoints.feedbacklist, queryParameters: {"eventId": eventId,},options: Options(headers: {'Authorization': 'Bearer ' + token!}),);
+
+      return FeedbackListModel.fromJson(res);
     }catch(e){
       print(e.toString());
       throw e;

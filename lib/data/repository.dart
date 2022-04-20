@@ -26,6 +26,7 @@ import 'package:sembast/sembast.dart';
 
 import '../models/Auth/otp_send.dart';
 import '../models/Auth/valid_otp_model.dart';
+import '../ui/feedback/feedback_list_model.dart';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
 
@@ -149,10 +150,10 @@ class Repository {
   }
 
   // Feedback list
-  Future<Feedback_add_Model>Feedback_list(String description, int eventId, String rate) async{
+  Future<FeedbackListModel>Feedback_list(int eventId) async{
     var token = await authToken;
     return await _postApi
-        .Feedback_list(description, eventId, rate, token )
+        .Feedback_list(eventId, token )
         .then((Feedback_list) => Feedback_list)
         .catchError((error)=> throw error);
 
