@@ -159,7 +159,7 @@ abstract class _UserStore with Store {
     //
     // loginFuture = ObservableFuture(future);
     _repository.login(email, password).then((value) async {
-      if (value.success == true && value.user != null) {
+      if (value != null) {
         print('isFirst : false');
         _repository.saveIsLoggedIn(true);
         this.isLoggedIn = true;
@@ -289,7 +289,7 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
-//after fargot password
+
   Future Valid_Otp(
       String email, String otp,successCallback, errorCallback) async {
     // final future = _repository.login(email, password);
@@ -341,6 +341,7 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
+
   @action
   Future getProfile() async {
     final future = _repository.getProfile();

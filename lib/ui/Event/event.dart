@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
@@ -20,7 +19,6 @@ class Event extends StatefulWidget {
   @override
   State<Event> createState() => _EventState();
 }
-
 class _EventState extends State<Event> {
   bool isEdit = false;
   UpcomingPastEventModal? event_list_data;
@@ -80,7 +78,6 @@ class _EventState extends State<Event> {
       ),
     );
   }
-
   Widget _segmentTextBox(String title){
     return Padding(
       padding : EdgeInsets.all(8),
@@ -89,7 +86,6 @@ class _EventState extends State<Event> {
           style: TextStyle(fontSize: 18, color: AppColors.primaryColor)),
     );
   }
-
   Widget getConditionsWidgets() {
     if (event_list_data != null) {
       return Column(
@@ -106,6 +102,7 @@ class _EventState extends State<Event> {
       return Text('No Data found');
     }
   }
+
   Widget event(ListData eventData, Color backgroundcolor, Image demo) {
     return Column(
       children: [

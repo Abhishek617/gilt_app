@@ -76,6 +76,7 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
+
   Future<List<Post>> findPostById(int id) {
     //creating filter
     List<Filter> filters = [];
@@ -181,10 +182,10 @@ class Repository {
   }
 
   // Common Content GET API :---------------------------------------------------------------------
-  Future changePassword(oldPassword, newPassword) async {
+  Future changePassword(oldPassword,newPassword) async {
     var token = await authToken;
     return await _postApi
-        .changePassword(oldPassword, newPassword, token)
+        .changePassword(oldPassword, newPassword,token)
         .then((contentData) => contentData)
         .catchError((error) => throw error);
   }
@@ -210,8 +211,11 @@ class Repository {
   // Feedback list
   Future<Feedback_add_Model> Feedback_list(
       String description, int eventId, String rate) async {
+  Future<FeedbackListModel>Feedback_list(int eventId) async{
     var token = await authToken;
     return await _postApi.Feedback_list(description, eventId, rate, token)
+    return await _postApi
+        .Feedback_list(eventId, token )
         .then((Feedback_list) => Feedback_list)
         .catchError((error) => throw error);
   }
@@ -256,6 +260,26 @@ class Repository {
         .then((registerData) => registerData)
         .catchError((error) => throw error);
   }
+  Future<void> saveIsLoggedIn(bool value) =>
+      _sharedPrefsHelper.saveIsLoggedIn(value);
+
+  Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
+
+  Future<void> saveAuthToken(String? value) =>
+      _sharedPrefsHelper.saveAuthToken(value!);
+
+  Future<String?> get authToken => _sharedPrefsHelper.authToken;
+
+  Future<void> saveRefreshToken(String? value) =>
+      _sharedPrefsHelper.saveRefreshToken(value!);
+
+  Future<String?> get refreshToken => _sharedPrefsHelper.refreshToken;
+
+  // Theme: --------------------------------------------------------------------
+  Future<void> changeBrightnessToDark(bool value) =>
+      _sharedPrefsHelper.changeBrightnessToDark(value);
+
+  bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
 
 
 }
