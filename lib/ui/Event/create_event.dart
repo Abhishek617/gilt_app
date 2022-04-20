@@ -415,7 +415,7 @@ class _Create_eventState extends State<Create_event> {
                               width: 10,
                             ),
                             Text(
-                              'Browser',
+                              'Browse',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 13),
                             ),
@@ -479,7 +479,7 @@ class _Create_eventState extends State<Create_event> {
                               width: 5,
                             ),
                             Text(
-                              'Browser',
+                              'Browse',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 13),
                             ),

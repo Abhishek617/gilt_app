@@ -34,11 +34,21 @@ class Endpoints {
   //logout
   static const String logout = baseUrl + "admin/logout";
 
+  //Refresh Token
+  static const String refreshToken = baseUrl + "admin/refreshToken";
+
   //signup
   static const String register = baseUrl + "api/admin";
 
   //change password
   static const String changePassword = baseUrl + "api/admin/changepassword";
+
+
+  //---------Business
+  //Get Business Places
+  static const String getBusinessPlaces = baseUrl + "api/business-places";
+  //Get Business Spaces
+  static const String getBusinessSpaces = baseUrl + "api/business-spaces";
 
   //---------Profile
   // get profile details
@@ -54,10 +64,14 @@ class Endpoints {
   // Valid Otp
   static const String validOtp = baseUrl + "admin/fp-validate";
 
+  //otp validate
+  static const String OtpValidate = baseUrl + "admin/otp-validate";
+
 // UpComing and Past Event
   static const String upcomingPast = baseUrl + 'api/event/upcomingAndPast';
 
-
+  // setting
+  static const String setting = baseUrl + 'api/settings';
 
   //feedback_add
   static const String feedbackadd = baseUrl + 'api/eventFeedback/add';

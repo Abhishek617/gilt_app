@@ -23,6 +23,7 @@ import 'package:guilt_app/ui/common/privacy_policy.dart';
 import 'package:guilt_app/ui/common/success_error_validation.dart';
 import 'package:guilt_app/ui/common/help_and_support.dart';
 import 'package:guilt_app/ui/common/terms_conditions.dart';
+import 'package:guilt_app/ui/common/validate_otp_screen.dart';
 import 'package:guilt_app/ui/feedback/add_feedback.dart';
 import 'package:guilt_app/ui/feedback/feedback_list.dart';
 import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
@@ -51,6 +52,8 @@ class Routes {
   Routes._();
 
   //static variables
+  //after login-signup otp
+  static const String otpvalidate = '/otpvalidate';
   static const String map = '/map';
   static const String addmoney = '/addmoney';
   static const String wallet = '/wallet';
@@ -69,6 +72,7 @@ class Routes {
   static const String forgot_password = '/forgot_password';
   static const String reset_password = '/reset_password';
   static const String change_old_password = '/change_old_password';
+  //after forget password
   static const String otp = '/otp';
   static const String signup = '/signup';
   static const String success_error_validate = '/success_error_validate';
@@ -101,6 +105,7 @@ class Routes {
 
 
   static final routes = <String, WidgetBuilder>{
+    otpvalidate: (BuildContext context) => Otp_Validate_Screen(),
     map: (BuildContext context) => Map(),
     addmoney: (BuildContext context) => AddMoney(),
     wallet: (BuildContext context) => Wallet(),
@@ -166,9 +171,9 @@ class Routes {
   }
 
   static navigateToScreenWithArgs(
-      BuildContext context, route, successErrorValidationPageArgs) {
+      BuildContext context, route, pageArgs) {
     Navigator.of(context)
-        .pushNamed(route, arguments: successErrorValidationPageArgs);
+        .pushNamed(route, arguments: pageArgs);
   }
 
   static goBack(BuildContext context) {

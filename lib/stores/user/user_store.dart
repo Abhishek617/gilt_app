@@ -1,17 +1,14 @@
+import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
-import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
-import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
+import 'package:guilt_app/ui/notification/notification.dart';
 import 'package:mobx/mobx.dart';
-
 import '../../data/repository.dart';
 import '../../models/Auth/profile_modal.dart';
-import '../../utils/dio/dio_error_util.dart';
+import '../../models/PageModals/setting_model.dart';
 import '../form/form_store.dart';
-
 part 'user_store.g.dart';
-
 class UserStore = _UserStore with _$UserStore;
 
 abstract class _UserStore with Store {
@@ -30,6 +27,7 @@ abstract class _UserStore with Store {
   bool isLoggedIn = false;
   bool isFirst = true;
   String? authToken;
+  String? refreshToken;
   GetProfileResponseModal? Profile_data = GetProfileResponseModal.fromJson({
     "success": true,
     "user": {
@@ -135,7 +133,15 @@ abstract class _UserStore with Store {
         .getAppContent(type)
         .then((contentData) => contentData)
         .catchError((error) => throw error);
-  } 
+  }
+
+  @action
+  Future settingGet() async {
+    return await _repository
+        .settingGet()
+        .then((settingData) => settingData)
+        .catchError((error) => throw error);
+  }
   @action
   Future changePassword(oldPassword,newPassword) async {
     return await _repository
@@ -162,12 +168,17 @@ abstract class _UserStore with Store {
           _repository.saveAuthToken(value.user?.authToken!);
           authToken = value.user?.authToken;
         }
+        if (value.refreshToken != null) {
+          print(value.refreshToken);
+          _repository.saveRefreshToken(value.refreshToken);
+          refreshToken = value.refreshToken;
+        }
         this.isFirst = false;
         this.success = true;
         getProfile();
         successCallback(value);
       } else {
-        print('failed to login');
+        successCallback(value);
       }
     }, onError: (error) {
       print(error.toString());
@@ -179,6 +190,8 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
+
+  //SETTING
 
   Future Feedback_add(
       String description, int eventId, String rate, successCallback, errorCallback) async{
@@ -198,8 +211,8 @@ abstract class _UserStore with Store {
 
   }
 
-  Future Feedback_list(int eventId,successCallback, errorCallback) async{
-    _repository.Feedback_list(eventId).then((value)async{
+  Future Feedback_list( String description, int eventId, String rate, successCallback, errorCallback) async{
+    _repository.Feedback_list(description, eventId, rate).then((value)async{
       if(value != null){
         successCallback(value);
       }else{
@@ -291,13 +304,45 @@ abstract class _UserStore with Store {
     });
   }
 
+  //after signup login
+  Future OtpValidate(
+      String email, String otp,successCallback, errorCallback) async {
+    // final future = _repository.login(email, password);
+
+    // loginFuture = ObservableFuture(future);
+    _repository.OtpValidate(email,otp).then((value) async {
+      if (value.success == true && value.data.user != null) {
+        _repository.saveIsLoggedIn(true);
+        this.isLoggedIn = true;
+        _repository.saveIsFirst(false);
+        if (value.data.user?.authToken != null) {
+          print(value.data.user?.authToken!);
+          _repository.saveAuthToken(value.data.user?.authToken!);
+          authToken = value.data.user?.authToken;
+        }
+        this.isFirst = false;
+        this.success = true;
+        getProfile();
+        successCallback(value);
+      } else {
+        print('failed to Reset Password');
+      }
+    }, onError: (error) {
+      print(error.toString());
+      errorCallback(error.response);
+    }).catchError((e) {
+      print(e);
+      throw e;
+    });
+  }
+
   @action
   Future getProfile() async {
     final future = _repository.getProfile();
     fetchPostsFuture = ObservableFuture(future);
 
     future.then((profileData) {
-      this.Profile_data = profileData;
+      Profile_data = profileData;
     }).catchError((error) {
       print(error.toString());
       // errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -361,13 +406,31 @@ abstract class _UserStore with Store {
     });
   }
 
+  @action
+  Future updateprofile(
+    UpdateProfileRequestModal UpdateProfileData, successCallback, errorCallback) async {
+    _repository.updateprofile(UpdateProfileData).then(
+            (value) async {
+              successCallback(value);
 
+            }
+        ,onError: (exception) {
+      print('onError : exception');
+      errorCallback(exception.response);
+      //Handle exception message
+      if (exception.message != null) {
+        print(exception
+            .message); // Here you get : "Connection  Timeout Exception" or even handled 500 errors on your backend.
+      }
+    },
+            );
+  }
   @action
   Future signUp(
       SignUpRequestModal signUpData, successCallback, errorCallback) async {
     _repository.signUp(signUpData).then(
       (value) async {
-        if (value != null) {
+        if (value.success == true && value.data!.user != null) {
           print('isFirst : false');
           _repository.saveIsLoggedIn(true);
           this.isLoggedIn = true;
