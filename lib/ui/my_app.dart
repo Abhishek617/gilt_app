@@ -60,7 +60,9 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               onReady: () {
                 print('---------------onReady--------------');
-                _userStore.getProfile();
+                if(_userStore.isLoggedIn) {
+                  _userStore.getProfile();
+                }
               },
               title: Strings.appName,
               theme: _themeStore.darkMode ? themeDataDark : themeData,
