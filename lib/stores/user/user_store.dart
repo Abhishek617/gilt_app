@@ -112,7 +112,7 @@ abstract class _UserStore with Store {
     //
     // loginFuture = ObservableFuture(future);
     _repository.login(email, password).then((value) async {
-      if (value != null) {
+      if (value.success == true && value.user != null) {
         print('isFirst : false');
         _repository.saveIsLoggedIn(true);
         this.isLoggedIn = true;
@@ -170,7 +170,24 @@ abstract class _UserStore with Store {
 
   }
 
-  Future Feedback_list(int eventId, successCallback, errorCallback) async{
+  Future Notification_list(successCallback, errorCallback)
+  async{
+    _repository.Notification_list().then((value)async{
+      if(value != null){
+        successCallback(value);
+      }else{
+        print("Faild to Feedback List");
+      }
+    }, onError: (error){
+      print(error.toString());
+      errorCallback(error.respone);
+    }).catchError((e){
+      print(e);
+      throw e;
+    });
+  }
+
+  Future Feedback_list( String description, int eventId, String rate, successCallback, errorCallback) async{
     _repository.Feedback_list(eventId).then((value)async{
       if(value != null){
         successCallback(value);
@@ -294,7 +311,6 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
-
   @action
   Future getProfile() {
     return _repository.getProfile().then((profileData) {
@@ -361,6 +377,25 @@ abstract class _UserStore with Store {
       this.success = false;
       throw e;
     });
+  }
+  //update setting
+  @action
+  Future settingpost(
+      SettingPostModal UpdateSettingData, successCallback, errorCallback) async {
+    _repository.settingpost(UpdateSettingData).then(
+          (value) async {
+        successCallback(value);
+      }
+      ,onError: (exception) {
+      print('onError : exception');
+      errorCallback(exception.response);
+      //Handle exception message
+      if (exception.message != null) {
+        print(exception
+            .message); // Here you get : "Connection  Timeout Exception" or even handled 500 errors on your backend.
+      }
+    },
+    );
   }
 
   @action

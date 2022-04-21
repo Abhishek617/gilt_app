@@ -36,13 +36,12 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    final pageArgs = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
         leading: GestureDetector(
           onTap: () {
-            Routes.navigateToScreen(context, Routes.before_login);
+            Routes.navigateToScreen(context, Routes.welcome_login);
           },
           child: Icon(
             Icons.arrow_back_ios_outlined,
@@ -243,7 +242,7 @@ class _SignUpState extends State<SignUp> {
                             "email": _userEmailController.value.text,
                             "phone": _phoneNumberController.value.text,
                             "password": _passwordController.value.text,
-                            "role_id": pageArgs != null ? pageArgs : '1'
+                            "role_id": "2"
                           });
                           _userStore.signUp(signUpData, (val) {
                             print(val);

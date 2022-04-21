@@ -70,19 +70,21 @@ mixin _$UserStore on _UserStore, Store {
         () => super.login(email, password, successCallback, errorCallback));
   }
 
-  final _$getProfileAsyncAction = AsyncAction('_UserStore.getProfile');
-
-  @override
-  Future<dynamic> getProfile() {
-    return _$getProfileAsyncAction.run(() => super.getProfile());
-  }
-
   final _$logoutAsyncAction = AsyncAction('_UserStore.logout');
 
   @override
   Future<dynamic> logout(dynamic successCallback, dynamic errorCallback) {
     return _$logoutAsyncAction
         .run(() => super.logout(successCallback, errorCallback));
+  }
+
+  final _$settingpostAsyncAction = AsyncAction('_UserStore.settingpost');
+
+  @override
+  Future<dynamic> settingpost(SettingPostModal UpdateSettingData,
+      dynamic successCallback, dynamic errorCallback) {
+    return _$settingpostAsyncAction.run(() =>
+        super.settingpost(UpdateSettingData, successCallback, errorCallback));
   }
 
   final _$updateprofileAsyncAction = AsyncAction('_UserStore.updateprofile');
@@ -101,6 +103,19 @@ mixin _$UserStore on _UserStore, Store {
       dynamic errorCallback) {
     return _$signUpAsyncAction
         .run(() => super.signUp(signUpData, successCallback, errorCallback));
+  }
+
+  final _$_UserStoreActionController = ActionController(name: '_UserStore');
+
+  @override
+  Future<dynamic> getProfile() {
+    final _$actionInfo =
+        _$_UserStoreActionController.startAction(name: '_UserStore.getProfile');
+    try {
+      return super.getProfile();
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
   }
 
   @override

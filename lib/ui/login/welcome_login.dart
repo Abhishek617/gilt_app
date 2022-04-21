@@ -48,14 +48,14 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                 buttonText: 'Login',
                 buttonColor: AppColors.primaryColor,
                 onPressed: () {
-                  Routes.navigateToScreen(context, Routes.login);
+                  Routes.navigateToScreen(context, Routes.before_login);
                 },
               ),
               ElevatedButtonWidget(
                 buttonColor: AppColors.primaryColor,
                 buttonText: 'Sign Up',
                 onPressed: () {
-                  Routes.navigateToScreen(context, Routes.before_login);
+                  Routes.navigateToScreen(context, Routes.signup);
                 },
               ),
 

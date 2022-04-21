@@ -84,7 +84,8 @@ class Endpoints {
   static const String feedbacklist = baseUrl + 'api/eventFeedback/';
 
 
-
+//Notificationlist
+  static const String notificationlist = baseUrl + 'api/notification';
 
 
 

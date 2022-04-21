@@ -41,7 +41,9 @@ class _Add_feedbackState extends State<Add_feedback> {
   ThemeStore _themeStore = ThemeStore(getIt<Repository>());
   final UserStore _userStore = UserStore(getIt<Repository>());
   late UserStore _feedbackStore;
+
   String? rate;
+
   void selectRate(value){
     setState(() {
       rate = value;
@@ -138,7 +140,7 @@ class _Add_feedbackState extends State<Add_feedback> {
                           ),
                           onTap: () {
                             setState(() {
-                              selectRate('good');
+                              selectRate(rate);
                               good = true;
                               excellent = false;
                               verygood = false;
@@ -173,10 +175,10 @@ class _Add_feedbackState extends State<Add_feedback> {
                             ),
                             onTap: () {
                               setState(() {
-                                selectRate('verygood');
-                                // good = false;
-                                // excellent = true;
-                                // verygood = false;
+                                selectRate(rate);
+                                good = false;
+                                excellent = true;
+                                verygood = false;
                               });
                             },
                           ),
@@ -211,7 +213,7 @@ class _Add_feedbackState extends State<Add_feedback> {
                             ),
                             onTap: () {
                               setState(() {
-                                selectRate('excellent');
+                                selectRate(rate);
                                 good = false;
                                 excellent = false;
                                 verygood = true;
@@ -255,11 +257,11 @@ class _Add_feedbackState extends State<Add_feedback> {
                       buttonText: 'Submit',
                       buttonColor: AppColors.primaryColor,
                       onPressed: () {
-                        Routes.navigateToScreen(context, Routes.feedback_list);
                         {
 
                             _feedbackStore.Feedback_add(
-                                _DescripationController.value.text, 5, rate!,(value) {
+                                _DescripationController.value.text, 27, rate!,(value) {
+
                               Routes.navigateRootToScreen(
                                   context, Routes.feedback_list);
                               // Routes.navigateToScreenWithArgs(
