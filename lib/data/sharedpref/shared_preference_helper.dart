@@ -39,8 +39,8 @@ class SharedPreferenceHelper {
     return _sharedPreference.remove(Preferences.refresh_token);
   }
 
-  Future<Object?> get profileData async {
-    return _sharedPreference.get(Preferences.profileData);
+  Future<String> get profileData async {
+    return _sharedPreference.getString(Preferences.profileData) ?? '';
   }
 
   Future<bool> saveProfileData(GetProfileResponseModal profileData) async {

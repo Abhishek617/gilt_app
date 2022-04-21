@@ -61,13 +61,6 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
-  final _$getProfileAsyncAction = AsyncAction('_PostStore.getProfile');
-
-  @override
-  Future<dynamic> getProfile() {
-    return _$getProfileAsyncAction.run(() => super.getProfile());
-  }
-
   final _$getBusinessPlacesAsyncAction =
       AsyncAction('_PostStore.getBusinessPlaces');
 
@@ -82,6 +75,13 @@ mixin _$PostStore on _PostStore, Store {
   @override
   Future<dynamic> getBusinessSpaces() {
     return _$getBusinessSpacesAsyncAction.run(() => super.getBusinessSpaces());
+  }
+
+  final _$checkContactsAsyncAction = AsyncAction('_PostStore.checkContacts');
+
+  @override
+  Future<dynamic> checkContacts(dynamic contacts) {
+    return _$checkContactsAsyncAction.run(() => super.checkContacts(contacts));
   }
 
   @override

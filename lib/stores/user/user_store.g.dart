@@ -9,18 +9,20 @@ part of 'user_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$UserStore on _UserStore, Store {
-  Computed<bool>? _$loadingComputed;
+  final _$Profile_dataAtom = Atom(name: '_UserStore.Profile_data');
 
   @override
-  bool get loading => (_$loadingComputed ??=
-          Computed<bool>(() => super.loading, name: '_UserStore.loading'))
-      .value;
-  Computed<bool>? _$isLoadingComputed;
+  GetProfileResponseModal? get Profile_data {
+    _$Profile_dataAtom.reportRead();
+    return super.Profile_data;
+  }
 
   @override
-  bool get isLoading => (_$isLoadingComputed ??=
-          Computed<bool>(() => super.isLoading, name: '_UserStore.isLoading'))
-      .value;
+  set Profile_data(GetProfileResponseModal? value) {
+    _$Profile_dataAtom.reportWrite(value, super.Profile_data, () {
+      super.Profile_data = value;
+    });
+  }
 
   final _$successAtom = Atom(name: '_UserStore.success');
 
@@ -37,41 +39,18 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
-  final _$loginFutureAtom = Atom(name: '_UserStore.loginFuture');
-
-  @override
-  ObservableFuture<LoginModal> get loginFuture {
-    _$loginFutureAtom.reportRead();
-    return super.loginFuture;
-  }
-
-  @override
-  set loginFuture(ObservableFuture<LoginModal> value) {
-    _$loginFutureAtom.reportWrite(value, super.loginFuture, () {
-      super.loginFuture = value;
-    });
-  }
-
-  final _$fetchPostsFutureAtom = Atom(name: '_UserStore.fetchPostsFuture');
-
-  @override
-  ObservableFuture<GetProfileResponseModal?> get fetchPostsFuture {
-    _$fetchPostsFutureAtom.reportRead();
-    return super.fetchPostsFuture;
-  }
-
-  @override
-  set fetchPostsFuture(ObservableFuture<GetProfileResponseModal?> value) {
-    _$fetchPostsFutureAtom.reportWrite(value, super.fetchPostsFuture, () {
-      super.fetchPostsFuture = value;
-    });
-  }
-
   final _$getAppContentAsyncAction = AsyncAction('_UserStore.getAppContent');
 
   @override
   Future<dynamic> getAppContent(dynamic type) {
     return _$getAppContentAsyncAction.run(() => super.getAppContent(type));
+  }
+
+  final _$settingGetAsyncAction = AsyncAction('_UserStore.settingGet');
+
+  @override
+  Future<dynamic> settingGet() {
+    return _$settingGetAsyncAction.run(() => super.settingGet());
   }
 
   final _$changePasswordAsyncAction = AsyncAction('_UserStore.changePassword');
@@ -106,6 +85,15 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.logout(successCallback, errorCallback));
   }
 
+  final _$updateprofileAsyncAction = AsyncAction('_UserStore.updateprofile');
+
+  @override
+  Future<dynamic> updateprofile(UpdateProfileRequestModal UpdateProfileData,
+      dynamic successCallback, dynamic errorCallback) {
+    return _$updateprofileAsyncAction.run(() =>
+        super.updateprofile(UpdateProfileData, successCallback, errorCallback));
+  }
+
   final _$signUpAsyncAction = AsyncAction('_UserStore.signUp');
 
   @override
@@ -118,11 +106,8 @@ mixin _$UserStore on _UserStore, Store {
   @override
   String toString() {
     return '''
-success: ${success},
-loginFuture: ${loginFuture},
-fetchPostsFuture: ${fetchPostsFuture},
-loading: ${loading},
-isLoading: ${isLoading}
+Profile_data: ${Profile_data},
+success: ${success}
     ''';
   }
 }

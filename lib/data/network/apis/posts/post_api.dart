@@ -32,11 +32,11 @@ class PostApi {
   PostApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future<GetProfileResponseModal> getProfile(token) async {
+  Future getProfile(token) async {
     try {
       final res = await _dioClient.post(Endpoints.getProfile,
           options: Options(headers: {'Authorization': 'Bearer ' + token!}));
-      return GetProfileResponseModal.fromJson(res);
+      return res;
     } catch (e) {
       print(e.toString());
       throw e;

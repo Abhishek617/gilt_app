@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:core';
 import 'package:guilt_app/data/local/datasources/post/post_datasource.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
@@ -66,7 +67,7 @@ class Repository {
   Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource);
 
   // Post: ---------------------------------------------------------------------
-  Future<GetProfileResponseModal> getProfile() async {
+  Future getProfile() async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
@@ -113,7 +114,9 @@ class Repository {
   Future<void> saveProfileData(GetProfileResponseModal value) =>
       _sharedPrefsHelper.saveProfileData(value);
 
-  Future<Object?> get profileData => _sharedPrefsHelper.profileData;
+  Future<GetProfileResponseModal> profileData(){
+   return _sharedPrefsHelper.profileData.then((value) => jsonDecode(value));
+  }
 
   // Login:---------------------------------------------------------------------
   Future<LoginModal> login(String email, String password) async {

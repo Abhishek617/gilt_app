@@ -36,18 +36,7 @@ abstract class _PostStore with Store {
   @computed
   bool get loading => fetchPostsFuture.status == FutureStatus.pending;
 
-  // actions:-------------------------------------------------------------------
-  @action
-  Future getProfile() async {
-    // final future = _repository.getProfile();
-    // fetchPostsFuture = ObservableFuture(future);
-    //
-    // future.then((postList) {
-    //   this.postList = postList;
-    // }).catchError((error) {
-    //   errorStore.errorMessage = DioErrorUtil.handleError(error);
-    // });
-  }
+
   @action
   Future getBusinessPlaces() async {
     return await _repository

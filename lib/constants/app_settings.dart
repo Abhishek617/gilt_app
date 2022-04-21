@@ -1,4 +1,4 @@
 class AppSettings{
-  static const businessUserRole = "1";
-  static const IndividualUserRole = "2";
+  static const IndividualUserRole = "1";
+  static const businessUserRole = "2";
 }

@@ -21,63 +21,15 @@ abstract class _UserStore with Store {
   // store for handling error messages
   final ErrorStore errorStore = ErrorStore();
 
-  @computed
-  bool get loading => fetchPostsFuture.status == FutureStatus.pending;
   // bool to check if current user is logged in
   bool isLoggedIn = false;
   bool isFirst = true;
   String? authToken;
   String? refreshToken;
 
-  GetProfileResponseModal? Profile_data = GetProfileResponseModal.fromJson({
-    "success": true,
-    "user": {
-      "id": 4,
-      "firstname": "test",
-      "lastname": "user",
-      "email": "test@gmail.com",
-      "password": "",
-      "phone": "1122334455",
-      "profile": null,
-      "aboutme": null,
-      "address": null,
-      "city": null,
-      "state": null,
-      "country": null,
-      "zip": null,
-      "role_id": 2,
-      "deleted_at": null,
-      "isEmailVerified": false,
-      "isPhoneVerified": false,
-      "auth_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJlbWFpbCI6Im5hZGVlbUBwaHBkb3RzMi5jb20ifSwiaWF0IjoxNjQ4NzI1MTg1LCJleHAiOjE2NDg3MzIzODV9.pazM0rmmzXQpRKbP6O4p1YuOa15OX94zZaLyhNuYhSI"
-    }
-  });
+  @observable
+  GetProfileResponseModal? Profile_data;
 
-
-  static ObservableFuture<GetProfileResponseModal?> emptyPostResponse =
-  ObservableFuture.value(GetProfileResponseModal.fromJson({
-    "success": true,
-    "user": {
-      "id": 4,
-      "firstname": "test",
-      "lastname": "user",
-      "email": "test@gmail.com",
-      "password": "",
-      "phone": "1122334455",
-      "profile": null,
-      "aboutme": null,
-      "address": null,
-      "city": null,
-      "state": null,
-      "country": null,
-      "zip": null,
-      "role_id": 2,
-      "deleted_at": null,
-      "isEmailVerified": false,
-      "isPhoneVerified": false,
-      "auth_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJlbWFpbCI6Im5hZGVlbUBwaHBkb3RzMi5jb20ifSwiaWF0IjoxNjQ4NzI1MTg1LCJleHAiOjE2NDg3MzIzODV9.pazM0rmmzXQpRKbP6O4p1YuOa15OX94zZaLyhNuYhSI"
-    }
-  }));
 
   // constructor:---------------------------------------------------------------
   _UserStore(Repository repository) : this._repository = repository {
@@ -109,14 +61,6 @@ abstract class _UserStore with Store {
   // store variables:-----------------------------------------------------------
   @observable
   bool success = false;
-  @observable
-  late ObservableFuture<LoginModal> loginFuture;
-  @observable
-  ObservableFuture<GetProfileResponseModal?> fetchPostsFuture =
-  ObservableFuture<GetProfileResponseModal?>(emptyPostResponse);
-
-  @computed
-  bool get isLoading => loginFuture.status == FutureStatus.pending;
 
   handleError(error) async {
     if(error.response.statusCode == 401){
@@ -126,6 +70,15 @@ abstract class _UserStore with Store {
     }else{
       return error;
     }
+  }
+
+  getUserRole() async{
+    print(await _repository.userRole);
+    return await _repository.userRole;
+  }
+  getProfileDetails(){
+    print(Profile_data);
+    return Profile_data;
   }
 
   @action
@@ -321,10 +274,10 @@ abstract class _UserStore with Store {
         _repository.saveIsLoggedIn(true);
         this.isLoggedIn = true;
         _repository.saveIsFirst(false);
-        if (value.data.user?.authToken != null) {
-          print(value.data.user?.authToken!);
-          _repository.saveAuthToken(value.data.user?.authToken!);
-          authToken = value.data.user?.authToken;
+        if (value.data?.user?.authToken != null) {
+          print(value.data?.user?.authToken!);
+          _repository.saveAuthToken(value.data?.user?.authToken!);
+          authToken = value.data?.user?.authToken;
         }
         this.isFirst = false;
         this.success = true;
@@ -343,12 +296,10 @@ abstract class _UserStore with Store {
   }
 
   @action
-  Future getProfile() async {
-    final future = _repository.getProfile();
-    fetchPostsFuture = ObservableFuture(future);
-
-    future.then((profileData) {
-      Profile_data = profileData;
+  Future getProfile() {
+    return _repository.getProfile().then((profileData) {
+      Profile_data = GetProfileResponseModal.fromJson(profileData);
+      _repository.saveProfileData(Profile_data!);
     }).catchError((error) {
       print(error.toString());
       // errorStore.errorMessage = DioErrorUtil.handleError(error);

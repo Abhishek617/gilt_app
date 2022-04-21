@@ -51,10 +51,8 @@ class _EventState extends State<Event> {
     // initializing stores
     _eventStore = Provider.of<UserStore>(context);
     // check to see if already called api
-    if (!_eventStore.loading) {
       getevent();
       isEdit = false;
-    }
   }
   int segmentedControlValue = 0;
 

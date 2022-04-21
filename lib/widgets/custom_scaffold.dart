@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/constants/app_settings.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/constants/dimens.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/ui/common/menu_drawer.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
@@ -25,6 +29,8 @@ class ScaffoldWrapper extends StatefulWidget {
 }
 
 class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
+  final UserStore _userStore = UserStore(getIt<Repository>());
+
   Widget IconWithText(icon, text, {double fontSize = 12}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -47,16 +53,27 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
       backgroundColor: Colors.white,
       appBar: widget.appBar,
       floatingActionButton: widget.isTab == true
-          ? FloatingActionButton(
-              backgroundColor: AppColors.primaryColor,
-              //Floating action button on Scaffold
-              onPressed: () {
-                //code to execute on button press
-                Routes.navigateToScreen(context, Routes.create_event);
-              },
-              child: IconWithText(Icons.calendar_month, 'Add Event',
-                  fontSize: 8), //icon inside button
-            )
+          ? _userStore.getUserRole() == AppSettings.businessUserRole
+              ? FloatingActionButton(
+                  backgroundColor: AppColors.primaryColor,
+                  //Floating action button on Scaffold
+                  onPressed: () {
+                    //code to execute on button press
+                    Routes.navigateToScreen(context, Routes.create_event);
+                  },
+                  child: IconWithText(Icons.calendar_month, 'Add Event',
+                      fontSize: 8), //icon inside button
+                )
+              : FloatingActionButton(
+                  backgroundColor: AppColors.primaryColor,
+                  //Floating action button on Scaffold
+                  onPressed: () {
+                    //code to execute on button press
+                    Routes.navigateToScreen(context, Routes.book_event);
+                  },
+                  child: IconWithText(Icons.calendar_month, 'Booking',
+                      fontSize: 8), //icon inside button
+                )
           : null,
       floatingActionButtonLocation: widget.isTab == true
           ? FloatingActionButtonLocation.centerDocked

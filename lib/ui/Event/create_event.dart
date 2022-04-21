@@ -91,7 +91,7 @@ class _Create_eventState extends State<Create_event> {
   TextEditingController _eventNameController = TextEditingController();
   TextEditingController _eventCategoryController = TextEditingController();
   TextEditingController _eventLocationController = TextEditingController();
-  TextEditingController _eventDateAndTimeController = TextEditingController();
+  TextEditingController _eventDateAndTimeController = TextEditingController(text: DateTime.now().toString());
   TextEditingController _eventPlaceDescriptionController =
       TextEditingController();
 
@@ -265,14 +265,14 @@ class _Create_eventState extends State<Create_event> {
                     Container(
                       width: DeviceUtils.getScaledWidth(context, 0.85),
                       child: DateTimePicker(
+                        controller: _eventDateAndTimeController,
                         decoration: InputDecoration(border: InputBorder.none, focusedBorder: InputBorder.none, contentPadding: EdgeInsets.all(0)),
                         type: DateTimePickerType.dateTime,
                         dateMask: 'd MMM, yyyy HH:mm',
-                        initialValue: DateTime.now().toString(),
+                        //initialValue: DateTime.now().toString(),
                         firstDate: DateTime.now(),
                         lastDate: DateTime(2100),
                         icon: Icon(Icons.event),
-
                         selectableDayPredicate: (date) {
                           // Disable weekend days to select from the calendar
                           if (date.weekday == 6 || date.weekday == 7) {
