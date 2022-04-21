@@ -1,5 +1,9 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
+import 'package:guilt_app/stores/post/post_store.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import '../../constants/colors.dart';
 import 'package:flutter/rendering.dart';
@@ -13,10 +17,11 @@ class Add_contacts extends StatefulWidget {
 }
 
 class _Add_contactsState extends State<Add_contacts> {
-
+  final PostStore _postStore = PostStore(getIt<Repository>());
   int selectedRadio = -1;
   late List<Contact> _contacts = [];
   late List<String?> _contactStrings = [];
+  late var appContacts = [];
 
   changeValue(int val) {
     setState(() {
@@ -44,7 +49,68 @@ class _Add_contactsState extends State<Add_contacts> {
       })!;
       print('_contacts');
       print(_contactStrings);
+      _postStore.checkContacts(_contactStrings).then((value) {
+        if (value.contact != null) {
+          setState(() {
+            appContacts = value.contact;
+          });
+
+        }
+      }).catchError((err) {
+        print(err.toString());
+      });
     });
+  }
+
+  Widget getContactListTile(AppContact contactData){
+    return ListTile(
+        leading: Container(
+          height: 40,
+          width: 40,
+          // margin: EdgeInsets.all(100.0),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                image:
+                NetworkImage('https://img.icons8.com/color/344/person-male.png'),
+                fit: BoxFit.fill,
+              ),
+              color: Colors.orange,
+              shape: BoxShape.circle),
+        ),
+        trailing:
+        //Icon(Icons.radio_button_unchecked, size: 15,),
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+                color: Colors.black, width: 2.3),
+          ),
+          height: 20,
+          width: 20,
+          child: Checkbox(
+            activeColor: Colors.white,
+            checkColor: Colors.black,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                    Radius.circular(10.00))),
+            onChanged: (changeValue) {
+              setState(() {
+                // if (changeValue == true) {
+                //   //checked[index] = true;
+                //   checked = true;
+                //   isChecked[index] = checked;
+                // } else {
+                //   isChecked[index] = false;
+                // }
+                //isChecked[index] = checked;
+                //_title = _getTitle();
+              });
+            },
+            value: true,
+          ),
+        ),
+        title: Text(
+            contactData.phone!));
   }
 
   @override
@@ -148,7 +214,7 @@ class _Add_contactsState extends State<Add_contacts> {
               SizedBox(
                 height: 10,
               ),
-              (_contactStrings.length > 0)
+              (appContacts.length > 0)
                   ? Column(
                       children: [
                         Container(
@@ -156,55 +222,9 @@ class _Add_contactsState extends State<Add_contacts> {
                           // width: 460,
                           width: MediaQuery.of(context).size.width / 0.0,
                           child: ListView.builder(
-                              itemCount: _contactStrings.length,
+                              itemCount: appContacts.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return ListTile(
-                                    leading: Container(
-                                      height: 40,
-                                      width: 40,
-                                      // margin: EdgeInsets.all(100.0),
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: NetworkImage(
-                                                'https://img.icons8.com/color/344/person-male.png'),
-                                            fit: BoxFit.fill,
-                                          ),
-                                          color: Colors.orange,
-                                          shape: BoxShape.circle),
-                                    ),
-                                    trailing:
-                                        //Icon(Icons.radio_button_unchecked, size: 15,),
-                                        Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            color: Colors.black, width: 2.3),
-                                      ),
-                                      height: 20,
-                                      width: 20,
-                                      child: Checkbox(
-                                        activeColor: Colors.white,
-                                        checkColor: Colors.black,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10.00))),
-                                        onChanged: (changeValue) {
-                                          setState(() {
-                                            // if (changeValue == true) {
-                                            //   //checked[index] = true;
-                                            //   checked = true;
-                                            //   isChecked[index] = checked;
-                                            // } else {
-                                            //   isChecked[index] = false;
-                                            // }
-                                            //isChecked[index] = checked;
-                                            //_title = _getTitle();
-                                          });
-                                        },
-                                        value: true,
-                                      ),
-                                    ),
-                                    title: Text(_contactStrings[index].toString()));
+                                return getContactListTile(appContacts[index]);
                               }),
                         ),
                         Container(

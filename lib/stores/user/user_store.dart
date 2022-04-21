@@ -22,9 +22,16 @@ abstract class _UserStore with Store {
   final ErrorStore errorStore = ErrorStore();
 
   // bool to check if current user is logged in
+  @observable
   bool isLoggedIn = false;
+
+  @observable
   bool isFirst = true;
+
+  @observable
   String? authToken;
+
+  @observable
   String? refreshToken;
 
   @observable
