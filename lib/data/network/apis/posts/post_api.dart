@@ -16,6 +16,7 @@ import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Auth/valid_otp_model.dart';
+import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 
@@ -72,6 +73,25 @@ class PostApi {
     try {
       final res = await _dioClient.post(Endpoints.setting,
           options: Options(headers: {'Authorization': 'Bearer ' + token!}));
+      return SettingGetModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //post setting
+  Future<SettingGetModal> settingpost(SettingPostModal UpdateSettingData) async {
+    try {
+      final res = await _dioClient.post(Endpoints.setting, data: {
+        "is_push_notification": UpdateSettingData.isPushNotification,
+        "is_email_notification": UpdateSettingData.isEmailNotification,
+        "is_show_app_icon": UpdateSettingData.isShowAppIcon,
+        "is_floating_notification": UpdateSettingData.isFloatingNotification,
+        "is_lock_screen_notification": UpdateSettingData.isLockScreenNotification,
+        "is_allow_sound": UpdateSettingData.isAllowSound,
+        "is_allow_vibration":UpdateSettingData.isAllowVibration,
+      });
       return SettingGetModal.fromJson(res);
     } catch (e) {
       print(e.toString());
@@ -230,6 +250,18 @@ class PostApi {
     }
   }
 
+  //notification_list
+  Future<NotificationListModal> Notification_list(token) async{
+    try {
+      final res = await _dioClient
+          .get(Endpoints.notificationlist,options: Options(headers: {'Authorization': 'Bearer ' + token!}),);
+
+      return NotificationListModal.fromJson(res);
+    }catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
   //feedback List
 
   Future<FeedbackListModel> Feedback_list(eventId,token) async{
