@@ -91,6 +91,9 @@ dependencies:
   #date and time picker
   date_time_picker: ^2.1.0
 
+  #Loader
+  flutter_easyloading: ^3.0.3
+
   #get contacts
   contacts_service: ^0.6.3
   getwidget: ^2.0.5

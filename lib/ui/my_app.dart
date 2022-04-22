@@ -1,3 +1,4 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:guilt_app/constants/app_theme.dart';
 import 'package:guilt_app/constants/strings.dart';
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
           return GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             child: GetMaterialApp(
+              builder: EasyLoading.init(),
               debugShowCheckedModeBanner: false,
               onReady: () {
                 print('---------------onReady--------------');

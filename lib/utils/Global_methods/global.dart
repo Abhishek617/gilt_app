@@ -3,6 +3,8 @@
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/utils/locale/app_localization.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -68,5 +70,32 @@ class GlobalMethods {
           SnackBar(content: Text('Contact data not available on device'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
+  }
+  static configLoading() {
+    EasyLoading.instance
+      ..displayDuration = const Duration(milliseconds: 2000)
+      ..indicatorType = EasyLoadingIndicatorType.threeBounce
+      ..loadingStyle = EasyLoadingStyle.custom
+      ..indicatorSize = 30.0
+      ..radius = 10.0
+      ..progressColor = AppColors.primaryColor
+      ..backgroundColor = AppColors.cream_app
+      ..indicatorColor = AppColors.primaryColor
+      ..textColor = AppColors.primaryColor
+      ..maskColor = Colors.grey.withOpacity(0.3)
+      ..userInteractions = true
+      ..dismissOnTap = false;
+  }
+
+  static showLoader() async{
+    await configLoading();
+    await EasyLoading.show(
+      status: 'Loading',
+      maskType: EasyLoadingMaskType.custom,
+      dismissOnTap: false
+    );
+  }
+  static hideLoader() async{
+    await EasyLoading.dismiss();
   }
 }

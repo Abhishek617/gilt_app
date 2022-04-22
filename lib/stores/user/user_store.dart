@@ -3,6 +3,7 @@ import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
 import 'package:guilt_app/ui/notification/notification.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:mobx/mobx.dart';
 import '../../data/repository.dart';
 import '../../models/Auth/profile_modal.dart';
@@ -320,11 +321,14 @@ abstract class _UserStore with Store {
   }
   @action
   Future getProfile() {
+    GlobalMethods.showLoader();
     return _repository.getProfile().then((profileData) {
       Profile_data = GetProfileResponseModal.fromJson(profileData);
       _repository.saveProfileData(Profile_data!);
+      GlobalMethods.hideLoader();
     }).catchError((error) {
       print(error.toString());
+      GlobalMethods.hideLoader();
       // errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }
