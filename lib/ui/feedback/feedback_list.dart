@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/models/Auth/feedback_list_model.dart';
@@ -39,28 +41,28 @@ class Feedback_list extends StatefulWidget {
 
 class _Feedback_listState extends State<Feedback_list> {
 
-  late UserStore _postStore;
+
+  List<dynamic> Feedback_list_data = [];
+  late UserStore _feedbackStore;
   Feedback? contentData;
 
+  get_feedback_list() => _feedbackStore.Feedback_list(5,(value) {
+    setState(() {
+      this.Feedback_list_data = value.eventFeedbacks;
+    });
+  },(error) {
+    print(error);
+    final data = json.decode(json.encode(error.data)) as Map<String, dynamic>;
+    GlobalMethods.showErrorMessage(context,data['message'], 'Log In Exception');
+  });
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _postStore = Provider.of<UserStore>(context);
-    _postStore.getAppContent('Feedback').then((value) {
-      print(value);
-      setState(() {
-        contentData = Feedback_list.fromJson(value);
-        print('feedback');
+    _feedbackStore = Provider.of<UserStore>(context);
+    get_feedback_list();
 
-       // print(contentData!.?.title.toString());
-      });
-    }).catchError((error) {
-      print(error.toString());
-    });
   }
-
-
 
 
   @override
@@ -90,25 +92,46 @@ class _Feedback_listState extends State<Feedback_list> {
                   SizedBox(
                     height: 20,
                   ),
+                  (Feedback_list_data.length > 0)?
                   Container(
                     width: DeviceUtils.getScaledWidth(context, 0.90),
                     height: DeviceUtils.getScaledHeight(context, 1.100),
                     child:ListView.builder(
-                        itemCount: 20,
+                        itemCount: Feedback_list_data.length,
                         itemBuilder: (BuildContext context,int index){
                           return Card(
                             elevation: 5,
                             child: ListTile(
-                              title:Text("A Virtual Evening of somoothJazz", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                              subtitle: Row(
-                                children: [Icon(Icons.tag_faces_outlined, color: Colors.purple,),
-                                  Text(" We got good feedback,",style: TextStyle(fontSize: 13),)],
-                              )
+                                title:Row(
+                                  children: [
+                                    Icon(Icons.tag_faces_outlined, color: Colors.purple),
+                                    SizedBox(
+                                      width: 3,
+                                    ),
+                                    Text(Feedback_list_data[index].rate,style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                                  ],
+                                ),
+                                subtitle: Row(
+                                  children: [
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 5),
+                                      child: Text(Feedback_list_data[index].description,style: TextStyle(fontSize: 13,fontWeight: FontWeight.bold),),
+                                    )
+                                  ],
+                                )
                           ),
                           );
                         }
                     ),
-                  ),
+
+                  ):
+                  Center(
+                    child: Text("No Data found"),
+                  )
+
                 ],
               ),
             ),
