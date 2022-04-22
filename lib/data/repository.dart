@@ -12,6 +12,7 @@ import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
+import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 import 'package:guilt_app/models/post/post.dart';
@@ -226,6 +227,13 @@ class Repository {
     var token = await authToken;
     return await _postApi.Feedback_add(description, eventId, rate, token)
         .then((feedbackAdd) => feedbackAdd)
+        .catchError((error) => throw error);
+  }
+//eventview
+  Future<EventViewModal> Event_Detail(int eventId) async {
+    var token = await authToken;
+    return await _postApi.Event_Detail(eventId, token)
+        .then((EventData) => EventData)
         .catchError((error) => throw error);
   }
 
