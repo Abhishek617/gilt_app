@@ -9,9 +9,11 @@ import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/ui/common/menu_drawer.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +32,6 @@ class _FullProfileState extends State<FullProfile> {
   bool isEdit = false;
   bool isAboutEdit = false;
   bool isContactEdit = false;
-  late UserStore _profileStore;
   TextEditingController _userEmailController = TextEditingController();
   TextEditingController _userFirstNameController = TextEditingController();
   TextEditingController _userLastNameController = TextEditingController();
@@ -44,84 +45,78 @@ class _FullProfileState extends State<FullProfile> {
   final UserStore _userStore = UserStore(getIt<Repository>());
 
   @override
-  void didChangeDependencies() async{
+  void didChangeDependencies() async {
     super.didChangeDependencies();
-
-    // initializing stores
-    _profileStore = Provider.of<UserStore>(context);
-
     // check to see if already called api
 
-   await  _profileStore.getProfile();
+    await _userStore.getProfile();
     setState(() {
       _userEmailController.text =
-          _profileStore.Profile_data!.user!.email.toString();
+          _userStore.Profile_data?.user?.email.toString() ?? '';
       _userFirstNameController.text =
-          _profileStore.Profile_data!.user!.firstname.toString();
+          _userStore.Profile_data?.user?.firstname.toString() ?? '';
       _userLastNameController.text =
-          _profileStore.Profile_data!.user!.lastname.toString();
+          _userStore.Profile_data?.user?.lastname.toString() ?? '';
       _userAboutmeController.text =
-          _profileStore.Profile_data!.user!.aboutme.toString();
+          _userStore.Profile_data?.user?.aboutme.toString() ?? '';
       _userContactController.text =
-          _profileStore.Profile_data!.user!.phone.toString();
+          _userStore.Profile_data?.user?.phone.toString() ?? '';
       _userAddressController.text =
-          _profileStore.Profile_data!.user!.address.toString();
+          _userStore.Profile_data?.user?.address.toString() ?? '';
       _userCityController.text =
-          _profileStore.Profile_data!.user!.city.toString();
+          _userStore.Profile_data?.user?.city.toString() ?? '';
       _userStateController.text =
-          _profileStore.Profile_data!.user!.state.toString();
+          _userStore.Profile_data?.user?.state.toString() ?? '';
       _userCountryController.text =
-          _profileStore.Profile_data!.user!.country.toString();
+          _userStore.Profile_data?.user?.country.toString() ?? '';
       _userZipController.text =
-          _profileStore.Profile_data!.user!.zip.toString();
+          _userStore.Profile_data?.user?.zip.toString() ?? '';
     });
 
     isEdit = false;
   }
 
   updatedata() {
-      final UpdateProfileData = UpdateProfileRequestModal.fromJson({
-        "firstname": _userFirstNameController.value.text,
-        "lastname": _userLastNameController.value.text,
-        "email": _userEmailController.value.text,
-        "phone": _userContactController.value.text,
-        "aboutme": _userAboutmeController.value.text,
-        "address": _userAddressController.value.text,
-        "city": _userCityController.value.text,
-        "state": _userStateController.value.text,
-        "country": _userCountryController.value.text,
-        "zip": int.parse(_userZipController.value.text),
-      });
-      _userStore.updateprofile(UpdateProfileData, (val) {
-        print(val);
-        (val.success == true)
-            ? (val.user != null)
-                ? Routes.navigateToScreenWithArgs(
-                    context,
-                    Routes.success_error_validate,
-                    SuccessErrorValidationPageArgs(
-                        isSuccess: true,
-                        description: 'SignUp Success',
-                        title: 'Success',
-                        isPreviousLogin: true))
-                : Routes.navigateRootToScreen(context, Routes.otpvalidate)
-            : GlobalMethods.showErrorMessage(
-                context, val.message, 'Update Profile');
-      }, (error) {
-        print(error.data.toString());
-        final data =
-            json.decode(json.encode(error.data)) as Map<String, dynamic>;
-        print(data['error']);
-        // Map<String, dynamic> map = json.decode(error.data);
-        List<dynamic> dataList = data["error"];
-        print(dataList[0]["message"]);
-        GlobalMethods.showErrorMessage(
-            context,
-            dataList[0]["field"] + ' : ' + dataList[0]["message"],
-            'Sign Up Exception');
-      });
-      // Routes.navigateToScreen(context, Routes.before_login);
-
+    final UpdateProfileData = UpdateProfileRequestModal.fromJson({
+      "firstname": _userFirstNameController.value.text,
+      "lastname": _userLastNameController.value.text,
+      "email": _userEmailController.value.text,
+      "phone": _userContactController.value.text,
+      "aboutme": _userAboutmeController.value.text,
+      "address": _userAddressController.value.text,
+      "city": _userCityController.value.text,
+      "state": _userStateController.value.text,
+      "country": _userCountryController.value.text,
+      "zip": int.parse(_userZipController.value.text),
+    });
+    _userStore.updateprofile(UpdateProfileData, (val) {
+      print(val);
+      (val.success == true)
+          ? (val.user != null)
+              ? Routes.navigateToScreenWithArgs(
+                  context,
+                  Routes.success_error_validate,
+                  SuccessErrorValidationPageArgs(
+                      isSuccess: true,
+                      description: 'SignUp Success',
+                      title: 'Success',
+                      isPreviousLogin: true))
+              : Routes.navigateRootToScreen(context, Routes.otpvalidate)
+          : GlobalMethods.showErrorMessage(
+              context, val.message, 'Update Profile');
+    }, (error) {
+      print(error.data.toString());
+      final data = json.decode(json.encode(error.data)) as Map<String, dynamic>;
+      print(data['error']);
+      // Map<String, dynamic> map = json.decode(error.data);
+      List<dynamic> dataList = data["error"];
+      print(dataList[0]["message"]);
+      GlobalMethods.showErrorMessage(
+          context,
+          dataList[0]["field"] + ' : ' + dataList[0]["message"],
+          'Sign Up Exception');
+    });
+    // Routes.navigateToScreen(context, Routes.before_login);
   }
 
   get_profile_input() {
@@ -203,9 +198,9 @@ class _FullProfileState extends State<FullProfile> {
           padding: const EdgeInsets.only(
               left: 00.0, top: 20.0, bottom: 00.0, right: 00.0),
           child: Text(
-            _profileStore.Profile_data!.user!.firstname.toString() +
+            (_userStore.Profile_data?.user?.firstname.toString() ?? '') +
                 '  ' +
-                _profileStore.Profile_data!.user!.lastname.toString(),
+                (_userStore.Profile_data?.user?.lastname.toString() ?? ''),
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
             textAlign: TextAlign.center,
           ),
@@ -214,7 +209,7 @@ class _FullProfileState extends State<FullProfile> {
           padding: const EdgeInsets.only(
               left: 00.0, top: 5.0, bottom: 00.0, right: 00.0),
           child: Text(
-            _profileStore.Profile_data!.user!.email.toString(),
+            _userStore.Profile_data?.user?.email.toString() ?? '',
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
@@ -275,7 +270,7 @@ class _FullProfileState extends State<FullProfile> {
           ],
         ),
         Text(
-          _profileStore.Profile_data!.user!.aboutme.toString(),
+          _userStore.Profile_data?.user?.aboutme.toString() ?? '',
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w400,
@@ -311,7 +306,7 @@ class _FullProfileState extends State<FullProfile> {
             onPressed: () {
               setState(() {
                 updatedata();
-                isAboutEdit = false ;
+                isAboutEdit = false;
               });
             },
             icon: Icon(
@@ -366,17 +361,17 @@ class _FullProfileState extends State<FullProfile> {
           ],
         ),
         Text(
-          _profileStore.Profile_data!.user!.phone.toString() +
+          (_userStore.Profile_data?.user?.phone.toString() ?? '') +
               '\n' +
-              _profileStore.Profile_data!.user!.address.toString() +
+              (_userStore.Profile_data?.user?.address.toString() ?? '') +
               '\n' +
-              _profileStore.Profile_data!.user!.city.toString() +
+              (_userStore.Profile_data?.user?.city.toString() ?? '') +
               '\n' +
-              _profileStore.Profile_data!.user!.state.toString() +
+              (_userStore.Profile_data?.user?.state.toString() ?? '') +
               '\n' +
-              _profileStore.Profile_data!.user!.country.toString() +
+              (_userStore.Profile_data?.user?.country.toString() ?? '') +
               '\n' +
-              _profileStore.Profile_data!.user!.zip.toString(),
+              (_userStore.Profile_data?.user?.zip.toString() ?? ''),
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w400,
@@ -527,64 +522,65 @@ class _FullProfileState extends State<FullProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldWrapper(
-      isTab: true,
-      isMenu: true,
+    return Scaffold(
+      drawer: MenuDrawer(),
       appBar: AppBar(
         shadowColor: Colors.transparent,
         centerTitle: true,
         title: const Text('Profile'),
       ),
-      child: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(16.0),
-          height: DeviceUtils.getScaledHeight(context, 1.20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(
-                          left: 00.0, top: 30.0, bottom: 00.0, right: 00.0),
-                      child: Image.network(
-                        'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
+      body: CustomBodyWrapper(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            height: DeviceUtils.getScaledHeight(context, 1.20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Stack(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 00.0, top: 30.0, bottom: 00.0, right: 00.0),
+                        child: Image.network(
+                          'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              checkProfile(),
-              Divider(
-                color: Colors.black12,
-                //color of divider
-                height: 20,
-                //height spacing of divider
-                thickness: 1,
-                //thickness of divier line
-                indent: 20,
-                //spacing at the start of divider
-                endIndent: 20, //spacing at the end of divider
-              ),
-              checkAbout(),
-              Divider(
-                color: Colors.black12,
-                //color of divider
-                height: 20,
-                //height spacing of divider
-                thickness: 1,
-                //thickness of divier line
-                indent: 20,
-                //spacing at the start of divider
-                endIndent: 20, //spacing at the end of divider
-              ),
-              checkContact(),
-            ],
+                checkProfile(),
+                Divider(
+                  color: Colors.black12,
+                  //color of divider
+                  height: 20,
+                  //height spacing of divider
+                  thickness: 1,
+                  //thickness of divier line
+                  indent: 20,
+                  //spacing at the start of divider
+                  endIndent: 20, //spacing at the end of divider
+                ),
+                checkAbout(),
+                Divider(
+                  color: Colors.black12,
+                  //color of divider
+                  height: 20,
+                  //height spacing of divider
+                  thickness: 1,
+                  //thickness of divier line
+                  indent: 20,
+                  //spacing at the start of divider
+                  endIndent: 20, //spacing at the end of divider
+                ),
+                checkContact(),
+              ],
+            ),
           ),
         ),
       ),

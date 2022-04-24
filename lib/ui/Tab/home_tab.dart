@@ -1,6 +1,10 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/strings.dart';
+import 'package:guilt_app/ui/Business/add_business.dart';
+import 'package:guilt_app/ui/Profile/full_profile.dart';
+import 'package:guilt_app/ui/Profile/main_profile.dart';
+import 'package:guilt_app/ui/common/menu_drawer.dart';
 import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/login/login.dart';
@@ -28,13 +32,7 @@ class _HomeTabState extends State<HomeTab> {
   var currentIndex = 0;
   final navigationKey = GlobalKey<CurvedNavigationBarState>();
   List<Widget> items = [];
-  final screens = [
-    Profile(),
-    Login(),
-    SignUp(),
-    Reset_password(),
-    Change_password(),
-  ];
+  var screens = [];
 
   @override
   initState() {
@@ -49,6 +47,15 @@ class _HomeTabState extends State<HomeTab> {
               : Strings.booking),
       iconWithText(Icons.question_answer_rounded, Strings.chat),
       iconWithText(Icons.account_circle_rounded, Strings.profile),
+    ];
+    screens = [
+      MainProfile(),
+      Wallet(),
+      _userStore.getUserRole() == AppSettings.businessUserRole
+          ? Create_event()
+          : Add_business(),
+      Messages(),
+      FullProfile(),
     ];
   }
 
@@ -68,6 +75,7 @@ class _HomeTabState extends State<HomeTab> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MenuDrawer(),
       backgroundColor: Colors.white,
       extendBody: true,
       //appBar: widget.appBar,

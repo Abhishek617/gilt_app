@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/ui/common/menu_drawer.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 
 import '../../utils/routes/routes.dart';
 import '../../widgets/custom_scaffold.dart';
@@ -230,9 +232,7 @@ class _MessagesState extends State<Messages> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldWrapper(
-      isMenu: true,
-      isTab: true,
+    return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,
         title: Center(child: Text('Messages')),
@@ -250,23 +250,25 @@ class _MessagesState extends State<Messages> {
           ),
         ],
       ),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 15,
-          ),
-          SingleChildScrollView(
-            child: Container(
-              width: DeviceUtils.getScaledWidth(context, 1.05),
-              height: DeviceUtils.getScaledHeight(context, 0.73),
-              child: ListView.builder(
-                itemCount: item.length,
-                itemBuilder: (context, index) =>
-                    index.isOdd ? Message_list() : Message_list_withoutcount(),
+      body: CustomBodyWrapper(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 15,
+            ),
+            SingleChildScrollView(
+              child: Container(
+                width: DeviceUtils.getScaledWidth(context, 1.05),
+                height: DeviceUtils.getScaledHeight(context, 0.73),
+                child: ListView.builder(
+                  itemCount: item.length,
+                  itemBuilder: (context, index) =>
+                      index.isOdd ? Message_list() : Message_list_withoutcount(),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

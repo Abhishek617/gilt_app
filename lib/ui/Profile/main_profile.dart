@@ -34,10 +34,9 @@ class _MainProfileState extends State<MainProfile> {
 
   @override
   void initState() {
-    // TODO: implement initState
-
-    super.initState();
     initSetup();
+    super.initState();
+
   }
 
   @override
@@ -167,15 +166,15 @@ class _MainProfileState extends State<MainProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MenuDrawer(),
       appBar: AppBar(
         shadowColor: Colors.transparent,
         centerTitle: true,
         title: Observer(
             builder: (_) => Text(
-                _profileStore.Profile_data!.user!.firstname.toString() +
+                (_profileStore.Profile_data?.user?.firstname.toString() ?? '') +
                     '  ' +
-                    _profileStore.Profile_data!.user!.lastname.toString())),
+                    (_profileStore.Profile_data?.user?.lastname.toString() ??
+                        ''))),
         actions: [
           IconButton(
             padding: EdgeInsets.only(
@@ -197,19 +196,20 @@ class _MainProfileState extends State<MainProfile> {
                 child: Stack(
                   children: [
                     Container(
-                      padding: const EdgeInsets.only(
-                          left: 00.0, top: 30.0, bottom: 00.0, right: 00.0),
+                      padding: const EdgeInsets.only(top: 30.0),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50.0),
-                        child: Image.network(
-                          _profileStore.Profile_data!.user!.profile == null
-                              ? 'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0'
-                              : _profileStore.Profile_data!.user!.profile
-                                  .toString(),
-                          width: DeviceUtils.getScaledWidth(context, 0.30),
-                          height: DeviceUtils.getScaledWidth(context, 0.30),
-                          fit: BoxFit.cover,
-                        ),
+                        borderRadius: BorderRadius.circular(100.0),
+                        child: Observer(
+                            builder: (_) => Image.network(
+                                  _profileStore.Profile_data?.user?.profile
+                                          .toString() ??
+                                      'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                                  width:
+                                      DeviceUtils.getScaledWidth(context, 0.30),
+                                  height:
+                                      DeviceUtils.getScaledWidth(context, 0.30),
+                                  fit: BoxFit.cover,
+                                )),
                       ),
                     ),
                   ],
@@ -219,13 +219,15 @@ class _MainProfileState extends State<MainProfile> {
                 height: 12,
               ),
               Center(
-                child: Text(
-                  _profileStore.Profile_data!.user!.email.toString(),
-                  style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600),
-                ),
+                child: Observer(
+                    builder: (_) => Text(
+                          _profileStore.Profile_data?.user?.email.toString() ??
+                              'User Email',
+                          style: TextStyle(
+                              color: AppColors.primaryColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600),
+                        )),
               ),
               Padding(
                 padding: EdgeInsets.only(
