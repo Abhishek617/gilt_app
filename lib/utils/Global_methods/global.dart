@@ -94,6 +94,8 @@ class GlobalMethods {
       maskType: EasyLoadingMaskType.custom,
       dismissOnTap: false
     );
+
+    Future.delayed(Duration(milliseconds: 3000)).then((value) => hideLoader());
   }
   static hideLoader() async{
     await EasyLoading.dismiss();
