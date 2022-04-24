@@ -12,6 +12,7 @@ import 'package:guilt_app/ui/Profile/main_profile.dart';
 import 'package:guilt_app/ui/Profile/organizer_profile.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
 import 'package:guilt_app/ui/Setting/setting.dart';
+import 'package:guilt_app/ui/Tab/home_tab.dart';
 import 'package:guilt_app/ui/attendees/add_contacts.dart';
 import 'package:guilt_app/ui/attendees/addendees_profile.dart';
 import 'package:guilt_app/ui/common/about_screen.dart';
@@ -70,6 +71,7 @@ class Routes {
   static const String home = '/home';
   static const String intro = '/intro';
   static const String forgot_password = '/forgot_password';
+  static const String home_tab = '/home_tab';
   static const String reset_password = '/reset_password';
   static const String change_old_password = '/change_old_password';
   //after forget password
@@ -123,6 +125,7 @@ class Routes {
     home: (BuildContext context) => HomeScreen(),
     otp: (BuildContext context) => Otp_screen(),
     forgot_password: (BuildContext context) => Reset_password(),
+    home_tab: (BuildContext context) => HomeTab(),
     reset_password: (BuildContext context) => Change_password(),
     change_old_password: (BuildContext context) => ChangeOldPassword(),
     signup: (BuildContext context) => SignUp(),

@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/app_settings.dart';
 import 'package:guilt_app/constants/colors.dart';
-import 'package:guilt_app/constants/dimens.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
@@ -31,21 +29,19 @@ class ScaffoldWrapper extends StatefulWidget {
 class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
   final UserStore _userStore = UserStore(getIt<Repository>());
 
-  Widget IconWithText(icon, text, {double fontSize = 12}) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          color: Colors.white,
-        ),
-        Text(
-          text,
-          style: TextStyle(fontSize: fontSize, color: Colors.white),
-        )
-      ],
-    );
-  }
+  Widget IconWithText(icon, text, {double fontSize = 12}) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: Colors.white,
+          ),
+          Text(
+            text,
+            style: TextStyle(fontSize: fontSize, color: Colors.white),
+          )
+        ],
+      );
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,8 +74,8 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
       floatingActionButtonLocation: widget.isTab == true
           ? FloatingActionButtonLocation.centerDocked
           : null,
-      bottomNavigationBar: widget.isTab == true
-          ? BottomAppBar(
+      bottomNavigationBar:
+      widget.isTab == true ? BottomAppBar(
               color: AppColors.primaryColor,
               //bottom navigation bar on scaffold
               shape: CircularNotchedRectangle(),
