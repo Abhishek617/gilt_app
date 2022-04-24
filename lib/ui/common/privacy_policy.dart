@@ -5,6 +5,7 @@ import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/models/PageModals/privacyPolicyModal.dart';
 import 'package:guilt_app/stores/post/post_store.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:provider/provider.dart';
@@ -32,8 +33,10 @@ class _Privacy_PolicyState extends State<Privacy_Policy> {
       setState(() {
         policyData = PrivacyPolicyModal.fromJson(value);
       });
+      GlobalMethods.hideLoader();
     }).catchError((error) {
       print(error.toString());
+      GlobalMethods.hideLoader();
     });
   }
 

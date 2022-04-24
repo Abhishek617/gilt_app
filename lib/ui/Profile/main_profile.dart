@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
@@ -21,8 +23,7 @@ class MainProfile extends StatefulWidget {
 }
 
 class _MainProfileState extends State<MainProfile> {
-  late UserStore _profileStore;
-
+  late UserStore _profileStore = UserStore(getIt<Repository>());
 
   // @override
   // void initState() {
@@ -46,7 +47,7 @@ class _MainProfileState extends State<MainProfile> {
 
   void initSetup() async {
     // initializing stores
-    _profileStore = Provider.of<UserStore>(context);
+   // _profileStore = Provider.of<UserStore>(context);
 
     // check to see if already called api
 

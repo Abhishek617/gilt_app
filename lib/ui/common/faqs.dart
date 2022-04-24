@@ -1,5 +1,6 @@
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 
 import 'package:guilt_app/stores/user/user_store.dart';
@@ -31,8 +32,10 @@ class _FaqScreenState extends State<FaqScreen> {
         print('faqs');
         print(contentData!.data?.title.toString());
       });
+      GlobalMethods.hideLoader();
     }).catchError((error) {
       print(error.toString());
+      GlobalMethods.hideLoader();
     });
   }
   Widget getConditionsWidgets() {

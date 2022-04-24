@@ -91,6 +91,7 @@ abstract class _UserStore with Store {
 
   @action
   Future getAppContent(type) async {
+    GlobalMethods.showLoader();
     return await _repository
         .getAppContent(type)
         .then((contentData) => contentData)
