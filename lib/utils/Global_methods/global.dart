@@ -19,7 +19,6 @@ class GlobalMethods {
         )..show(context);
       }
     });
-
     return SizedBox.shrink();
   }
 

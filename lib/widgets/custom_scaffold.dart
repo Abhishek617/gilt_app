@@ -49,8 +49,8 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: widget.isMenu == true ? MenuDrawer() : null,
       backgroundColor: Colors.white,
+      drawer: widget.isMenu == true ? MenuDrawer() : null,
       appBar: widget.appBar,
       floatingActionButton: widget.isTab == true
           ? _userStore.getUserRole() == AppSettings.businessUserRole
