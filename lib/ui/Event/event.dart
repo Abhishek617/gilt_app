@@ -104,7 +104,7 @@ class _EventState extends State<Event> {
       return Text('No Data found');
     }
   }
-  Widget event(ListData eventData, Color backgroundcolor, Image demo) {
+  Widget event(UpcomingAndPastEventListDetail eventData, Color backgroundcolor, Image demo) {
     return Column(
       children: [
              Card(

@@ -1,4 +1,4 @@
-import 'package:guilt_app/ui/home/main_profile.dart';
+import 'package:guilt_app/ui/home/home_explore_screen.dart';
 import 'package:guilt_app/utils/Global_methods/local_auth.dart';
 import 'package:flutter/material.dart';
 
