@@ -52,6 +52,15 @@ abstract class _UserStore with Store {
     repository.isFirst.then((value) {
       this.isFirst = value;
     });
+    // getting authToken
+    repository.authToken.then((value) {
+      this.authToken = value;
+    });
+    // getting refresh token
+    repository.refreshToken.then((value) {
+      this.refreshToken = value;
+    });
+
   }
 
   // disposers:-----------------------------------------------------------------
