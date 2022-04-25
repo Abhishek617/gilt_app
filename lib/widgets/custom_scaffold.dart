@@ -91,7 +91,7 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
                   children: <Widget>[
                     InkWell(
                       onTap: () {
-                        Routes.navigateToScreen(context, Routes.events_home);
+                        Routes.navigateToScreen(context, Routes.explore_home);
                       },
                       child: IconWithText(Icons.explore, 'Explore'),
                     ),

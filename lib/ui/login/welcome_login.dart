@@ -66,7 +66,7 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                   await FirebaseServices().signInWithGoogle();
                   if(FirebaseAuth.instance.currentUser!.email != null) {
                     _userStore.oauth(FirebaseAuth.instance.currentUser!.email as String, FirebaseAuth.instance.currentUser!.displayName as String, FirebaseAuth.instance.currentUser!.displayName as String, (value) {
-                      Routes.navigateRootToScreen(context, Routes.events_home);
+                      Routes.navigateRootToScreen(context, Routes.explore_home);
                       // Routes.navigateToScreenWithArgs(
                       //     context,
                       //     Routes.success_error_validate,
@@ -83,7 +83,7 @@ class _WelcomeLoginState extends State<WelcomeLogin> {
                     }).then((value) {
                       print(value);
                     });
-                    Routes.navigateRootToScreen(context, Routes.events_home);
+                    Routes.navigateRootToScreen(context, Routes.explore_home);
                   }
                   print('error');
                 },

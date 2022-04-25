@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/strings.dart';
 import 'package:guilt_app/ui/Business/add_business.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
-import 'package:guilt_app/ui/Profile/main_profile.dart';
+import 'package:guilt_app/ui/home/main_profile.dart';
 import 'package:guilt_app/ui/common/menu_drawer.dart';
 import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
@@ -49,7 +49,7 @@ class _HomeTabState extends State<HomeTab> {
       iconWithText(Icons.account_circle_rounded, Strings.profile),
     ];
     screens = [
-      MainProfile(),
+      HomeExploreScreen(),
       Wallet(),
       _userStore.getUserRole() == AppSettings.businessUserRole
           ? Create_event()

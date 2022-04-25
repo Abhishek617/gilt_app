@@ -16,14 +16,14 @@ import 'package:provider/provider.dart';
 import '../common/menu_drawer.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 
-class MainProfile extends StatefulWidget {
-  const MainProfile({Key? key}) : super(key: key);
+class HomeExploreScreen extends StatefulWidget {
+  const HomeExploreScreen({Key? key}) : super(key: key);
 
   @override
-  State<MainProfile> createState() => _MainProfileState();
+  State<HomeExploreScreen> createState() => _HomeExploreScreenState();
 }
 
-class _MainProfileState extends State<MainProfile> {
+class _HomeExploreScreenState extends State<HomeExploreScreen> {
   late UserStore _profileStore = UserStore(getIt<Repository>());
 
   // @override

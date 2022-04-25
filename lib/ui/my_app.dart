@@ -8,7 +8,7 @@ import 'package:guilt_app/ui/Business/business_list.dart';
 import 'package:guilt_app/ui/Event/expense_screen.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
-import 'package:guilt_app/ui/Profile/main_profile.dart';
+import 'package:guilt_app/ui/home/main_profile.dart';
 import 'package:guilt_app/ui/Tab/home_tab.dart';
 import 'package:guilt_app/ui/common/about_screen.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
