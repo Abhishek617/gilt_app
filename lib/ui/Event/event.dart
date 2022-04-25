@@ -104,7 +104,7 @@ class _EventState extends State<Event> {
       return Text('No Data found');
     }
   }
-  Widget event(UpcomingAndPastEventListDetail eventData, Color backgroundcolor, Image demo) {
+  Widget event(UpcomingAndPastEventListDetail eventData, Color backgroundColor, Image demo) {
     return Column(
       children: [
              Card(
@@ -113,7 +113,7 @@ class _EventState extends State<Event> {
               child: Container(
                 margin: EdgeInsets.all(5),
                 width: DeviceUtils.getScaledWidth(context, 0.90),
-                color: backgroundcolor,
+                color: backgroundColor,
                 alignment: Alignment.center,
                 child: Row(
                   children: [

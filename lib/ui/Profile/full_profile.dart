@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
@@ -535,23 +536,19 @@ class _FullProfileState extends State<FullProfile> {
             padding: EdgeInsets.all(16.0),
             height: DeviceUtils.getScaledHeight(context, 1.20),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Stack(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(
-                            left: 00.0, top: 30.0, bottom: 00.0, right: 00.0),
-                        child: Image.network(
-                          'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
-                          width: 100,
-                          height: 100,
+                Container(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100.0),
+                    child: Observer(
+                        builder: (_) => Image.network(
+                          _userStore.Profile_data?.user?.profile?.toString() ??
+                              'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                          width: DeviceUtils.getScaledWidth(context, 0.30),
+                          height: DeviceUtils.getScaledWidth(context, 0.30),
                           fit: BoxFit.cover,
-                        ),
-                      ),
-                    ],
+                        )),
                   ),
                 ),
                 checkProfile(),
