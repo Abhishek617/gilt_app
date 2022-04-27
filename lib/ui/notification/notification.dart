@@ -1,16 +1,11 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-
-import '../../utils/device/device_utils.dart';
 
 class Notifications extends StatefulWidget {
   @override
@@ -48,7 +43,7 @@ class _NotificationsState extends State<Notifications> {
     });
   }
 
-  With_Button(notificationData) => Container(
+  withButton(notificationData) => Container(
         padding: EdgeInsets.only(top: 5),
         child: Row(
           children: [
@@ -141,7 +136,7 @@ class _NotificationsState extends State<Notifications> {
         ),
       );
 
-  Without_Button(notificationData) => Container(
+  withOutButton(notificationData) => Container(
         padding: EdgeInsets.only(top: 10),
         child: Row(
           children: [
@@ -221,8 +216,8 @@ class _NotificationsState extends State<Notifications> {
                       itemCount: contentData.length,
                       itemBuilder: (context, index) =>
                           contentData[index].isButton == 'Yes'
-                              ? With_Button(contentData[index])
-                              : Without_Button(contentData[index]),
+                              ? withButton(contentData[index])
+                              : withOutButton(contentData[index]),
                     ),
                   )
                 : Center(
