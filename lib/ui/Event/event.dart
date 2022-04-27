@@ -115,74 +115,72 @@ class _EventState extends State<Event> {
   Widget event(UpcomingAndPastEventListDetail eventData, Color backgroundColor, Image demo) {
     return Column(
       children: [
-             Card(
-              shadowColor: AppColors.grayTextColor,
-              elevation: 2.5,
-              child: Container(
-                margin: EdgeInsets.all(5),
-                width: DeviceUtils.getScaledWidth(context, 0.90),
-                color: backgroundColor,
-                alignment: Alignment.center,
-                child: Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.network(
-                        'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
-                        width: DeviceUtils.getScaledWidth(context, 0.20),
-                        height: DeviceUtils.getScaledWidth(context, 0.20),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: Dimens.horizontal_padding),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(DateFormat('dd MMMM yyyy  HH:mma').format(DateTime.parse(eventData.startDate)),
-                                style: TextStyle(
-                                    color: AppColors.primaryColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400)),
-                            Text(eventData.name,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w700)),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.location_on,
-                                  size: 12,
-                                  color: AppColors.grayTextColor,
-                                ),
-
-                                Text(eventData.location,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.grayTextColor),
-                                ),
-                              ],
-                            ),
-                          ],
+           GestureDetector(
+               child: Card(
+                shadowColor: AppColors.grayTextColor,
+                elevation: 2.5,
+                child: Container(
+                  margin: EdgeInsets.all(5),
+                  width: DeviceUtils.getScaledWidth(context, 0.90),
+                  color: backgroundColor,
+                  alignment: Alignment.center,
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.network(
+                          'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                          width: DeviceUtils.getScaledWidth(context, 0.20),
+                          height: DeviceUtils.getScaledWidth(context, 0.20),
                         ),
                       ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: Dimens.horizontal_padding),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(DateFormat('dd MMMM yyyy  HH:mma').format(DateTime.parse(eventData.startDate)),
+                                  style: TextStyle(
+                                      color: AppColors.primaryColor,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400)),
+                              Text(eventData.name,
+                                  style: TextStyle(
+                                      fontSize: 18, fontWeight: FontWeight.w700)),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on,
+                                    size: 12,
+                                    color: AppColors.grayTextColor,
+                                  ),
+
+                                  Text(eventData.location,
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.grayTextColor),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      ],
                     ),
-
-                    ],
                   ),
-                ),
             ),
-               onTap: (){
 
-    {
+               onTap: (){
       Routes.navigateToScreenWithArgs(
           context, Routes.event_details, eventData.id);
-    }
                },
              ),
-
         Divider(
           color: Colors.black12,
           //color of divider

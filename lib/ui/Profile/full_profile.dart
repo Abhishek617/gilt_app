@@ -49,7 +49,6 @@ class _FullProfileState extends State<FullProfile> {
 
   @override
   void didChangeDependencies() async {
-  void didChangeDependencies() {
     super.didChangeDependencies();
     // check to see if already called api
 
