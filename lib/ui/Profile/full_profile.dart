@@ -115,8 +115,8 @@ class _FullProfileState extends State<FullProfile> {
             context, 'Profile Updated Successfully.', 'Update Profile');
         if (val.user != null) {
           setState(() {
-           // addData = new GetProfileResponseModal(user: val.user);
-           setData();
+            // addData = new GetProfileResponseModal(user: val.user);
+            setData();
             isEdit = false;
             isAboutEdit = false;
             isContactEdit = false;
