@@ -6,6 +6,7 @@ import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -33,13 +34,16 @@ class _NotificationsState extends State<Notifications> {
   }
 
   getNotificationList() {
+    GlobalMethods.showLoader();
     _userStore.Notification_list((value) {
       print(value);
       setState(() {
         contentData = value.notification?.length > 0 ? value.notification : [];
         print('notification');
       });
+      GlobalMethods.hideLoader();
     }, (error) {
+      GlobalMethods.hideLoader();
       print(error.toString());
     });
   }
