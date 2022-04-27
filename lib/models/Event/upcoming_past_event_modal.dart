@@ -31,13 +31,13 @@ class Events {
     required this.currentPage,
   });
   late final int totalItems;
-  late final List<ListData> listData;
+  late final List<UpcomingAndPastEventListDetail> listData;
   late final int totalPages;
   late final int currentPage;
 
   Events.fromJson(Map<String, dynamic> json){
     totalItems = json['totalItems'];
-    listData = List.from(json['listData']).map((e)=>ListData.fromJson(e)).toList();
+    listData = List.from(json['listData']).map((e)=>UpcomingAndPastEventListDetail.fromJson(e)).toList();
     totalPages = json['totalPages'];
     currentPage = json['currentPage'];
   }
@@ -52,8 +52,8 @@ class Events {
   }
 }
 
-class ListData {
-  ListData({
+class UpcomingAndPastEventListDetail {
+  UpcomingAndPastEventListDetail({
     required this.id,
     required this.name,
     required this.category,
@@ -84,7 +84,7 @@ class ListData {
   late final String createdAt;
   late final String updatedAt;
 
-  ListData.fromJson(Map<String, dynamic> json){
+  UpcomingAndPastEventListDetail.fromJson(Map<String, dynamic> json){
     id = json['id'];
     name = json['name'];
     category = json['category'];

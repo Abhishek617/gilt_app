@@ -1,3 +1,4 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:guilt_app/constants/app_theme.dart';
 import 'package:guilt_app/constants/strings.dart';
@@ -7,7 +8,8 @@ import 'package:guilt_app/ui/Business/business_list.dart';
 import 'package:guilt_app/ui/Event/expense_screen.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
-import 'package:guilt_app/ui/Profile/main_profile.dart';
+import 'package:guilt_app/ui/home/home_explore_screen.dart';
+import 'package:guilt_app/ui/Tab/home_tab.dart';
 import 'package:guilt_app/ui/common/about_screen.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
@@ -57,10 +59,13 @@ class MyApp extends StatelessWidget {
           return GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             child: GetMaterialApp(
+              builder: EasyLoading.init(),
               debugShowCheckedModeBanner: false,
               onReady: () {
                 print('---------------onReady--------------');
-                _userStore.getProfile();
+                // if(_userStore.isLoggedIn) {
+                //   _userStore.getProfile();
+                // }
               },
               title: Strings.appName,
               theme: _themeStore.darkMode ? themeDataDark : themeData,
@@ -81,7 +86,7 @@ class MyApp extends StatelessWidget {
               ],
               home: (_userStore.isFirst
                   ? OnBoardingPage()
-                  : (_userStore.isLoggedIn ? MainProfile() : WelcomeLogin())),
+                  : (_userStore.isLoggedIn ? HomeTab() : WelcomeLogin())),
               // home:(_userStore.isFirst ? Login() : (_userStore.isLoggedIn ? SignUp() : WelcomeLogin())),
             ),
           );

@@ -3,15 +3,18 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/ui/common/menu_drawer.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:provider/provider.dart';
 
@@ -45,16 +48,34 @@ class _FullProfileState extends State<FullProfile> {
   final UserStore _userStore = UserStore(getIt<Repository>());
 
   @override
+  void didChangeDependencies() async {
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    // initializing stores
-    _profileStore = Provider.of<UserStore>(context);
-
     // check to see if already called api
 
+    await _userStore.getProfile();
     _profileStore.getProfile();
     setState(() {
+      _userEmailController.text =
+          _userStore.Profile_data?.user?.email.toString() ?? '';
+      _userFirstNameController.text =
+          _userStore.Profile_data?.user?.firstname.toString() ?? '';
+      _userLastNameController.text =
+          _userStore.Profile_data?.user?.lastname.toString() ?? '';
+      _userAboutmeController.text =
+          _userStore.Profile_data?.user?.aboutme.toString() ?? '';
+      _userContactController.text =
+          _userStore.Profile_data?.user?.phone.toString() ?? '';
+      _userAddressController.text =
+          _userStore.Profile_data?.user?.address.toString() ?? '';
+      _userCityController.text =
+          _userStore.Profile_data?.user?.city.toString() ?? '';
+      _userStateController.text =
+          _userStore.Profile_data?.user?.state.toString() ?? '';
+      _userCountryController.text =
+          _userStore.Profile_data?.user?.country.toString() ?? '';
+      _userZipController.text =
+          _userStore.Profile_data?.user?.zip.toString() ?? '';
       addData = _profileStore.Profile_data;
       _userEmailController.text = addData!.user!.email.toString();
       _userFirstNameController.text = addData!.user!.firstname.toString();
@@ -517,64 +538,61 @@ class _FullProfileState extends State<FullProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldWrapper(
-      isTab: true,
-      isMenu: true,
+    return Scaffold(
+      drawer: MenuDrawer(),
       appBar: AppBar(
         shadowColor: Colors.transparent,
         centerTitle: true,
         title: const Text('Profile'),
       ),
-      child: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(16.0),
-          height: DeviceUtils.getScaledHeight(context, 1.20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(
-                          left: 00.0, top: 30.0, bottom: 00.0, right: 00.0),
-                      child: Image.network(
-                        'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
+      body: CustomBodyWrapper(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            height: DeviceUtils.getScaledHeight(context, 1.20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100.0),
+                    child: Observer(
+                        builder: (_) => Image.network(
+                          _userStore.Profile_data?.user?.profile?.toString() ??
+                              'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                          width: DeviceUtils.getScaledWidth(context, 0.30),
+                          height: DeviceUtils.getScaledWidth(context, 0.30),
+                          fit: BoxFit.cover,
+                        )),
+                  ),
                 ),
-              ),
-              checkProfile(),
-              Divider(
-                color: Colors.black12,
-                //color of divider
-                height: 20,
-                //height spacing of divider
-                thickness: 1,
-                //thickness of divier line
-                indent: 20,
-                //spacing at the start of divider
-                endIndent: 20, //spacing at the end of divider
-              ),
-              checkAbout(),
-              Divider(
-                color: Colors.black12,
-                //color of divider
-                height: 20,
-                //height spacing of divider
-                thickness: 1,
-                //thickness of divier line
-                indent: 20,
-                //spacing at the start of divider
-                endIndent: 20, //spacing at the end of divider
-              ),
-              checkContact(),
-            ],
+                checkProfile(),
+                Divider(
+                  color: Colors.black12,
+                  //color of divider
+                  height: 20,
+                  //height spacing of divider
+                  thickness: 1,
+                  //thickness of divier line
+                  indent: 20,
+                  //spacing at the start of divider
+                  endIndent: 20, //spacing at the end of divider
+                ),
+                checkAbout(),
+                Divider(
+                  color: Colors.black12,
+                  //color of divider
+                  height: 20,
+                  //height spacing of divider
+                  thickness: 1,
+                  //thickness of divier line
+                  indent: 20,
+                  //spacing at the start of divider
+                  endIndent: 20, //spacing at the end of divider
+                ),
+                checkContact(),
+              ],
+            ),
           ),
         ),
       ),
