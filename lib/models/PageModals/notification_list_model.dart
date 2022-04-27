@@ -6,12 +6,12 @@ class NotificationListModal {
   });
   late final bool success;
   late final String message;
-  late final List<Notification> notification;
+  late final List<NotificationItem> notification;
 
   NotificationListModal.fromJson(Map<String, dynamic> json){
     success = json['success'];
     message = json['message'];
-    notification = List.from(json['notification']).map((e)=>Notification.fromJson(e)).toList();
+    notification = List.from(json['notification']).map((e)=>NotificationItem.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -23,8 +23,8 @@ class NotificationListModal {
   }
 }
 
-class Notification {
-  Notification({
+class NotificationItem {
+  NotificationItem({
     required this.id,
     required this.userId,
     required this.message,
@@ -39,7 +39,7 @@ class Notification {
   late final String username;
   late final String createdAt;
 
-  Notification.fromJson(Map<String, dynamic> json){
+  NotificationItem.fromJson(Map<String, dynamic> json){
     id = json['id'];
     userId = json['userId'];
     message = json['message'];

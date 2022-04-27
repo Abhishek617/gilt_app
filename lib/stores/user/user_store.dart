@@ -146,7 +146,7 @@ abstract class _UserStore with Store {
           refreshToken = value.refreshToken;
         }
         if (value.user?.roleId != null) {
-          var role = value.user!.roleId.toString();
+          var role = value.user?.roleId.toString() ?? '1';
           print('roleID : '+ role);
           _repository.saveUserRole(role);
         }
@@ -469,7 +469,7 @@ abstract class _UserStore with Store {
       SignUpRequestModal signUpData, successCallback, errorCallback) async {
     _repository.signUp(signUpData).then(
       (value) async {
-        if (value.success == true && value.data!.user != null) {
+        if (value.success == true && value.data?.user != null) {
           print('isFirst : false');
           _repository.saveIsLoggedIn(true);
           this.isLoggedIn = true;

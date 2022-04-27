@@ -1,5 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:intl/intl.dart';
@@ -13,18 +17,26 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-  late UserStore _notificationStore;
-  NotificationListModal? contentData;
-
+  final UserStore _userStore = UserStore(getIt<Repository>());
+  List<NotificationItem> contentData = [];
 
   @override
   void didChangeDependencies() {
+    getNotificationList();
     super.didChangeDependencies();
-    _notificationStore = Provider.of<UserStore>(context);
-    _notificationStore.Notification_list((value) {
+  }
+
+  @override
+  initState() {
+    getNotificationList();
+    super.initState();
+  }
+
+  getNotificationList() {
+    _userStore.Notification_list((value) {
       print(value);
       setState(() {
-        contentData = value;
+        contentData = value.notification?.length > 0 ? value.notification : [];
         print('notification');
       });
     }, (error) {
@@ -32,9 +44,7 @@ class _NotificationsState extends State<Notifications> {
     });
   }
 
-
-  With_Button(notificationData) =>
-      Container(
+  With_Button(notificationData) => Container(
         padding: EdgeInsets.only(top: 5),
         child: Row(
           children: [
@@ -115,7 +125,8 @@ class _NotificationsState extends State<Notifications> {
             Padding(
               padding: EdgeInsets.only(bottom: 45),
               child: Text(
-                DateFormat('dd MMMM yyyy').format(DateTime.parse(notificationData.createdAt)),
+                DateFormat('dd MMMM yyyy')
+                    .format(DateTime.parse(notificationData.createdAt)),
                 style: TextStyle(
                   fontSize: 8,
                   fontWeight: FontWeight.w500,
@@ -174,7 +185,8 @@ class _NotificationsState extends State<Notifications> {
             Padding(
               padding: EdgeInsets.only(bottom: 10.0),
               child: Text(
-                DateFormat('dd MMMM yyyy').format(DateTime.parse(notificationData.createdAt)),
+                DateFormat('dd MMMM yyyy')
+                    .format(DateTime.parse(notificationData.createdAt)),
                 style: TextStyle(
                   fontSize: 8,
                   fontWeight: FontWeight.w500,
@@ -187,7 +199,6 @@ class _NotificationsState extends State<Notifications> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,
@@ -198,23 +209,24 @@ class _NotificationsState extends State<Notifications> {
       body: Column(
         children: [
           SingleChildScrollView(
-            child: (contentData!.notification.length > 0)
+            child: (contentData.length > 0)
                 ? Container(
                     width: DeviceUtils.getScaledWidth(context, 1.10),
                     height: DeviceUtils.getScaledHeight(context, 0.85),
                     child: ListView.builder(
-                      itemCount: contentData?.notification.length,
-                      itemBuilder: (context, index) => contentData
-                                  ?.notification[index].isButton == 'Yes'
-                          ? With_Button(contentData?.notification[index])
-                          : Without_Button(contentData?.notification[index]),
+                      itemCount: contentData.length,
+                      itemBuilder: (context, index) =>
+                          contentData[index].isButton == 'Yes'
+                              ? With_Button(contentData[index])
+                              : Without_Button(contentData[index]),
                     ),
                   )
-                : Row(mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('No Data found',),
-                  ],
-                ),
+                : Center(
+                    heightFactor: 12.0,
+                    child: Text(
+                      'No Notification found',
+                      style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+                    )),
           ),
         ],
       ),
