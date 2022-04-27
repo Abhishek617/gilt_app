@@ -273,8 +273,9 @@ class Repository {
 //updateprofile
   Future<UpdateProfileResponseModal> updateprofile(
       UpdateProfileRequestModal UpdateProfileData) async {
+    var token = await authToken;
     return await _postApi
-        .updateprofile(UpdateProfileData)
+        .updateprofile(UpdateProfileData, token)
         .then((profileData) => profileData)
         .catchError((error) => throw error);
   }

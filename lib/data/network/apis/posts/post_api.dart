@@ -82,16 +82,18 @@ class PostApi {
   }
 
   //post setting
-  Future<SettingGetModal> settingpost(SettingPostModal UpdateSettingData) async {
+  Future<SettingGetModal> settingpost(
+      SettingPostModal UpdateSettingData) async {
     try {
       final res = await _dioClient.post(Endpoints.setting, data: {
         "is_push_notification": UpdateSettingData.isPushNotification,
         "is_email_notification": UpdateSettingData.isEmailNotification,
         "is_show_app_icon": UpdateSettingData.isShowAppIcon,
         "is_floating_notification": UpdateSettingData.isFloatingNotification,
-        "is_lock_screen_notification": UpdateSettingData.isLockScreenNotification,
+        "is_lock_screen_notification":
+            UpdateSettingData.isLockScreenNotification,
         "is_allow_sound": UpdateSettingData.isAllowSound,
-        "is_allow_vibration":UpdateSettingData.isAllowVibration,
+        "is_allow_vibration": UpdateSettingData.isAllowVibration,
       });
       return SettingGetModal.fromJson(res);
     } catch (e) {
@@ -163,11 +165,11 @@ class PostApi {
   }
 
   // Check Registered Users from Contacts
-  Future checkContacts(contacts,token) async {
+  Future checkContacts(contacts, token) async {
     try {
       return await _dioClient.post(
         Endpoints.checkContacts,
-        data: {"contact":contacts},
+        data: {"contact": contacts},
         options: Options(headers: {'Authorization': 'Bearer ' + token}),
       );
     } catch (e) {
@@ -201,7 +203,6 @@ class PostApi {
     }
   }
 
-
   // Send Otp
 
   Future<OtpSendModel> Send_Otp(email) async {
@@ -227,22 +228,24 @@ class PostApi {
       throw e;
     }
   }
+
 //otpvalidate
   Future<OtpValidateModel> OtpValidate(email, otp) async {
     try {
-      final res = await _dioClient
-          .post(Endpoints.OtpValidate, data: {"email_phone": email, "otp": otp});
+      final res = await _dioClient.post(Endpoints.OtpValidate,
+          data: {"email_phone": email, "otp": otp});
       return OtpValidateModel.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
     }
   }
+
   //feedback Add
   Future<Feedback_add_Model> Feedback_add(
       description, eventId, rate, token) async {
     try {
-     final res = await _dioClient.post(Endpoints.feedbackadd,
+      final res = await _dioClient.post(Endpoints.feedbackadd,
           data: {"description": description, "eventId": eventId, "rate": rate});
       return Feedback_add_Model.fromJson(res);
     } catch (e) {
@@ -250,39 +253,54 @@ class PostApi {
       throw e;
     }
   }
-//eventview
-  Future<EventViewModal> Event_Detail(eventId,token) async{
-    try {
-      final res = await _dioClient
-          .get(Endpoints.eventview, queryParameters: {"id": eventId,},options: Options(headers: {'Authorization': 'Bearer ' + token!}),);
 
-      return EventViewModal .fromJson(res);
-    }catch (e) {
+//eventview
+  Future<EventViewModal> Event_Detail(eventId, token) async {
+    try {
+      final res = await _dioClient.get(
+        Endpoints.eventview,
+        queryParameters: {
+          "id": eventId,
+        },
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
+
+      return EventViewModal.fromJson(res);
+    } catch (e) {
       print(e.toString());
       throw e;
     }
   }
+
   //notification_list
-  Future<NotificationListModal> Notification_list(token) async{
+  Future<NotificationListModal> Notification_list(token) async {
     try {
-      final res = await _dioClient
-          .get(Endpoints.notificationlist,options: Options(headers: {'Authorization': 'Bearer ' + token!}),);
+      final res = await _dioClient.get(
+        Endpoints.notificationlist,
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
 
       return NotificationListModal.fromJson(res);
-    }catch (e) {
+    } catch (e) {
       print(e.toString());
       throw e;
     }
   }
+
   //feedback List
 
-  Future<FeedbackListModel> Feedback_list(eventId,token) async{
+  Future<FeedbackListModel> Feedback_list(eventId, token) async {
     try {
-      final res = await _dioClient
-          .get(Endpoints.feedbacklist, queryParameters: {"eventId": eventId,},options: Options(headers: {'Authorization': 'Bearer ' + token!}),);
+      final res = await _dioClient.get(
+        Endpoints.feedbacklist,
+        queryParameters: {
+          "eventId": eventId,
+        },
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
 
       return FeedbackListModel.fromJson(res);
-    }catch (e) {
+    } catch (e) {
       print(e.toString());
       throw e;
     }
@@ -293,7 +311,10 @@ class PostApi {
       filterby, page, size, token) async {
     try {
       final res = await _dioClient.post(Endpoints.upcomingPast,
-          options: Options(headers: {'Authorization': 'Bearer ' + token!,'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}),
+          options: Options(headers: {
+            'Authorization': 'Bearer ' + token!,
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+          }),
           data: {"Filterby": filterby, "page": page, "size": size});
       return UpcomingPastEventModal.fromJson(res);
     } catch (e) {
@@ -302,20 +323,29 @@ class PostApi {
     }
   }
 
-  Future<UpdateProfileResponseModal> updateprofile(UpdateProfileRequestModal UpdateProfileData) async {
+  Future<UpdateProfileResponseModal> updateprofile(
+      UpdateProfileRequestModal UpdateProfileData, token) async {
     try {
-      final res = await _dioClient.put(Endpoints.updateProfile, data: FormData.fromMap({
-        "email": UpdateProfileData.email,
-        "firstname": UpdateProfileData.firstname,
-        "lastname": UpdateProfileData.lastname,
-        "phone": UpdateProfileData.phone,
-        "aboutme": UpdateProfileData.aboutme,
-        "address": UpdateProfileData.address,
-        "city": UpdateProfileData.city,
-        "state": UpdateProfileData.state,
-        "country": UpdateProfileData.country,
-        "zip": UpdateProfileData.zip,
-      }));
+      FormData formData = FormData();
+      var form = FormData.fromMap({
+        "email": UpdateProfileData.email.toString(),
+        "firstname": UpdateProfileData.firstname.toString(),
+        "lastname": UpdateProfileData.lastname.toString(),
+        "phone": UpdateProfileData.phone.toString(),
+        "aboutme": UpdateProfileData.aboutme.toString(),
+        "address": UpdateProfileData.address.toString(),
+        "city": UpdateProfileData.city.toString(),
+        "state": UpdateProfileData.state.toString(),
+        "country": UpdateProfileData.country.toString(),
+        "zip": UpdateProfileData.zip.toString()
+      });
+      formData.fields.addAll(form.fields);
+
+      final res = await _dioClient.put(
+        Endpoints.updateProfile,
+        data: formData,
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
       return UpdateProfileResponseModal.fromJson(res);
     } catch (e) {
       print(e.toString());

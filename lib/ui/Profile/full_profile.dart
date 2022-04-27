@@ -16,6 +16,7 @@ import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/colors.dart';
@@ -33,8 +34,8 @@ class _FullProfileState extends State<FullProfile> {
   bool isEdit = false;
   bool isAboutEdit = false;
   bool isContactEdit = false;
+  @observable
   var addData;
-  late UserStore _profileStore;
   TextEditingController _userEmailController = TextEditingController();
   TextEditingController _userFirstNameController = TextEditingController();
   TextEditingController _userLastNameController = TextEditingController();
@@ -47,13 +48,10 @@ class _FullProfileState extends State<FullProfile> {
   TextEditingController _userZipController = TextEditingController();
   final UserStore _userStore = UserStore(getIt<Repository>());
 
-  @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-    // check to see if already called api
-
+  @action
+  setData() async {
     await _userStore.getProfile();
-    _profileStore.getProfile();
+    addData = _userStore.Profile_data;
     setState(() {
       _userEmailController.text =
           _userStore.Profile_data?.user?.email.toString() ?? '';
@@ -75,20 +73,27 @@ class _FullProfileState extends State<FullProfile> {
           _userStore.Profile_data?.user?.country.toString() ?? '';
       _userZipController.text =
           _userStore.Profile_data?.user?.zip.toString() ?? '';
-      addData = _profileStore.Profile_data;
-      _userEmailController.text = addData!.user!.email.toString();
-      _userFirstNameController.text = addData!.user!.firstname.toString();
-      _userLastNameController.text = addData!.user!.lastname.toString();
-      _userAboutmeController.text = addData!.user!.aboutme.toString();
-      _userContactController.text = addData!.user!.phone.toString();
-      _userAddressController.text = addData!.user!.address.toString();
-      _userCityController.text = addData!.user!.city.toString();
-      _userStateController.text = addData!.user!.state.toString();
-      _userCountryController.text = addData!.user!.country.toString();
-      _userZipController.text = addData!.user!.zip.toString();
+      addData = _userStore.Profile_data;
+      _userEmailController.text = addData?.user?.email.toString() ?? '';
+      _userFirstNameController.text = addData?.user?.firstname.toString() ?? '';
+      _userLastNameController.text = addData?.user?.lastname.toString() ?? '';
+      _userAboutmeController.text = addData?.user?.aboutme.toString() ?? '';
+      _userContactController.text = addData?.user?.phone.toString() ?? '';
+      _userAddressController.text = addData?.user?.address.toString() ?? '';
+      _userCityController.text = addData?.user?.city.toString() ?? '';
+      _userStateController.text = addData?.user?.state.toString() ?? '';
+      _userCountryController.text = addData?.user?.country.toString() ?? '';
+      _userZipController.text = addData?.user?.zip.toString() ?? '';
+      isEdit = false;
     });
+  }
 
-    isEdit = false;
+  @override
+  void initState() {
+    super.initState();
+    // check to see if already called api
+
+    setData();
   }
 
   updatedata() {
@@ -104,21 +109,24 @@ class _FullProfileState extends State<FullProfile> {
       "country": _userCountryController.value.text,
       "zip": int.parse(_userZipController.value.text),
     });
-    _userStore.updateprofile(UpdateProfileData, (val)  {
-
-      (val.success == true)
-          ? (val.user != null)
-              ? Routes.navigateToScreenWithArgs(
-                  context,
-                  Routes.success_error_validate,
-                  SuccessErrorValidationPageArgs(
-                      isSuccess: true,
-                      description: 'SignUp Success',
-                      title: 'Success',
-                      isPreviousLogin: true))
-              : Routes.navigateRootToScreen(context, Routes.otpvalidate)
-          : GlobalMethods.showErrorMessage(
-              context, val.message, 'Update Profile');
+    _userStore.updateprofile(UpdateProfileData, (val) {
+      if (val.success == true) {
+        GlobalMethods.showErrorMessage(
+            context, 'Profile Updated Successfully.', 'Update Profile');
+        if (val.user != null) {
+          setState(() {
+           // addData = new GetProfileResponseModal(user: val.user);
+           setData();
+            isEdit = false;
+            isAboutEdit = false;
+            isContactEdit = false;
+          });
+        } else {
+          Routes.navigateRootToScreen(context, Routes.otpvalidate);
+        }
+      } else {
+        GlobalMethods.showErrorMessage(context, val.message, 'Update Profile');
+      }
     }, (error) {
       print(error.data.toString());
       final data = json.decode(json.encode(error.data)) as Map<String, dynamic>;
@@ -212,21 +220,24 @@ class _FullProfileState extends State<FullProfile> {
         Padding(
           padding: const EdgeInsets.only(
               left: 00.0, top: 20.0, bottom: 00.0, right: 00.0),
-          child: Text(
-            addData!.user!.firstname.toString() +
-                '  ' +
-                addData!.user!.lastname.toString(),
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
-            textAlign: TextAlign.center,
-          ),
+          child: Observer(
+              builder: (_) => Text(
+                    (addData?.user?.firstname.toString() ?? '') +
+                        '  ' +
+                        (addData?.user?.lastname.toString() ?? ''),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
+                    textAlign: TextAlign.center,
+                  )),
         ),
         Padding(
           padding: const EdgeInsets.only(
               left: 00.0, top: 5.0, bottom: 00.0, right: 00.0),
-          child: Text(
-            addData!.user!.email.toString(),
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-            textAlign: TextAlign.center,
+          child: Observer(
+            builder: (_) => Text(
+              addData?.user?.email.toString() ?? '',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
         Padding(
@@ -284,11 +295,13 @@ class _FullProfileState extends State<FullProfile> {
             ),
           ],
         ),
-        Text(
-          addData!.user!.aboutme.toString(),
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
+        Observer(
+          builder: (_) => Text(
+            addData?.user?.aboutme.toString() ?? '',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
       ],
@@ -320,7 +333,7 @@ class _FullProfileState extends State<FullProfile> {
           child: ElevatedButton.icon(
             onPressed: () {
               setState(() {
-               updatedata();
+                updatedata();
                 isAboutEdit = false;
               });
             },
@@ -375,21 +388,23 @@ class _FullProfileState extends State<FullProfile> {
             ),
           ],
         ),
-        Text(
-          addData!.user!.phone.toString() +
-              '\n' +
-              addData!.user!.address.toString() +
-              '\n' +
-              addData!.user!.city.toString() +
-              '\n' +
-              addData!.user!.state.toString() +
-              '\n' +
-              addData!.user!.country.toString() +
-              '\n' +
-              addData!.user!.zip.toString(),
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
+        Observer(
+          builder: (_) => Text(
+            (addData?.user?.phone.toString() ?? '') +
+                '\n' +
+                (addData?.user?.address.toString() ?? '') +
+                '\n' +
+                (addData?.user?.city.toString() ?? '') +
+                '\n' +
+                (addData?.user?.state.toString() ?? '') +
+                '\n' +
+                (addData?.user?.country.toString() ?? '') +
+                '\n' +
+                (addData?.user?.zip.toString() ?? ''),
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
       ],
@@ -557,12 +572,13 @@ class _FullProfileState extends State<FullProfile> {
                     borderRadius: BorderRadius.circular(100.0),
                     child: Observer(
                         builder: (_) => Image.network(
-                          _userStore.Profile_data?.user?.profile?.toString() ??
-                              'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
-                          width: DeviceUtils.getScaledWidth(context, 0.30),
-                          height: DeviceUtils.getScaledWidth(context, 0.30),
-                          fit: BoxFit.cover,
-                        )),
+                              _userStore.Profile_data?.user?.profile
+                                      ?.toString() ??
+                                  'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                              width: DeviceUtils.getScaledWidth(context, 0.30),
+                              height: DeviceUtils.getScaledWidth(context, 0.30),
+                              fit: BoxFit.cover,
+                            )),
                   ),
                 ),
                 checkProfile(),
