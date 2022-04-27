@@ -260,6 +260,11 @@ abstract class _UserStore with Store {
           _repository.saveAuthToken(value.data?.user?.authToken!);
           authToken = value.data?.user?.authToken;
         }
+        if (value.data?.refreshToken != null) {
+          print(value.data?.refreshToken);
+          _repository.saveRefreshToken(value.data?.refreshToken);
+          refreshToken = value.data?.refreshToken;
+        }
         this.isFirst = false;
         this.success = true;
         getProfile();
@@ -313,6 +318,11 @@ abstract class _UserStore with Store {
           print(value.data?.user?.authToken!);
           _repository.saveAuthToken(value.data?.user?.authToken!);
           authToken = value.data?.user?.authToken;
+        }
+        if (value.data?.refreshToken != null) {
+          print(value.data?.refreshToken);
+          _repository.saveRefreshToken(value.data?.refreshToken);
+          refreshToken = value.data?.refreshToken;
         }
         this.isFirst = false;
         this.success = true;
@@ -451,6 +461,7 @@ abstract class _UserStore with Store {
           if (value.data?.user?.authToken != null) {
             _repository.saveAuthToken(value.data?.user?.authToken!);
           }
+
           this.isFirst = false;
           this.success = true;
           successCallback(value);

@@ -281,7 +281,7 @@ class PostApi {
       filterby, page, size, token) async {
     try {
       final res = await _dioClient.post(Endpoints.upcomingPast,
-          options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+          options: Options(headers: {'Authorization': 'Bearer ' + token!,'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}),
           data: {"Filterby": filterby, "page": page, "size": size});
       return UpcomingPastEventModal.fromJson(res);
     } catch (e) {

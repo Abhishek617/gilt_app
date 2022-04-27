@@ -8,6 +8,7 @@ import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
@@ -261,7 +262,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                               height: 5,
                             ),
                             Text(
-                              'Get 20r Your Tickets',
+                              'Get \$20 off on Your Ticket',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w700),
                               textAlign: TextAlign.left,
@@ -271,7 +272,9 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                             ),
                             ElevatedButton(
                               child: Text('Invite'),
-                              onPressed: () {},
+                              onPressed: () {
+                                GlobalMethods.askPermissions(context, Routes.add_contacts);
+                              },
                             ),
                           ],
                         ),
