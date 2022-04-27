@@ -30,6 +30,7 @@ class _FullProfileState extends State<FullProfile> {
   bool isEdit = false;
   bool isAboutEdit = false;
   bool isContactEdit = false;
+  var addData;
   late UserStore _profileStore;
   TextEditingController _userEmailController = TextEditingController();
   TextEditingController _userFirstNameController = TextEditingController();
@@ -44,7 +45,7 @@ class _FullProfileState extends State<FullProfile> {
   final UserStore _userStore = UserStore(getIt<Repository>());
 
   @override
-  void didChangeDependencies() async{
+  void didChangeDependencies() {
     super.didChangeDependencies();
 
     // initializing stores
@@ -52,76 +53,65 @@ class _FullProfileState extends State<FullProfile> {
 
     // check to see if already called api
 
-   await  _profileStore.getProfile();
+    _profileStore.getProfile();
     setState(() {
-      _userEmailController.text =
-          _profileStore.Profile_data!.user!.email.toString();
-      _userFirstNameController.text =
-          _profileStore.Profile_data!.user!.firstname.toString();
-      _userLastNameController.text =
-          _profileStore.Profile_data!.user!.lastname.toString();
-      _userAboutmeController.text =
-          _profileStore.Profile_data!.user!.aboutme.toString();
-      _userContactController.text =
-          _profileStore.Profile_data!.user!.phone.toString();
-      _userAddressController.text =
-          _profileStore.Profile_data!.user!.address.toString();
-      _userCityController.text =
-          _profileStore.Profile_data!.user!.city.toString();
-      _userStateController.text =
-          _profileStore.Profile_data!.user!.state.toString();
-      _userCountryController.text =
-          _profileStore.Profile_data!.user!.country.toString();
-      _userZipController.text =
-          _profileStore.Profile_data!.user!.zip.toString();
+      addData = _profileStore.Profile_data;
+      _userEmailController.text = addData!.user!.email.toString();
+      _userFirstNameController.text = addData!.user!.firstname.toString();
+      _userLastNameController.text = addData!.user!.lastname.toString();
+      _userAboutmeController.text = addData!.user!.aboutme.toString();
+      _userContactController.text = addData!.user!.phone.toString();
+      _userAddressController.text = addData!.user!.address.toString();
+      _userCityController.text = addData!.user!.city.toString();
+      _userStateController.text = addData!.user!.state.toString();
+      _userCountryController.text = addData!.user!.country.toString();
+      _userZipController.text = addData!.user!.zip.toString();
     });
 
     isEdit = false;
   }
 
   updatedata() {
-      final UpdateProfileData = UpdateProfileRequestModal.fromJson({
-        "firstname": _userFirstNameController.value.text,
-        "lastname": _userLastNameController.value.text,
-        "email": _userEmailController.value.text,
-        "phone": _userContactController.value.text,
-        "aboutme": _userAboutmeController.value.text,
-        "address": _userAddressController.value.text,
-        "city": _userCityController.value.text,
-        "state": _userStateController.value.text,
-        "country": _userCountryController.value.text,
-        "zip": int.parse(_userZipController.value.text),
-      });
-      _userStore.updateprofile(UpdateProfileData, (val) {
-        print(val);
-        (val.success == true)
-            ? (val.user != null)
-                ? Routes.navigateToScreenWithArgs(
-                    context,
-                    Routes.success_error_validate,
-                    SuccessErrorValidationPageArgs(
-                        isSuccess: true,
-                        description: 'SignUp Success',
-                        title: 'Success',
-                        isPreviousLogin: true))
-                : Routes.navigateRootToScreen(context, Routes.otpvalidate)
-            : GlobalMethods.showErrorMessage(
-                context, val.message, 'Update Profile');
-      }, (error) {
-        print(error.data.toString());
-        final data =
-            json.decode(json.encode(error.data)) as Map<String, dynamic>;
-        print(data['error']);
-        // Map<String, dynamic> map = json.decode(error.data);
-        List<dynamic> dataList = data["error"];
-        print(dataList[0]["message"]);
-        GlobalMethods.showErrorMessage(
-            context,
-            dataList[0]["field"] + ' : ' + dataList[0]["message"],
-            'Sign Up Exception');
-      });
-      // Routes.navigateToScreen(context, Routes.before_login);
+    final UpdateProfileData = UpdateProfileRequestModal.fromJson({
+      "firstname": _userFirstNameController.value.text,
+      "lastname": _userLastNameController.value.text,
+      "email": _userEmailController.value.text,
+      "phone": _userContactController.value.text,
+      "aboutme": _userAboutmeController.value.text,
+      "address": _userAddressController.value.text,
+      "city": _userCityController.value.text,
+      "state": _userStateController.value.text,
+      "country": _userCountryController.value.text,
+      "zip": int.parse(_userZipController.value.text),
+    });
+    _userStore.updateprofile(UpdateProfileData, (val)  {
 
+      (val.success == true)
+          ? (val.user != null)
+              ? Routes.navigateToScreenWithArgs(
+                  context,
+                  Routes.success_error_validate,
+                  SuccessErrorValidationPageArgs(
+                      isSuccess: true,
+                      description: 'SignUp Success',
+                      title: 'Success',
+                      isPreviousLogin: true))
+              : Routes.navigateRootToScreen(context, Routes.otpvalidate)
+          : GlobalMethods.showErrorMessage(
+              context, val.message, 'Update Profile');
+    }, (error) {
+      print(error.data.toString());
+      final data = json.decode(json.encode(error.data)) as Map<String, dynamic>;
+      print(data['error']);
+      // Map<String, dynamic> map = json.decode(error.data);
+      List<dynamic> dataList = data["error"];
+      print(dataList[0]["message"]);
+      GlobalMethods.showErrorMessage(
+          context,
+          dataList[0]["field"] + ' : ' + dataList[0]["message"],
+          'Sign Up Exception');
+    });
+    // Routes.navigateToScreen(context, Routes.before_login);
   }
 
   get_profile_input() {
@@ -203,9 +193,9 @@ class _FullProfileState extends State<FullProfile> {
           padding: const EdgeInsets.only(
               left: 00.0, top: 20.0, bottom: 00.0, right: 00.0),
           child: Text(
-            _profileStore.Profile_data!.user!.firstname.toString() +
+            addData!.user!.firstname.toString() +
                 '  ' +
-                _profileStore.Profile_data!.user!.lastname.toString(),
+                addData!.user!.lastname.toString(),
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
             textAlign: TextAlign.center,
           ),
@@ -214,7 +204,7 @@ class _FullProfileState extends State<FullProfile> {
           padding: const EdgeInsets.only(
               left: 00.0, top: 5.0, bottom: 00.0, right: 00.0),
           child: Text(
-            _profileStore.Profile_data!.user!.email.toString(),
+            addData!.user!.email.toString(),
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
@@ -275,7 +265,7 @@ class _FullProfileState extends State<FullProfile> {
           ],
         ),
         Text(
-          _profileStore.Profile_data!.user!.aboutme.toString(),
+          addData!.user!.aboutme.toString(),
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w400,
@@ -310,8 +300,8 @@ class _FullProfileState extends State<FullProfile> {
           child: ElevatedButton.icon(
             onPressed: () {
               setState(() {
-                updatedata();
-                isAboutEdit = false ;
+               updatedata();
+                isAboutEdit = false;
               });
             },
             icon: Icon(
@@ -366,17 +356,17 @@ class _FullProfileState extends State<FullProfile> {
           ],
         ),
         Text(
-          _profileStore.Profile_data!.user!.phone.toString() +
+          addData!.user!.phone.toString() +
               '\n' +
-              _profileStore.Profile_data!.user!.address.toString() +
+              addData!.user!.address.toString() +
               '\n' +
-              _profileStore.Profile_data!.user!.city.toString() +
+              addData!.user!.city.toString() +
               '\n' +
-              _profileStore.Profile_data!.user!.state.toString() +
+              addData!.user!.state.toString() +
               '\n' +
-              _profileStore.Profile_data!.user!.country.toString() +
+              addData!.user!.country.toString() +
               '\n' +
-              _profileStore.Profile_data!.user!.zip.toString(),
+              addData!.user!.zip.toString(),
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w400,

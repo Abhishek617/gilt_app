@@ -304,7 +304,7 @@ class PostApi {
 
   Future<UpdateProfileResponseModal> updateprofile(UpdateProfileRequestModal UpdateProfileData) async {
     try {
-      final res = await _dioClient.put(Endpoints.updateProfile, data: {
+      final res = await _dioClient.put(Endpoints.updateProfile, data: FormData.fromMap({
         "email": UpdateProfileData.email,
         "firstname": UpdateProfileData.firstname,
         "lastname": UpdateProfileData.lastname,
@@ -315,7 +315,7 @@ class PostApi {
         "state": UpdateProfileData.state,
         "country": UpdateProfileData.country,
         "zip": UpdateProfileData.zip,
-      });
+      }));
       return UpdateProfileResponseModal.fromJson(res);
     } catch (e) {
       print(e.toString());
