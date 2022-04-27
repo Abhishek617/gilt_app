@@ -87,7 +87,8 @@ class Endpoints {
 //Notificationlist
   static const String notificationlist = baseUrl + 'api/notification';
 
-
+//EventView
+  static const String eventview = baseUrl + 'api/event';
 
 
 

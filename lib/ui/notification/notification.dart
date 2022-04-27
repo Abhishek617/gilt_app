@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/device/device_utils.dart';
@@ -14,6 +15,7 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications> {
   late UserStore _notificationStore;
   NotificationListModal? contentData;
+
 
   @override
   void didChangeDependencies() {
@@ -30,7 +32,9 @@ class _NotificationsState extends State<Notifications> {
     });
   }
 
-  With_Button(notificationData) => Container(
+
+  With_Button(notificationData) =>
+      Container(
         padding: EdgeInsets.only(top: 5),
         child: Row(
           children: [
@@ -106,12 +110,12 @@ class _NotificationsState extends State<Notifications> {
               ],
             ),
             SizedBox(
-              width: 5,
+              width: DeviceUtils.getScaledWidth(context, 0.02),
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 45),
               child: Text(
-                notificationData.createdAt,
+                DateFormat('dd MMMM yyyy').format(DateTime.parse(notificationData.createdAt)),
                 style: TextStyle(
                   fontSize: 8,
                   fontWeight: FontWeight.w500,
@@ -165,12 +169,12 @@ class _NotificationsState extends State<Notifications> {
               ],
             ),
             SizedBox(
-              width: 5,
+              width: DeviceUtils.getScaledWidth(context, 0.11),
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 10.0),
               child: Text(
-                notificationData.createdAt,
+                DateFormat('dd MMMM yyyy').format(DateTime.parse(notificationData.createdAt)),
                 style: TextStyle(
                   fontSize: 8,
                   fontWeight: FontWeight.w500,
@@ -183,6 +187,7 @@ class _NotificationsState extends State<Notifications> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,
@@ -193,20 +198,23 @@ class _NotificationsState extends State<Notifications> {
       body: Column(
         children: [
           SingleChildScrollView(
-            child: (contentData != null)
+            child: (contentData!.notification.length > 0)
                 ? Container(
                     width: DeviceUtils.getScaledWidth(context, 1.10),
                     height: DeviceUtils.getScaledHeight(context, 0.85),
                     child: ListView.builder(
                       itemCount: contentData?.notification.length,
                       itemBuilder: (context, index) => contentData
-                                  ?.notification[index].isButton ==
-                              'Yes'
+                                  ?.notification[index].isButton == 'Yes'
                           ? With_Button(contentData?.notification[index])
                           : Without_Button(contentData?.notification[index]),
                     ),
                   )
-                : Text('No Data found'),
+                : Row(mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('No Data found',),
+                  ],
+                ),
           ),
         ],
       ),

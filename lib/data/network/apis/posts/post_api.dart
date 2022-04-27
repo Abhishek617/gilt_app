@@ -16,6 +16,7 @@ import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Auth/valid_otp_model.dart';
+import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
@@ -249,7 +250,18 @@ class PostApi {
       throw e;
     }
   }
+//eventview
+  Future<EventViewModal> Event_Detail(eventId,token) async{
+    try {
+      final res = await _dioClient
+          .get(Endpoints.eventview, queryParameters: {"id": eventId,},options: Options(headers: {'Authorization': 'Bearer ' + token!}),);
 
+      return EventViewModal .fromJson(res);
+    }catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
   //notification_list
   Future<NotificationListModal> Notification_list(token) async{
     try {
@@ -292,7 +304,7 @@ class PostApi {
 
   Future<UpdateProfileResponseModal> updateprofile(UpdateProfileRequestModal UpdateProfileData) async {
     try {
-      final res = await _dioClient.put(Endpoints.updateProfile, data: {
+      final res = await _dioClient.put(Endpoints.updateProfile, data: FormData.fromMap({
         "email": UpdateProfileData.email,
         "firstname": UpdateProfileData.firstname,
         "lastname": UpdateProfileData.lastname,
@@ -303,7 +315,7 @@ class PostApi {
         "state": UpdateProfileData.state,
         "country": UpdateProfileData.country,
         "zip": UpdateProfileData.zip,
-      });
+      }));
       return UpdateProfileResponseModal.fromJson(res);
     } catch (e) {
       print(e.toString());

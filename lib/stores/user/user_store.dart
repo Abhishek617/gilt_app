@@ -204,6 +204,22 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
+//EventView
+  Future Event_Detail( int eventId, successCallback, errorCallback) async{
+    _repository.Event_Detail(eventId).then((value)async{
+      if(value != null){
+        successCallback(value);
+      }else{
+        print("Faild to Feedback List");
+      }
+    }, onError: (error){
+      print(error.toString());
+      errorCallback(error.respone);
+    }).catchError((e){
+      print(e);
+      throw e;
+    });
+  }
 
   Future Feedback_list( String description, int eventId, String rate, successCallback, errorCallback) async{
     _repository.Feedback_list(eventId).then((value)async{

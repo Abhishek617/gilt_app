@@ -33,6 +33,8 @@ class _FullProfileState extends State<FullProfile> {
   bool isEdit = false;
   bool isAboutEdit = false;
   bool isContactEdit = false;
+  var addData;
+  late UserStore _profileStore;
   TextEditingController _userEmailController = TextEditingController();
   TextEditingController _userFirstNameController = TextEditingController();
   TextEditingController _userLastNameController = TextEditingController();
@@ -51,6 +53,7 @@ class _FullProfileState extends State<FullProfile> {
     // check to see if already called api
 
     await _userStore.getProfile();
+    _profileStore.getProfile();
     setState(() {
       _userEmailController.text =
           _userStore.Profile_data?.user?.email.toString() ?? '';
@@ -72,6 +75,17 @@ class _FullProfileState extends State<FullProfile> {
           _userStore.Profile_data?.user?.country.toString() ?? '';
       _userZipController.text =
           _userStore.Profile_data?.user?.zip.toString() ?? '';
+      addData = _profileStore.Profile_data;
+      _userEmailController.text = addData!.user!.email.toString();
+      _userFirstNameController.text = addData!.user!.firstname.toString();
+      _userLastNameController.text = addData!.user!.lastname.toString();
+      _userAboutmeController.text = addData!.user!.aboutme.toString();
+      _userContactController.text = addData!.user!.phone.toString();
+      _userAddressController.text = addData!.user!.address.toString();
+      _userCityController.text = addData!.user!.city.toString();
+      _userStateController.text = addData!.user!.state.toString();
+      _userCountryController.text = addData!.user!.country.toString();
+      _userZipController.text = addData!.user!.zip.toString();
     });
 
     isEdit = false;
@@ -90,8 +104,8 @@ class _FullProfileState extends State<FullProfile> {
       "country": _userCountryController.value.text,
       "zip": int.parse(_userZipController.value.text),
     });
-    _userStore.updateprofile(UpdateProfileData, (val) {
-      print(val);
+    _userStore.updateprofile(UpdateProfileData, (val)  {
+
       (val.success == true)
           ? (val.user != null)
               ? Routes.navigateToScreenWithArgs(
@@ -199,9 +213,9 @@ class _FullProfileState extends State<FullProfile> {
           padding: const EdgeInsets.only(
               left: 00.0, top: 20.0, bottom: 00.0, right: 00.0),
           child: Text(
-            (_userStore.Profile_data?.user?.firstname.toString() ?? '') +
+            addData!.user!.firstname.toString() +
                 '  ' +
-                (_userStore.Profile_data?.user?.lastname.toString() ?? ''),
+                addData!.user!.lastname.toString(),
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
             textAlign: TextAlign.center,
           ),
@@ -210,7 +224,7 @@ class _FullProfileState extends State<FullProfile> {
           padding: const EdgeInsets.only(
               left: 00.0, top: 5.0, bottom: 00.0, right: 00.0),
           child: Text(
-            _userStore.Profile_data?.user?.email.toString() ?? '',
+            addData!.user!.email.toString(),
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
@@ -271,7 +285,7 @@ class _FullProfileState extends State<FullProfile> {
           ],
         ),
         Text(
-          _userStore.Profile_data?.user?.aboutme.toString() ?? '',
+          addData!.user!.aboutme.toString(),
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w400,
@@ -306,7 +320,7 @@ class _FullProfileState extends State<FullProfile> {
           child: ElevatedButton.icon(
             onPressed: () {
               setState(() {
-                updatedata();
+               updatedata();
                 isAboutEdit = false;
               });
             },
@@ -362,17 +376,17 @@ class _FullProfileState extends State<FullProfile> {
           ],
         ),
         Text(
-          (_userStore.Profile_data?.user?.phone.toString() ?? '') +
+          addData!.user!.phone.toString() +
               '\n' +
-              (_userStore.Profile_data?.user?.address.toString() ?? '') +
+              addData!.user!.address.toString() +
               '\n' +
-              (_userStore.Profile_data?.user?.city.toString() ?? '') +
+              addData!.user!.city.toString() +
               '\n' +
-              (_userStore.Profile_data?.user?.state.toString() ?? '') +
+              addData!.user!.state.toString() +
               '\n' +
-              (_userStore.Profile_data?.user?.country.toString() ?? '') +
+              addData!.user!.country.toString() +
               '\n' +
-              (_userStore.Profile_data?.user?.zip.toString() ?? ''),
+              addData!.user!.zip.toString(),
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w400,
