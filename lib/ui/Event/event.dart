@@ -26,7 +26,7 @@ class Event extends StatefulWidget {
 }
 
 class _EventState extends State<Event> {
-  final UserStore _userStore = UserStore(getIt<Repository>());
+
   bool isEdit = false;
   UpcomingPastEventModal? event_list_data;
 
@@ -175,12 +175,12 @@ class _EventState extends State<Event> {
                     ),
                   ),
             ),
-
                onTap: (){
       Routes.navigateToScreenWithArgs(
           context, Routes.event_details, eventData.id);
                },
              ),
+
         Divider(
           color: Colors.black12,
           //color of divider

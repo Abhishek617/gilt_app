@@ -1,6 +1,7 @@
 import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
+import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
 import 'package:guilt_app/ui/notification/notification.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
@@ -444,7 +445,24 @@ abstract class _UserStore with Store {
     },
     );
   }
-
+  @action
+  Future createEvent(
+      CreateEventRequestModal eventData, successCallback, errorCallback) async {
+    _repository.createEvent(eventData).then(
+          (value) async {
+        successCallback(value);
+      }
+      ,onError: (exception) {
+      print('onError : exception');
+      errorCallback(exception.response);
+      //Handle exception message
+      if (exception.message != null) {
+        print(exception
+            .message); // Here you get : "Connection  Timeout Exception" or even handled 500 errors on your backend.
+      }
+    },
+    );
+  }
   @action
   Future updateprofile(
     UpdateProfileRequestModal UpdateProfileData, successCallback, errorCallback) async {

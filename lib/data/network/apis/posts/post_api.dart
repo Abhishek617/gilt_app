@@ -6,7 +6,7 @@ import 'package:guilt_app/data/network/rest_client.dart';
 
 import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
 import 'package:guilt_app/models/Auth/feedback_add_model.dart';
-import 'package:guilt_app/models/Auth/changePasswordModal.dart';
+import 'package:guilt_app/models/Auth/commonModal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/oauth_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
@@ -16,6 +16,7 @@ import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Auth/valid_otp_model.dart';
+import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
@@ -82,18 +83,16 @@ class PostApi {
   }
 
   //post setting
-  Future<SettingGetModal> settingpost(
-      SettingPostModal UpdateSettingData) async {
+  Future<SettingGetModal> settingpost(SettingPostModal UpdateSettingData) async {
     try {
       final res = await _dioClient.post(Endpoints.setting, data: {
         "is_push_notification": UpdateSettingData.isPushNotification,
         "is_email_notification": UpdateSettingData.isEmailNotification,
         "is_show_app_icon": UpdateSettingData.isShowAppIcon,
         "is_floating_notification": UpdateSettingData.isFloatingNotification,
-        "is_lock_screen_notification":
-            UpdateSettingData.isLockScreenNotification,
+        "is_lock_screen_notification": UpdateSettingData.isLockScreenNotification,
         "is_allow_sound": UpdateSettingData.isAllowSound,
-        "is_allow_vibration": UpdateSettingData.isAllowVibration,
+        "is_allow_vibration":UpdateSettingData.isAllowVibration,
       });
       return SettingGetModal.fromJson(res);
     } catch (e) {
@@ -190,13 +189,13 @@ class PostApi {
   }
 
   // Change Password POST API
-  Future<ChangePasswordResponseModal> changePassword(
+  Future<CommonResponseModal> changePassword(
       oldPassword, newPassword, token) async {
     try {
       final res = await _dioClient.post(Endpoints.changePassword,
           options: Options(headers: {'Authorization': 'Bearer ' + token!}),
           data: {"old_password": oldPassword, "new_password": newPassword});
-      return ChangePasswordResponseModal.fromJson(res);
+      return CommonResponseModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
@@ -347,6 +346,36 @@ class PostApi {
         options: Options(headers: {'Authorization': 'Bearer ' + token!}),
       );
       return UpdateProfileResponseModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+//create event
+  Future<CommonResponseModal> createEvent(CreateEventRequestModal eventData,token) async {
+    try {
+      FormData formData = FormData();
+      var form = FormData.fromMap({
+        "name": eventData.name,
+        "category": eventData.category,
+        "location": eventData.location,
+        "startDate": eventData.startDate,
+        "endDate": eventData.endDate,
+        "description": eventData.description,
+        "attendees": eventData.attendees,
+        "expenseDescription": eventData.expenseDescription,
+        "lat": eventData.lat,
+        "long": eventData.long,
+        "totalExpense": eventData.totalExpense
+      });
+      formData.fields.addAll(form.fields);
+
+      final res = await _dioClient.put(
+        Endpoints.addEvent,
+        data: formData,
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
+      return CommonResponseModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;

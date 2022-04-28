@@ -4,6 +4,7 @@ import 'dart:core';
 import 'package:guilt_app/data/local/datasources/post/post_datasource.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
+import 'package:guilt_app/models/Auth/commonModal.dart';
 import 'package:guilt_app/models/Auth/feedback_add_model.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/oauth_modal.dart';
@@ -20,6 +21,7 @@ import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:sembast/sembast.dart';
 import '../models/Auth/otp_send.dart';
 import '../models/Auth/valid_otp_model.dart';
+import '../models/Event/create_event_modal.dart';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
 
@@ -277,6 +279,14 @@ class Repository {
     return await _postApi
         .updateprofile(UpdateProfileData, token)
         .then((profileData) => profileData)
+        .catchError((error) => throw error);
+  }
+//addevent
+  Future<CommonResponseModal> createEvent(CreateEventRequestModal eventData,) async {
+    var token = await authToken;
+    return await _postApi
+        .createEvent(eventData, token)
+        .then((addeventData) => addeventData)
         .catchError((error) => throw error);
   }
 
