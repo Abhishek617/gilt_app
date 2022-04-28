@@ -1,5 +1,5 @@
+import 'package:guilt_app/ui/home/home_explore_screen.dart';
 import 'package:guilt_app/utils/Global_methods/local_auth.dart';
-import 'package:guilt_app/ui/profile/main_profile.dart';
 import 'package:flutter/material.dart';
 
 class FacePage extends StatelessWidget {
@@ -76,7 +76,7 @@ class FacePage extends StatelessWidget {
 
       if (isAuthenticated) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => MainProfile()),
+          MaterialPageRoute(builder: (context) => HomeExploreScreen()),
         );
       }
     },

@@ -1,8 +1,10 @@
 import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
+import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
 import 'package:guilt_app/ui/notification/notification.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:mobx/mobx.dart';
 import '../../data/repository.dart';
 import '../../models/Auth/profile_modal.dart';
@@ -22,9 +24,16 @@ abstract class _UserStore with Store {
   final ErrorStore errorStore = ErrorStore();
 
   // bool to check if current user is logged in
+  @observable
   bool isLoggedIn = false;
+
+  @observable
   bool isFirst = true;
+
+  @observable
   String? authToken;
+
+  @observable
   String? refreshToken;
 
   @observable
@@ -44,6 +53,15 @@ abstract class _UserStore with Store {
     repository.isFirst.then((value) {
       this.isFirst = value;
     });
+    // getting authToken
+    repository.authToken.then((value) {
+      this.authToken = value;
+    });
+    // getting refresh token
+    repository.refreshToken.then((value) {
+      this.refreshToken = value;
+    });
+
   }
 
   // disposers:-----------------------------------------------------------------
@@ -83,6 +101,7 @@ abstract class _UserStore with Store {
 
   @action
   Future getAppContent(type) async {
+    GlobalMethods.showLoader();
     return await _repository
         .getAppContent(type)
         .then((contentData) => contentData)
@@ -128,7 +147,7 @@ abstract class _UserStore with Store {
           refreshToken = value.refreshToken;
         }
         if (value.user?.roleId != null) {
-          var role = value.user!.roleId.toString();
+          var role = value.user?.roleId.toString() ?? '1';
           print('roleID : '+ role);
           _repository.saveUserRole(role);
         }
@@ -173,6 +192,22 @@ abstract class _UserStore with Store {
   Future Notification_list(successCallback, errorCallback)
   async{
     _repository.Notification_list().then((value)async{
+      if(value != null){
+        successCallback(value);
+      }else{
+        print("Faild to Feedback List");
+      }
+    }, onError: (error){
+      print(error.toString());
+      errorCallback(error.respone);
+    }).catchError((e){
+      print(e);
+      throw e;
+    });
+  }
+//EventView
+  Future Event_Detail( int eventId, successCallback, errorCallback) async{
+    _repository.Event_Detail(eventId).then((value)async{
       if(value != null){
         successCallback(value);
       }else{
@@ -242,6 +277,11 @@ abstract class _UserStore with Store {
           _repository.saveAuthToken(value.data?.user?.authToken!);
           authToken = value.data?.user?.authToken;
         }
+        if (value.data?.refreshToken != null) {
+          print(value.data?.refreshToken);
+          _repository.saveRefreshToken(value.data?.refreshToken);
+          refreshToken = value.data?.refreshToken;
+        }
         this.isFirst = false;
         this.success = true;
         getProfile();
@@ -296,6 +336,11 @@ abstract class _UserStore with Store {
           _repository.saveAuthToken(value.data?.user?.authToken!);
           authToken = value.data?.user?.authToken;
         }
+        if (value.data?.refreshToken != null) {
+          print(value.data?.refreshToken);
+          _repository.saveRefreshToken(value.data?.refreshToken);
+          refreshToken = value.data?.refreshToken;
+        }
         this.isFirst = false;
         this.success = true;
         getProfile();
@@ -313,11 +358,14 @@ abstract class _UserStore with Store {
   }
   @action
   Future getProfile() {
+    GlobalMethods.showLoader();
     return _repository.getProfile().then((profileData) {
       Profile_data = GetProfileResponseModal.fromJson(profileData);
       _repository.saveProfileData(Profile_data!);
+      GlobalMethods.hideLoader();
     }).catchError((error) {
       print(error.toString());
+      GlobalMethods.hideLoader();
       // errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }
@@ -397,7 +445,24 @@ abstract class _UserStore with Store {
     },
     );
   }
-
+  @action
+  Future createEvent(
+      CreateEventRequestModal eventData, successCallback, errorCallback) async {
+    _repository.createEvent(eventData).then(
+          (value) async {
+        successCallback(value);
+      }
+      ,onError: (exception) {
+      print('onError : exception');
+      errorCallback(exception.response);
+      //Handle exception message
+      if (exception.message != null) {
+        print(exception
+            .message); // Here you get : "Connection  Timeout Exception" or even handled 500 errors on your backend.
+      }
+    },
+    );
+  }
   @action
   Future updateprofile(
     UpdateProfileRequestModal UpdateProfileData, successCallback, errorCallback) async {
@@ -422,7 +487,7 @@ abstract class _UserStore with Store {
       SignUpRequestModal signUpData, successCallback, errorCallback) async {
     _repository.signUp(signUpData).then(
       (value) async {
-        if (value.success == true && value.data!.user != null) {
+        if (value.success == true && value.data?.user != null) {
           print('isFirst : false');
           _repository.saveIsLoggedIn(true);
           this.isLoggedIn = true;
@@ -430,6 +495,7 @@ abstract class _UserStore with Store {
           if (value.data?.user?.authToken != null) {
             _repository.saveAuthToken(value.data?.user?.authToken!);
           }
+
           this.isFirst = false;
           this.success = true;
           successCallback(value);

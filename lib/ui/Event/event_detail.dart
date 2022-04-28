@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 // import 'package:full_screen_image/full_screen_image.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/rounded_button_with_icon.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +22,50 @@ class EventDetails extends StatefulWidget {
 
 class _EventDetailsState extends State<EventDetails> {
 
+  late UserStore _EventDetailStore;
+  Feedback? contentData;
+   var args;
+
+
+  @override
+  void initState() {
+    super.initState();
+  }
+  @override
+  void didinitState(){
+    setState((){
+      args = ModalRoute.of(context)!.settings.arguments as int;
+      print(args);
+    });
+    didChangeDependencies();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _EventDetailStore = Provider.of<UserStore>(context);
+    _EventDetailStore.Event_Detail(args,(value) {
+      print(value);
+      setState(() {
+        contentData = value;
+        print('eventview');
+      });
+    },(error) {
+      print(error.toString());
+    });
+  }
+
+
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
+
+
    return Scaffold(
      floatingActionButton: FloatingActionButton.extended(
        onPressed: (){

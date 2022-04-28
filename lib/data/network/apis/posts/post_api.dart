@@ -6,7 +6,7 @@ import 'package:guilt_app/data/network/rest_client.dart';
 
 import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
 import 'package:guilt_app/models/Auth/feedback_add_model.dart';
-import 'package:guilt_app/models/Auth/changePasswordModal.dart';
+import 'package:guilt_app/models/Auth/commonModal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/oauth_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
@@ -16,6 +16,8 @@ import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Auth/valid_otp_model.dart';
+import 'package:guilt_app/models/Event/create_event_modal.dart';
+import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
@@ -162,11 +164,11 @@ class PostApi {
   }
 
   // Check Registered Users from Contacts
-  Future checkContacts(contacts,token) async {
+  Future checkContacts(contacts, token) async {
     try {
       return await _dioClient.post(
         Endpoints.checkContacts,
-        data: {"contact":contacts},
+        data: {"contact": contacts},
         options: Options(headers: {'Authorization': 'Bearer ' + token}),
       );
     } catch (e) {
@@ -187,19 +189,18 @@ class PostApi {
   }
 
   // Change Password POST API
-  Future<ChangePasswordResponseModal> changePassword(
+  Future<CommonResponseModal> changePassword(
       oldPassword, newPassword, token) async {
     try {
       final res = await _dioClient.post(Endpoints.changePassword,
           options: Options(headers: {'Authorization': 'Bearer ' + token!}),
           data: {"old_password": oldPassword, "new_password": newPassword});
-      return ChangePasswordResponseModal.fromJson(res);
+      return CommonResponseModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
     }
   }
-
 
   // Send Otp
 
@@ -226,22 +227,24 @@ class PostApi {
       throw e;
     }
   }
+
 //otpvalidate
   Future<OtpValidateModel> OtpValidate(email, otp) async {
     try {
-      final res = await _dioClient
-          .post(Endpoints.OtpValidate, data: {"email_phone": email, "otp": otp});
+      final res = await _dioClient.post(Endpoints.OtpValidate,
+          data: {"email_phone": email, "otp": otp});
       return OtpValidateModel.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
     }
   }
+
   //feedback Add
   Future<Feedback_add_Model> Feedback_add(
       description, eventId, rate, token) async {
     try {
-     final res = await _dioClient.post(Endpoints.feedbackadd,
+      final res = await _dioClient.post(Endpoints.feedbackadd,
           data: {"description": description, "eventId": eventId, "rate": rate});
       return Feedback_add_Model.fromJson(res);
     } catch (e) {
@@ -250,27 +253,53 @@ class PostApi {
     }
   }
 
-  //notification_list
-  Future<NotificationListModal> Notification_list(token) async{
+//eventview
+  Future<EventViewModal> Event_Detail(eventId, token) async {
     try {
-      final res = await _dioClient
-          .get(Endpoints.notificationlist,options: Options(headers: {'Authorization': 'Bearer ' + token!}),);
+      final res = await _dioClient.get(
+        Endpoints.eventview,
+        queryParameters: {
+          "id": eventId,
+        },
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
 
-      return NotificationListModal.fromJson(res);
-    }catch (e) {
+      return EventViewModal.fromJson(res);
+    } catch (e) {
       print(e.toString());
       throw e;
     }
   }
+
+  //notification_list
+  Future<NotificationListModal> Notification_list(token) async {
+    try {
+      final res = await _dioClient.get(
+        Endpoints.notificationlist,
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
+
+      return NotificationListModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
   //feedback List
 
-  Future<FeedbackListModel> Feedback_list(eventId,token) async{
+  Future<FeedbackListModel> Feedback_list(eventId, token) async {
     try {
-      final res = await _dioClient
-          .get(Endpoints.feedbacklist, queryParameters: {"eventId": eventId,},options: Options(headers: {'Authorization': 'Bearer ' + token!}),);
+      final res = await _dioClient.get(
+        Endpoints.feedbacklist,
+        queryParameters: {
+          "eventId": eventId,
+        },
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
 
       return FeedbackListModel.fromJson(res);
-    }catch (e) {
+    } catch (e) {
       print(e.toString());
       throw e;
     }
@@ -281,7 +310,10 @@ class PostApi {
       filterby, page, size, token) async {
     try {
       final res = await _dioClient.post(Endpoints.upcomingPast,
-          options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+          options: Options(headers: {
+            'Authorization': 'Bearer ' + token!,
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+          }),
           data: {"Filterby": filterby, "page": page, "size": size});
       return UpcomingPastEventModal.fromJson(res);
     } catch (e) {
@@ -290,21 +322,60 @@ class PostApi {
     }
   }
 
-  Future<UpdateProfileResponseModal> updateprofile(UpdateProfileRequestModal UpdateProfileData) async {
+  Future<UpdateProfileResponseModal> updateprofile(
+      UpdateProfileRequestModal UpdateProfileData, token) async {
     try {
-      final res = await _dioClient.put(Endpoints.updateProfile, data: {
-        "email": UpdateProfileData.email,
-        "firstname": UpdateProfileData.firstname,
-        "lastname": UpdateProfileData.lastname,
-        "phone": UpdateProfileData.phone,
-        "aboutme": UpdateProfileData.aboutme,
-        "address": UpdateProfileData.address,
-        "city": UpdateProfileData.city,
-        "state": UpdateProfileData.state,
-        "country": UpdateProfileData.country,
-        "zip": UpdateProfileData.zip,
+      FormData formData = FormData();
+      var form = FormData.fromMap({
+        "email": UpdateProfileData.email.toString(),
+        "firstname": UpdateProfileData.firstname.toString(),
+        "lastname": UpdateProfileData.lastname.toString(),
+        "phone": UpdateProfileData.phone.toString(),
+        "aboutme": UpdateProfileData.aboutme.toString(),
+        "address": UpdateProfileData.address.toString(),
+        "city": UpdateProfileData.city.toString(),
+        "state": UpdateProfileData.state.toString(),
+        "country": UpdateProfileData.country.toString(),
+        "zip": UpdateProfileData.zip.toString()
       });
+      formData.fields.addAll(form.fields);
+
+      final res = await _dioClient.put(
+        Endpoints.updateProfile,
+        data: formData,
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
       return UpdateProfileResponseModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+//create event
+  Future<CommonResponseModal> createEvent(CreateEventRequestModal eventData,token) async {
+    try {
+      FormData formData = FormData();
+      var form = FormData.fromMap({
+        "name": eventData.name,
+        "category": eventData.category,
+        "location": eventData.location,
+        "startDate": eventData.startDate,
+        "endDate": eventData.endDate,
+        "description": eventData.description,
+        "attendees": eventData.attendees,
+        "expenseDescription": eventData.expenseDescription,
+        "lat": eventData.lat,
+        "long": eventData.long,
+        "totalExpense": eventData.totalExpense
+      });
+      formData.fields.addAll(form.fields);
+
+      final res = await _dioClient.put(
+        Endpoints.addEvent,
+        data: formData,
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
+      return CommonResponseModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;

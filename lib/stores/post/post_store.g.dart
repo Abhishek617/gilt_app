@@ -77,6 +77,13 @@ mixin _$PostStore on _PostStore, Store {
     return _$getBusinessSpacesAsyncAction.run(() => super.getBusinessSpaces());
   }
 
+  final _$checkContactsAsyncAction = AsyncAction('_PostStore.checkContacts');
+
+  @override
+  Future<dynamic> checkContacts(dynamic contacts) {
+    return _$checkContactsAsyncAction.run(() => super.checkContacts(contacts));
+  }
+
   @override
   String toString() {
     return '''

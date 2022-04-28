@@ -1,10 +1,10 @@
-class ChangePasswordResponseModal {
+class CommonResponseModal {
   String? message;
   bool? success;
 
-  ChangePasswordResponseModal({this.message, this.success});
+  CommonResponseModal({this.message, this.success});
 
-  ChangePasswordResponseModal.fromJson(Map<String, dynamic> json) {
+  CommonResponseModal.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     success = json['success'];
   }

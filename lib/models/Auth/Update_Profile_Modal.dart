@@ -52,6 +52,7 @@ class UpdateProfileRequestModal {
 }
 
 
+
 class UpdateProfileResponseModal {
   UpdateProfileResponseModal({
     required this.success,
@@ -86,12 +87,12 @@ class User {
     required this.password,
     required this.phone,
     this.profile,
-    this.aboutme,
-    this.address,
-    this.city,
-    this.state,
-    this.country,
-    this.zip,
+    required this.aboutme,
+    required this.address,
+    required this.city,
+    required this.state,
+    required this.country,
+    required this.zip,
     required this.roleId,
     this.deletedAt,
     required this.isEmailVerified,
@@ -105,12 +106,12 @@ class User {
   late final String password;
   late final String phone;
   late final Null profile;
-  late final Null aboutme;
-  late final Null address;
-  late final Null city;
-  late final Null state;
-  late final Null country;
-  late final Null zip;
+  late final String aboutme;
+  late final String address;
+  late final String city;
+  late final String state;
+  late final String country;
+  late final int zip;
   late final int roleId;
   late final Null deletedAt;
   late final bool isEmailVerified;
@@ -125,12 +126,12 @@ class User {
     password = json['password'];
     phone = json['phone'];
     profile = null;
-    aboutme = null;
-    address = null;
-    city = null;
-    state = null;
-    country = null;
-    zip = null;
+    aboutme = json['aboutme'];
+    address = json['address'];
+    city = json['city'];
+    state = json['state'];
+    country = json['country'];
+    zip = json['zip'];
     roleId = json['role_id'];
     deletedAt = null;
     isEmailVerified = json['isEmailVerified'];
@@ -161,3 +162,4 @@ class User {
     return _data;
   }
 }
+

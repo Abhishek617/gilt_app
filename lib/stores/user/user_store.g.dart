@@ -9,6 +9,66 @@ part of 'user_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$UserStore on _UserStore, Store {
+  final _$isLoggedInAtom = Atom(name: '_UserStore.isLoggedIn');
+
+  @override
+  bool get isLoggedIn {
+    _$isLoggedInAtom.reportRead();
+    return super.isLoggedIn;
+  }
+
+  @override
+  set isLoggedIn(bool value) {
+    _$isLoggedInAtom.reportWrite(value, super.isLoggedIn, () {
+      super.isLoggedIn = value;
+    });
+  }
+
+  final _$isFirstAtom = Atom(name: '_UserStore.isFirst');
+
+  @override
+  bool get isFirst {
+    _$isFirstAtom.reportRead();
+    return super.isFirst;
+  }
+
+  @override
+  set isFirst(bool value) {
+    _$isFirstAtom.reportWrite(value, super.isFirst, () {
+      super.isFirst = value;
+    });
+  }
+
+  final _$authTokenAtom = Atom(name: '_UserStore.authToken');
+
+  @override
+  String? get authToken {
+    _$authTokenAtom.reportRead();
+    return super.authToken;
+  }
+
+  @override
+  set authToken(String? value) {
+    _$authTokenAtom.reportWrite(value, super.authToken, () {
+      super.authToken = value;
+    });
+  }
+
+  final _$refreshTokenAtom = Atom(name: '_UserStore.refreshToken');
+
+  @override
+  String? get refreshToken {
+    _$refreshTokenAtom.reportRead();
+    return super.refreshToken;
+  }
+
+  @override
+  set refreshToken(String? value) {
+    _$refreshTokenAtom.reportWrite(value, super.refreshToken, () {
+      super.refreshToken = value;
+    });
+  }
+
   final _$Profile_dataAtom = Atom(name: '_UserStore.Profile_data');
 
   @override
@@ -121,6 +181,10 @@ mixin _$UserStore on _UserStore, Store {
   @override
   String toString() {
     return '''
+isLoggedIn: ${isLoggedIn},
+isFirst: ${isFirst},
+authToken: ${authToken},
+refreshToken: ${refreshToken},
 Profile_data: ${Profile_data},
 success: ${success}
     ''';

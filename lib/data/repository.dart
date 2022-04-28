@@ -4,6 +4,7 @@ import 'dart:core';
 import 'package:guilt_app/data/local/datasources/post/post_datasource.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
+import 'package:guilt_app/models/Auth/commonModal.dart';
 import 'package:guilt_app/models/Auth/feedback_add_model.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/oauth_modal.dart';
@@ -12,6 +13,7 @@ import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
+import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 import 'package:guilt_app/models/post/post.dart';
@@ -19,6 +21,7 @@ import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:sembast/sembast.dart';
 import '../models/Auth/otp_send.dart';
 import '../models/Auth/valid_otp_model.dart';
+import '../models/Event/create_event_modal.dart';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
 
@@ -228,6 +231,13 @@ class Repository {
         .then((feedbackAdd) => feedbackAdd)
         .catchError((error) => throw error);
   }
+//eventview
+  Future<EventViewModal> Event_Detail(int eventId) async {
+    var token = await authToken;
+    return await _postApi.Event_Detail(eventId, token)
+        .then((EventData) => EventData)
+        .catchError((error) => throw error);
+  }
 
   // Feedback list
   Future<FeedbackListModel> Feedback_list(int eventId) async {
@@ -265,9 +275,18 @@ class Repository {
 //updateprofile
   Future<UpdateProfileResponseModal> updateprofile(
       UpdateProfileRequestModal UpdateProfileData) async {
+    var token = await authToken;
     return await _postApi
-        .updateprofile(UpdateProfileData)
+        .updateprofile(UpdateProfileData, token)
         .then((profileData) => profileData)
+        .catchError((error) => throw error);
+  }
+//addevent
+  Future<CommonResponseModal> createEvent(CreateEventRequestModal eventData,) async {
+    var token = await authToken;
+    return await _postApi
+        .createEvent(eventData, token)
+        .then((addeventData) => addeventData)
         .catchError((error) => throw error);
   }
 

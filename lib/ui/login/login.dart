@@ -38,6 +38,8 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     _passwordFocusNode = FocusNode();
+    _userEmailController.text = 'nadeem@phpdots.com';
+    _passwordController.text = 'Nadeem@321';
   }
 
   @override
@@ -203,7 +205,7 @@ class _LoginState extends State<Login> {
                             _passwordController.value.text, (value) {
                           (value.success == true && value.user != null)
                               ? Routes.navigateRootToScreen(
-                                  context, Routes.events_home)
+                                  context, Routes.home_tab)
                               : Routes.navigateRootToScreen(
                                   context, Routes.otpvalidate);
                           // Routes.navigateToScreenWithArgs(

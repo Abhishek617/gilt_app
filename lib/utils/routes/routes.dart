@@ -8,10 +8,11 @@ import 'package:guilt_app/ui/Event/expense_screen.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Messages/ChatScreen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
-import 'package:guilt_app/ui/Profile/main_profile.dart';
+import 'package:guilt_app/ui/home/home_explore_screen.dart';
 import 'package:guilt_app/ui/Profile/organizer_profile.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
 import 'package:guilt_app/ui/Setting/setting.dart';
+import 'package:guilt_app/ui/Tab/home_tab.dart';
 import 'package:guilt_app/ui/attendees/add_contacts.dart';
 import 'package:guilt_app/ui/attendees/addendees_profile.dart';
 import 'package:guilt_app/ui/common/about_screen.dart';
@@ -70,6 +71,7 @@ class Routes {
   static const String home = '/home';
   static const String intro = '/intro';
   static const String forgot_password = '/forgot_password';
+  static const String home_tab = '/home_tab';
   static const String reset_password = '/reset_password';
   static const String change_old_password = '/change_old_password';
   //after forget password
@@ -80,7 +82,7 @@ class Routes {
   static const String terms_conditions = '/terms_conditions';
   static const String faqs = '/faqs';
   static const String prof = '/prof';
-  static const String events_home = '/events_home';
+  static const String explore_home = '/explore_home';
   static const String view_profile = '/view_profile';
   static const String add_business = '/add_business';
   static const String business_list = '/business_list';
@@ -123,6 +125,7 @@ class Routes {
     home: (BuildContext context) => HomeScreen(),
     otp: (BuildContext context) => Otp_screen(),
     forgot_password: (BuildContext context) => Reset_password(),
+    home_tab: (BuildContext context) => HomeTab(),
     reset_password: (BuildContext context) => Change_password(),
     change_old_password: (BuildContext context) => ChangeOldPassword(),
     signup: (BuildContext context) => SignUp(),
@@ -133,11 +136,11 @@ class Routes {
     faqs: (BuildContext context) => FaqScreen(),
     prof: (BuildContext context) => Profile(),
     view_profile: (BuildContext context) => FullProfile(),
-    events_home: (BuildContext context) => MainProfile(),
+    explore_home: (BuildContext context) => HomeExploreScreen(),
     add_business: (BuildContext context) => Add_business(),
     business_list: (BuildContext context) => Business_list(),
 
-    events_home: (BuildContext context) => MainProfile(),
+    explore_home: (BuildContext context) => HomeExploreScreen(),
     event: (BuildContext context) => Event(),
     event_details: (BuildContext context) => EventDetails(),
     atendees: (BuildContext context) => Attendees(),

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/ui/common/menu_drawer.dart';
+import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 
 import '../../utils/device/device_utils.dart';
 import '../../utils/routes/routes.dart';
@@ -191,9 +193,7 @@ class _WalletState extends State<Wallet> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldWrapper(
-      isMenu: true,
-      isTab: true,
+    return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,
         title: Text('Wallet'),
@@ -209,292 +209,294 @@ class _WalletState extends State<Wallet> {
           ),
         ],
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                SizedBox(
-                  height: 20,
-                  width: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 30,
-                      width: 50,
-                    ),
-                    Text(
-                      'Last Updated Balance',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+      body: CustomBodyWrapper(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    height: 20,
+                    width: 20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                        width: 50,
                       ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                      width: 70,
-                    ),
-                    Text(
-                      '\$15,625',
-                      style: TextStyle(
+                      Text(
+                        'Last Updated Balance',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                        width: 70,
+                      ),
+                      Text(
+                        '\$15,625',
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                        width: 70,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.check_box,
+                            color: AppColors.primaryColor,
+                            size: 17,
+                          ),
+                          Text(
+                            'Primary',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 70,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        height: 40,
+                        width: 90,
+                      ),
+                      Icon(
+                        Icons.refresh,
                         color: AppColors.primaryColor,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
+                        size: 30,
                       ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                      width: 70,
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.check_box,
-                          color: AppColors.primaryColor,
-                          size: 17,
-                        ),
-                        Text(
-                          'Primary',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: 70,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      height: 40,
-                      width: 90,
-                    ),
-                    Icon(
-                      Icons.refresh,
-                      color: AppColors.primaryColor,
-                      size: 30,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-              width: 90,
-            ),
-            ElevatedButtonWidget(
-              buttonColor: AppColors.primaryColor,
-              onPressed: () => {  Routes.navigateToScreen(context, Routes.addmoney)},
-              buttonText: ('Add Money'),
-            ),
-            Divider(
-              color: Colors.black12,
-              //color of divider
-              height: 20,
-              //height spacing of divider
-              thickness: 1,
-              //thickness of divier line
-              indent: 20,
-              //spacing at the start of divider
-              endIndent: 20, //spacing at the end of divider
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  height: 20,
-                  width: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Use Your Wallet to',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                      width: 20,
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.settings,
-                          color: AppColors.primaryColor,
-                          size: 17,
-                        ),
-                        Text(
-                          '  Make a Payment',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 170,
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: AppColors.primaryColor,
-                          size: 14,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                      width: 20,
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.settings,
-                          color: AppColors.primaryColor,
-                          size: 17,
-                        ),
-                        Text(
-                          '  Send Money to Bank',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 147,
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: AppColors.primaryColor,
-                          size: 14,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Divider(
-              color: Colors.black12,
-              //color of divider
-              height: 20,
-              //height spacing of divider
-              thickness: 1,
-              //thickness of divier line
-              indent: 20,
-              //spacing at the start of divider
-              endIndent: 20, //spacing at the end of divider
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  height: 20,
-                  width: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Payment History',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                      width: 20,
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.settings,
-                          color: AppColors.primaryColor,
-                          size: 17,
-                        ),
-                        Text(
-                          '  Payment History',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 170,
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: AppColors.primaryColor,
-                          size: 14,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Divider(
-              color: Colors.black12,
-              //color of divider
-              height: 20,
-              //height spacing of divider
-              thickness: 1,
-              //thickness of divier line
-              indent: 20,
-              //spacing at the start of divider
-              endIndent: 20, //spacing at the end of divider
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  height: 20,
-                  width: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Resent Transaction',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Column(children: [
-              SizedBox(
-                height: 10,
-                width: 10,
+                    ],
+                  ),
+                ],
               ),
-              Container(
-                height: DeviceUtils.getScaledHeight(context, 0.50),
-                child:ListView.builder(
-                  itemCount: item.length,
-                  itemBuilder: (context, index) =>
-                  index.isOdd ? Payment_paid_list() : Payment_recived_list(),
+              SizedBox(
+                height: 20,
+                width: 90,
+              ),
+              ElevatedButtonWidget(
+                buttonColor: AppColors.primaryColor,
+                onPressed: () => {  Routes.navigateToScreen(context, Routes.addmoney)},
+                buttonText: ('Add Money'),
+              ),
+              Divider(
+                color: Colors.black12,
+                //color of divider
+                height: 20,
+                //height spacing of divider
+                thickness: 1,
+                //thickness of divier line
+                indent: 20,
+                //spacing at the start of divider
+                endIndent: 20, //spacing at the end of divider
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    height: 20,
+                    width: 20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Use Your Wallet to',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                        width: 20,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.settings,
+                            color: AppColors.primaryColor,
+                            size: 17,
+                          ),
+                          Text(
+                            '  Make a Payment',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 170,
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColors.primaryColor,
+                            size: 14,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                        width: 20,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.settings,
+                            color: AppColors.primaryColor,
+                            size: 17,
+                          ),
+                          Text(
+                            '  Send Money to Bank',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 147,
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColors.primaryColor,
+                            size: 14,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Divider(
+                color: Colors.black12,
+                //color of divider
+                height: 20,
+                //height spacing of divider
+                thickness: 1,
+                //thickness of divier line
+                indent: 20,
+                //spacing at the start of divider
+                endIndent: 20, //spacing at the end of divider
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    height: 20,
+                    width: 20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Payment History',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                        width: 20,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.settings,
+                            color: AppColors.primaryColor,
+                            size: 17,
+                          ),
+                          Text(
+                            '  Payment History',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 170,
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColors.primaryColor,
+                            size: 14,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Divider(
+                color: Colors.black12,
+                //color of divider
+                height: 20,
+                //height spacing of divider
+                thickness: 1,
+                //thickness of divier line
+                indent: 20,
+                //spacing at the start of divider
+                endIndent: 20, //spacing at the end of divider
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    height: 20,
+                    width: 20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Resent Transaction',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Column(children: [
+                SizedBox(
+                  height: 10,
+                  width: 10,
                 ),
+                Container(
+                  height: DeviceUtils.getScaledHeight(context, 0.50),
+                  child:ListView.builder(
+                    itemCount: item.length,
+                    itemBuilder: (context, index) =>
+                    index.isOdd ? Payment_paid_list() : Payment_recived_list(),
+                  ),
+                ),
+              ],
               ),
             ],
-            ),
-          ],
+          ),
         ),
       ),
     );

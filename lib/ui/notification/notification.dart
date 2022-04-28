@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
-import 'package:provider/provider.dart';
-
-import '../../utils/device/device_utils.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:intl/intl.dart';
 
 class Notifications extends StatefulWidget {
   @override
@@ -12,25 +13,37 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-  late UserStore _notificationStore;
-  NotificationListModal? contentData;
+  final UserStore _userStore = UserStore(getIt<Repository>());
+  List<NotificationItem> contentData = [];
 
   @override
   void didChangeDependencies() {
+    getNotificationList();
     super.didChangeDependencies();
-    _notificationStore = Provider.of<UserStore>(context);
-    _notificationStore.Notification_list((value) {
+  }
+
+  @override
+  initState() {
+    getNotificationList();
+    super.initState();
+  }
+
+  getNotificationList() {
+    GlobalMethods.showLoader();
+    _userStore.Notification_list((value) {
       print(value);
       setState(() {
-        contentData = value;
+        contentData = value.notification?.length > 0 ? value.notification : [];
         print('notification');
       });
+      GlobalMethods.hideLoader();
     }, (error) {
+      GlobalMethods.hideLoader();
       print(error.toString());
     });
   }
 
-  With_Button(notificationData) => Container(
+  withButton(notificationData) => Container(
         padding: EdgeInsets.only(top: 5),
         child: Row(
           children: [
@@ -106,12 +119,13 @@ class _NotificationsState extends State<Notifications> {
               ],
             ),
             SizedBox(
-              width: 5,
+              width: DeviceUtils.getScaledWidth(context, 0.02),
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 45),
               child: Text(
-                notificationData.createdAt,
+                DateFormat('dd MMMM yyyy')
+                    .format(DateTime.parse(notificationData.createdAt)),
                 style: TextStyle(
                   fontSize: 8,
                   fontWeight: FontWeight.w500,
@@ -122,7 +136,7 @@ class _NotificationsState extends State<Notifications> {
         ),
       );
 
-  Without_Button(notificationData) => Container(
+  withOutButton(notificationData) => Container(
         padding: EdgeInsets.only(top: 10),
         child: Row(
           children: [
@@ -165,12 +179,13 @@ class _NotificationsState extends State<Notifications> {
               ],
             ),
             SizedBox(
-              width: 5,
+              width: DeviceUtils.getScaledWidth(context, 0.11),
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 10.0),
               child: Text(
-                notificationData.createdAt,
+                DateFormat('dd MMMM yyyy')
+                    .format(DateTime.parse(notificationData.createdAt)),
                 style: TextStyle(
                   fontSize: 8,
                   fontWeight: FontWeight.w500,
@@ -193,20 +208,24 @@ class _NotificationsState extends State<Notifications> {
       body: Column(
         children: [
           SingleChildScrollView(
-            child: (contentData != null)
+            child: (contentData.length > 0)
                 ? Container(
                     width: DeviceUtils.getScaledWidth(context, 1.10),
                     height: DeviceUtils.getScaledHeight(context, 0.85),
                     child: ListView.builder(
-                      itemCount: contentData?.notification.length,
-                      itemBuilder: (context, index) => contentData
-                                  ?.notification[index].isButton ==
-                              'Yes'
-                          ? With_Button(contentData?.notification[index])
-                          : Without_Button(contentData?.notification[index]),
+                      itemCount: contentData.length,
+                      itemBuilder: (context, index) =>
+                          contentData[index].isButton == 'Yes'
+                              ? withButton(contentData[index])
+                              : withOutButton(contentData[index]),
                     ),
                   )
-                : Text('No Data found'),
+                : Center(
+                    heightFactor: 12.0,
+                    child: Text(
+                      'No Notification found',
+                      style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+                    )),
           ),
         ],
       ),

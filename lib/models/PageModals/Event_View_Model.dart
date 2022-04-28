@@ -1,59 +1,30 @@
-class UpcomingPastEventModal {
-  UpcomingPastEventModal( {
+class EventViewModal {
+  EventViewModal({
     required this.success,
     required this.message,
-    required this.events,
+    required this.event,
   });
   late final bool success;
   late final String message;
-  late final Events events;
+  late final Event event;
 
-  UpcomingPastEventModal.fromJson(Map<String, dynamic> json){
+  EventViewModal.fromJson(Map<String, dynamic> json){
     success = json['success'];
     message = json['message'];
-    events = Events.fromJson(json['events']);
+    event = Event.fromJson(json['event']);
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
     _data['success'] = success;
     _data['message'] = message;
-    _data['events'] = events.toJson();
+    _data['event'] = event.toJson();
     return _data;
   }
 }
 
-class Events {
-  Events({
-    required this.totalItems,
-    required this.listData,
-    required this.totalPages,
-    required this.currentPage,
-  });
-  late final int totalItems;
-  late final List<UpcomingAndPastEventListDetail> listData;
-  late final int totalPages;
-  late final int currentPage;
-
-  Events.fromJson(Map<String, dynamic> json){
-    totalItems = json['totalItems'];
-    listData = List.from(json['listData']).map((e)=>UpcomingAndPastEventListDetail.fromJson(e)).toList();
-    totalPages = json['totalPages'];
-    currentPage = json['currentPage'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['totalItems'] = totalItems;
-    _data['listData'] = listData.map((e)=>e.toJson()).toList();
-    _data['totalPages'] = totalPages;
-    _data['currentPage'] = currentPage;
-    return _data;
-  }
-}
-
-class UpcomingAndPastEventListDetail {
-  UpcomingAndPastEventListDetail({
+class Event {
+  Event({
     required this.id,
     required this.name,
     required this.category,
@@ -68,6 +39,9 @@ class UpcomingAndPastEventListDetail {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
+    required this.organizer,
+    required this.eventImages,
+    required this.eventAttendees,
   });
   late final int id;
   late final String name;
@@ -83,8 +57,11 @@ class UpcomingAndPastEventListDetail {
   late final String status;
   late final String createdAt;
   late final String updatedAt;
+  late final Organizer organizer;
+  late final List<dynamic> eventImages;
+  late final List<EventAttendees> eventAttendees;
 
-  UpcomingAndPastEventListDetail.fromJson(Map<String, dynamic> json){
+  Event.fromJson(Map<String, dynamic> json){
     id = json['id'];
     name = json['name'];
     category = json['category'];
@@ -99,6 +76,9 @@ class UpcomingAndPastEventListDetail {
     status = json['status'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    organizer = Organizer.fromJson(json['organizer']);
+    eventImages = List.castFrom<dynamic, dynamic>(json['eventImages']);
+    eventAttendees = List.from(json['eventAttendees']).map((e)=>EventAttendees.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -117,6 +97,9 @@ class UpcomingAndPastEventListDetail {
     _data['status'] = status;
     _data['createdAt'] = createdAt;
     _data['updatedAt'] = updatedAt;
+    _data['organizer'] = organizer.toJson();
+    _data['eventImages'] = eventImages;
+    _data['eventAttendees'] = eventAttendees.map((e)=>e.toJson()).toList();
     return _data;
   }
 }
@@ -138,6 +121,73 @@ class LatLong {
     final _data = <String, dynamic>{};
     _data['type'] = type;
     _data['coordinates'] = coordinates;
+    return _data;
+  }
+}
+
+class Organizer {
+  Organizer({
+    required this.firstname,
+    required this.lastname,
+  });
+  late final String firstname;
+  late final String lastname;
+
+  Organizer.fromJson(Map<String, dynamic> json){
+    firstname = json['firstname'];
+    lastname = json['lastname'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
+    _data['firstname'] = firstname;
+    _data['lastname'] = lastname;
+    return _data;
+  }
+}
+
+class EventAttendees {
+  EventAttendees({
+    required this.userId,
+    required this.admin,
+  });
+  late final int userId;
+  late final Admin admin;
+
+  EventAttendees.fromJson(Map<String, dynamic> json){
+    userId = json['userId'];
+    admin = Admin.fromJson(json['admin']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
+    _data['userId'] = userId;
+    _data['admin'] = admin.toJson();
+    return _data;
+  }
+}
+
+class Admin {
+  Admin({
+    required this.firstname,
+    required this.lastname,
+    required this.phone,
+  });
+  late final String firstname;
+  late final String lastname;
+  late final String phone;
+
+  Admin.fromJson(Map<String, dynamic> json){
+    firstname = json['firstname'];
+    lastname = json['lastname'];
+    phone = json['phone'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
+    _data['firstname'] = firstname;
+    _data['lastname'] = lastname;
+    _data['phone'] = phone;
     return _data;
   }
 }
