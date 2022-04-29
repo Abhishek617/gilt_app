@@ -23,6 +23,7 @@ class _Add_contactsState extends State<Add_contacts> {
   late List<String?> _contactStrings = [];
   late var appContacts = [];
   late var filteredContactList = [];
+  bool visible = false;
 
   changeValue(int val) {
     setState(() {
@@ -42,7 +43,7 @@ class _Add_contactsState extends State<Add_contacts> {
     // are now just retrieving it
     final Iterable<Contact> contacts =
         await ContactsService.getContacts(withThumbnails: false);
-    if(contacts.length > 0) {
+    if (contacts.length > 0) {
       setState(() {
         _contacts = contacts.toList();
         _contactStrings = _contacts
@@ -65,7 +66,7 @@ class _Add_contactsState extends State<Add_contacts> {
           print(err.toString());
         });
       });
-    }else{
+    } else {
       setState(() {
         appContacts = [];
         filteredContactList = appContacts;
@@ -98,12 +99,18 @@ class _Add_contactsState extends State<Add_contacts> {
           height: 20,
           width: 20,
           child: Checkbox(
+            value: visible,
             activeColor: Colors.white,
             checkColor: Colors.black,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.00))),
             onChanged: (changeValue) {
               setState(() {
+                if (changeValue == true) {
+                  visible = true;
+                } else {
+                  visible = false;
+                }
                 // if (changeValue == true) {
                 //   //checked[index] = true;
                 //   checked = true;
@@ -115,7 +122,6 @@ class _Add_contactsState extends State<Add_contacts> {
                 //_title = _getTitle();
               });
             },
-            value: true,
           ),
         ),
         title: Text(contactData.phone!));
@@ -128,6 +134,12 @@ class _Add_contactsState extends State<Add_contacts> {
         shadowColor: Colors.transparent,
         centerTitle: true,
         title: const Text('Contacts'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: () {},
+          )
+        ],
       ),
       child: Container(
         padding: EdgeInsets.all(25.0),
@@ -163,7 +175,8 @@ class _Add_contactsState extends State<Add_contacts> {
                           child: ListView.builder(
                               itemCount: filteredContactList.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return getContactListTile(filteredContactList[index]);
+                                return getContactListTile(
+                                    filteredContactList[index]);
                               }),
                         ),
                         Container(

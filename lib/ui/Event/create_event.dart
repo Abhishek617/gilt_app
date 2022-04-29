@@ -496,7 +496,10 @@ class _Create_eventState extends State<Create_event> {
                               ),
                             ],
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            GlobalMethods.askPermissions(
+                                context, Routes.add_contacts);
+                          },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(32.0),
