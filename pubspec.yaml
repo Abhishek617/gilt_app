@@ -97,6 +97,8 @@ dependencies:
   #get contacts
   contacts_service: ^0.6.3
   getwidget: ^2.0.5
+
+  # Face Authentication
   local_auth: ^2.0.0
   curved_navigation_bar: ^1.0.3
 

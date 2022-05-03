@@ -118,20 +118,36 @@ class _BookEventState extends State<BookEvent> {
     },
   );
 
+  Widget _searchTextField() { //add
+    return TextFormField();
+  }
+  bool _isSearchBar = false;
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
       isMenu: false,
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: Text('Book Event'),
+        title: !_isSearchBar ? Text('Explore Event') : _searchTextField() ,
         centerTitle: true,
-        actions: [
+        actions: !_isSearchBar
+        ? [//add
+            IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  setState(() { //add
+                    _isSearchBar = true;
+                  });
+                }
+            )
+        ] : [
           IconButton(
-            icon: Icon(Icons.circle_notifications),
-            onPressed: () {
-              Routes.navigateToScreen(context, Routes.notifi);
-            },
+              icon: Icon(Icons.clear),
+              onPressed: () {
+                setState(() {
+                  _isSearchBar = false;
+                });
+              }
           )
         ],
       ),

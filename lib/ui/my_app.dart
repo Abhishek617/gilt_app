@@ -20,6 +20,7 @@ import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
+import 'package:guilt_app/utils/Global_methods/face_auth_service.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/stores/language/language_store.dart';
 import 'package:guilt_app/stores/post/post_store.dart';
@@ -43,6 +44,13 @@ class MyApp extends StatelessWidget {
   final PostStore _postStore = PostStore(getIt<Repository>());
   final LanguageStore _languageStore = LanguageStore(getIt<Repository>());
   final UserStore _userStore = UserStore(getIt<Repository>());
+
+  Widget appInit(){
+    FaceAuthService.authenticate();
+    return (_userStore.isFirst
+        ? OnBoardingPage()
+        : (_userStore.isLoggedIn ? HomeTab() : WelcomeLogin()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,9 +92,7 @@ class MyApp extends StatelessWidget {
                 // Built-in localization of basic text for Cupertino widgets
                 GlobalCupertinoLocalizations.delegate,
               ],
-              home: (_userStore.isFirst
-                  ? OnBoardingPage()
-                  : (_userStore.isLoggedIn ? HomeTab() : WelcomeLogin())),
+              home: appInit(),
               // home:(_userStore.isFirst ? Login() : (_userStore.isLoggedIn ? SignUp() : WelcomeLogin())),
             ),
           );
