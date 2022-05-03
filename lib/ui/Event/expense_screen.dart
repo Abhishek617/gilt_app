@@ -1,11 +1,14 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import '../../constants/colors.dart';
@@ -29,7 +32,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import '../../widgets/rounded_button_widget.dart';
 
-
 class Expense_Screen extends StatefulWidget {
   const Expense_Screen({Key? key}) : super(key: key);
 
@@ -38,63 +40,76 @@ class Expense_Screen extends StatefulWidget {
 }
 
 class _Expense_ScreenState extends State<Expense_Screen> {
-  bool viewVisible = true;
+  bool viewVisible = false;
   bool status = true;
-
+  final UserStore _userStore = UserStore(getIt<Repository>());
   TextEditingController _amount = TextEditingController();
   bool isChecked = false;
 
   //bool _value = false;
   int val = -1;
   int _count = 0;
-  void _incrementCounter(){
+
+  void _incrementCounter() {
     setState(() {
       _count++;
       _amount.text = _count.toString();
     });
   }
+
   disableButton() {
     setState(() {
       status = false;
     });
   }
+
   enableButton() {
     setState(() {
       status = true;
     });
   }
 
-
-  void _decrementCounter(){
+  void _decrementCounter() {
     setState(() {
       _count--;
       _amount.text = _count.toString();
-
     });
   }
 
-  void showWidget(){
+  void showWidget() {
     setState(() {
-      if (viewVisible = true){
+      if (viewVisible = true) {
         viewVisible = true;
-      }else{
+      } else {
         viewVisible = false;
       }
-
     });
   }
 
-
-
-  void _showValue(){
-    setState(() {
-    });
+  void _showValue() {
+    setState(() {});
   }
 
-
+  createEvent(eData) {
+    GlobalMethods.showLoader();
+    String dData = jsonDecode(eData);
+    _userStore.createEvent(dData as CreateEventRequestModal, (val) {
+      GlobalMethods.hideLoader();
+      if (val.success == true) {
+        GlobalMethods.showSuccessMessage(context, val.message, 'Create Event');
+      } else {
+        GlobalMethods.showErrorMessage(context, val.message, 'Create Event');
+      }
+    }, (error) {
+      GlobalMethods.hideLoader();
+      print(error.data.toString());
+    });
+    // Routes.navigateToScreen(context, Routes.before_login);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as String;
     return ScaffoldWrapper(
         isMenu: false,
         appBar: AppBar(
@@ -117,40 +132,44 @@ class _Expense_ScreenState extends State<Expense_Screen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: Text("Add Expense",style: TextStyle(
-                      fontWeight: FontWeight.bold),),
+                Text(
+                  "Add Expense",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 53),
-                      child: IconButton(
-                        icon: Icon(Icons.remove),
-                        onPressed: _decrementCounter,
-                        iconSize: 15,
-                      ),
+                    IconButton(
+                      icon: Icon(Icons.remove),
+                      onPressed: _decrementCounter,
+                      iconSize: 15,
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     Container(
-                      height: 45,
-                      width: 120,
+                      alignment: Alignment.topCenter,
+                      height: DeviceUtils.getScaledHeight(
+                          context, 0.07),
+                      width: DeviceUtils.getScaledWidth(
+                          context, 0.35),
                       child: Center(
                         child: TextField(
                           controller: _amount,
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,0}')),
-                                   ],
-                            //WhitelistingTextInputFormatter(RegExp(r'^\d+\.?\d{0,2}')),
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d+\.?\d{0,0}')),
+                          ],
+                          //WhitelistingTextInputFormatter(RegExp(r'^\d+\.?\d{0,2}')),
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(5),
                             border: OutlineInputBorder(),
-                            hintText:
-                                '\$ 5000',
+                            hintText: '\$ 5000',
                           ),
                         ),
                       ),
@@ -165,120 +184,108 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                     ),
                   ],
                 ),
-
                 SizedBox(
-                  height: 5,
-                ),
-
-                Container(
                   height: 10,
-                  width: 130,
-                  color: Colors.grey,
                 ),
-
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Container(
-                    child: Divider(
-                      // color: Colors.teal.shade100,
-                      thickness: 1.0,
-                    ),
+                Container(
+                  child: Divider(
+                    thickness: 1.0,
                   ),
                 ),
-
                 SizedBox(
                   height: 10,
                 ),
-
                 Row(
                   children: [
-                    Text("Add Description",style: TextStyle(
-                        fontWeight: FontWeight.bold),),
+                    Text(
+                      "Add Description",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
-
                 SizedBox(
                   height: 10,
                 ),
                 Container(
-                  width: 340,
                   child: TextFormField(
                     minLines: 2,
                     maxLines: 40,
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
                       hintText: 'Add description',
-                      hintStyle: TextStyle(
-                          color: Colors.grey
-                      ),
+                      hintStyle: TextStyle(color: Colors.grey),
                     ),
                   ),
                 ),
-
+                SizedBox(
+                  height: 10,
+                ),
                 Container(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: ElevatedButtonWidget(
+                  child: viewVisible == false ? ElevatedButtonWidget(
                       buttonText: 'Confirm',
                       buttonColor: AppColors.primaryColor,
-                      onPressed: (){}
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Container(
-                    child: Divider(
-                      // color: Colors.teal.shade100,
-                      thickness: 1.0,
-                    ),
-                  ),
-                ),
+                      onPressed: () {
 
+                      }) : disableButton(),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Divider(
+                  // color: Colors.teal.shade100,
+                  thickness: 1.0,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
                 Row(
                   children: [
-                    Text("Add Expense Manually",style: TextStyle(
-                        fontWeight: FontWeight.bold),),
+                    Text(
+                      "Add Expense Manually",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     SizedBox(
-                      width: 145,
+                      width: DeviceUtils.getScaledWidth(
+                          context, 0.43),
                     ),
                     Container(
                       decoration: BoxDecoration(
-
                         shape: BoxShape.circle,
                         border: Border.all(
-                            color: viewVisible == true ? Colors.black: Colors.black,
+                            color: viewVisible == true
+                                ? Colors.black
+                                : Colors.black,
                             width: 2.3),
                       ),
-                      height: 21,
-                      width: 21,
+                      height: 22,
+                      width: 22,
                       child: Checkbox(
                         activeColor: Colors.white,
                         checkColor: Colors.black,
-                     // side: BorderSide(color: Colors.black),
+                        // side: BorderSide(color: Colors.black),
                         tristate: false,
-                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)),),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
                         value: viewVisible,
                         onChanged: (value) {
                           setState(() {
-                          if (value == true){
-                            viewVisible = true;
-                          }else{
-                            viewVisible = false;
-                          }
-                          }
-
-                          );
+                            if (value == true) {
+                              viewVisible = true;
+                            } else {
+                              viewVisible = false;
+                            }
+                          });
                         },
                       ),
                     ),
                   ],
                 ),
-
                 SizedBox(
-                  height: 15,
+                  height: 5,
                 ),
                 Column(
+
                   children: [
                     Visibility(
                       maintainSize: true,
@@ -286,93 +293,102 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                       maintainState: true,
                       visible: viewVisible,
                       child: Container(
-                        height: 500,
-                       // width: 460,
-                        width: MediaQuery.of(context).size.width / 0.0,
+                        height: DeviceUtils.getScaledHeight(context, 0.366),
                         child: ListView.builder(
                             itemCount: 10,
-                            itemBuilder: (BuildContext context,int index){
+                            itemBuilder: (BuildContext context, int index) {
                               return ListTile(
-                                  leading:  Container(
-                                    height: 40,
-                                    width: 40,
+                                  leading: Container(
+                                    height: DeviceUtils.getScaledHeight(
+                                        context, 0.7),
+                                    width: DeviceUtils.getScaledWidth(
+                                        context, 0.127),
                                     // margin: EdgeInsets.all(100.0),
                                     decoration: BoxDecoration(
                                         image: DecorationImage(
-                                          image: NetworkImage('https://img.icons8.com/color/344/person-male.png'),
+                                          image: NetworkImage(
+                                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU'),
                                           fit: BoxFit.fill,
                                         ),
                                         color: Colors.orange,
-                                        shape: BoxShape.circle
-                                    ),
+                                        shape: BoxShape.circle),
                                   ),
-                                  trailing:
-                                  Wrap(
+                                  trailing: Wrap(
                                     spacing: 7, // space between two icons
                                     children: <Widget>[
-
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 5),
-                                        child: Container(child: Icon(Icons.remove, size: 15,)),
+                                        padding: const EdgeInsets.only(top: 10),
+                                        child: Container(
+                                            child: Icon(
+                                          Icons.remove,
+                                          size: 15,
+                                        )),
                                       ),
-
                                       Container(
-                                        height: 30,
-                                        width: 50,
-                                        child: Center(
-                                          child: TextField(
-                                            style: TextStyle(fontSize: 10),
+                                        alignment: Alignment.topCenter,
+                                        height: DeviceUtils.getScaledHeight(
+                                            context, 0.049),
+                                        width: DeviceUtils.getScaledWidth(
+                                            context, 0.25),
+
+                                        child: TextField(
+
+                                            style: TextStyle(fontSize: 11),
                                             controller: _amount,
                                             keyboardType: TextInputType.number,
-                                            inputFormatters: <TextInputFormatter>[
-                                              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,0}')),
+                                            inputFormatters: <
+                                                TextInputFormatter>[
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp(r'^\d+\.?\d{0,0}')),
                                             ],
                                             //WhitelistingTextInputFormatter(RegExp(r'^\d+\.?\d{0,2}')),
-                                            textAlign: TextAlign.center,
                                             decoration: InputDecoration(
-                                              border: OutlineInputBorder(),
-                                              hintText:
-                                              '',
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                              contentPadding: EdgeInsets.all(5.0),
 
+                                              border: OutlineInputBorder(
+                                              ),
+                                              hintText: '',
+                                            ),
+
+                                          ),
+
+                                      ),
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 5),
-                                        child: Container(child: Icon(Icons.add, size: 15,)),
+                                        padding: const EdgeInsets.only(top: 10),
+                                        child: Container(
+                                            child: Icon(
+                                          Icons.add,
+                                          size: 15,
+                                        )),
                                       )
                                     ],
                                   ),
-                                  title:Text("Abc $index")
-                              );
+
+                                  title: Text("Abc $index"));
+
                             }
-                        ),
+                            ),
 
                       ),
                     ),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Container(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: ElevatedButtonWidget(
-                          buttonText: 'Confirm',
-                          buttonColor: AppColors.primaryColor,
-                          onPressed: () {
-                          },
-                        ),
-                      ),
+
+                      child: viewVisible == true? ElevatedButtonWidget(
+                        buttonText: 'Confirm',
+                        buttonColor: AppColors.primaryColor,
+                        onPressed: () {
+                          createEvent(args);
+                        },
+                      ): disableButton(),
                     ),
                   ],
                 ),
               ],
             ),
-
           ),
-
-
-        )
-    );
+        ));
   }
 }
-
-

@@ -1,8 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/Event/create_event_modal.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
@@ -22,6 +28,8 @@ class Create_event extends StatefulWidget {
 
 class _Create_eventState extends State<Create_event> {
   File? pickedImage;
+  final UserStore _userStore = UserStore(getIt<Repository>());
+
 
   void imagePickerOption() {
     Get.bottomSheet(
@@ -89,8 +97,8 @@ class _Create_eventState extends State<Create_event> {
   TextEditingController _eventCategoryController = TextEditingController();
   TextEditingController _eventLocationController = TextEditingController();
   TextEditingController _eventDateAndTimeController = TextEditingController(text: DateTime.now().toString());
-  TextEditingController _eventPlaceDescriptionController =
-      TextEditingController();
+  TextEditingController _eventPlaceDescriptionController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +145,7 @@ class _Create_eventState extends State<Create_event> {
                         height: DeviceUtils.getScaledHeight(context, 0.08),
                         child: TextFormField(
                           autocorrect: true,
-                          controller: _eventCategoryController,
+                          controller: _eventNameController,
                           decoration: InputDecoration(
                             hintText: 'Enter Event Name',
                             enabledBorder: UnderlineInputBorder(
@@ -316,6 +324,7 @@ class _Create_eventState extends State<Create_event> {
                         minLines: 2,
                         maxLines: 10,
                         keyboardType: TextInputType.multiline,
+                        controller: _eventPlaceDescriptionController,
                         decoration: InputDecoration(
                           hintText: 'Enter your description',
                           hintStyle: TextStyle(color: Colors.grey),
@@ -505,7 +514,15 @@ class _Create_eventState extends State<Create_event> {
                       buttonText: 'Continue',
                       buttonColor: AppColors.primaryColor,
                       onPressed: () {
-                        Routes.navigateToScreen(context, Routes.expense_screen);
+                        String eData = jsonEncode({
+                          "name": _eventNameController.value.text,
+                          "category": _eventCategoryController.value.text,
+                          "location": _eventLocationController.value.text,
+                          "startDate": _eventDateAndTimeController.value.text,
+                          "description":_eventPlaceDescriptionController.value.text
+                        });
+                        Routes.navigateToScreenWithArgs(
+                            context, Routes.expense_screen, eData);
                       },
                     ),
                   ),
