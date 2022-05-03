@@ -4,6 +4,7 @@ import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/stores/post/post_store.dart';
+import 'package:guilt_app/ui/Event/create_event.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import '../../constants/colors.dart';
 import 'package:flutter/rendering.dart';
@@ -23,7 +24,8 @@ class _Add_contactsState extends State<Add_contacts> {
   late List<String?> _contactStrings = [];
   late var appContacts = [];
   late var filteredContactList = [];
-  bool visible = false;
+  List<CheckContactResponse> selectContacts = [];
+
 
   changeValue(int val) {
     setState(() {
@@ -74,7 +76,7 @@ class _Add_contactsState extends State<Add_contacts> {
     }
   }
 
-  Widget getContactListTile(AppContact contactData) {
+  Widget getContactListTile(AppContact contactData, int index, bool visible) {
     return ListTile(
         leading: Container(
           height: 40,
@@ -106,11 +108,22 @@ class _Add_contactsState extends State<Add_contacts> {
                 borderRadius: BorderRadius.all(Radius.circular(10.00))),
             onChanged: (changeValue) {
               setState(() {
-                if (changeValue == true) {
-                  visible = true;
-                } else {
-                  visible = false;
-                }
+                filteredContactList[index].visible = !filteredContactList[index].visible;
+                if(filteredContactList[index].visible == true)
+                  {
+
+                    selectContacts.add(CheckContactResponse());
+                  }
+                else if(filteredContactList[index].visible == false)
+                  {
+                    selectContacts.removeWhere((element) => element.contact == filteredContactList[index]);
+                  }
+                //if(changeValue == true){
+                 // visible = true;
+                //}
+                 //else {
+                //visible = false;
+                //}
                 // if (changeValue == true) {
                 //   //checked[index] = true;
                 //   checked = true;
@@ -136,9 +149,21 @@ class _Add_contactsState extends State<Add_contacts> {
         title: const Text('Contacts'),
         actions: [
           IconButton(
-            icon: Icon(Icons.save),
-            onPressed: () {},
-          )
+            icon: Icon(Icons.check),
+            onPressed: () {
+
+ //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Create_event( CheckContactmodel: filteredContactList[index])));
+
+    // setState(() {
+              //
+              //   // filteredContactList[index] == true ?
+              //   // Navigator.push(
+              //   //     context,
+              //   //     MaterialPageRoute(
+              //   //     builder: (context) => Create_event(),)): print('error');
+              // });
+            },
+          ),
         ],
       ),
       child: Container(
@@ -176,7 +201,7 @@ class _Add_contactsState extends State<Add_contacts> {
                               itemCount: filteredContactList.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return getContactListTile(
-                                    filteredContactList[index]);
+                                  filteredContactList[index],index,filteredContactList[index].visible,);
                               }),
                         ),
                         Container(

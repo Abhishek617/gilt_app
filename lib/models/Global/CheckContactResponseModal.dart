@@ -32,8 +32,9 @@ class AppContact {
   int? isExist;
   int? userId;
   String? profile;
+  bool? visible = false;
 
-  AppContact({this.phone, this.isExist, this.userId, this.profile});
+  AppContact({this.phone, this.isExist, this.userId, this.profile, this.visible});
 
   AppContact.fromJson(Map<String, dynamic> json) {
     phone = json['phone'];

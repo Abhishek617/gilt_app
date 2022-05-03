@@ -7,6 +7,7 @@ import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
+import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 
@@ -20,7 +21,8 @@ import 'package:intl/intl.dart';
 import '../../utils/device/device_utils.dart';
 
 class Create_event extends StatefulWidget {
-  const Create_event({Key? key}) : super(key: key);
+  //final CheckContactResponse CheckContactmodel;
+  const Create_event({Key? key,}) : super(key: key);
 
   @override
   State<Create_event> createState() => _Create_eventState();
