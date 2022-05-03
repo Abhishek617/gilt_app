@@ -147,6 +147,15 @@ mixin _$UserStore on _UserStore, Store {
         super.settingpost(UpdateSettingData, successCallback, errorCallback));
   }
 
+  final _$createEventAsyncAction = AsyncAction('_UserStore.createEvent');
+
+  @override
+  Future<dynamic> createEvent(CreateEventRequestModal eventData,
+      dynamic successCallback, dynamic errorCallback) {
+    return _$createEventAsyncAction.run(
+        () => super.createEvent(eventData, successCallback, errorCallback));
+  }
+
   final _$updateprofileAsyncAction = AsyncAction('_UserStore.updateprofile');
 
   @override
