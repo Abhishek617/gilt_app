@@ -21,8 +21,8 @@ import 'package:intl/intl.dart';
 import '../../utils/device/device_utils.dart';
 
 class Create_event extends StatefulWidget {
-  //final CheckContactResponse CheckContactmodel;
-  const Create_event({Key? key,}) : super(key: key);
+ // final CheckContactResponse CheckContactmodel;
+  const Create_event({Key? key, }) : super(key: key);
 
   @override
   State<Create_event> createState() => _Create_eventState();

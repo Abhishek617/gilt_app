@@ -76,7 +76,8 @@ class _Add_contactsState extends State<Add_contacts> {
     }
   }
 
-  Widget getContactListTile(AppContact contactData, int index, bool visible) {
+  Widget getContactListTile( int index) {
+    var contentData = filteredContactList[index];
     return ListTile(
         leading: Container(
           height: 40,
@@ -101,22 +102,21 @@ class _Add_contactsState extends State<Add_contacts> {
           height: 20,
           width: 20,
           child: Checkbox(
-            value: visible,
+            value: contentData.visible,
             activeColor: Colors.white,
             checkColor: Colors.black,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.00))),
             onChanged: (changeValue) {
               setState(() {
-                filteredContactList[index].visible = !filteredContactList[index].visible;
-                if(filteredContactList[index].visible == true)
+                contentData.visible = !contentData.visible;
+                if(contentData.visible == true)
                   {
-
-                    selectContacts.add(CheckContactResponse());
+                    selectContacts.add(contentData as CheckContactResponse) ;
                   }
-                else if(filteredContactList[index].visible == false)
+                else
                   {
-                    selectContacts.removeWhere((element) => element.contact == filteredContactList[index]);
+                    selectContacts.removeWhere((element) => element.contact == contentData);
                   }
                 //if(changeValue == true){
                  // visible = true;
@@ -137,7 +137,7 @@ class _Add_contactsState extends State<Add_contacts> {
             },
           ),
         ),
-        title: Text(contactData.phone!));
+        title: Text(contentData.phone!));
   }
 
   @override
@@ -152,7 +152,7 @@ class _Add_contactsState extends State<Add_contacts> {
             icon: Icon(Icons.check),
             onPressed: () {
 
- //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Create_event( CheckContactmodel: filteredContactList[index])));
+ //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Create_event( CheckContactmodel: conte )));
 
     // setState(() {
               //
@@ -201,7 +201,7 @@ class _Add_contactsState extends State<Add_contacts> {
                               itemCount: filteredContactList.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return getContactListTile(
-                                  filteredContactList[index],index,filteredContactList[index].visible,);
+                               index);
                               }),
                         ),
                         Container(
