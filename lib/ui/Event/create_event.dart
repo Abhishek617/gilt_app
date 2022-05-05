@@ -21,18 +21,18 @@ import 'package:intl/intl.dart';
 import '../../utils/device/device_utils.dart';
 
 class Create_event extends StatefulWidget {
- // final CheckContactResponse CheckContactmodel;
-  const Create_event({Key? key, }) : super(key: key);
+ final List <AppContact> Selectedcontactlist;
+  const Create_event({Key? key,  required this.Selectedcontactlist}) : super(key: key);
 
   @override
-  State<Create_event> createState() => _Create_eventState();
+  State<Create_event> createState() => _Create_eventState(Selectedcontactlist);
 }
 
 class _Create_eventState extends State<Create_event> {
+   List<AppContact> Selectedcontactlist;
+  _Create_eventState(this.Selectedcontactlist);
   File? pickedImage;
   final UserStore _userStore = UserStore(getIt<Repository>());
-
-
   void imagePickerOption() {
     Get.bottomSheet(
       SingleChildScrollView(
@@ -426,7 +426,7 @@ class _Create_eventState extends State<Create_event> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           "Invite Attended",
                           style: TextStyle(fontWeight: FontWeight.bold),
@@ -434,10 +434,18 @@ class _Create_eventState extends State<Create_event> {
                         SizedBox(
                           height: 5,
                         ),
-                        Text(
-                          "Add Attendence with control list",
+                        Selectedcontactlist!.length > 0
+                          ?
+                         Text(
+                          "control list",
                           style: TextStyle(fontWeight: FontWeight.w400),
-                        ),
+                        )
+                        :
+                          Text(
+                            "Add Attendence with control list",
+                            style: TextStyle(fontWeight: FontWeight.w400),
+                          )
+
                       ],
                     )
                   ],

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/data/repository.dart';
@@ -5,6 +7,8 @@ import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/stores/post/post_store.dart';
 import 'package:guilt_app/ui/Event/create_event.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import '../../constants/colors.dart';
 import 'package:flutter/rendering.dart';
@@ -24,7 +28,7 @@ class _Add_contactsState extends State<Add_contacts> {
   late List<String?> _contactStrings = [];
   late var appContacts = [];
   late var filteredContactList = [];
-  List<CheckContactResponse> selectContacts = [];
+  List<AppContact> selectContacts = [];
 
 
   changeValue(int val) {
@@ -78,6 +82,7 @@ class _Add_contactsState extends State<Add_contacts> {
 
   Widget getContactListTile( int index) {
     var contentData = filteredContactList[index];
+
     return ListTile(
         leading: Container(
           height: 40,
@@ -112,11 +117,11 @@ class _Add_contactsState extends State<Add_contacts> {
                 contentData.visible = !contentData.visible;
                 if(contentData.visible == true)
                   {
-                    selectContacts.add(contentData as CheckContactResponse) ;
-                  }
+                    selectContacts.add(contentData) ;
+                   }
                 else
                   {
-                    selectContacts.removeWhere((element) => element.contact == contentData);
+                    selectContacts.removeWhere((element) => element.phone == contentData);
                   }
                 //if(changeValue == true){
                  // visible = true;
@@ -151,9 +156,15 @@ class _Add_contactsState extends State<Add_contacts> {
           IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
+if(selectContacts.length > 0) {
 
- //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Create_event( CheckContactmodel: conte )));
-
+  Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => Create_event(Selectedcontactlist: selectContacts)));
+}
+else{
+  GlobalMethods.showErrorMessage(
+      context, 'Please select Contact', 'Create Event');
+}
     // setState(() {
               //
               //   // filteredContactList[index] == true ?

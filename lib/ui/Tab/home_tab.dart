@@ -52,7 +52,7 @@ class _HomeTabState extends State<HomeTab> {
       HomeExploreScreen(),
       Wallet(),
       _userStore.getUserRole() == AppSettings.businessUserRole
-          ? Create_event()
+          ? Create_event(Selectedcontactlist: [])
           : Add_business(),
       Messages(),
       FullProfile(),
