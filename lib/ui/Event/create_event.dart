@@ -21,18 +21,23 @@ import 'package:intl/intl.dart';
 import '../../utils/device/device_utils.dart';
 
 class Create_event extends StatefulWidget {
- final List <AppContact> Selectedcontactlist;
-  const Create_event({Key? key,  required this.Selectedcontactlist}) : super(key: key);
+  final List<AppContact> Selectedcontactlist;
+
+  const Create_event({Key? key, required this.Selectedcontactlist})
+      : super(key: key);
 
   @override
   State<Create_event> createState() => _Create_eventState(Selectedcontactlist);
 }
 
 class _Create_eventState extends State<Create_event> {
-   List<AppContact> Selectedcontactlist;
+  List<AppContact> Selectedcontactlist;
+
   _Create_eventState(this.Selectedcontactlist);
+
   File? pickedImage;
   final UserStore _userStore = UserStore(getIt<Repository>());
+
   void imagePickerOption() {
     Get.bottomSheet(
       SingleChildScrollView(
@@ -98,9 +103,58 @@ class _Create_eventState extends State<Create_event> {
   TextEditingController _eventNameController = TextEditingController();
   TextEditingController _eventCategoryController = TextEditingController();
   TextEditingController _eventLocationController = TextEditingController();
-  TextEditingController _eventDateAndTimeController = TextEditingController(text: DateTime.now().toString());
-  TextEditingController _eventPlaceDescriptionController = TextEditingController();
+  TextEditingController _eventDateAndTimeController =
+      TextEditingController(text: DateTime.now().toString());
+  TextEditingController _eventPlaceDescriptionController =
+      TextEditingController();
 
+  Widget getConditionsWidgets() {
+    if (Selectedcontactlist!.length > 0) {
+      return Row(
+        children: Selectedcontactlist.map(
+            (item) => Selectedcontactlist.indexOf(item) < 5
+                ? Container(
+                    margin: EdgeInsets.only(left: 10),
+                    height: 40,
+                    width: 40,
+                    // margin: EdgeInsets.all(100.0),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              'https://img.icons8.com/color/344/person-male.png'),
+                          fit: BoxFit.fill,
+                        ),
+                        color: Colors.orange,
+                        shape: BoxShape.circle),
+                  )
+                : Selectedcontactlist.lastIndexOf(item) == Selectedcontactlist.length - Selectedcontactlist.indexOf(item)
+                    ? Container():Container(
+              height: 40,
+              width: 40,
+              child: Padding(
+                padding: EdgeInsets.only(top: 11),
+                child: Text('+'+
+                    (Selectedcontactlist.length - Selectedcontactlist.lastIndexOf(item)).toString(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              margin: EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                  color: AppColors.primaryColor,
+                  shape: BoxShape.circle),
+            )
+
+        ).toList(),
+      );
+    } else {
+      return IconButton(icon: Icon(Icons.add), onPressed: () {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -270,33 +324,34 @@ class _Create_eventState extends State<Create_event> {
                 Row(
                   children: [
                     Container(
-                      width: DeviceUtils.getScaledWidth(context, 0.85),
-                      child: DateTimePicker(
-                        controller: _eventDateAndTimeController,
-                        decoration: InputDecoration(border: InputBorder.none, focusedBorder: InputBorder.none, contentPadding: EdgeInsets.all(0)),
-                        type: DateTimePickerType.dateTime,
-                        dateMask: 'd MMM, yyyy HH:mm',
-                        //initialValue: DateTime.now().toString(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(2100),
-                        icon: Icon(Icons.event),
-                        selectableDayPredicate: (date) {
-                          // Disable weekend days to select from the calendar
-                          if (date.weekday == 6 || date.weekday == 7) {
-                            return false;
-                          }
+                        width: DeviceUtils.getScaledWidth(context, 0.85),
+                        child: DateTimePicker(
+                          controller: _eventDateAndTimeController,
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.all(0)),
+                          type: DateTimePickerType.dateTime,
+                          dateMask: 'd MMM, yyyy HH:mm',
+                          //initialValue: DateTime.now().toString(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2100),
+                          icon: Icon(Icons.event),
+                          selectableDayPredicate: (date) {
+                            // Disable weekend days to select from the calendar
+                            if (date.weekday == 6 || date.weekday == 7) {
+                              return false;
+                            }
 
-                          return true;
-                        },
-                        onChanged: (val) => print(val),
-                        validator: (val) {
-                          print(val);
-                          return null;
-                        },
-                        onSaved: (val) => print(val),
-                      )
-                    ),
-
+                            return true;
+                          },
+                          onChanged: (val) => print(val),
+                          validator: (val) {
+                            print(val);
+                            return null;
+                          },
+                          onSaved: (val) => print(val),
+                        )),
                   ],
                 ),
                 Container(
@@ -435,17 +490,16 @@ class _Create_eventState extends State<Create_event> {
                           height: 5,
                         ),
                         Selectedcontactlist!.length > 0
-                          ?
-                         Text(
-                          "control list",
-                          style: TextStyle(fontWeight: FontWeight.w400),
-                        )
-                        :
-                          Text(
-                            "Add Attendence with control list",
-                            style: TextStyle(fontWeight: FontWeight.w400),
-                          )
-
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  getConditionsWidgets(),
+                                ],
+                              )
+                            : Text(
+                                "Add Attendence with control list",
+                                style: TextStyle(fontWeight: FontWeight.w400),
+                              )
                       ],
                     )
                   ],
@@ -532,7 +586,8 @@ class _Create_eventState extends State<Create_event> {
                           "category": _eventCategoryController.value.text,
                           "location": _eventLocationController.value.text,
                           "startDate": _eventDateAndTimeController.value.text,
-                          "description":_eventPlaceDescriptionController.value.text
+                          "description":
+                              _eventPlaceDescriptionController.value.text
                         });
                         Routes.navigateToScreenWithArgs(
                             context, Routes.expense_screen, eData);
