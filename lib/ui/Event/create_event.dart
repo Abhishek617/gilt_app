@@ -127,8 +127,8 @@ class _Create_eventState extends State<Create_event> {
                         color: Colors.orange,
                         shape: BoxShape.circle),
                   )
-                : Selectedcontactlist.lastIndexOf(item) == Selectedcontactlist.length - Selectedcontactlist.indexOf(item)
-                    ? Container():Container(
+                : Selectedcontactlist.lastIndexOf(item) == 5
+                    ? Container(
               height: 40,
               width: 40,
               child: Padding(
@@ -147,9 +147,13 @@ class _Create_eventState extends State<Create_event> {
               decoration: BoxDecoration(
                   color: AppColors.primaryColor,
                   shape: BoxShape.circle),
-            )
+
+            ):Container()
+
+
 
         ).toList(),
+        
       );
     } else {
       return IconButton(icon: Icon(Icons.add), onPressed: () {});

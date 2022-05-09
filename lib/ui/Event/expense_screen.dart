@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
+import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
@@ -33,13 +34,15 @@ import 'package:http/http.dart' as http;
 import '../../widgets/rounded_button_widget.dart';
 
 class Expense_Screen extends StatefulWidget {
-  const Expense_Screen({Key? key}) : super(key: key);
+
+  const Expense_Screen({Key? key,}) : super(key: key);
 
   @override
   State<Expense_Screen> createState() => _Expense_ScreenState();
 }
 
 class _Expense_ScreenState extends State<Expense_Screen> {
+
   bool viewVisible = false;
   bool status = true;
   final UserStore _userStore = UserStore(getIt<Repository>());
