@@ -593,8 +593,9 @@ class _Create_eventState extends State<Create_event> {
                           "description":
                               _eventPlaceDescriptionController.value.text
                         });
-                        Routes.navigateToScreenWithArgs(
-                            context, Routes.expense_screen, eData);
+                        List<AppContact> Selectedcontactexpenselist = Selectedcontactlist;
+                        Routes.navigateToScreenWithContactArgs(
+                            context, Routes.expense_screen, eData, Selectedcontactexpenselist);
                       },
                     ),
                   ),

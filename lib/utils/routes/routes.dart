@@ -1,3 +1,4 @@
+import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:guilt_app/ui/Event/create_event.dart';
@@ -151,7 +152,7 @@ class Routes {
     help_and_support: (BuildContext context) => HelpAndSupport(),
     about_screen: (BuildContext context) => About_screen(),
     create_event: (BuildContext context) => Create_event(Selectedcontactlist: []),
-    expense_screen: (BuildContext context) => Expense_Screen(),
+    expense_screen: (BuildContext context) => Expense_Screen(selectedcontactexpenselist: [],),
     attendees_profile: (BuildContext context) => Attendees_profile(),
     add_contacts: (BuildContext context) => Add_contacts(),
     bank_lists: (BuildContext context) => Bank_lists(),
@@ -174,9 +175,15 @@ class Routes {
   }
 
   static navigateToScreenWithArgs(
-      BuildContext context, route, pageArgs) {
+      BuildContext context, route, pageArgs, ) {
     Navigator.of(context)
         .pushNamed(route, arguments: pageArgs);
+  }
+
+  static navigateToScreenWithContactArgs(
+      BuildContext context, route, pageArgs, List<AppContact> selectedcontactexpenselist,) {
+    Navigator.of(context)
+        .pushNamed(route, arguments: pageArgs,);
   }
 
   static goBack(BuildContext context) {

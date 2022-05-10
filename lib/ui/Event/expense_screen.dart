@@ -2,47 +2,36 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
-import 'package:guilt_app/models/PageModals/faqs_model.dart';
-import 'package:flutter/material.dart';
+
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
-import 'package:guilt_app/widgets/custom_scaffold.dart';
+
 import '../../constants/colors.dart';
 import '../../utils/routes/routes.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
-import 'package:guilt_app/constants/assets.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
-import 'package:guilt_app/models/PageModals/success_error_args.dart';
-import 'package:guilt_app/stores/form/form_store.dart';
-import 'package:guilt_app/stores/theme/theme_store.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
-import 'package:guilt_app/widgets/app_logo.dart';
-import 'package:guilt_app/widgets/textfield_widget.dart';
-import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
 import '../../widgets/rounded_button_widget.dart';
 
 class Expense_Screen extends StatefulWidget {
-
-  const Expense_Screen({Key? key,}) : super(key: key);
+  final List<AppContact> selectedcontactexpenselist;
+  const Expense_Screen({Key? key, required this.selectedcontactexpenselist}) : super(key: key);
 
   @override
-  State<Expense_Screen> createState() => _Expense_ScreenState();
+  State<Expense_Screen> createState() => _Expense_ScreenState(selectedcontactexpenselist);
 }
 
 class _Expense_ScreenState extends State<Expense_Screen> {
-
+  List<AppContact> selectedcontactexpenselist;
+_Expense_ScreenState(this.selectedcontactexpenselist);
   bool viewVisible = false;
   bool status = true;
   final UserStore _userStore = UserStore(getIt<Repository>());
@@ -298,8 +287,9 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                       child: Container(
                         height: DeviceUtils.getScaledHeight(context, 0.366),
                         child: ListView.builder(
-                            itemCount: 10,
+                            itemCount: selectedcontactexpenselist.length,
                             itemBuilder: (BuildContext context, int index) {
+
                               return ListTile(
                                   leading: Container(
                                     height: DeviceUtils.getScaledHeight(
@@ -367,7 +357,8 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                                     ],
                                   ),
 
-                                  title: Text("Abc $index"));
+                                  title: Text(selectedcontactexpenselist[index].phone.toString()),
+                              );
 
                             }
                             ),
