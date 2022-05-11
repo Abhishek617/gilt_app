@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Business/BusinessPlaceLostModal.dart';
@@ -11,12 +12,9 @@ import 'package:guilt_app/models/Business/BusinessSpaceListModal.dart';
 import 'package:guilt_app/stores/post/post_store.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
-import '../../constants/colors.dart';
-import '../../utils/routes/routes.dart';
 import 'package:flutter/rendering.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../widgets/rounded_button_widget.dart';
 
 // ignore: camel_case_types
 
@@ -127,7 +125,7 @@ class _Add_businessState extends State<Add_business> {
       if (BusinessSpaceListModal.fromJson(placeData).businessSpaces != null) {
         setState(() {
           spaceList =
-          BusinessSpaceListModal.fromJson(placeData).businessSpaces!;
+              BusinessSpaceListModal.fromJson(placeData).businessSpaces!;
           selectedSpace = spaceList[0];
         });
       }
@@ -152,6 +150,18 @@ class _Add_businessState extends State<Add_business> {
           title: Text('Add Business'),
           centerTitle: true,
           shadowColor: Colors.transparent,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Routes.goBack(context);
+            },
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.check_rounded),
+              onPressed: addNewBusiness,
+            )
+          ],
         ),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -198,7 +208,10 @@ class _Add_businessState extends State<Add_business> {
                   items: placeList.map((BusinessPlaces item) {
                     return DropdownMenuItem(
                       value: item,
-                      child: Text(item.name ?? item.id.toString(),style: TextStyle(color: Colors.black),),
+                      child: Text(
+                        item.name ?? item.id.toString(),
+                        style: TextStyle(color: Colors.black),
+                      ),
                     );
                   }).toList(),
                   // After selecting the desired option,it will
@@ -228,7 +241,10 @@ class _Add_businessState extends State<Add_business> {
                   items: spaceList.map((BusinessSpaces item) {
                     return DropdownMenuItem(
                       value: item,
-                      child: Text(item.name ?? item.id.toString(),style: TextStyle(color: Colors.black),),
+                      child: Text(
+                        item.name ?? item.id.toString(),
+                        style: TextStyle(color: Colors.black),
+                      ),
                     );
                   }).toList(),
                   // After selecting the desired option,it will
@@ -434,16 +450,6 @@ class _Add_businessState extends State<Add_business> {
                       ),
                     ),
                   ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Center(
-                  child: ElevatedButtonWidget(
-                    buttonText: 'Add Now',
-                    buttonColor: AppColors.primaryColor,
-                    onPressed: addNewBusiness,
-                  ),
                 ),
               ],
             ),

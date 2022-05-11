@@ -44,7 +44,7 @@ class FaceAuthService {
       _isAuthenticating = true;
       _authorized = 'Authenticating';
       authenticated = await auth.authenticate(
-        localizedReason: 'Let OS determine authentication method',
+        localizedReason: 'Please authenticate to use Guilt Trip',
         options: const AuthenticationOptions(
           useErrorDialogs: true,
           stickyAuth: true,

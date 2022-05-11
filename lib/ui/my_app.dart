@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
   final UserStore _userStore = UserStore(getIt<Repository>());
 
   Widget appInit(){
-    FaceAuthService.authenticate();
+    if(_userStore.isLoggedIn) FaceAuthService.authenticate();
     return (_userStore.isFirst
         ? OnBoardingPage()
         : (_userStore.isLoggedIn ? HomeTab() : WelcomeLogin()));

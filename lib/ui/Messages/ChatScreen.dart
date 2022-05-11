@@ -1,11 +1,15 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/data/network/constants/endpoints.dart';
+import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
+import 'package:guilt_app/models/Chat/message_model.dart';
+import 'package:guilt_app/utils/Global_methods/SocketService.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/widgets/custom_scaffold.dart';
 
-import '../../constants/colors.dart';
-import '../../utils/device/device_utils.dart';
-import '../../widgets/custom_scaffold.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -15,6 +19,32 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  late SharedPreferenceHelper sharedPrefHelper;
+  late TextEditingController _messageController;
+  late ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _messageController = TextEditingController();
+    _controller = ScrollController();
+    initSocket();
+    WidgetsBinding.instance?.addPostFrameCallback((_) => {
+      _controller.animateTo(
+        0.0,
+        duration: Duration(milliseconds: 200),
+        curve: Curves.easeIn,
+      )
+    });
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    socketDisconnect();
+    super.dispose();
+  }
+  
   reciver() => Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -177,9 +207,10 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               SingleChildScrollView(
                 child: Container(
-                  width: DeviceUtils.getScaledWidth(context, 1.10),
+                  width: DeviceUtils.getScaledWidth(context, 1.00),
                   height: DeviceUtils.getScaledHeight(context, 0.85),
                   child: ListView.builder(
+                    controller: _controller,
                     itemCount: item.length,
                     itemBuilder: (context, index) =>
                         index.isOdd ? reciver() : sender(),
@@ -210,6 +241,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   Expanded(
                     child: TextField(
+                      controller: _messageController,
                       textAlign: TextAlign.start,
                       decoration: InputDecoration(
                         hoverColor: Colors.white,
@@ -234,7 +266,12 @@ class _ChatScreenState extends State<ChatScreen> {
                     width: 15,
                   ),
                   FloatingActionButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      sendMessage(_messageController.text,(){
+                        _messageController.text = '';
+                        // TODO: Update Chat
+                      });
+                    },
                     child: Icon(
                       Icons.send,
                       color: AppColors.primaryColor,
