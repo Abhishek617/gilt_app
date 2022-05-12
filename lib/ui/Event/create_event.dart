@@ -9,6 +9,7 @@ import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/ui/Event/expense_screen.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 
 import 'package:guilt_app/widgets/custom_scaffold.dart';
@@ -585,17 +586,21 @@ class _Create_eventState extends State<Create_event> {
                       buttonText: 'Continue',
                       buttonColor: AppColors.primaryColor,
                       onPressed: () {
-                        String eData = jsonEncode({
+                       String eData = jsonEncode({
                           "name": _eventNameController.value.text,
                           "category": _eventCategoryController.value.text,
                           "location": _eventLocationController.value.text,
                           "startDate": _eventDateAndTimeController.value.text,
                           "description":
-                              _eventPlaceDescriptionController.value.text
+                              _eventPlaceDescriptionController.value.text,
                         });
-                        List<AppContact> Selectedcontactexpenselist = Selectedcontactlist;
-                        Routes.navigateToScreenWithContactArgs(
-                            context, Routes.expense_screen, eData, Selectedcontactexpenselist);
+
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => Expense_Screen(sdata: eData,
+                                selectedcontactexpenselist: Selectedcontactlist)));
+                        //
+                        // Routes.navigateToScreenWithContactArgs(
+                        //     context, Routes.expense_screen, eData, Selectedcontactexpenselist);
                       },
                     ),
                   ),

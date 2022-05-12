@@ -152,7 +152,7 @@ class Routes {
     help_and_support: (BuildContext context) => HelpAndSupport(),
     about_screen: (BuildContext context) => About_screen(),
     create_event: (BuildContext context) => Create_event(Selectedcontactlist: []),
-    expense_screen: (BuildContext context) => Expense_Screen(selectedcontactexpenselist: [],),
+    expense_screen: (BuildContext context) => Expense_Screen(selectedcontactexpenselist: [], sdata: '',),
     attendees_profile: (BuildContext context) => Attendees_profile(),
     add_contacts: (BuildContext context) => Add_contacts(),
     bank_lists: (BuildContext context) => Bank_lists(),
@@ -181,7 +181,7 @@ class Routes {
   }
 
   static navigateToScreenWithContactArgs(
-      BuildContext context, route, pageArgs, List<AppContact> selectedcontactexpenselist,) {
+      BuildContext context, route, pageArgs,) {
     Navigator.of(context)
         .pushNamed(route, arguments: pageArgs,);
   }

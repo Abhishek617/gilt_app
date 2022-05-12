@@ -23,15 +23,17 @@ import '../../widgets/rounded_button_widget.dart';
 
 class Expense_Screen extends StatefulWidget {
   final List<AppContact> selectedcontactexpenselist;
-  const Expense_Screen({Key? key, required this.selectedcontactexpenselist}) : super(key: key);
+  String sdata;
+ Expense_Screen({Key? key, required this.selectedcontactexpenselist, required this.sdata}) : super(key: key);
 
   @override
-  State<Expense_Screen> createState() => _Expense_ScreenState(selectedcontactexpenselist);
+  State<Expense_Screen> createState() => _Expense_ScreenState(selectedcontactexpenselist , sdata);
 }
 
 class _Expense_ScreenState extends State<Expense_Screen> {
   List<AppContact> selectedcontactexpenselist;
-_Expense_ScreenState(this.selectedcontactexpenselist);
+  String sdata;
+ _Expense_ScreenState(this.selectedcontactexpenselist,this.sdata);
   bool viewVisible = false;
   bool status = true;
   final UserStore _userStore = UserStore(getIt<Repository>());
@@ -101,7 +103,7 @@ _Expense_ScreenState(this.selectedcontactexpenselist);
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as String;
+final args = ModalRoute.of(context)!.settings.arguments;
     return ScaffoldWrapper(
         isMenu: false,
         appBar: AppBar(
@@ -357,7 +359,7 @@ _Expense_ScreenState(this.selectedcontactexpenselist);
                                     ],
                                   ),
 
-                                  title: Text(selectedcontactexpenselist[index].phone.toString()),
+                                  title: Text(selectedcontactexpenselist[index].phone.toString() , style:TextStyle(fontSize: 13),),
                               );
 
                             }
@@ -374,7 +376,7 @@ _Expense_ScreenState(this.selectedcontactexpenselist);
                         buttonText: 'Confirm',
                         buttonColor: AppColors.primaryColor,
                         onPressed: () {
-                          createEvent(args);
+                      createEvent(args);
                         },
                       ): disableButton(),
                     ),
