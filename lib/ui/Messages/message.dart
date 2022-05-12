@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guilt_app/constants/colors.dart';
-import 'package:guilt_app/ui/common/menu_drawer.dart';
+import 'package:guilt_app/models/Chat/roomListModel.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
+import 'package:guilt_app/utils/Global_methods/SocketService.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
-
-import '../../utils/routes/routes.dart';
-import '../../widgets/custom_scaffold.dart';
+import 'package:mobx/mobx.dart';
 
 class Messages extends StatefulWidget {
   const Messages({Key? key}) : super(key: key);
@@ -15,7 +17,29 @@ class Messages extends StatefulWidget {
 }
 
 class _MessagesState extends State<Messages> {
-  Message_list() => GestureDetector(
+  @observable
+  List<Rooms> screenRoomList = [];
+
+  @override
+  void initState() {
+    G.socketUtils?.handleRoomList((roomListData){
+      setState(() {
+        print('roomListData');
+        print(roomListData);
+        var data = RoomListModel.fromJson(roomListData);
+        screenRoomList = data.roomData?.rooms ?? [];
+      });
+
+    });
+    super.initState();
+
+  }
+
+  bindSocketListeners(){
+
+  }
+
+  Message_list(msgData) => GestureDetector(
         child: Column(
           children: [
             Container(
@@ -52,7 +76,7 @@ class _MessagesState extends State<Messages> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'David Siliba',
+                        msgData.userName ?? 'No Name',
                         style: TextStyle(
                           color: AppColors.primaryColor,
                           fontSize: 16,
@@ -105,7 +129,6 @@ class _MessagesState extends State<Messages> {
                             color: AppColors.primaryColor,
                             shape: BoxShape.circle),
                       ),
-
                     ],
                   ),
                 ],
@@ -127,7 +150,7 @@ class _MessagesState extends State<Messages> {
         onTap: () => {Routes.navigateToScreen(context, Routes.chat)},
       );
 
-  Message_list_withoutcount() => GestureDetector(
+  Message_list_withoutcount(msgData) => GestureDetector(
       child: Column(
         children: [
           Container(
@@ -164,7 +187,7 @@ class _MessagesState extends State<Messages> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'David Siliba',
+                      msgData.username ?? 'No Name',
                       style: TextStyle(
                         color: AppColors.primaryColor,
                         fontSize: 16,
@@ -172,7 +195,7 @@ class _MessagesState extends State<Messages> {
                       ),
                     ),
                     Text(
-                      'Hey! How its Going',
+                      msgData.lastMessage ?? 'No Message',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -188,7 +211,7 @@ class _MessagesState extends State<Messages> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Just Now',
+                      msgData.lastMessageAt ?? 'Just Now',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
@@ -215,20 +238,10 @@ class _MessagesState extends State<Messages> {
           ),
         ],
       ),
-      onTap: () => {Routes.navigateToScreen(context, Routes.chat)});
-  List<String> item = [
-    ' b',
-    'c ',
-    ' d',
-    ' b',
-    'c ',
-    ' d',
-    ' r',
-    'n ',
-    'y',
-    'f',
-    'm' ' b',
-  ];
+      onTap: () {
+        G.socketUtils?.joinPrivateUser(msgData);
+        Routes.navigateToScreenWithArgs(context, Routes.chat,msgData);
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -256,17 +269,25 @@ class _MessagesState extends State<Messages> {
             SizedBox(
               height: 15,
             ),
-            SingleChildScrollView(
-              child: Container(
-                width: DeviceUtils.getScaledWidth(context, 1.05),
-                height: DeviceUtils.getScaledHeight(context, 0.73),
-                child: ListView.builder(
-                  itemCount: item.length,
-                  itemBuilder: (context, index) =>
-                      index.isOdd ? Message_list() : Message_list_withoutcount(),
-                ),
-              ),
-            ),
+            screenRoomList.length > 0
+                ? SingleChildScrollView(
+                    child: Container(
+                      width: DeviceUtils.getScaledWidth(context, 1.05),
+                      height: DeviceUtils.getScaledHeight(context, 0.73),
+                      child: Observer(
+                          builder: (_) => ListView.builder(
+                                itemCount: screenRoomList.length,
+                                itemBuilder: (context, index) =>
+                                screenRoomList[index]?.unreadMessageCount !=
+                                            0
+                                        ? Message_list(screenRoomList[index])
+                                        : Message_list_withoutcount(screenRoomList[index]),
+                              )),
+                    ),
+                  )
+                : Center(
+                    child: Text('No Messages Found'),
+                  ),
           ],
         ),
       ),

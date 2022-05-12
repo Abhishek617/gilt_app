@@ -8,6 +8,8 @@ import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
+import 'package:guilt_app/utils/Global_methods/SocketService.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
@@ -26,13 +28,15 @@ class HomeExploreScreen extends StatefulWidget {
 }
 
 class _HomeExploreScreenState extends State<HomeExploreScreen> {
+  late SocketUtils socketUtils;
   late UserStore _userStore = UserStore(getIt<Repository>());
   List<UpcomingAndPastEventListDetail> upcomingEventList = [];
   List<UpcomingAndPastEventListDetail> pastEventList = [];
 
   @override
   void initState() {
-    initSetup();
+    G.initSocket();
+    G.socketUtils?.initSocket();
     super.initState();
   }
 

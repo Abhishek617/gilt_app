@@ -1,15 +1,15 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guilt_app/constants/colors.dart';
-import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
-import 'package:guilt_app/models/Chat/message_model.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
 import 'package:guilt_app/utils/Global_methods/SocketService.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
-
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -22,29 +22,64 @@ class _ChatScreenState extends State<ChatScreen> {
   late SharedPreferenceHelper sharedPrefHelper;
   late TextEditingController _messageController;
   late ScrollController _controller;
+  var currentMessageList = [];
 
   @override
   void initState() {
     super.initState();
     _messageController = TextEditingController();
     _controller = ScrollController();
-    initSocket();
-    WidgetsBinding.instance?.addPostFrameCallback((_) => {
-      _controller.animateTo(
-        0.0,
-        duration: Duration(milliseconds: 200),
-        curve: Curves.easeIn,
-      )
-    });
+    if (currentMessageList.length > 0) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) => {
+            _controller.animateTo(
+              0.0,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeIn,
+            )
+          });
+    }
   }
 
   @override
   void dispose() {
     _messageController.dispose();
-    socketDisconnect();
+    G.socketUtils?.socketDisconnect();
     super.dispose();
   }
-  
+
+  getChatTitle() {
+    // if(currentChatRoom.type == 'event'){
+    return Observer(
+        builder: (_) => Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(G.socketUtils?.currentChatRoom.roomName),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Hosted by',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      Icon(
+                        Icons.person_pin,
+                        size: 20,
+                      ),
+                      Text(
+                        (G.socketUtils?.currentMessageList?.firstname ?? '') +
+                            ' ' +
+                            (G.socketUtils?.currentMessageList?.lastname ?? ''),
+                        style: TextStyle(fontSize: 12),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ));
+    // }
+  }
+
   reciver() => Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -176,27 +211,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           shadowColor: Colors.transparent,
           centerTitle: true,
-          title: Column(
-            children: [
-              Text('Evening of Smooth Jazz        '),
-              Row(
-                children: [
-                  Text(
-                    '             Hosted by',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  Icon(
-                    Icons.person_pin,
-                    size: 20,
-                  ),
-                  Text(
-                    'Michale Scott',
-                    style: TextStyle(fontSize: 12),
-                  )
-                ],
-              ),
-            ],
-          )),
+          title: getChatTitle()),
       child: Stack(
         children: <Widget>[
           Column(
@@ -205,18 +220,22 @@ class _ChatScreenState extends State<ChatScreen> {
                 height: 10,
                 width: 10,
               ),
-              SingleChildScrollView(
-                child: Container(
-                  width: DeviceUtils.getScaledWidth(context, 1.00),
-                  height: DeviceUtils.getScaledHeight(context, 0.85),
-                  child: ListView.builder(
-                    controller: _controller,
-                    itemCount: item.length,
-                    itemBuilder: (context, index) =>
-                        index.isOdd ? reciver() : sender(),
-                  ),
-                ),
-              ),
+              Observer(
+                  builder: (_) => G.socketUtils?.currentMessageList != null
+                      ? SingleChildScrollView(
+                          child: Container(
+                            width: DeviceUtils.getScaledWidth(context, 1.00),
+                            height: DeviceUtils.getScaledHeight(context, 0.85),
+                            child: ListView.builder(
+                              controller: _controller,
+                              itemCount: G.socketUtils?.currentMessageList
+                                  .messages.length,
+                              itemBuilder: (context, index) =>
+                                  index.isOdd ? reciver() : sender(),
+                            ),
+                          ),
+                        )
+                      : Text('Start a chat')),
             ],
           ),
           Align(
@@ -267,7 +286,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   FloatingActionButton(
                     onPressed: () {
-                      sendMessage(_messageController.text,(){
+                      G.socketUtils
+                          ?.sendMessage(_messageController.text, 'text', () {
                         _messageController.text = '';
                         // TODO: Update Chat
                       });
