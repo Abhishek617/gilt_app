@@ -48,7 +48,7 @@ class Rooms {
   String? sId;
   Null? username;
   String? lastMessageAt;
-  Null? lastMessage;
+  LastMessage? lastMessage;
   String? roomId;
   String? index;
   String? roomName;
@@ -70,7 +70,9 @@ class Rooms {
     sId = json['_id'];
     username = json['username'];
     lastMessageAt = json['last_message_at'];
-    lastMessage = json['lastMessage'];
+    lastMessage = json['lastMessage'] != null
+        ? new LastMessage.fromJson(json['lastMessage'])
+        : null;
     roomId = json['roomId'];
     index = json['index'];
     roomName = json['roomName'];
@@ -88,7 +90,9 @@ class Rooms {
     data['_id'] = this.sId;
     data['username'] = this.username;
     data['last_message_at'] = this.lastMessageAt;
-    data['lastMessage'] = this.lastMessage;
+    if (this.lastMessage != null) {
+      data['lastMessage'] = this.lastMessage!.toJson();
+    }
     data['roomId'] = this.roomId;
     data['index'] = this.index;
     data['roomName'] = this.roomName;
@@ -96,6 +100,51 @@ class Rooms {
     if (this.users != null) {
       data['users'] = this.users!.map((v) => v.toJson()).toList();
     }
+    return data;
+  }
+}
+
+class LastMessage {
+  String? messageType;
+  String? content;
+  String? senderUserId;
+  String? username;
+  int? userType;
+  int? userSqlId;
+  String? date;
+  String? timestamp;
+
+  LastMessage(
+      {this.messageType,
+        this.content,
+        this.senderUserId,
+        this.username,
+        this.userType,
+        this.userSqlId,
+        this.date,
+        this.timestamp});
+
+  LastMessage.fromJson(Map<String, dynamic> json) {
+    messageType = json['message_type'];
+    content = json['content'];
+    senderUserId = json['senderUserId'];
+    username = json['username'];
+    userType = json['user_type'];
+    userSqlId = json['userSqlId'];
+    date = json['date'];
+    timestamp = json['timestamp'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['message_type'] = this.messageType;
+    data['content'] = this.content;
+    data['senderUserId'] = this.senderUserId;
+    data['username'] = this.username;
+    data['user_type'] = this.userType;
+    data['userSqlId'] = this.userSqlId;
+    data['date'] = this.date;
+    data['timestamp'] = this.timestamp;
     return data;
   }
 }

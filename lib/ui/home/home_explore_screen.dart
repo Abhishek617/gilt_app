@@ -36,7 +36,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
   @override
   void initState() {
     G.initSocket();
-    G.socketUtils?.initSocket();
+    G.socketUtils.initSocket();
     super.initState();
   }
 

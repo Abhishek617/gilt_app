@@ -3,7 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/models/Chat/roomListModel.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
-import 'package:guilt_app/utils/Global_methods/SocketService.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
@@ -22,22 +21,18 @@ class _MessagesState extends State<Messages> {
 
   @override
   void initState() {
-    G.socketUtils?.handleRoomList((roomListData){
+    G.socketUtils.handleRoomList((roomListData) {
       setState(() {
         print('roomListData');
         print(roomListData);
         var data = RoomListModel.fromJson(roomListData);
         screenRoomList = data.roomData?.rooms ?? [];
       });
-
     });
     super.initState();
-
   }
 
-  bindSocketListeners(){
-
-  }
+  bindSocketListeners() {}
 
   Message_list(msgData) => GestureDetector(
         child: Column(
@@ -147,7 +142,14 @@ class _MessagesState extends State<Messages> {
             ),
           ],
         ),
-        onTap: () => {Routes.navigateToScreen(context, Routes.chat)},
+        onTap: () => {
+          if (msgData.type == 'private')
+            {Routes.navigateToScreen(context, Routes.chat)}
+          else if (msgData.type == 'event')
+            {Routes.navigateToScreen(context, Routes.event_chat)}
+          else
+            {Routes.navigateToScreen(context, Routes.business_chat)}
+        },
       );
 
   Message_list_withoutcount(msgData) => GestureDetector(
@@ -187,7 +189,7 @@ class _MessagesState extends State<Messages> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      msgData.username ?? 'No Name',
+                      msgData.lastMessage.username ?? 'No Name',
                       style: TextStyle(
                         color: AppColors.primaryColor,
                         fontSize: 16,
@@ -195,7 +197,7 @@ class _MessagesState extends State<Messages> {
                       ),
                     ),
                     Text(
-                      msgData.lastMessage ?? 'No Message',
+                      msgData.lastMessage.content ?? 'No Message',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -239,8 +241,8 @@ class _MessagesState extends State<Messages> {
         ],
       ),
       onTap: () {
-        G.socketUtils?.joinPrivateUser(msgData);
-        Routes.navigateToScreenWithArgs(context, Routes.chat,msgData);
+        G.socketUtils.joinPrivateUser(msgData);
+        Routes.navigateToScreenWithArgs(context, Routes.chat, msgData);
       });
 
   @override
@@ -278,10 +280,11 @@ class _MessagesState extends State<Messages> {
                           builder: (_) => ListView.builder(
                                 itemCount: screenRoomList.length,
                                 itemBuilder: (context, index) =>
-                                screenRoomList[index]?.unreadMessageCount !=
+                                    screenRoomList[index]?.unreadMessageCount !=
                                             0
                                         ? Message_list(screenRoomList[index])
-                                        : Message_list_withoutcount(screenRoomList[index]),
+                                        : Message_list_withoutcount(
+                                            screenRoomList[index]),
                               )),
                     ),
                   )

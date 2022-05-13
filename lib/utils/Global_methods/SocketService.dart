@@ -7,6 +7,7 @@ import 'package:guilt_app/data/sharedpref/constants/preferences.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
+import 'package:guilt_app/models/Chat/SocketUserModel.dart';
 import 'package:guilt_app/models/Chat/roomListModel.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:mobx/mobx.dart';
@@ -15,13 +16,12 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketUtils {
   late IO.Socket _socket;
-  late var socketUserData;
+  late SocketUserModel socketUserData;
 
   final UserStore _userStore = UserStore(getIt<Repository>());
 
   @observable
   late var userData;
-
 
   @observable
   var currentChatRoom;
@@ -71,15 +71,16 @@ class SocketUtils {
           'token': 'Bearer $aToken'
         }; // Update the extra headers.
         _socket.connect();
-        _socket.onConnect((userData) {
+        _socket.onConnect((sUserData) {
           print('connected to websocket');
-          print(userData);
-          if(userData != null){
-          socketUserData = userData;
-          }else{
-            _socket.emit(GET_USER_DATA);
-            _socket.on(GET_USER_DATA,(data){
-              userData = data;
+          print(sUserData);
+          if (sUserData != null) {
+            socketUserData = sUserData;
+          } else {
+            getUserData((data) {
+              print('socketUserData');
+              print(data);
+              socketUserData = data;
             });
           }
         });
@@ -94,12 +95,21 @@ class SocketUtils {
       callback(response);
     });
   }
-
+getUserData(userDataHandler){
+  _socket.emit(GET_USER_DATA);
+  _socket.on(GET_USER_DATA, (response) {
+    print('SocketUserData:');
+    print(response);
+    var uD = SocketUserModel.fromJson(response);
+    userDataHandler(uD);
+  });
+}
   setOnMessageBackFromServer(Function onMessageBackFromServer) {
     _socket.on(SEND_NEW_MESSAGE, (data) {
       onMessageBackFromServer(data);
     });
   }
+
   setOnErrorListener(Function onError) {
     _socket.on('error', (error) {
       print('---------------Socket Error occurred--------------');
@@ -109,6 +119,7 @@ class SocketUtils {
       initSocket();
     });
   }
+
   @action
   handleRoomList(roomListListener) {
     if (_socket != null) {
@@ -117,6 +128,18 @@ class SocketUtils {
       _socket.off(GET_ROOM_LIST);
       _socket.on(GET_ROOM_LIST, roomListListener);
     }
+  }
+
+  onLoadMessageListener(loadMessageHandler) {
+    _socket.emit(GET_MESSAGE_LIST);
+    _socket.on(GET_MESSAGE_LIST, (messageList) {
+      loadMessageHandler(messageList);
+    });
+  }
+  onNewMessageListener(newMessageHandler) {
+    _socket.on(SEND_NEW_MESSAGE, (newMessage) {
+      newMessageHandler(newMessage);
+    });
   }
 
   @action
@@ -135,25 +158,25 @@ class SocketUtils {
   }
 
   @action
-  void sendMessage(textMessage, type, callback) {
+  void sendMessage(textMessage, threadInfo,type, callback) {
     String messageText = textMessage.trim();
     print(currentMessageList);
     print(currentChatRoom);
     print(messageText);
     if (messageText != '') {
       var messagePost = {
-        "room_key": "Marriage_8",
-        "senderUserId": "627399e7e95d745e9deb94f7",
+        "room_key": "3_14",
+        "senderUserId": socketUserData.sId,
         // mongodb userid of the loggedin user
         "message": messageText,
         // actual message, in case of file you can send file location here or send it in file object
-        "username": "Parshwa Shah",
+        "username": (socketUserData.firstName ?? '') + ' ' + (socketUserData.lastName ?? ''),
         // sender username
-        "user_type": 1,
+        "user_type": userData.user.roleId ?? '1',
         // pass user role
-        "userSqlId": 35,
+        "userSqlId": socketUserData.sqlId,
         // loggedin user sqlId,
-        "message_type": "text"
+        "message_type": type
       };
       _socket.emit('sendMessage', messagePost);
       callback();

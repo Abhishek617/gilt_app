@@ -1,15 +1,18 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
+import 'package:guilt_app/models/Chat/UserChatMessagesModel.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
-import 'package:guilt_app/utils/Global_methods/SocketService.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
+import 'package:mobx/mobx.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -22,87 +25,114 @@ class _ChatScreenState extends State<ChatScreen> {
   late SharedPreferenceHelper sharedPrefHelper;
   late TextEditingController _messageController;
   late ScrollController _controller;
-  var currentMessageList = [];
+  List<Messages> currentMessageList = [];
+  var currentUserName = '';
+
+  @observable
+  late UserChatMessagesModel? loadMessageData;
 
   @override
   void initState() {
     super.initState();
     _messageController = TextEditingController();
     _controller = ScrollController();
-    if (currentMessageList.length > 0) {
-      WidgetsBinding.instance?.addPostFrameCallback((_) => {
-            _controller.animateTo(
-              0.0,
-              duration: Duration(milliseconds: 200),
-              curve: Curves.easeIn,
-            )
-          });
-    }
+    currentUserName = G.socketUtils.userData.user.firstname + ' ' + G.socketUtils.userData.user.lastname;
+    G.socketUtils.onLoadMessageListener(loadMessageHandler);
+    G.socketUtils.onNewMessageListener(newMessageHandler);
+  }
+
+  loadMessageHandler(messageData) {
+    setState(() {
+      loadMessageData = UserChatMessagesModel.fromJson(messageData);
+      currentMessageList = loadMessageData?.messages ?? [];
+      print('loadMessageHandler');
+      print(currentMessageList);
+      if (currentMessageList.length > 0) {
+        WidgetsBinding.instance?.addPostFrameCallback((_) => {
+              _controller.animateTo(
+                0.0,
+                duration: Duration(milliseconds: 200),
+                curve: Curves.easeIn,
+              )
+            });
+      }
+    });
+  }
+
+  newMessageHandler(messageData) {
+    setState(() {
+      Messages newMsg = Messages.fromJson(messageData);
+      currentMessageList = [...currentMessageList, newMsg];
+      if (currentMessageList.length > 0) {
+        WidgetsBinding.instance?.addPostFrameCallback((_) => {
+              _controller.animateTo(
+                0.0,
+                duration: Duration(milliseconds: 200),
+                curve: Curves.easeIn,
+              )
+            });
+      }
+    });
   }
 
   @override
   void dispose() {
     _messageController.dispose();
-    G.socketUtils?.socketDisconnect();
+    G.socketUtils.socketDisconnect();
     super.dispose();
   }
 
   getChatTitle() {
     // if(currentChatRoom.type == 'event'){
     return Observer(
-        builder: (_) => Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(G.socketUtils?.currentChatRoom.roomName),
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Hosted by',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      Icon(
-                        Icons.person_pin,
-                        size: 20,
-                      ),
-                      Text(
-                        (G.socketUtils?.currentMessageList?.firstname ?? '') +
-                            ' ' +
-                            (G.socketUtils?.currentMessageList?.lastname ?? ''),
-                        style: TextStyle(fontSize: 12),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ));
+      builder: (_) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100.0),
+                border: Border.all(color: Colors.white)),
+            padding: const EdgeInsets.all(8.0),
+            child: Image.network(
+              loadMessageData?.threadUserInfo?.profile ??
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
+              height: 30,
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          Text(
+            (loadMessageData?.threadUserInfo?.firstName ?? '') +
+                ' ' +
+                (loadMessageData?.threadUserInfo?.lastName ?? ''),
+            style: TextStyle(fontSize: 12),
+          )
+        ],
+      ),
+    );
     // }
   }
 
-  reciver() => Column(
+ sender(messageDetails) => Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              SizedBox(
-                width: DeviceUtils.getScaledWidth(context, 0.32),
-              ),
               Align(
                 alignment: Alignment.centerRight,
                 child: Container(
-                  width: DeviceUtils.getScaledWidth(context, 0.44),
-                  height: DeviceUtils.getScaledHeight(context, 0.05),
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 13.5),
-                    child: Text(
-                      'Hi! About that Party....',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  constraints: BoxConstraints(minWidth: 100),
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    messageDetails.content,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   margin: EdgeInsets.all(10.0),
@@ -112,54 +142,23 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
               ),
-              Stack(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(
-                        left: 10.0, top: 00.0, bottom: 00.0, right: 25.0),
-                    child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                      width: 30,
-                      height: 30,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ],
       );
 
-  sender() => Column(
+  receiver(messageDetails) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(
-                          left: 25.0, top: 00.0, bottom: 00.0, right: 10.0),
-                      child: Image.network(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                        width: 30,
-                        height: 30,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               Container(
                 width: DeviceUtils.getScaledWidth(context, 0.44),
                 height: DeviceUtils.getScaledHeight(context, 0.05),
                 child: Padding(
                   padding: EdgeInsets.only(top: 13.5),
                   child: Text(
-                    'Hi! About that Party....',
+                    messageDetails.content,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
@@ -178,40 +177,25 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       );
-  List<String> item = [
-    ' b',
-    'c ',
-    ' d',
-    ' b',
-    'c ',
-    ' d',
-    ' r',
-    'n ',
-    'y',
-    'f',
-    'm' ' b',
-    'c ',
-    ' d',
-    ' r'
-  ];
 
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
       isMenu: false,
       appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back_ios_rounded,
-              size: 17,
-            ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+            size: 17,
           ),
-          shadowColor: Colors.transparent,
-          centerTitle: true,
-          title: getChatTitle()),
+        ),
+        shadowColor: Colors.transparent,
+        centerTitle: true,
+        title: getChatTitle(),
+      ),
       child: Stack(
         children: <Widget>[
           Column(
@@ -221,17 +205,16 @@ class _ChatScreenState extends State<ChatScreen> {
                 width: 10,
               ),
               Observer(
-                  builder: (_) => G.socketUtils?.currentMessageList != null
+                  builder: (_) => currentMessageList != null
                       ? SingleChildScrollView(
                           child: Container(
                             width: DeviceUtils.getScaledWidth(context, 1.00),
                             height: DeviceUtils.getScaledHeight(context, 0.85),
                             child: ListView.builder(
                               controller: _controller,
-                              itemCount: G.socketUtils?.currentMessageList
-                                  .messages.length,
+                              itemCount: currentMessageList.length,
                               itemBuilder: (context, index) =>
-                                  index.isOdd ? reciver() : sender(),
+                              currentMessageList[index].username == currentUserName ? sender(currentMessageList[index]) : receiver(currentMessageList[index]),
                             ),
                           ),
                         )
@@ -287,9 +270,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   FloatingActionButton(
                     onPressed: () {
                       G.socketUtils
-                          ?.sendMessage(_messageController.text, 'text', () {
+                          ?.sendMessage(_messageController.text, loadMessageData?.threadUserInfo,'text', () {
                         _messageController.text = '';
-                        // TODO: Update Chat
                       });
                     },
                     child: Icon(
