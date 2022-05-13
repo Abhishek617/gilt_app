@@ -593,14 +593,16 @@ class _Create_eventState extends State<Create_event> {
                           "startDate": _eventDateAndTimeController.value.text,
                           "description":
                               _eventPlaceDescriptionController.value.text,
+                         "selectedcontactexpenselist":  Selectedcontactlist,
                         });
 
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Expense_Screen(sdata: eData,
-                                selectedcontactexpenselist: Selectedcontactlist)));
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //     builder: (context) =>Expense_Screen(
+                        //         sdata: eData,
+                        //         selectedcontactexpenselist: Selectedcontactlist)));
                         //
-                        // Routes.navigateToScreenWithContactArgs(
-                        //     context, Routes.expense_screen, eData, Selectedcontactexpenselist);
+                        Routes.navigateToScreenWithContactArgs(
+                            context, Routes.expense_screen, eData);
                       },
                     ),
                   ),

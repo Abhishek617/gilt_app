@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
+import 'package:guilt_app/ui/Event/create_event.dart';
 
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
@@ -21,19 +22,19 @@ import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import '../../widgets/rounded_button_widget.dart';
 
+
 class Expense_Screen extends StatefulWidget {
-  final List<AppContact> selectedcontactexpenselist;
-  String sdata;
- Expense_Screen({Key? key, required this.selectedcontactexpenselist, required this.sdata}) : super(key: key);
+  // final List<AppContact> selectedcontactexpenselist;
+  // String sdata;
+ Expense_Screen({Key? key}) : super(key: key);
 
   @override
-  State<Expense_Screen> createState() => _Expense_ScreenState(selectedcontactexpenselist , sdata);
+  State<Expense_Screen> createState() => _Expense_ScreenState();
 }
 
 class _Expense_ScreenState extends State<Expense_Screen> {
-  List<AppContact> selectedcontactexpenselist;
-  String sdata;
- _Expense_ScreenState(this.selectedcontactexpenselist,this.sdata);
+ List<AppContact> selectedcontactexpenselist = [];
+  String sdata = '';
   bool viewVisible = false;
   bool status = true;
   final UserStore _userStore = UserStore(getIt<Repository>());
@@ -98,12 +99,104 @@ class _Expense_ScreenState extends State<Expense_Screen> {
       GlobalMethods.hideLoader();
       print(error.data.toString());
     });
-    // Routes.navigateToScreen(context, Routes.before_login);
   }
+
+  expenseslist(args)
+  {
+    String elist = jsonDecode(args);
+    Visibility(
+      maintainSize: true,
+      maintainAnimation: true,
+      maintainState: true,
+      visible: viewVisible,
+      child: Container(
+        height: DeviceUtils.getScaledHeight(context, 0.366),
+        child: ListView.builder(
+            itemCount: args.selectedcontactexpenselist.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                leading: Container(
+                  height: DeviceUtils.getScaledHeight(
+                      context, 0.7),
+                  width: DeviceUtils.getScaledWidth(
+                      context, 0.127),
+                  // margin: EdgeInsets.all(100.0),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU'),
+                        fit: BoxFit.fill,
+                      ),
+                      color: Colors.orange,
+                      shape: BoxShape.circle),
+                ),
+                trailing: Wrap(
+                  spacing: 7, // space between two icons
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Container(
+                          child: Icon(
+                            Icons.remove,
+                            size: 15,
+                          )),
+                    ),
+                    Container(
+                      alignment: Alignment.topCenter,
+                      height: DeviceUtils.getScaledHeight(
+                          context, 0.049),
+                      width: DeviceUtils.getScaledWidth(
+                          context, 0.25),
+
+                      child: TextField(
+
+                        style: TextStyle(fontSize: 11),
+                        controller: _amount,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <
+                            TextInputFormatter>[
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d+\.?\d{0,0}')),
+                        ],
+                        //WhitelistingTextInputFormatter(RegExp(r'^\d+\.?\d{0,2}')),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(5.0),
+
+                          border: OutlineInputBorder(
+                          ),
+                          hintText: '',
+                        ),
+
+                      ),
+
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Container(
+                          child: Icon(
+                            Icons.add,
+                            size: 15,
+                          )),
+                    )
+                  ],
+                ),
+
+                title: Text(args.selectedcontactexpenselist[index].phone.toString() , style:TextStyle(fontSize: 13),),
+              );
+
+            }
+        ),
+
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
-final args = ModalRoute.of(context)!.settings.arguments;
+final args = ModalRoute.of(context)?.settings.arguments.toString();
+  print(args);
+
     return ScaffoldWrapper(
         isMenu: false,
         appBar: AppBar(
@@ -279,94 +372,8 @@ final args = ModalRoute.of(context)!.settings.arguments;
                   height: 5,
                 ),
                 Column(
-
                   children: [
-                    Visibility(
-                      maintainSize: true,
-                      maintainAnimation: true,
-                      maintainState: true,
-                      visible: viewVisible,
-                      child: Container(
-                        height: DeviceUtils.getScaledHeight(context, 0.366),
-                        child: ListView.builder(
-                            itemCount: selectedcontactexpenselist.length,
-                            itemBuilder: (BuildContext context, int index) {
-
-                              return ListTile(
-                                  leading: Container(
-                                    height: DeviceUtils.getScaledHeight(
-                                        context, 0.7),
-                                    width: DeviceUtils.getScaledWidth(
-                                        context, 0.127),
-                                    // margin: EdgeInsets.all(100.0),
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU'),
-                                          fit: BoxFit.fill,
-                                        ),
-                                        color: Colors.orange,
-                                        shape: BoxShape.circle),
-                                  ),
-                                  trailing: Wrap(
-                                    spacing: 7, // space between two icons
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 10),
-                                        child: Container(
-                                            child: Icon(
-                                          Icons.remove,
-                                          size: 15,
-                                        )),
-                                      ),
-                                      Container(
-                                        alignment: Alignment.topCenter,
-                                        height: DeviceUtils.getScaledHeight(
-                                            context, 0.049),
-                                        width: DeviceUtils.getScaledWidth(
-                                            context, 0.25),
-
-                                        child: TextField(
-
-                                            style: TextStyle(fontSize: 11),
-                                            controller: _amount,
-                                            keyboardType: TextInputType.number,
-                                            inputFormatters: <
-                                                TextInputFormatter>[
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp(r'^\d+\.?\d{0,0}')),
-                                            ],
-                                            //WhitelistingTextInputFormatter(RegExp(r'^\d+\.?\d{0,2}')),
-                                            decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.all(5.0),
-
-                                              border: OutlineInputBorder(
-                                              ),
-                                              hintText: '',
-                                            ),
-
-                                          ),
-
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 10),
-                                        child: Container(
-                                            child: Icon(
-                                          Icons.add,
-                                          size: 15,
-                                        )),
-                                      )
-                                    ],
-                                  ),
-
-                                  title: Text(selectedcontactexpenselist[index].phone.toString() , style:TextStyle(fontSize: 13),),
-                              );
-
-                            }
-                            ),
-
-                      ),
-                    ),
+                    expenseslist(args),
                     SizedBox(
                       height: 5,
                     ),

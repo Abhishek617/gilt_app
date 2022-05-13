@@ -152,7 +152,7 @@ class Routes {
     help_and_support: (BuildContext context) => HelpAndSupport(),
     about_screen: (BuildContext context) => About_screen(),
     create_event: (BuildContext context) => Create_event(Selectedcontactlist: []),
-    expense_screen: (BuildContext context) => Expense_Screen(selectedcontactexpenselist: [], sdata: '',),
+    expense_screen: (BuildContext context) => Expense_Screen(),
     attendees_profile: (BuildContext context) => Attendees_profile(),
     add_contacts: (BuildContext context) => Add_contacts(),
     bank_lists: (BuildContext context) => Bank_lists(),
