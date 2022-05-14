@@ -35,8 +35,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
 
   @override
   void initState() {
-    G.initSocket();
-    G.socketUtils.initSocket();
+
     super.initState();
   }
 
@@ -50,6 +49,8 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
     await _userStore.getProfile();
     getEventsList('upcoming');
     getEventsList('past');
+    G.initSocket();
+    G.socketUtils.initSocket();
   }
 
   getEventsList(type) {

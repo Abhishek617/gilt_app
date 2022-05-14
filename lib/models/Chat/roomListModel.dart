@@ -156,6 +156,7 @@ class Users {
   int? roleId;
   String? profile;
   bool? isActive;
+  String? lastOnline;
 
   Users(
       {this.sId,
@@ -163,7 +164,8 @@ class Users {
         this.lastName,
         this.roleId,
         this.profile,
-        this.isActive});
+        this.isActive,
+        this.lastOnline});
 
   Users.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -172,6 +174,7 @@ class Users {
     roleId = json['roleId'];
     profile = json['profile'];
     isActive = json['isActive'];
+    lastOnline = json['lastOnline'];
   }
 
   Map<String, dynamic> toJson() {
@@ -182,6 +185,7 @@ class Users {
     data['roleId'] = this.roleId;
     data['profile'] = this.profile;
     data['isActive'] = this.isActive;
+    data['lastOnline'] = this.lastOnline;
     return data;
   }
 }

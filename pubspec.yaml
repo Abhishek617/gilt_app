@@ -105,6 +105,9 @@ dependencies:
   #Socket Chat Integration
   socket_io_client: ^1.0.2
 
+  #Date formate
+  jiffy: ^5.0.0
+
   curved_navigation_bar: ^1.0.3
 
 

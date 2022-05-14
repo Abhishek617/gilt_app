@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -29,7 +29,7 @@ class _ChatScreenState extends State<ChatScreen> {
   var currentUserName = '';
 
   @observable
-  late UserChatMessagesModel? loadMessageData;
+  UserChatMessagesModel loadMessageData = UserChatMessagesModel();
 
   @override
   void initState() {
@@ -60,8 +60,10 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   newMessageHandler(messageData) {
+    print('new messageData');
+    print(messageData);
     setState(() {
-      Messages newMsg = Messages.fromJson(messageData);
+      Messages newMsg = Messages.fromJson(messageData.data);
       currentMessageList = [...currentMessageList, newMsg];
       if (currentMessageList.length > 0) {
         WidgetsBinding.instance?.addPostFrameCallback((_) => {
@@ -84,34 +86,39 @@ class _ChatScreenState extends State<ChatScreen> {
 
   getChatTitle() {
     // if(currentChatRoom.type == 'event'){
-    return Observer(
-      builder: (_) => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100.0),
-                border: Border.all(color: Colors.white)),
-            padding: const EdgeInsets.all(8.0),
-            child: Image.network(
-              loadMessageData?.threadUserInfo?.profile ??
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-              height: 30,
-              fit: BoxFit.cover,
+    if(loadMessageData != null) {
+      return Observer(
+        builder: (_) =>
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100.0),
+                      border: Border.all(color: Colors.white)),
+                  // padding: const EdgeInsets.all(8.0),
+                  child: Image.network(
+                    loadMessageData?.threadUserInfo?.profile ??
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
+                    height: 30,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(
+                  width: 16,
+                ),
+                Text(
+                  (loadMessageData?.threadUserInfo?.firstName ?? '') +
+                      ' ' +
+                      (loadMessageData?.threadUserInfo?.lastName ?? ''),
+                  style: TextStyle(fontSize: 12),
+                )
+              ],
             ),
-          ),
-          SizedBox(
-            width: 16,
-          ),
-          Text(
-            (loadMessageData?.threadUserInfo?.firstName ?? '') +
-                ' ' +
-                (loadMessageData?.threadUserInfo?.lastName ?? ''),
-            style: TextStyle(fontSize: 12),
-          )
-        ],
-      ),
-    );
+      );
+    }else{
+      return Container();
+    }
     // }
   }
 
@@ -158,7 +165,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: Padding(
                   padding: EdgeInsets.only(top: 13.5),
                   child: Text(
-                    messageDetails.content,
+                    messageDetails.content ?? '',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
