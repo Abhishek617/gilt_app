@@ -196,8 +196,8 @@ class _MenuDrawerState extends State<MenuDrawer> {
                     getMenuTile(
                         'INVITE FRIENDS',
                         () => {
-                              GlobalMethods.askPermissions(
-                                  context, Routes.add_contacts)
+                             GlobalMethods.askPermissions(
+                        context, Routes.add_contacts)
                             }),
                     getMenuTile(
                       'EXPENSE HISTORY',

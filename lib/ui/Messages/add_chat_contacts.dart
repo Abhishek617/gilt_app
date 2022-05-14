@@ -9,14 +9,14 @@ import '../../constants/colors.dart';
 import 'package:flutter/rendering.dart';
 import '../../widgets/rounded_button_widget.dart';
 
-class AddContacts extends StatefulWidget {
-  const AddContacts({Key? key}) : super(key: key);
+class AddChatContacts extends StatefulWidget {
+  const AddChatContacts({Key? key}) : super(key: key);
 
   @override
-  State<AddContacts> createState() => _AddContactsState();
+  State<AddChatContacts> createState() => _AddChatContactsState();
 }
 
-class _AddContactsState extends State<AddContacts> {
+class _AddChatContactsState extends State<AddChatContacts> {
   final PostStore _postStore = PostStore(getIt<Repository>());
   int selectedRadio = -1;
   late List<Contact> _contacts = [];
@@ -41,7 +41,7 @@ class _AddContactsState extends State<AddContacts> {
     //We already have permissions for contact when we get to this page, so we
     // are now just retrieving it
     final Iterable<Contact> contacts =
-        await ContactsService.getContacts(withThumbnails: false);
+    await ContactsService.getContacts(withThumbnails: false);
     if (contacts.length > 0) {
       setState(() {
         _contacts = contacts.toList();
@@ -98,8 +98,8 @@ class _AddContactsState extends State<AddContacts> {
               shape: BoxShape.circle),
         ),
         trailing:
-            //Icon(Icons.radio_button_unchecked, size: 15,),
-            Container(
+        //Icon(Icons.radio_button_unchecked, size: 15,),
+        Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(color: Colors.black, width: 2.3),
@@ -164,30 +164,30 @@ class _AddContactsState extends State<AddContacts> {
               ),
               (filteredContactList.length > 0)
                   ? Column(
-                      children: [
-                        Container(
-                          height: 500,
-                          // width: 460,
-                          width: MediaQuery.of(context).size.width / 0.0,
-                          child: ListView.builder(
-                              itemCount: filteredContactList.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return getContactListTile(
-                                    filteredContactList[index]);
-                              }),
-                        ),
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 20),
-                            child: ElevatedButtonWidget(
-                              buttonText: 'Confirm',
-                              buttonColor: AppColors.primaryColor,
-                              onPressed: () {},
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
+                children: [
+                  Container(
+                    height: 500,
+                    // width: 460,
+                    width: MediaQuery.of(context).size.width / 0.0,
+                    child: ListView.builder(
+                        itemCount: filteredContactList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return getContactListTile(
+                              filteredContactList[index]);
+                        }),
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: ElevatedButtonWidget(
+                        buttonText: 'Confirm',
+                        buttonColor: AppColors.primaryColor,
+                        onPressed: () {},
+                      ),
+                    ),
+                  ),
+                ],
+              )
                   : Text('No Contacts available'),
             ],
           ),

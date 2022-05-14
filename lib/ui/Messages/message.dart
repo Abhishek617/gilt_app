@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/models/Chat/roomListModel.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
@@ -247,6 +248,8 @@ class _MessagesState extends State<Messages> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print('Open contacts');
+          GlobalMethods.askPermissions(
+              context, Routes.add_new_chat_contact);
         },
         child: Icon(Icons.add_comment, color: AppColors.primaryColor,),
       ),
