@@ -80,7 +80,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     _messageController.dispose();
-    G.socketUtils.socketDisconnect();
+    //G.socketUtils.socketDisconnect();
     super.dispose();
   }
 

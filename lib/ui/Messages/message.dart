@@ -43,18 +43,18 @@ class _MessagesState extends State<Messages> {
               padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               child: Row(
                 children: [
-                CircleAvatar(
-                backgroundColor: AppColors.primaryColor,
-                radius: 22,
-                child: CircleAvatar(
-                    backgroundImage:
-                    NetworkImage( msgData.users[0].profile ??
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                    ),
-                    onBackgroundImageError: (e, s) {
-                      debugPrint('image issue, $e,$s');
-                    }
-                  ),),
+                  CircleAvatar(
+                    backgroundColor: AppColors.primaryColor,
+                    radius: 22,
+                    child: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          msgData.users[0].profile ??
+                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
+                        ),
+                        onBackgroundImageError: (e, s) {
+                          debugPrint('image issue, $e,$s');
+                        }),
+                  ),
                   SizedBox(
                     width: 20,
                   ),
@@ -88,7 +88,8 @@ class _MessagesState extends State<Messages> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        Jiffy(msgData.lastMessageAt, "yyyy-MM-ddThh:mm:ssZ").fromNow(),
+                        Jiffy(msgData.lastMessageAt, "yyyy-MM-ddThh:mm:ssZ")
+                            .fromNow(),
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
@@ -242,22 +243,29 @@ class _MessagesState extends State<Messages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print('Open contacts');
+        },
+        child: Icon(Icons.add_comment, color: AppColors.primaryColor,),
+      ),
       appBar: AppBar(
         shadowColor: Colors.transparent,
         title: Center(child: Text('Messages')),
         centerTitle: true,
-        actions: [
-          IconButton(
-            padding: EdgeInsets.only(
-              top: 10.0,
-              bottom: 5.0,
-            ),
-            icon: Icon(Icons.circle_notifications),
-            onPressed: () {
-              Routes.navigateToScreen(context, Routes.notifi);
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     padding: EdgeInsets.only(
+        //       top: 10.0,
+        //       bottom: 5.0,
+        //     ),
+        //     icon: Icon(Icons.circle_notifications),
+        //     onPressed: () {
+        //       Routes.navigateToScreen(context, Routes.notifi);
+        //     },
+        //   ),
+        // ],
       ),
       body: CustomBodyWrapper(
         child: Column(
