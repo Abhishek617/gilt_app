@@ -4,6 +4,9 @@ import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/stores/post/post_store.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import '../../constants/colors.dart';
 import 'package:flutter/rendering.dart';
@@ -40,8 +43,9 @@ class _AddChatContactsState extends State<AddChatContacts> {
   Future<void> getContacts() async {
     //We already have permissions for contact when we get to this page, so we
     // are now just retrieving it
+    GlobalMethods.showLoader();
     final Iterable<Contact> contacts =
-    await ContactsService.getContacts(withThumbnails: false);
+        await ContactsService.getContacts(withThumbnails: false);
     if (contacts.length > 0) {
       setState(() {
         _contacts = contacts.toList();
@@ -59,19 +63,25 @@ class _AddChatContactsState extends State<AddChatContacts> {
             setState(() {
               appContacts = value.contact;
               if (appContacts.length > 0) {
-                appContacts.removeWhere((item) => item.isExists == '0');
+                appContacts.removeWhere((item) => item.isExist == 0);
                 filteredContactList = appContacts;
+                print(appContacts);
               } else {
                 appContacts = [];
                 filteredContactList = [];
               }
+              GlobalMethods.hideLoader();
             });
           } else {
-            appContacts = [];
-            filteredContactList = [];
+            setState(() {
+              appContacts = [];
+              filteredContactList = [];
+            });
+            GlobalMethods.hideLoader();
           }
         }).catchError((err) {
           print(err.toString());
+          GlobalMethods.hideLoader();
         });
       });
     } else {
@@ -79,6 +89,7 @@ class _AddChatContactsState extends State<AddChatContacts> {
         appContacts = [];
         filteredContactList = appContacts;
       });
+      GlobalMethods.hideLoader();
     }
   }
 
@@ -98,34 +109,19 @@ class _AddChatContactsState extends State<AddChatContacts> {
               shape: BoxShape.circle),
         ),
         trailing:
-        //Icon(Icons.radio_button_unchecked, size: 15,),
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.black, width: 2.3),
-          ),
-          height: 20,
-          width: 20,
-          child: Checkbox(
-            activeColor: Colors.white,
-            checkColor: Colors.black,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.00))),
-            onChanged: (changeValue) {
-              setState(() {
-                // if (changeValue == true) {
-                //   //checked[index] = true;
-                //   checked = true;
-                //   isChecked[index] = checked;
+            //Icon(Icons.radio_button_unchecked, size: 15,),
+            Container(
+          child: ElevatedButton(
+              onPressed: () {
+                G.socketUtils.joinPrivateUser(contactData);
+                // if (contactData.messageType == 'private') {
+                Routes.navigateToScreen(context, Routes.chat);
+                // } else if (msgData.lastMessage.messageType == 'event') {
+                // Routes.navigateToScreen(context, Routes.event_chat);
                 // } else {
-                //   isChecked[index] = false;
-                // }
-                //isChecked[index] = checked;
-                //_title = _getTitle();
-              });
-            },
-            value: true,
-          ),
+                // Routes.navigateToScreen(context, Routes.business_chat);
+              },
+              child: Text('Message')),
         ),
         title: Text(contactData.phone!));
   }
@@ -136,7 +132,7 @@ class _AddChatContactsState extends State<AddChatContacts> {
       appBar: AppBar(
         shadowColor: Colors.transparent,
         centerTitle: true,
-        title: const Text('Contacts'),
+        title: const Text('New Message'),
       ),
       child: Container(
         padding: EdgeInsets.all(25.0),
@@ -155,7 +151,7 @@ class _AddChatContactsState extends State<AddChatContacts> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Contact List",
+                  "Contacts",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -164,30 +160,20 @@ class _AddChatContactsState extends State<AddChatContacts> {
               ),
               (filteredContactList.length > 0)
                   ? Column(
-                children: [
-                  Container(
-                    height: 500,
-                    // width: 460,
-                    width: MediaQuery.of(context).size.width / 0.0,
-                    child: ListView.builder(
-                        itemCount: filteredContactList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return getContactListTile(
-                              filteredContactList[index]);
-                        }),
-                  ),
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: ElevatedButtonWidget(
-                        buttonText: 'Confirm',
-                        buttonColor: AppColors.primaryColor,
-                        onPressed: () {},
-                      ),
-                    ),
-                  ),
-                ],
-              )
+                      children: [
+                        Container(
+                          height: 500,
+                          // width: 460,
+                          width: MediaQuery.of(context).size.width / 0.0,
+                          child: ListView.builder(
+                              itemCount: filteredContactList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return getContactListTile(
+                                    filteredContactList[index]);
+                              }),
+                        ),
+                      ],
+                    )
                   : Text('No Contacts available'),
             ],
           ),

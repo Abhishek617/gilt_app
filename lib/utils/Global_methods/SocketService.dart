@@ -148,7 +148,7 @@ getUserData(userDataHandler){
     _socket.emit(JOIN_USER_PRIVATE_CHAT, {
       "type": "private",
       "sqlId": 3, // userid of the user whom you want to chat
-      "user_id": userData.users[0].sId // mongodb userid of the loggedin user
+      "user_id": socketUserData.sId // mongodb userid of the loggedin user
     });
     _socket.on('loadMessage', (messages) {
       currentMessageList = messages.cast<String, dynamic>();
