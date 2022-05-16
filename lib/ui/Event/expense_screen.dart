@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
+import 'package:guilt_app/models/PageModals/expensemodel.dart';
 import 'package:guilt_app/ui/Event/create_event.dart';
 
 import 'package:guilt_app/utils/device/device_utils.dart';
@@ -103,16 +105,16 @@ class _Expense_ScreenState extends State<Expense_Screen> {
 
   expenseslist(args)
   {
-    String elist = jsonDecode(args);
+    ExpenseModal elist = jsonDecode(args);
     Visibility(
       maintainSize: true,
       maintainAnimation: true,
       maintainState: true,
       visible: viewVisible,
       child: Container(
-        height: DeviceUtils.getScaledHeight(context, 0.366),
+        height:DeviceUtils.getScaledHeight(context, 0.366),
         child: ListView.builder(
-            itemCount: args.selectedcontactexpenselist.length,
+            itemCount: elist.contact?.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
                 leading: Container(
@@ -180,8 +182,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                     )
                   ],
                 ),
-
-                title: Text(args.selectedcontactexpenselist[index].phone.toString() , style:TextStyle(fontSize: 13),),
+                title: Text(elist.contact![index].phone.toString() , style:TextStyle(fontSize: 13),),
               );
 
             }
@@ -194,7 +195,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
 
   @override
   Widget build(BuildContext context) {
-final args = ModalRoute.of(context)?.settings.arguments.toString();
+final args = ModalRoute.of(context)?.settings.arguments;
   print(args);
 
     return ScaffoldWrapper(
