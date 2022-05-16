@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -36,27 +35,31 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     _messageController = TextEditingController();
     _controller = ScrollController();
-    currentUserName = G.socketUtils.userData.user.firstname + ' ' + G.socketUtils.userData.user.lastname;
+    currentUserName = G.socketUtils.userData.user.firstname +
+        ' ' +
+        G.socketUtils.userData.user.lastname;
     G.socketUtils.onLoadMessageListener(loadMessageHandler);
     G.socketUtils.onNewMessageListener(newMessageHandler);
   }
 
   loadMessageHandler(messageData) {
-    setState(() {
-      loadMessageData = UserChatMessagesModel.fromJson(messageData);
-      currentMessageList = loadMessageData?.messages ?? [];
-      print('loadMessageHandler');
-      print(currentMessageList);
-      if (currentMessageList.length > 0) {
-        WidgetsBinding.instance?.addPostFrameCallback((_) => {
-              _controller.animateTo(
-                0.0,
-                duration: Duration(milliseconds: 200),
-                curve: Curves.easeIn,
-              )
-            });
-      }
-    });
+    if (mounted) {
+      setState(() {
+        loadMessageData = UserChatMessagesModel.fromJson(messageData);
+        currentMessageList = loadMessageData?.messages ?? [];
+        print('loadMessageHandler');
+        print(currentMessageList);
+        if (currentMessageList.length > 0) {
+          WidgetsBinding.instance?.addPostFrameCallback((_) => {
+                _controller.animateTo(
+                  0.0,
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.easeIn,
+                )
+              });
+        }
+      });
+    }
   }
 
   newMessageHandler(messageData) {
@@ -86,43 +89,45 @@ class _ChatScreenState extends State<ChatScreen> {
 
   getChatTitle() {
     // if(currentChatRoom.type == 'event'){
-    if(loadMessageData != null) {
+    if (loadMessageData != null) {
       return Observer(
-        builder: (_) =>
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100.0),
-                      border: Border.all(color: Colors.white)),
-                  // padding: const EdgeInsets.all(8.0),
-                  child: Image.network(
-                    loadMessageData?.threadUserInfo?.profile ??
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                    height: 30,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                SizedBox(
-                  width: 16,
-                ),
-                Text(
-                  (loadMessageData?.threadUserInfo?.firstName ?? '') +
-                      ' ' +
-                      (loadMessageData?.threadUserInfo?.lastName ?? ''),
-                  style: TextStyle(fontSize: 12),
-                )
-              ],
+        builder: (_) => Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              height: 40,
+              child: CircleAvatar(
+                backgroundColor: AppColors.cream_app,
+                radius: 20,
+                child: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                      loadMessageData?.threadUserInfo?.profile ??
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
+                    ),
+                    onBackgroundImageError: (e, s) {
+                      debugPrint('image issue, $e,$s');
+                    }),
+              ),
             ),
+            SizedBox(
+              width: 16,
+            ),
+            Text(
+              (loadMessageData?.threadUserInfo?.firstName ?? '') +
+                  ' ' +
+                  (loadMessageData?.threadUserInfo?.lastName ?? ''),
+              style: TextStyle(fontSize: 12),
+            )
+          ],
+        ),
       );
-    }else{
+    } else {
       return Container();
     }
     // }
   }
 
- sender(messageDetails) => Column(
+  sender(messageDetails) => Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Row(
@@ -134,7 +139,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   constraints: BoxConstraints(minWidth: 100),
                   padding: EdgeInsets.all(8.0),
                   child: Text(
-                    messageDetails.content,
+                    messageDetails.content ?? '',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
@@ -200,7 +205,6 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
         shadowColor: Colors.transparent,
-        centerTitle: true,
         title: getChatTitle(),
       ),
       child: Stack(
@@ -221,7 +225,10 @@ class _ChatScreenState extends State<ChatScreen> {
                               controller: _controller,
                               itemCount: currentMessageList.length,
                               itemBuilder: (context, index) =>
-                              currentMessageList[index].username == currentUserName ? sender(currentMessageList[index]) : receiver(currentMessageList[index]),
+                                  currentMessageList[index].username ==
+                                          currentUserName
+                                      ? sender(currentMessageList[index])
+                                      : receiver(currentMessageList[index]),
                             ),
                           ),
                         )
@@ -276,8 +283,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   FloatingActionButton(
                     onPressed: () {
-                      G.socketUtils
-                          ?.sendMessage(_messageController.text, loadMessageData?.threadUserInfo,'text', () {
+                      G.socketUtils?.sendMessage(_messageController.text,
+                          loadMessageData?.threadUserInfo, 'text', () {
                         _messageController.text = '';
                       });
                     },

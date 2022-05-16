@@ -17,7 +17,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 class SocketUtils {
   late IO.Socket _socket;
   late SocketUserModel socketUserData;
-
+  bool isSocketConnected = false;
   final UserStore _userStore = UserStore(getIt<Repository>());
 
   @observable
@@ -70,9 +70,13 @@ class SocketUtils {
         _socket.io.options['extraHeaders'] = {
           'token': 'Bearer $aToken'
         }; // Update the extra headers.
+        if (isSocketConnected) {
+          _socket.disconnect();
+        }
         _socket.connect();
         _socket.onConnect((sUserData) {
           print('connected to websocket');
+          isSocketConnected = true;
           print(sUserData);
           if (sUserData != null) {
             socketUserData = sUserData;
@@ -95,15 +99,17 @@ class SocketUtils {
       callback(response);
     });
   }
-getUserData(userDataHandler){
-  _socket.emit(GET_USER_DATA);
-  _socket.on(GET_USER_DATA, (response) {
-    print('SocketUserData:');
-    print(response);
-    var uD = SocketUserModel.fromJson(response);
-    userDataHandler(uD);
-  });
-}
+
+  getUserData(userDataHandler) {
+    _socket.emit(GET_USER_DATA);
+    _socket.on(GET_USER_DATA, (response) {
+      print('SocketUserData:');
+      print(response);
+      var uD = SocketUserModel.fromJson(response);
+      userDataHandler(uD);
+    });
+  }
+
   setOnMessageBackFromServer(Function onMessageBackFromServer) {
     _socket.on(SEND_NEW_MESSAGE, (data) {
       onMessageBackFromServer(data);
@@ -131,11 +137,21 @@ getUserData(userDataHandler){
   }
 
   onLoadMessageListener(loadMessageHandler) {
-    _socket.emit(GET_MESSAGE_LIST);
+    print('onLoadMessageListener : currentChatRoom');
+    print(currentChatRoom);
+    var loadMsgData = {
+      "room_key": currentChatRoom.roomName,
+      "type": currentChatRoom.type,
+      "user_id": socketUserData.sId
+    };
+    _socket.emit(GET_MESSAGE_LIST, loadMsgData);
     _socket.on(GET_MESSAGE_LIST, (messageList) {
+      print('loadMessage:');
+      print(messageList);
       loadMessageHandler(messageList);
     });
   }
+
   onNewMessageListener(newMessageHandler) {
     _socket.on(SEND_NEW_MESSAGE, (newMessage) {
       newMessageHandler(newMessage);
@@ -143,11 +159,11 @@ getUserData(userDataHandler){
   }
 
   @action
-  void joinPrivateUser(userData) {
-    currentChatRoom = userData;
+  void joinPrivateUser(roomData) {
+    currentChatRoom = roomData;
     _socket.emit(JOIN_USER_PRIVATE_CHAT, {
-      "type": "private",
-      "sqlId": 3, // userid of the user whom you want to chat
+      "type": roomData.type,
+      "sqlId": roomData.lastMessage.userSqlId, // userid of the user whom you want to chat
       "user_id": socketUserData.sId // mongodb userid of the loggedin user
     });
     _socket.on('loadMessage', (messages) {
@@ -158,7 +174,7 @@ getUserData(userDataHandler){
   }
 
   @action
-  void sendMessage(textMessage, threadInfo,type, callback) {
+  void sendMessage(textMessage, threadInfo, type, callback) {
     String messageText = textMessage.trim();
     print(currentMessageList);
     print(currentChatRoom);
@@ -170,7 +186,9 @@ getUserData(userDataHandler){
         // mongodb userid of the loggedin user
         "message": messageText,
         // actual message, in case of file you can send file location here or send it in file object
-        "username": (socketUserData.firstName ?? '') + ' ' + (socketUserData.lastName ?? ''),
+        "username": (socketUserData.firstName ?? '') +
+            ' ' +
+            (socketUserData.lastName ?? ''),
         // sender username
         "user_type": userData.user.roleId ?? '1',
         // pass user role
@@ -185,8 +203,9 @@ getUserData(userDataHandler){
 
   @ConnectionState.active
   void socketDisconnect() {
-    if (_socket != null) {
+    if (isSocketConnected) {
       _socket.disconnect();
+      isSocketConnected = false;
       print(_socket);
     }
   }

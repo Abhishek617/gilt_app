@@ -46,9 +46,9 @@ class RoomData {
 
 class Rooms {
   String? sId;
-  Null? username;
   String? lastMessageAt;
   LastMessage? lastMessage;
+  String? type;
   String? roomId;
   String? index;
   String? roomName;
@@ -57,9 +57,9 @@ class Rooms {
 
   Rooms(
       {this.sId,
-        this.username,
         this.lastMessageAt,
         this.lastMessage,
+        this.type,
         this.roomId,
         this.index,
         this.roomName,
@@ -68,11 +68,11 @@ class Rooms {
 
   Rooms.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    username = json['username'];
     lastMessageAt = json['last_message_at'];
     lastMessage = json['lastMessage'] != null
         ? new LastMessage.fromJson(json['lastMessage'])
         : null;
+    type = json['type'];
     roomId = json['roomId'];
     index = json['index'];
     roomName = json['roomName'];
@@ -88,11 +88,11 @@ class Rooms {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.sId;
-    data['username'] = this.username;
     data['last_message_at'] = this.lastMessageAt;
     if (this.lastMessage != null) {
       data['lastMessage'] = this.lastMessage!.toJson();
     }
+    data['type'] = this.type;
     data['roomId'] = this.roomId;
     data['index'] = this.index;
     data['roomName'] = this.roomName;

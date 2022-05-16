@@ -38,6 +38,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
 
   @override
   void initState() {
+    initSetup();
     super.initState();
   }
 

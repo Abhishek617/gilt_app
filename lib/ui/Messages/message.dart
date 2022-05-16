@@ -41,6 +41,7 @@ class _MessagesState extends State<Messages> {
         child: Column(
           children: [
             Container(
+              color: Colors.transparent,
               padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               child: Row(
                 children: [
@@ -103,7 +104,7 @@ class _MessagesState extends State<Messages> {
                               child: Padding(
                                 padding: EdgeInsets.only(top: 5),
                                 child: Text(
-                                  '9',
+                                  msgData.unreadMessageCount.toString(),
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,
@@ -137,10 +138,11 @@ class _MessagesState extends State<Messages> {
           ],
         ),
         onTap: () {
+          G.socketUtils.currentChatRoom = msgData;
           G.socketUtils.joinPrivateUser(msgData);
-          if (msgData.lastMessage.messageType == 'private') {
+          if (msgData.type == 'private') {
             Routes.navigateToScreen(context, Routes.chat);
-          } else if (msgData.lastMessage.messageType == 'event') {
+          } else if (msgData.type == 'event') {
             Routes.navigateToScreen(context, Routes.event_chat);
           } else {
             Routes.navigateToScreen(context, Routes.business_chat);
