@@ -179,6 +179,23 @@ class SocketUtils {
       print(currentMessageList);
     });
   }
+  @action
+  void joinNewPrivateUser(newUserData) {
+    print('New User Create/Join Room');
+    print(newUserData.toString());
+    _socket.emit(JOIN_USER_PRIVATE_CHAT, {
+      "type": 'private',
+      "sqlId": newUserData.userId,
+      // userid of the user whom you want to chat
+      "user_id": socketUserData.sId
+      // mongodb userid of the loggedin user
+    });
+    _socket.on('loadMessage', (messages) {
+      currentMessageList = messages.cast<String, dynamic>();
+      print('onLoadMessage');
+      print(currentMessageList);
+    });
+  }
 
   @action
   void sendMessage(textMessage, threadInfo, type, callback) {

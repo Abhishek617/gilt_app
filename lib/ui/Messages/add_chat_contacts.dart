@@ -35,7 +35,6 @@ class _AddChatContactsState extends State<AddChatContacts> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getContacts();
     super.initState();
   }
@@ -50,7 +49,7 @@ class _AddChatContactsState extends State<AddChatContacts> {
       setState(() {
         _contacts = contacts.toList();
         _contactStrings = _contacts
-            .map((e) => e.phones?.map((i) => i.value).toList())
+            .map((e) => e.phones?.map((i) => i.value?.replaceAll(' ','')).toList())
             .toList()
             .reduce((p, el) {
           p?.addAll(el!);
@@ -95,35 +94,39 @@ class _AddChatContactsState extends State<AddChatContacts> {
 
   Widget getContactListTile(AppContact contactData) {
     return ListTile(
-        leading: Container(
-          height: 40,
-          width: 40,
-          // margin: EdgeInsets.all(100.0),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(
-                    'https://img.icons8.com/color/344/person-male.png'),
-                fit: BoxFit.fill,
-              ),
-              color: Colors.orange,
-              shape: BoxShape.circle),
-        ),
-        trailing:
-            //Icon(Icons.radio_button_unchecked, size: 15,),
-            Container(
-          child: ElevatedButton(
-              onPressed: () {
-                G.socketUtils.joinPrivateUser(contactData);
-                // if (contactData.messageType == 'private') {
-                Routes.navigateToScreen(context, Routes.chat);
-                // } else if (msgData.lastMessage.messageType == 'event') {
-                // Routes.navigateToScreen(context, Routes.event_chat);
-                // } else {
-                // Routes.navigateToScreen(context, Routes.business_chat);
-              },
-              child: Text('Message')),
-        ),
-        title: Text(contactData.phone!));
+      leading: Container(
+        height: 40,
+        width: 40,
+        // margin: EdgeInsets.all(100.0),
+        decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(contactData.profile ??
+                  'https://img.icons8.com/color/344/person-male.png'),
+              fit: BoxFit.fill,
+            ),
+            color: Colors.orange,
+            shape: BoxShape.circle),
+      ),
+      trailing:
+          //Icon(Icons.radio_button_unchecked, size: 15,),
+          Container(
+        child: ElevatedButton(
+            onPressed: () {
+              G.socketUtils.joinNewPrivateUser(contactData);
+              // TODO : get newly created room data
+              // if (contactData.messageType == 'private') {
+              Routes.navigateToScreen(context, Routes.chat);
+              // } else if (msgData.lastMessage.messageType == 'event') {
+              // Routes.navigateToScreen(context, Routes.event_chat);
+              // } else {
+              // Routes.navigateToScreen(context, Routes.business_chat);
+            },
+            child: Text('Message')),
+      ),
+      title: Text(
+        (contactData.firstname ?? '') + ' ' + (contactData.lastname ?? ''),
+      ),
+    );
   }
 
   @override

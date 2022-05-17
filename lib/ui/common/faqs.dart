@@ -74,7 +74,6 @@ class _FaqScreenState extends State<FaqScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

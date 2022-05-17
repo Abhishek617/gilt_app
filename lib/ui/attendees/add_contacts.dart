@@ -32,7 +32,6 @@ class _AddContactsState extends State<AddContacts> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getContacts();
     super.initState();
   }

@@ -15,7 +15,6 @@ class _AttendeesState extends State<Attendees> {
   late Iterable<Contact> _contacts;
   @override
   void initState() {
-    // TODO: implement initState
     getContacts();
     super.initState();
   }

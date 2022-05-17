@@ -39,7 +39,6 @@ class _Add_businessState extends State<Add_business> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _businessPriceController.text = '0';
     getPlacesAndSpaces();

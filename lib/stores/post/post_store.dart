@@ -55,7 +55,7 @@ abstract class _PostStore with Store {
   Future checkContacts(contacts) async {
     return await _repository
         .checkContacts(contacts)
-        .then((contactList) => CheckContactResponse.fromJson(contactList))
+        .then((contactList) => CheckAppContactResponseModel.fromJson(contactList))
         .catchError((error) => throw error);
   }
 }

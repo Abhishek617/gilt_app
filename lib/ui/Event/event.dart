@@ -41,7 +41,6 @@ class _EventState extends State<Event> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(Duration(milliseconds: 3000), () {
       print("Wait for 3000 milliseconds");
