@@ -105,7 +105,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
 
   expenseslist(args)
   {
-    ExpenseModal elist = jsonDecode(args);
+    ExpenseModal elist = ExpenseModal.fromJson(jsonDecode(args));
     Visibility(
       maintainSize: true,
       maintainAnimation: true,
@@ -114,7 +114,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
       child: Container(
         height:DeviceUtils.getScaledHeight(context, 0.366),
         child: ListView.builder(
-            itemCount: elist.contact?.length,
+            itemCount: elist.selectedcontactexpenselist?.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
                 leading: Container(
@@ -182,7 +182,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                     )
                   ],
                 ),
-                title: Text(elist.contact![index].phone.toString() , style:TextStyle(fontSize: 13),),
+                title: Text(elist.selectedcontactexpenselist![index].phone.toString() , style:TextStyle(fontSize: 13),),
               );
 
             }

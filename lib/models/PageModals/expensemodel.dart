@@ -4,44 +4,30 @@ class ExpenseModal {
     required this.category,
     required this.location,
     required this.startDate,
-    required this.endDate,
     required this.description,
-    this.contact,
-    required this.expenseDescription,
-    required this.lat,
-    required this.long,
-    required this.totalExpense,
+    this.selectedcontactexpenselist,
   });
 
   late final String name;
   late final String category;
   late final String location;
   late final String startDate;
-  late final String endDate;
   late final String description;
-  List<Scontact>? contact;
-  late final String expenseDescription;
-  late final String lat;
-  late final String long;
-  late final String totalExpense;
+  List<Scontact>? selectedcontactexpenselist;
+
 
   ExpenseModal.fromJson(Map<String, dynamic> json){
     name = json['name'];
     category = json['category'];
     location = json['location'];
     startDate = json['startDate'];
-    endDate = json['endDate'];
     description = json['description'];
-    if (json['contact'] != null) {
-      contact = <Scontact>[];
-      json['contact'].forEach((v) {
-        contact!.add(new Scontact.fromJson(v));
+    if (json['selectedcontactexpenselist'] != null) {
+      selectedcontactexpenselist = <Scontact>[];
+      json['selectedcontactexpenselist'].forEach((v) {
+        selectedcontactexpenselist!.add(new Scontact.fromJson(v));
       });
     }
-    expenseDescription = json['expenseDescription'];
-    lat = json['lat'];
-    long = json['long'];
-    totalExpense = json['totalExpense'];
   }
 
   Map<String, dynamic> toJson() {
@@ -50,15 +36,10 @@ class ExpenseModal {
     _data['category'] = category;
     _data['location'] = location;
     _data['startDate'] = startDate;
-    _data['endDate'] = endDate;
     _data['description'] = description;
-    if (this.contact != null) {
-      _data['contact'] = this.contact!.map((v) => v.toJson()).toList();
+    if (this.selectedcontactexpenselist != null) {
+      _data['selectedcontactexpenselist'] = this.selectedcontactexpenselist!.map((v) => v.toJson()).toList();
     }
-    _data['expenseDescription'] = expenseDescription;
-    _data['lat'] = lat;
-    _data['long'] = long;
-    _data['totalExpense'] = totalExpense;
     return _data;
   }
 }

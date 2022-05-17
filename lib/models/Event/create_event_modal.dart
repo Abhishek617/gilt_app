@@ -44,7 +44,7 @@ class CreateEventRequestModal {
     _data['category'] = category;
     _data['location'] = location;
     _data['startDate'] = startDate;
-    _data['endDate'] = endDate;
+
     _data['description'] = description;
     _data['attendees'] = attendees.map((e)=>e.toJson()).toList();
     _data['expenseDescription'] = expenseDescription;
