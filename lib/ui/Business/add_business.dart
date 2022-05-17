@@ -151,15 +151,16 @@ class _Add_businessState extends State<Add_business> {
           title: Text('Add Business'),
           centerTitle: true,
           shadowColor: Colors.transparent,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Routes.goBack(context);
-            },
-          ),
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back_ios_outlined),
+          //   onPressed: () {
+          //     Routes.goBack(context);
+          //   },
+          // ),
           actions: [
-            IconButton(
-              icon: Icon(Icons.check_rounded),
+            ElevatedButton(
+              style: ButtonStyle(shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),),
+              child: Text('SAVE'),
               onPressed: addNewBusiness,
             )
           ],

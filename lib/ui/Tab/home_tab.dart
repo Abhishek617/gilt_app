@@ -36,13 +36,24 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   initState() {
+    _userStore.getProfile();
+    // tabSetup();
     super.initState();
+  }
+
+  @override
+  didChangeDependencies() {
+    tabSetup();
+    super.didChangeDependencies();
+  }
+
+  tabSetup() {
     items = [
       iconWithText(Icons.explore, Strings.explore),
       iconWithText(Icons.account_balance_wallet, Strings.wallet),
       iconWithText(
           Icons.calendar_month,
-          _userStore.getUserRole() == AppSettings.businessUserRole
+          _userStore.getUserRole().toString() == AppSettings.businessUserRole
               ? Strings.addEvent
               : Strings.booking),
       iconWithText(Icons.question_answer_rounded, Strings.chat),

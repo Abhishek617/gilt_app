@@ -6,7 +6,7 @@ class Strings {
   static const String explore = "Explore";
   static const String wallet = "Wallet";
   static const String addEvent = "Add Event";
-  static const String booking = "Booking";
+  static const String booking = "Business";
   static const String chat = "Chat";
   static const String profile = "Profile";
 }

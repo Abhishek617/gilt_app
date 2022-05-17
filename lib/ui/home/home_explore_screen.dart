@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:guilt_app/constants/app_settings.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
@@ -38,13 +39,15 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
 
   @override
   void initState() {
-    initSetup();
+    //initSetup();
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
     initSetup();
+    G.initSocket();
+    G.socketUtils.initSocket();
     super.didChangeDependencies();
   }
 
@@ -55,8 +58,6 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
     });
     getEventsList('upcoming');
     getEventsList('past');
-    G.initSocket();
-    G.socketUtils.initSocket();
   }
 
   getEventsList(type) {
@@ -249,15 +250,22 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                         )),
                 getFixSizedBox(size: 5),
                 Text(
-                  'Description Here',
+                  ProfileData?.user?.roleId.toString() == AppSettings.businessUserRole ? 'Business Account' : 'Individual Account',
                 ),
+                ProfileData?.user?.roleId.toString() == AppSettings.businessUserRole ?
                 ElevatedButtonWidget(
+                  buttonColor: AppColors.primaryColor,
+                  onPressed: () {
+                    Routes.navigateToScreen(context, Routes.create_event);
+                  },
+                  buttonText: ('Create Event'),
+                ) : ElevatedButtonWidget(
                   buttonColor: AppColors.primaryColor,
                   onPressed: () {
                     Routes.navigateToScreen(context, Routes.add_business);
                   },
                   buttonText: ('Add Business'),
-                ),
+                ) ,
                 getFixSizedBox(),
                 Card(
                   color: Colors.white60,
