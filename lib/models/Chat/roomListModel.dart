@@ -106,17 +106,17 @@ class Rooms {
 
 class LastMessage {
   String? messageType;
-  String? content;
+  String? message;
   String? senderUserId;
   String? username;
-  int? userType;
+  String? userType;
   int? userSqlId;
   String? date;
   String? timestamp;
 
   LastMessage(
       {this.messageType,
-        this.content,
+        this.message,
         this.senderUserId,
         this.username,
         this.userType,
@@ -126,7 +126,7 @@ class LastMessage {
 
   LastMessage.fromJson(Map<String, dynamic> json) {
     messageType = json['message_type'];
-    content = json['content'];
+    message = json['message'];
     senderUserId = json['senderUserId'];
     username = json['username'];
     userType = json['user_type'];
@@ -138,7 +138,7 @@ class LastMessage {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['message_type'] = this.messageType;
-    data['content'] = this.content;
+    data['message'] = this.message;
     data['senderUserId'] = this.senderUserId;
     data['username'] = this.username;
     data['user_type'] = this.userType;

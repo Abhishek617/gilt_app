@@ -7,6 +7,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
+import 'package:guilt_app/models/Chat/UserChatMessageListModel.dart';
+import 'package:guilt_app/models/Chat/UserChatMessageListModel.dart';
 import 'package:guilt_app/models/Chat/UserChatMessagesModel.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
@@ -28,7 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
   var currentUserName = '';
 
   @observable
-  UserChatMessagesModel loadMessageData = UserChatMessagesModel();
+  UserChatMessageListModel loadMessageData = UserChatMessageListModel();
 
   @override
   void initState() {
@@ -45,7 +47,7 @@ class _ChatScreenState extends State<ChatScreen> {
   loadMessageHandler(messageData) {
     if (mounted) {
       setState(() {
-        loadMessageData = UserChatMessagesModel.fromJson(messageData);
+        loadMessageData = UserChatMessageListModel.fromJson(messageData);
         currentMessageList = loadMessageData?.messages ?? [];
         print('loadMessageHandler');
         print(currentMessageList);
@@ -65,19 +67,23 @@ class _ChatScreenState extends State<ChatScreen> {
   newMessageHandler(messageData) {
     print('new messageData');
     print(messageData);
-    setState(() {
-      Messages newMsg = Messages.fromJson(messageData.data);
-      currentMessageList = [...currentMessageList, newMsg];
-      if (currentMessageList.length > 0) {
-        WidgetsBinding.instance?.addPostFrameCallback((_) => {
-              _controller.animateTo(
-                0.0,
-                duration: Duration(milliseconds: 200),
-                curve: Curves.easeIn,
-              )
-            });
-      }
-    });
+    messageData  = CatchSentMessageModel.fromJson(messageData);
+    if (mounted) {
+      setState(() {
+        // Messages newMsg = Messages.fromJson(messageData.data);
+        currentMessageList = [...currentMessageList, messageData.data];
+        if (currentMessageList.length > 0) {
+          WidgetsBinding.instance?.addPostFrameCallback((_) =>
+          {
+            _controller.animateTo(
+              0.0,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeIn,
+            )
+          });
+        }
+      });
+    }
   }
 
   @override
@@ -136,11 +142,11 @@ class _ChatScreenState extends State<ChatScreen> {
               Align(
                 alignment: Alignment.centerRight,
                 child: Container(
-                  constraints: BoxConstraints(minWidth: 100),
+                  constraints: BoxConstraints(minWidth: 50),
                   padding: EdgeInsets.all(8.0),
                   child: Text(
-                    messageDetails.content ?? '',
-                    textAlign: TextAlign.center,
+                    messageDetails.message ?? '',
+                    textAlign: TextAlign.start,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 12,
@@ -165,18 +171,15 @@ class _ChatScreenState extends State<ChatScreen> {
           Row(
             children: [
               Container(
-                width: DeviceUtils.getScaledWidth(context, 0.44),
-                height: DeviceUtils.getScaledHeight(context, 0.05),
-                child: Padding(
-                  padding: EdgeInsets.only(top: 13.5),
-                  child: Text(
-                    messageDetails.content ?? '',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
+                constraints: BoxConstraints(minWidth: 50),
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  messageDetails.message ?? '',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 margin: EdgeInsets.all(10.0),
@@ -225,7 +228,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               controller: _controller,
                               itemCount: currentMessageList.length,
                               itemBuilder: (context, index) =>
-                                  currentMessageList[index].username ==
+                              (currentMessageList[index].user?.firstName).toString() + ' ' + (currentMessageList[index].user?.lastName).toString() ==
                                           currentUserName
                                       ? sender(currentMessageList[index])
                                       : receiver(currentMessageList[index]),

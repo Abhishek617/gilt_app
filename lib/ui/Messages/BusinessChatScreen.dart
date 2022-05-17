@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
+import 'package:guilt_app/models/Chat/UserChatMessageListModel.dart';
 import 'package:guilt_app/models/Chat/UserChatMessagesModel.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
 import 'package:guilt_app/utils/Global_methods/SocketService.dart';
@@ -28,7 +29,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
   var currentUserName = '';
 
   @observable
-  UserChatMessagesModel loadMessageData = UserChatMessagesModel();
+  UserChatMessageListModel loadMessageData = UserChatMessageListModel();
 
   @override
   void initState() {
@@ -45,18 +46,18 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
   loadMessageHandler(messageData) {
     if (mounted) {
       setState(() {
-        loadMessageData = UserChatMessagesModel.fromJson(messageData);
+        loadMessageData = UserChatMessageListModel.fromJson(messageData);
         currentMessageList = loadMessageData?.messages ?? [];
         print('loadMessageHandler');
         print(currentMessageList);
         if (currentMessageList.length > 0) {
           WidgetsBinding.instance?.addPostFrameCallback((_) => {
-                _controller.animateTo(
-                  0.0,
-                  duration: Duration(milliseconds: 200),
-                  curve: Curves.easeIn,
-                )
-              });
+            _controller.animateTo(
+              0.0,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeIn,
+            )
+          });
         }
       });
     }
@@ -65,17 +66,18 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
   newMessageHandler(messageData) {
     print('new messageData');
     print(messageData);
+    messageData  = CatchSentMessageModel.fromJson(messageData);
     setState(() {
       Messages newMsg = Messages.fromJson(messageData.data);
       currentMessageList = [...currentMessageList, newMsg];
       if (currentMessageList.length > 0) {
         WidgetsBinding.instance?.addPostFrameCallback((_) => {
-              _controller.animateTo(
-                0.0,
-                duration: Duration(milliseconds: 200),
-                curve: Curves.easeIn,
-              )
-            });
+          _controller.animateTo(
+            0.0,
+            duration: Duration(milliseconds: 200),
+            curve: Curves.easeIn,
+          )
+        });
       }
     });
   }
@@ -128,67 +130,67 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
   }
 
   sender(messageDetails) => Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+    crossAxisAlignment: CrossAxisAlignment.end,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  constraints: BoxConstraints(minWidth: 100),
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    messageDetails.content,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  margin: EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    color: AppColors.cream_app,
-                    borderRadius: BorderRadius.circular(17.00),
-                  ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              constraints: BoxConstraints(minWidth: 100),
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                messageDetails.message ?? '',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-            ],
+              margin: EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                color: AppColors.cream_app,
+                borderRadius: BorderRadius.circular(17.00),
+              ),
+            ),
           ),
         ],
-      );
+      ),
+    ],
+  );
 
   receiver(messageDetails) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
         children: [
-          Row(
-            children: [
-              Container(
-                width: DeviceUtils.getScaledWidth(context, 0.44),
-                height: DeviceUtils.getScaledHeight(context, 0.05),
-                child: Padding(
-                  padding: EdgeInsets.only(top: 13.5),
-                  child: Text(
-                    messageDetails.message ?? '',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                margin: EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
-                  borderRadius: BorderRadius.circular(17.00),
+          Container(
+            width: DeviceUtils.getScaledWidth(context, 0.44),
+            height: DeviceUtils.getScaledHeight(context, 0.05),
+            child: Padding(
+              padding: EdgeInsets.only(top: 13.5),
+              child: Text(
+                messageDetails.message ?? '',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-            ],
+            ),
+            margin: EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+              color: AppColors.primaryColor,
+              borderRadius: BorderRadius.circular(17.00),
+            ),
           ),
         ],
-      );
+      ),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -218,20 +220,20 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
               Observer(
                   builder: (_) => currentMessageList != null
                       ? SingleChildScrollView(
-                          child: Container(
-                            width: DeviceUtils.getScaledWidth(context, 1.00),
-                            height: DeviceUtils.getScaledHeight(context, 0.85),
-                            child: ListView.builder(
-                              controller: _controller,
-                              itemCount: currentMessageList.length,
-                              itemBuilder: (context, index) =>
-                                  currentMessageList[index].username ==
-                                          currentUserName
-                                      ? sender(currentMessageList[index])
-                                      : receiver(currentMessageList[index]),
-                            ),
-                          ),
-                        )
+                    child: Container(
+                      width: DeviceUtils.getScaledWidth(context, 1.00),
+                      height: DeviceUtils.getScaledHeight(context, 0.85),
+                      child: ListView.builder(
+                        controller: _controller,
+                        itemCount: currentMessageList.length,
+                        itemBuilder: (context, index) =>
+                        (currentMessageList[index].user?.firstName).toString() + ' ' + (currentMessageList[index].user?.lastName).toString() ==
+                            currentUserName
+                            ? sender(currentMessageList[index])
+                            : receiver(currentMessageList[index]),
+                      ),
+                    ),
+                  )
                       : Text('Start a chat')),
             ],
           ),
@@ -285,8 +287,8 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                     onPressed: () {
                       G.socketUtils?.sendMessage(_messageController.text,
                           loadMessageData?.threadUserInfo, 'text', () {
-                        _messageController.text = '';
-                      });
+                            _messageController.text = '';
+                          });
                     },
                     child: Icon(
                       Icons.send,

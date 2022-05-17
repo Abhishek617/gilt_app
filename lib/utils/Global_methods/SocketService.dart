@@ -8,6 +8,7 @@ import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Chat/SocketUserModel.dart';
+import 'package:guilt_app/models/Chat/UserChatMessageListModel.dart';
 import 'package:guilt_app/models/Chat/roomListModel.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:mobx/mobx.dart';
@@ -161,10 +162,15 @@ class SocketUtils {
   @action
   void joinPrivateUser(roomData) {
     currentChatRoom = roomData;
+    var users = roomData.roomName.split('_');
+    print('users split from room');
+    print(users.toString());
     _socket.emit(JOIN_USER_PRIVATE_CHAT, {
       "type": roomData.type,
-      "sqlId": roomData.lastMessage.userSqlId, // userid of the user whom you want to chat
-      "user_id": socketUserData.sId // mongodb userid of the loggedin user
+      "sqlId": socketUserData.sqlId == 3 ? 14 : 3,
+      // userid of the user whom you want to chat
+      "user_id": socketUserData.sId
+      // mongodb userid of the loggedin user
     });
     _socket.on('loadMessage', (messages) {
       currentMessageList = messages.cast<String, dynamic>();
@@ -180,8 +186,8 @@ class SocketUtils {
     print(currentChatRoom);
     print(messageText);
     if (messageText != '') {
-      var messagePost = {
-        "room_key": "3_14",
+      var msgData = {
+        "room_key": currentChatRoom.roomName,
         "senderUserId": socketUserData.sId,
         // mongodb userid of the loggedin user
         "message": messageText,
@@ -190,13 +196,13 @@ class SocketUtils {
             ' ' +
             (socketUserData.lastName ?? ''),
         // sender username
-        "user_type": userData.user.roleId ?? '1',
+        "user_type":  userData.user.roleId.toString() ?? '1',
         // pass user role
         "userSqlId": socketUserData.sqlId,
         // loggedin user sqlId,
-        "message_type": type
+        "message_type": "text"
       };
-      _socket.emit('sendMessage', messagePost);
+      _socket.emit('sendMessage', msgData);
       callback();
     }
   }

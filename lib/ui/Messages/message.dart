@@ -42,7 +42,7 @@ class _MessagesState extends State<Messages> {
           children: [
             Container(
               color: Colors.transparent,
-              padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
               child: Row(
                 children: [
                   CircleAvatar(
@@ -65,7 +65,7 @@ class _MessagesState extends State<Messages> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          msgData.lastMessage.username ?? 'No Name',
+                          msgData.users[0].firstName + ' ' + msgData.users[0].lastName ?? 'No Name',
                           style: TextStyle(
                             color: AppColors.primaryColor,
                             fontSize: 16,
@@ -73,7 +73,7 @@ class _MessagesState extends State<Messages> {
                           ),
                         ),
                         Text(
-                          msgData.lastMessage.content ?? 'No Message',
+                          msgData.lastMessage.message ?? 'No Message',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -195,7 +195,7 @@ class _MessagesState extends State<Messages> {
   //                     ),
   //                   ),
   //                   Text(
-  //                     msgData.lastMessage.content ?? 'No Message',
+  //                     msgData.lastMessage.message ?? 'No Message',
   //                     style: TextStyle(
   //                       fontSize: 12,
   //                       fontWeight: FontWeight.w500,
