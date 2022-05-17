@@ -1,5 +1,5 @@
 class UserChatMessageListModel {
-  List<Messages>? messages;
+  List<MessageObj>? messages;
   int? offset;
   ThreadUserInfo? threadUserInfo;
   String? roomKey;
@@ -9,9 +9,9 @@ class UserChatMessageListModel {
 
   UserChatMessageListModel.fromJson(Map<String, dynamic> json) {
     if (json['messages'] != null) {
-      messages = <Messages>[];
+      messages = <MessageObj>[];
       json['messages'].forEach((v) {
-        messages!.add(new Messages.fromJson(v));
+        messages!.add(new MessageObj.fromJson(v));
       });
     }
     offset = json['offset'];
@@ -35,7 +35,7 @@ class UserChatMessageListModel {
   }
 }
 
-class Messages {
+class MessageObj {
   String? sId;
   String? roomKey;
   String? userType;
@@ -44,7 +44,7 @@ class Messages {
   User? user;
   String? message;
 
-  Messages(
+  MessageObj(
       {this.sId,
         this.roomKey,
         this.userType,
@@ -53,7 +53,7 @@ class Messages {
         this.user,
         this.message});
 
-  Messages.fromJson(Map<String, dynamic> json) {
+  MessageObj.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     roomKey = json['room_key'];
     userType = json['user_type'];

@@ -26,7 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
   late SharedPreferenceHelper sharedPrefHelper;
   late TextEditingController _messageController;
   late ScrollController _controller;
-  List<Messages> currentMessageList = [];
+  List<MessageObj> currentMessageList = [];
   var currentUserName = '';
 
   @observable

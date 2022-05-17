@@ -9,6 +9,7 @@ import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Chat/SocketUserModel.dart';
 import 'package:guilt_app/models/Chat/UserChatMessageListModel.dart';
+import 'package:guilt_app/models/Chat/UserChatMessagesModel.dart';
 import 'package:guilt_app/models/Chat/roomListModel.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:mobx/mobx.dart';
@@ -186,23 +187,22 @@ class SocketUtils {
     print(currentChatRoom);
     print(messageText);
     if (messageText != '') {
-      var msgData = {
+      var msg = {
+        "_id": socketUserData.sId,
         "room_key": currentChatRoom.roomName,
-        "senderUserId": socketUserData.sId,
-        // mongodb userid of the loggedin user
         "message": messageText,
-        // actual message, in case of file you can send file location here or send it in file object
-        "username": (socketUserData.firstName ?? '') +
-            ' ' +
-            (socketUserData.lastName ?? ''),
-        // sender username
-        "user_type":  userData.user.roleId.toString() ?? '1',
-        // pass user role
-        "userSqlId": socketUserData.sqlId,
-        // loggedin user sqlId,
-        "message_type": "text"
+        "user_type": userData.user.roleId.toString() ?? '1',
+        "message_type": "text",
+        "files": [],
+        "user": {
+          "userSqlId": socketUserData.sqlId,
+          "firstName": (socketUserData.firstName ?? ''),
+          "lastName": (socketUserData.lastName ?? ''),
+          "profile":
+              socketUserData.profile
+        }
       };
-      _socket.emit('sendMessage', msgData);
+      _socket.emit('sendMessage', msg);
       callback();
     }
   }

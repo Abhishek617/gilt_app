@@ -25,7 +25,7 @@ class _EventChatScreenState extends State<EventChatScreen> {
   late SharedPreferenceHelper sharedPrefHelper;
   late TextEditingController _messageController;
   late ScrollController _controller;
-  List<Messages> currentMessageList = [];
+  List<MessageObj> currentMessageList = [];
   var currentUserName = '';
 
   @observable
@@ -68,7 +68,7 @@ class _EventChatScreenState extends State<EventChatScreen> {
     print(messageData);
     messageData  = CatchSentMessageModel.fromJson(messageData);
     setState(() {
-      Messages newMsg = Messages.fromJson(messageData.data);
+      MessageObj newMsg = MessageObj.fromJson(messageData.data);
       currentMessageList = [...currentMessageList, newMsg];
       if (currentMessageList.length > 0) {
         WidgetsBinding.instance?.addPostFrameCallback((_) => {

@@ -24,6 +24,17 @@ class _MessagesState extends State<Messages> {
 
   @override
   void initState() {
+
+    super.initState();
+  }
+
+  @override
+  didChangeDependencies(){
+    bindSocketListeners();
+    super.didChangeDependencies();
+  }
+
+  bindSocketListeners() {
     G.socketUtils.handleRoomList((roomListData) {
       setState(() {
         print('roomListData');
@@ -32,10 +43,7 @@ class _MessagesState extends State<Messages> {
         screenRoomList = data.roomData?.rooms ?? [];
       });
     });
-    super.initState();
   }
-
-  bindSocketListeners() {}
 
   Message_list(msgData) => GestureDetector(
         child: Column(

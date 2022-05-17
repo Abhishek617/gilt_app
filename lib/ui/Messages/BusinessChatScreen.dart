@@ -25,7 +25,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
   late SharedPreferenceHelper sharedPrefHelper;
   late TextEditingController _messageController;
   late ScrollController _controller;
-  List<Messages> currentMessageList = [];
+  List<MessageObj> currentMessageList = [];
   var currentUserName = '';
 
   @observable
@@ -68,8 +68,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
     print(messageData);
     messageData  = CatchSentMessageModel.fromJson(messageData);
     setState(() {
-      Messages newMsg = Messages.fromJson(messageData.data);
-      currentMessageList = [...currentMessageList, newMsg];
+      currentMessageList = [...currentMessageList, messageData.data];
       if (currentMessageList.length > 0) {
         WidgetsBinding.instance?.addPostFrameCallback((_) => {
           _controller.animateTo(
