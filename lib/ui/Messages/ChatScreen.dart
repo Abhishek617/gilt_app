@@ -40,6 +40,7 @@ class _ChatScreenState extends State<ChatScreen> {
   File? pickedImage;
   @observable
   UserChatMessageListModel loadMessageData = UserChatMessageListModel();
+  int currentPageOffset = 1;
 
   @override
   void initState() {
@@ -49,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
     currentUserName = G.socketUtils.userData.user.firstname +
         ' ' +
         G.socketUtils.userData.user.lastname;
-    G.socketUtils.emitLoadMessage('private');
+    G.socketUtils.emitLoadMessage('private', currentPageOffset);
     G.socketUtils.onLoadMessageListener(loadMessageHandler);
     G.socketUtils.onNewMessageListener(newMessageHandler);
   }
@@ -92,15 +93,14 @@ class _ChatScreenState extends State<ChatScreen> {
 
   uploadImage() {
     if (pickedImage != null) {
-      _postStore.uploadChatImage(pickedImage).then((imageData){
-        G.socketUtils?.sendMessage(imageData,
-            loadMessageData?.threadUserInfo, 'image', () {
-              _messageController.text = '';
-            });
-      }).catchError((err){
+      _postStore.uploadChatImage(pickedImage).then((imageData) {
+        G.socketUtils?.sendMessage(
+            imageData, loadMessageData?.threadUserInfo, 'image', () {
+          _messageController.text = '';
+        });
+      }).catchError((err) {
         print(err);
       });
-
     }
   }
 
@@ -225,7 +225,9 @@ class _ChatScreenState extends State<ChatScreen> {
               Align(
                 alignment: Alignment.centerRight,
                 child: Container(
-                  constraints: BoxConstraints(minWidth: 50),
+                  constraints: BoxConstraints(
+                      minWidth: 50,
+                      maxWidth: DeviceUtils.getScaledWidth(context, 0.80)),
                   padding: EdgeInsets.all(8.0),
                   child: Text(
                     messageDetails.message ?? '',
@@ -254,11 +256,13 @@ class _ChatScreenState extends State<ChatScreen> {
           Row(
             children: [
               Container(
-                constraints: BoxConstraints(minWidth: 50),
+                constraints: BoxConstraints(
+                    minWidth: 50,
+                    maxWidth: DeviceUtils.getScaledWidth(context, 0.80)),
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   messageDetails.message ?? '',
-                  textAlign: TextAlign.end,
+                  textAlign: TextAlign.start,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12,
@@ -283,6 +287,7 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
+            G.socketUtils.emitRoomList();
             Navigator.pop(context);
           },
           icon: Icon(

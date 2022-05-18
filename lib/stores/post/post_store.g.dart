@@ -69,6 +69,14 @@ mixin _$PostStore on _PostStore, Store {
     return _$getBusinessPlacesAsyncAction.run(() => super.getBusinessPlaces());
   }
 
+  final _$uploadChatImageAsyncAction =
+      AsyncAction('_PostStore.uploadChatImage');
+
+  @override
+  Future<dynamic> uploadChatImage(dynamic image) {
+    return _$uploadChatImageAsyncAction.run(() => super.uploadChatImage(image));
+  }
+
   final _$getBusinessSpacesAsyncAction =
       AsyncAction('_PostStore.getBusinessSpaces');
 

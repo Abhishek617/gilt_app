@@ -14,6 +14,7 @@ class G {
 
   static initSocket() {
     socketUtils = SocketUtils();
+    socketUtils.initSocket();
   }
 
 // static void initDummyUsers() {

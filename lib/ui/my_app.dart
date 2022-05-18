@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
   Widget appInit() {
     if (_userStore.isLoggedIn) {
       FaceAuthService.authenticate();
-      G.socketUtils.initSocket();
+      G.initSocket();
     }
     return (_userStore.isFirst
         ? OnBoardingPage()

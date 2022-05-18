@@ -152,19 +152,21 @@ class SocketUtils {
     }
   }
 
-  emitLoadMessage(chatType) {
+  emitLoadMessage(chatType,offset) {
     if (currentChatRoom != null) {
       var loadMsgData = {
         "room_key": currentChatRoom.roomName,
         "type": currentChatRoom.type,
-        "user_id": socketUserData.sId
+        "user_id": socketUserData.sId,
+        "offset":offset
       };
       _socket.emit(GET_MESSAGE_LIST, loadMsgData);
     } else {
       var loadMsgData = {
         "room_key": currentChatRoomKey,
         "type": chatType,
-        "user_id": socketUserData.sId
+        "user_id": socketUserData.sId,
+        "offset":offset
       };
       _socket.emit(GET_MESSAGE_LIST, loadMsgData);
     }
