@@ -40,6 +40,7 @@ class MessageObj {
   String? roomKey;
   String? userType;
   String? messageType;
+  String? createdAt;
   List<Files>? files;
   User? user;
   String? message;
@@ -49,6 +50,7 @@ class MessageObj {
         this.roomKey,
         this.userType,
         this.messageType,
+        this.createdAt,
         this.files,
         this.user,
         this.message});
@@ -58,6 +60,7 @@ class MessageObj {
     roomKey = json['room_key'];
     userType = json['user_type'];
     messageType = json['message_type'];
+    createdAt = json['created_at'];
     if (json['files'] != null) {
       files = <Files>[];
       json['files'].forEach((v) {
@@ -74,6 +77,7 @@ class MessageObj {
     data['room_key'] = this.roomKey;
     data['user_type'] = this.userType;
     data['message_type'] = this.messageType;
+    data['created_at'] = this.createdAt;
     if (this.files != null) {
       data['files'] = this.files!.map((v) => v.toJson()).toList();
     }

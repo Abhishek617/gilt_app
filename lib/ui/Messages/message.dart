@@ -103,9 +103,7 @@ class _MessagesState extends State<Messages> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        Jiffy(msgData.lastMessageAt, "yyyy-MM-ddThh:mm:ssZ")
-                            .fromNow(),
+                      Text(G.convertToAgo(DateTime.parse(msgData.lastMessageAt)),
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w600,

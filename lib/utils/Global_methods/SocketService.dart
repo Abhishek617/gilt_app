@@ -153,6 +153,7 @@ class SocketUtils {
   }
 
   emitLoadMessage(chatType,offset) {
+    print('loadMessage Offset : '+offset.toString());
     if (currentChatRoom != null) {
       var loadMsgData = {
         "room_key": currentChatRoom.roomName,

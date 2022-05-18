@@ -21,6 +21,7 @@ import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:mobx/mobx.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -33,7 +34,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   late SharedPreferenceHelper sharedPrefHelper;
   late TextEditingController _messageController;
-  late ScrollController _controller;
+  late ScrollController _listScrollController;
   late PostStore _postStore = PostStore(getIt<Repository>());
   List<MessageObj> currentMessageList = [];
   var currentUserName = '';
@@ -41,12 +42,15 @@ class _ChatScreenState extends State<ChatScreen> {
   @observable
   UserChatMessageListModel loadMessageData = UserChatMessageListModel();
   int currentPageOffset = 1;
+  final FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _messageController = TextEditingController();
-    _controller = ScrollController();
+    _listScrollController = ScrollController();
+   // focusNode.addListener(onFocusChange);
+    _listScrollController.addListener(_scrollListener);
     currentUserName = G.socketUtils.userData.user.firstname +
         ' ' +
         G.socketUtils.userData.user.lastname;
@@ -54,7 +58,14 @@ class _ChatScreenState extends State<ChatScreen> {
     G.socketUtils.onLoadMessageListener(loadMessageHandler);
     G.socketUtils.onNewMessageListener(newMessageHandler);
   }
-
+  void onFocusChange() {
+    if (focusNode.hasFocus) {
+      // Hide sticker when keyboard appear
+      setState(() {
+       // isShowSticker = false;
+      });
+    }
+  }
   loadMessageHandler(messageData) {
     if (mounted) {
       setState(() {
@@ -65,17 +76,19 @@ class _ChatScreenState extends State<ChatScreen> {
         G.socketUtils.markThreadAsRead(loadMessageData.roomKey);
         if (currentMessageList.length > 0) {
           WidgetsBinding.instance?.addPostFrameCallback((_) => {
-                _controller.animateTo(
-                  0.0,
-                  duration: Duration(milliseconds: 200),
-                  curve: Curves.easeIn,
-                )
+               scrollToBottom()
               });
         }
       });
     }
   }
+scrollToBottom(){
+    setState(() {
+      _listScrollController.animateTo(0.0,
+          duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+    });
 
+}
   pickImage(ImageSource imageType) async {
     try {
       final photo = await ImagePicker().pickImage(source: imageType);
@@ -112,15 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() {
         // Messages newMsg = Messages.fromJson(messageData.data);
         currentMessageList = [...currentMessageList, messageData.data];
-        if (currentMessageList.length > 0) {
-          WidgetsBinding.instance?.addPostFrameCallback((_) => {
-                _controller.animateTo(
-                  0.0,
-                  duration: Duration(milliseconds: 200),
-                  curve: Curves.easeIn,
-                )
-              });
-        }
+       scrollToBottom();
       });
     }
   }
@@ -215,70 +220,120 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+  
+  _scrollListener() {
+    if (_listScrollController.offset >=
+        _listScrollController.position.maxScrollExtent &&
+        !_listScrollController.position.outOfRange) {
+      print("reach the bottom");
+      setState(() {
+        if(currentPageOffset > 1){
+          currentPageOffset -= currentPageOffset;
+        }else{
+          currentPageOffset = 1;
+        }
+        G.socketUtils.emitLoadMessage('private', currentPageOffset);
+       // currentPageOffset += currentPageOffset;
+      });
+    }
+    if (_listScrollController.offset <=
+        _listScrollController.position.minScrollExtent &&
+        !_listScrollController.position.outOfRange) {
+      print("reach the top");
+      setState(() {
+        if(currentPageOffset > 0){
+          currentPageOffset += currentPageOffset;
+        }else{
+          currentPageOffset = 1;
+        }
+        G.socketUtils.emitLoadMessage('private', currentPageOffset);
+      });
+    }
+  }
 
   sender(messageDetails) => Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+    mainAxisAlignment: MainAxisAlignment.end,
+    children: [
+      Align(
+        alignment: Alignment.centerRight,
+        child: Container(
+          constraints: BoxConstraints(
+              minWidth: 50,
+              maxWidth: DeviceUtils.getScaledWidth(context, 0.80)),
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  constraints: BoxConstraints(
-                      minWidth: 50,
-                      maxWidth: DeviceUtils.getScaledWidth(context, 0.80)),
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    messageDetails.message ?? '',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  margin: EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    color: AppColors.cream_app,
-                    borderRadius: BorderRadius.circular(17.00),
-                  ),
+              Text(
+                messageDetails.message ?? '',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
+              SizedBox(height: 8,),
+              Text(G.convertToAgo(DateTime.parse(messageDetails.createdAt)),style: TextStyle(
+                color: Colors.black,
+                fontSize: 8,
+                fontWeight: FontWeight.w500,
+              ),),
             ],
           ),
-        ],
-      );
+          margin: EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+            color: AppColors.cream_app,
+            borderRadius: BorderRadius.circular(17.00),
+          ),
+        ),
+      ),
+
+    ],
+  );
 
   receiver(messageDetails) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          constraints: BoxConstraints(
+              minWidth: 50,
+              maxWidth: DeviceUtils.getScaledWidth(context, 0.80)),
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                constraints: BoxConstraints(
-                    minWidth: 50,
-                    maxWidth: DeviceUtils.getScaledWidth(context, 0.80)),
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  messageDetails.message ?? '',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                margin: EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
-                  borderRadius: BorderRadius.circular(17.00),
+              Text(
+                messageDetails.message ?? '',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
+              SizedBox(height: 8,),
+              Text(G.convertToAgo(DateTime.parse(messageDetails.createdAt)),style: TextStyle(
+                color: Colors.white,
+                fontSize: 8,
+                fontWeight: FontWeight.w500,
+              ),),
             ],
           ),
-        ],
-      );
+          margin: EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+            color: AppColors.primaryColor,
+            borderRadius: BorderRadius.circular(17.00),
+          ),
+        ),
+      ),
+
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -308,12 +363,13 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               Observer(
                   builder: (_) => currentMessageList != null
-                      ? SingleChildScrollView(
+                      ? Flexible(
                           child: Container(
+                            margin: EdgeInsets.only(bottom: 60.0),
                             width: DeviceUtils.getScaledWidth(context, 1.00),
                             height: DeviceUtils.getScaledHeight(context, 0.85),
                             child: ListView.builder(
-                              controller: _controller,
+                              controller: _listScrollController,
                               itemCount: currentMessageList.length,
                               itemBuilder: (context, index) =>
                                   (currentMessageList[index].user?.firstName)
