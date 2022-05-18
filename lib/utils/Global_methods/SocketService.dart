@@ -167,7 +167,8 @@ class SocketUtils {
         "room_key": currentChatRoomKey,
         "type": chatType,
         "user_id": socketUserData.sId,
-        "offset":offset
+        "offset":offset,
+        "limit":20,
       };
       _socket.emit(GET_MESSAGE_LIST, loadMsgData);
     }
@@ -255,7 +256,7 @@ class SocketUtils {
       if (messageText != '') {
         var msg = {
           // "_id": socketUserData.sId,
-          "room_key": currentChatRoom.roomName,
+          "room_key": currentChatRoomKey,
           "message": messageText,
           "user_type": userData.user.roleId.toString() ?? '1',
           "message_type": "text",
