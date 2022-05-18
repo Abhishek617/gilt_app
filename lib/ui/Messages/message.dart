@@ -90,6 +90,8 @@ class _MessagesState extends State<Messages> {
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
