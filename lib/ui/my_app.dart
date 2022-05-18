@@ -20,6 +20,7 @@ import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
 import 'package:guilt_app/utils/Global_methods/face_auth_service.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/stores/language/language_store.dart';
@@ -45,8 +46,11 @@ class MyApp extends StatelessWidget {
   final LanguageStore _languageStore = LanguageStore(getIt<Repository>());
   final UserStore _userStore = UserStore(getIt<Repository>());
 
-  Widget appInit(){
-    if(_userStore.isLoggedIn) FaceAuthService.authenticate();
+  Widget appInit() {
+    if (_userStore.isLoggedIn) {
+      FaceAuthService.authenticate();
+      G.socketUtils.initSocket();
+    }
     return (_userStore.isFirst
         ? OnBoardingPage()
         : (_userStore.isLoggedIn ? HomeTab() : WelcomeLogin()));

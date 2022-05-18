@@ -90,73 +90,84 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
     );
   }
 
+  getEventDetails(context, eventItem) {
+    if (eventItem.id != null)
+      Routes.navigateToScreenWithArgs(
+          context, Routes.event_details, eventItem.id);
+  }
+
   Widget upcomingOrPastEventCard(
       UpcomingAndPastEventListDetail eventItem, type) {
-    return Card(
-      margin: EdgeInsets.only(right: 12, bottom: 5),
-      child: Container(
-        color: Colors.white,
-        alignment: Alignment.center,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.network(
-              // eventItem['imageURL'] ?? 'https://zillifurniture.com/images/product/1601279977-pro-placeholder.png',
-              type == 'upcoming'
-                  ? 'https://vanguardian.org/wp-content/uploads/2021/02/UpcomingEvents.jpg'
-                  : 'https://sathyaeducare.com/assets/img/recent.jpg',
-              width: DeviceUtils.getScaledWidth(context, 0.40),
-              height: DeviceUtils.getScaledHeight(context, 0.10),
-            ),
-            getFixSizedBox(size: 5),
-            Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(eventItem.name,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700)),
-                  getFixSizedBox(size: 3),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.supervised_user_circle,
-                        size: 20,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      Text(
-                        '20+ Attendees',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          decoration: TextDecoration.underline,
-                          color: Colors.blueAccent,
-                        ),
-                      ),
-                    ],
-                  ),
-                  getFixSizedBox(size: 3),
-                  Row(
-                    children: [
-                      Icon(Icons.location_on,
-                          size: 20,
-                          color: Theme.of(context).colorScheme.primary),
-                      Text(
-                        eventItem.location,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+    return GestureDetector(
+      onTap: () {
+        getEventDetails(context, eventItem);
+      },
+      child: Card(
+        margin: EdgeInsets.only(right: 12, bottom: 5),
+        child: Container(
+          color: Colors.white,
+          alignment: Alignment.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.network(
+                // eventItem['imageURL'] ?? 'https://zillifurniture.com/images/product/1601279977-pro-placeholder.png',
+                type == 'upcoming'
+                    ? 'https://vanguardian.org/wp-content/uploads/2021/02/UpcomingEvents.jpg'
+                    : 'https://sathyaeducare.com/assets/img/recent.jpg',
+                width: DeviceUtils.getScaledWidth(context, 0.40),
+                height: DeviceUtils.getScaledHeight(context, 0.10),
               ),
-            ),
-          ],
+              getFixSizedBox(size: 5),
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(eventItem.name,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700)),
+                    getFixSizedBox(size: 3),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.supervised_user_circle,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        Text(
+                          '20+ Attendees',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            decoration: TextDecoration.underline,
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ],
+                    ),
+                    getFixSizedBox(size: 3),
+                    Row(
+                      children: [
+                        Icon(Icons.location_on,
+                            size: 20,
+                            color: Theme.of(context).colorScheme.primary),
+                        Text(
+                          eventItem.location,
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -204,8 +215,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
             builder: (_) => Text(
                 (ProfileData?.user?.firstname.toString() ?? '') +
                     '  ' +
-                    (ProfileData?.user?.lastname.toString() ??
-                        ''))),
+                    (ProfileData?.user?.lastname.toString() ?? ''))),
         actions: [
           IconButton(
             padding: EdgeInsets.only(
@@ -229,8 +239,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                     borderRadius: BorderRadius.circular(100.0),
                     child: Observer(
                         builder: (_) => Image.network(
-                              ProfileData?.user?.profile
-                                      ?.toString() ??
+                              ProfileData?.user?.profile?.toString() ??
                                   'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
                               width: DeviceUtils.getScaledWidth(context, 0.30),
                               height: DeviceUtils.getScaledWidth(context, 0.30),
@@ -241,8 +250,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                 getFixSizedBox(),
                 Observer(
                     builder: (_) => Text(
-                          ProfileData?.user?.email.toString() ??
-                              'User Email',
+                          ProfileData?.user?.email.toString() ?? 'User Email',
                           style: TextStyle(
                               color: AppColors.primaryColor,
                               fontSize: 18,
@@ -250,22 +258,27 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                         )),
                 getFixSizedBox(size: 5),
                 Text(
-                  ProfileData?.user?.roleId.toString() == AppSettings.businessUserRole ? 'Business Account' : 'Individual Account',
+                  ProfileData?.user?.roleId.toString() ==
+                          AppSettings.businessUserRole
+                      ? 'Business Account'
+                      : 'Individual Account',
                 ),
-                ProfileData?.user?.roleId.toString() == AppSettings.businessUserRole ?
-                ElevatedButtonWidget(
-                  buttonColor: AppColors.primaryColor,
-                  onPressed: () {
-                    Routes.navigateToScreen(context, Routes.create_event);
-                  },
-                  buttonText: ('Create Event'),
-                ) : ElevatedButtonWidget(
-                  buttonColor: AppColors.primaryColor,
-                  onPressed: () {
-                    Routes.navigateToScreen(context, Routes.add_business);
-                  },
-                  buttonText: ('Add Business'),
-                ) ,
+                ProfileData?.user?.roleId.toString() ==
+                        AppSettings.businessUserRole
+                    ? ElevatedButtonWidget(
+                        buttonColor: AppColors.primaryColor,
+                        onPressed: () {
+                          Routes.navigateToScreen(context, Routes.create_event);
+                        },
+                        buttonText: ('Create Event'),
+                      )
+                    : ElevatedButtonWidget(
+                        buttonColor: AppColors.primaryColor,
+                        onPressed: () {
+                          Routes.navigateToScreen(context, Routes.add_business);
+                        },
+                        buttonText: ('Add Business'),
+                      ),
                 getFixSizedBox(),
                 Card(
                   color: Colors.white60,

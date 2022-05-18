@@ -24,12 +24,11 @@ class _MessagesState extends State<Messages> {
 
   @override
   void initState() {
-
     super.initState();
   }
 
   @override
-  didChangeDependencies(){
+  didChangeDependencies() {
     bindSocketListeners();
     super.didChangeDependencies();
   }
@@ -73,7 +72,10 @@ class _MessagesState extends State<Messages> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          msgData.users[0].firstName + ' ' + msgData.users[0].lastName ?? 'No Name',
+                          msgData.users[0].firstName +
+                                  ' ' +
+                                  msgData.users[0].lastName ??
+                              'No Name',
                           style: TextStyle(
                             color: AppColors.primaryColor,
                             fontSize: 16,
@@ -81,7 +83,9 @@ class _MessagesState extends State<Messages> {
                           ),
                         ),
                         Text(
-                          msgData.lastMessage.message ?? 'No Message',
+                          msgData.lastMessage?.messageType == 'image'
+                              ? 'Image'
+                              : (msgData.lastMessage?.message ?? 'No Message'),
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -258,10 +262,12 @@ class _MessagesState extends State<Messages> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print('Open contacts');
-          GlobalMethods.askPermissions(
-              context, Routes.add_new_chat_contact);
+          GlobalMethods.askPermissions(context, Routes.add_new_chat_contact);
         },
-        child: Icon(Icons.add_comment, color: AppColors.primaryColor,),
+        child: Icon(
+          Icons.add_comment,
+          color: AppColors.primaryColor,
+        ),
       ),
       appBar: AppBar(
         shadowColor: Colors.transparent,

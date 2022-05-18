@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -5,14 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Chat/UserChatMessageListModel.dart';
 import 'package:guilt_app/models/Chat/UserChatMessageListModel.dart';
 import 'package:guilt_app/models/Chat/UserChatMessagesModel.dart';
+import 'package:guilt_app/stores/post/post_store.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -26,9 +34,10 @@ class _ChatScreenState extends State<ChatScreen> {
   late SharedPreferenceHelper sharedPrefHelper;
   late TextEditingController _messageController;
   late ScrollController _controller;
+  late PostStore _postStore = PostStore(getIt<Repository>());
   List<MessageObj> currentMessageList = [];
   var currentUserName = '';
-
+  File? pickedImage;
   @observable
   UserChatMessageListModel loadMessageData = UserChatMessageListModel();
 
@@ -40,6 +49,7 @@ class _ChatScreenState extends State<ChatScreen> {
     currentUserName = G.socketUtils.userData.user.firstname +
         ' ' +
         G.socketUtils.userData.user.lastname;
+    G.socketUtils.emitLoadMessage('private');
     G.socketUtils.onLoadMessageListener(loadMessageHandler);
     G.socketUtils.onNewMessageListener(newMessageHandler);
   }
@@ -51,6 +61,7 @@ class _ChatScreenState extends State<ChatScreen> {
         currentMessageList = loadMessageData?.messages ?? [];
         print('loadMessageHandler');
         print(currentMessageList);
+        G.socketUtils.markThreadAsRead(loadMessageData.roomKey);
         if (currentMessageList.length > 0) {
           WidgetsBinding.instance?.addPostFrameCallback((_) => {
                 _controller.animateTo(
@@ -64,23 +75,51 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  pickImage(ImageSource imageType) async {
+    try {
+      final photo = await ImagePicker().pickImage(source: imageType);
+      if (photo == null) return;
+      final tempImage = File(photo.path);
+      setState(() {
+        pickedImage = tempImage;
+      });
+      uploadImage();
+      Get.back();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
+
+  uploadImage() {
+    if (pickedImage != null) {
+      _postStore.uploadChatImage(pickedImage).then((imageData){
+        G.socketUtils?.sendMessage(imageData,
+            loadMessageData?.threadUserInfo, 'image', () {
+              _messageController.text = '';
+            });
+      }).catchError((err){
+        print(err);
+      });
+
+    }
+  }
+
   newMessageHandler(messageData) {
     print('new messageData');
     print(messageData);
-    messageData  = CatchSentMessageModel.fromJson(messageData);
+    messageData = CatchSentMessageModel.fromJson(messageData);
     if (mounted) {
       setState(() {
         // Messages newMsg = Messages.fromJson(messageData.data);
         currentMessageList = [...currentMessageList, messageData.data];
         if (currentMessageList.length > 0) {
-          WidgetsBinding.instance?.addPostFrameCallback((_) =>
-          {
-            _controller.animateTo(
-              0.0,
-              duration: Duration(milliseconds: 200),
-              curve: Curves.easeIn,
-            )
-          });
+          WidgetsBinding.instance?.addPostFrameCallback((_) => {
+                _controller.animateTo(
+                  0.0,
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.easeIn,
+                )
+              });
         }
       });
     }
@@ -131,6 +170,50 @@ class _ChatScreenState extends State<ChatScreen> {
       return Container();
     }
     // }
+  }
+
+  void imagePickerOption() {
+    Get.bottomSheet(
+      SingleChildScrollView(
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10.0),
+            topRight: Radius.circular(10.0),
+          ),
+          child: Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    "Select a Photo",
+                    style: TextStyle(fontSize: 20, color: Colors.grey),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Divider(
+                    height: 1,
+                    color: Colors.grey,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      pickImage(ImageSource.gallery);
+                    },
+                    child: Text("Choose from Library...",
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.center),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   sender(messageDetails) => Column(
@@ -228,7 +311,13 @@ class _ChatScreenState extends State<ChatScreen> {
                               controller: _controller,
                               itemCount: currentMessageList.length,
                               itemBuilder: (context, index) =>
-                              (currentMessageList[index].user?.firstName).toString() + ' ' + (currentMessageList[index].user?.lastName).toString() ==
+                                  (currentMessageList[index].user?.firstName)
+                                                  .toString() +
+                                              ' ' +
+                                              (currentMessageList[index]
+                                                      .user
+                                                      ?.lastName)
+                                                  .toString() ==
                                           currentUserName
                                       ? sender(currentMessageList[index])
                                       : receiver(currentMessageList[index]),
@@ -248,7 +337,9 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Row(
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      imagePickerOption();
+                    },
                     child: Icon(
                       Icons.attach_file,
                       color: Colors.white,

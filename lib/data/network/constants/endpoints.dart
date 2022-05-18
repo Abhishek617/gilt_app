@@ -52,6 +52,7 @@ class Endpoints {
   static const String getBusinessPlaces = baseUrl + "api/business-places";
   //Get Business Spaces
   static const String getBusinessSpaces = baseUrl + "api/business-spaces";
+  static const String uploadChatImage = baseUrl + "api/chatImage/upload";
 
   //---------Profile
   // get profile details
@@ -69,6 +70,9 @@ class Endpoints {
 
   //otp validate
   static const String OtpValidate = baseUrl + "admin/otp-validate";
+
+  // Getting Event Details
+  static const String eventDetail = baseUrl + 'api/event';
 
 // UpComing and Past Event
   static const String upcomingPast = baseUrl + 'api/event/upcomingAndPast';

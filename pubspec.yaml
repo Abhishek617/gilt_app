@@ -88,7 +88,7 @@ dependencies:
   geolocator: ^8.2.0
   permission_handler: ^9.2.0
   fluttertoast: ^8.0.9
-
+  http_parser: ^4.0.0
   #date and time picker
   date_time_picker: ^2.1.0
 

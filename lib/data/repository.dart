@@ -12,6 +12,7 @@ import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
+import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
@@ -204,6 +205,15 @@ class Repository {
         .catchError((error) => throw error);
   }
 
+  // Upload Chat Image :---------------------------------------------------------------------
+  Future uploadChatImage(image) async {
+    var token = await authToken;
+    return await _postApi
+        .uploadChatImage(image, token)
+        .then((contentData) => contentData)
+        .catchError((error) => throw error);
+  }
+
   // OtpSend:---------------------------------------------------------------------
 
   Future<OtpSendModel> Send_Otp(String email) async {
@@ -232,9 +242,9 @@ class Repository {
         .catchError((error) => throw error);
   }
 //eventview
-  Future<EventViewModal> Event_Detail(int eventId) async {
+  Future Event_Detail(int eventId) async {
     var token = await authToken;
-    return await _postApi.Event_Detail(eventId, token)
+    return await _postApi.getEventDetail(eventId, token)
         .then((EventData) => EventData)
         .catchError((error) => throw error);
   }
