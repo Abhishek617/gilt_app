@@ -41,12 +41,19 @@ class _Expense_ScreenState extends State<Expense_Screen> {
   bool status = true;
   final UserStore _userStore = UserStore(getIt<Repository>());
   TextEditingController _amount = TextEditingController();
+ TextEditingController _expensedescription = TextEditingController();
   bool isChecked = false;
-
-  //bool _value = false;
+ var myControllers = [];
+ //bool _value = false;
   int val = -1;
   int _count = 0;
 
+ void createControllers() {
+   myControllers = [];
+   for (var i = 0; i < selectedcontactexpenselist.length ; i++) {
+     myControllers.add(TextEditingController());
+   }
+ }
   void _incrementCounter() {
     setState(() {
       _count++;
@@ -87,10 +94,10 @@ class _Expense_ScreenState extends State<Expense_Screen> {
     setState(() {});
   }
 
-  createEvent(eData) {
+  createEvent(eData, expenseData) async {
     GlobalMethods.showLoader();
     String dData = jsonDecode(eData);
-    _userStore.createEvent(dData as CreateEventRequestModal, (val) {
+   return _userStore.createEvent(dData as CreateEventRequestModal, (val) {
       GlobalMethods.hideLoader();
       if (val.success == true) {
         GlobalMethods.showSuccessMessage(context, val.message, 'Create Event');
@@ -106,7 +113,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
   expenseslist(args)
   {
     ExpenseModal elist = ExpenseModal.fromJson(jsonDecode(args));
-    Visibility(
+   return Visibility(
       maintainSize: true,
       maintainAnimation: true,
       maintainState: true,
@@ -153,7 +160,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                       child: TextField(
 
                         style: TextStyle(fontSize: 11),
-                        controller: _amount,
+                        controller:  myControllers[index],
                         keyboardType: TextInputType.number,
                         inputFormatters: <
                             TextInputFormatter>[
@@ -296,6 +303,7 @@ final args = ModalRoute.of(context)?.settings.arguments;
                 ),
                 Container(
                   child: TextFormField(
+                    controller: _expensedescription,
                     minLines: 2,
                     maxLines: 40,
                     keyboardType: TextInputType.multiline,
@@ -384,8 +392,15 @@ final args = ModalRoute.of(context)?.settings.arguments;
                         buttonText: 'Confirm',
                         buttonColor: AppColors.primaryColor,
                         onPressed: () {
-                      createEvent(args);
+                            final expenseData = CreateEventRequestModal.fromJson(
+                            {
+                              " expenseDescription" :  _expensedescription.value.text,
+                               "totalExpense":  _amount.value.text,
+                            }
+                          );
+                      createEvent(args, expenseData);
                         },
+
                       ): disableButton(),
                     ),
                   ],
