@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:ffi';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
@@ -44,14 +44,13 @@ class _Expense_ScreenState extends State<Expense_Screen> {
  TextEditingController _expensedescription = TextEditingController();
   bool isChecked = false;
  var myControllers = [];
- //bool _value = false;
-  int val = -1;
+ bool _value = false;
+ int val = 0;
   int _count = 0;
 
- void createControllers() {
-   myControllers = [];
+  createControllers() {
    for (var i = 0; i < selectedcontactexpenselist.length ; i++) {
-     myControllers.add(TextEditingController());
+     return myControllers.add(TextEditingController());
    }
  }
   void _incrementCounter() {
@@ -61,6 +60,19 @@ class _Expense_ScreenState extends State<Expense_Screen> {
     });
   }
 
+ // _incrementCounterlist(int index) {
+ //   setState(() {
+ //     _count++;
+ //     myControllers[index].text = _count.toString();
+ //   });
+ // }
+ //
+ // _decrementCounterlist(int index) {
+ //   setState(() {
+ //     _count--;
+ //     myControllers[index].text = _count.toString();
+ //   });
+ // }
   disableButton() {
     setState(() {
       status = false;
@@ -112,6 +124,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
 
   expenseslist(args)
   {
+
     ExpenseModal elist = ExpenseModal.fromJson(jsonDecode(args));
    return Visibility(
       maintainSize: true,
@@ -124,7 +137,9 @@ class _Expense_ScreenState extends State<Expense_Screen> {
             itemCount: elist.selectedcontactexpenselist?.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
+
                 leading: Container(
+
                   height: DeviceUtils.getScaledHeight(
                       context, 0.7),
                   width: DeviceUtils.getScaledWidth(
@@ -400,7 +415,6 @@ final args = ModalRoute.of(context)?.settings.arguments;
                           );
                       createEvent(args, expenseData);
                         },
-
                       ): disableButton(),
                     ),
                   ],
