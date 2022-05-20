@@ -206,6 +206,18 @@ class _MenuDrawerState extends State<MenuDrawer> {
                       },
                     ),
                     getMenuTile(
+                      'MY BUSINESS',
+                          () => {
+                        Routes.navigateToScreen(context, Routes.mybusiness_list)
+                      },
+                    ),
+                    getMenuTile(
+                      'BUSINESS PAYMENT',
+                          () => {
+                        Routes.navigateToScreen(context, Routes.business_payment)
+                      },
+                    ),
+                    getMenuTile(
                       'SEARCH BUSINESS',
                       () =>
                           {Routes.navigateToScreen(context, Routes.book_event)},

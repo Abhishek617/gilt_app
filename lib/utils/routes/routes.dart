@@ -1,6 +1,8 @@
 import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
+import 'package:guilt_app/ui/Business/business_payment.dart';
+import 'package:guilt_app/ui/Business/mybusiness.dart';
 import 'package:guilt_app/ui/Event/create_event.dart';
 import 'package:guilt_app/ui/Event/book_event.dart';
 import 'package:guilt_app/ui/Event/book_event_details.dart';
@@ -55,6 +57,8 @@ class Routes {
 
   //static variables
   //after login-signup otp
+  static const  String business_payment= '/business_payment';
+  static const  String mybusiness_list= '/mybusiness_list';
   static const String otpvalidate = '/otpvalidate';
   static const String map = '/map';
   static const String addmoney = '/addmoney';
@@ -108,6 +112,8 @@ class Routes {
 
 
   static final routes = <String, WidgetBuilder>{
+    business_payment: (BuildContext context) => BusinessPayment(),
+   mybusiness_list: (BuildContext context) => MyBusiness(),
     otpvalidate: (BuildContext context) => Otp_Validate_Screen(),
     map: (BuildContext context) => Map(),
     addmoney: (BuildContext context) => AddMoney(),
