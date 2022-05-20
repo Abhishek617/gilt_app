@@ -33,10 +33,12 @@ import 'package:guilt_app/ui/home/home.dart';
 import 'package:guilt_app/ui/Map/map.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/login/login.dart';
+import 'package:guilt_app/ui/my_business/pay_request.dart';
 import 'package:guilt_app/ui/payment/AddMoney.dart';
 import 'package:guilt_app/ui/payment/Payment_history.dart';
 import 'package:guilt_app/ui/payment/bank_lists.dart';
 import 'package:guilt_app/ui/payment/card_details.dart';
+import 'package:guilt_app/ui/payment/cards.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
@@ -103,6 +105,12 @@ class Routes {
   static const  String card_details= '/card_details';
   static const  String add_feedback= '/add_feedback';
   static const  String feedback_list= '/feedback_list';
+  static const  String card= '/cards';
+  static const  String pay_requst= '/pay_request';
+
+
+
+
 
 
 
@@ -158,6 +166,10 @@ class Routes {
     card_details: (BuildContext context) => Card_details(),
     add_feedback: (BuildContext context) => Add_feedback(),
     feedback_list: (BuildContext context) => Feedback_list(),
+    card: (BuildContext context) => Cards(),
+    pay_requst: (BuildContext context) => Pay_Request(),
+
+
 
 
 

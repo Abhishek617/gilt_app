@@ -76,6 +76,10 @@ dependencies:
   get: ^4.6.1
   file: ^6.1.2
   material_floating_search_bar: ^0.3.7
+  firebase_core: ^1.15.0
+  firebase_messaging: ^11.2.15
+  flutter_local_notifications: ^9.4.1
+
 
   #Botton Tab Navigation bar
   animated_bottom_navigation_bar: ^0.3.2
@@ -99,6 +103,7 @@ dependencies:
   getwidget: ^2.0.5
   local_auth: ^2.0.0
   curved_navigation_bar: ^1.0.3
+  flutter_multi_formatter: ^2.5.1
 
 
 dev_dependencies:

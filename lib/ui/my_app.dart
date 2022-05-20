@@ -31,9 +31,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-
 import 'Business/add_business.dart';
 import 'login/login.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -59,6 +62,7 @@ class MyApp extends StatelessWidget {
           return GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             child: GetMaterialApp(
+
               builder: EasyLoading.init(),
               debugShowCheckedModeBanner: false,
               onReady: () {

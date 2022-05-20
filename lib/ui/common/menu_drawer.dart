@@ -199,10 +199,18 @@ class _MenuDrawerState extends State<MenuDrawer> {
                               GlobalMethods.askPermissions(
                                   context, Routes.add_contacts)
                             }),
+
                     getMenuTile(
                       'EXPENSE HISTORY',
                       () => {
                         Routes.navigateToScreen(context, Routes.expensehistory)
+                      },
+                    ),
+
+                    getMenuTile(
+                      'MY BUSINESS',
+                          () => {
+                        Routes.navigateToScreen(context, Routes.pay_requst)
                       },
                     ),
                     getMenuTile(
@@ -234,8 +242,8 @@ class _MenuDrawerState extends State<MenuDrawer> {
                     getMenuTile(
                       'PAYMENT METHOD',
                       () => {
-                        Navigator.of(context).pop()
-                        // Routes.navigateRootToScreen(context, Routes.bank_lists),
+                      //  Navigator.of(context).pop()
+                         Routes.navigateRootToScreen(context, Routes.card),
                         // GlobalMethods.showErrorMessage(context, error.message.toString(), 'Logout Error');
                       },
                     ),

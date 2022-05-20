@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 
+import '../../utils/Global_methods/global.dart';
 import '../../utils/routes/routes.dart';
 
 import 'package:flutter/rendering.dart';
