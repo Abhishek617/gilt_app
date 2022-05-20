@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 // import 'package:full_screen_image/full_screen_image.dart';
 import 'package:guilt_app/constants/colors.dart';
@@ -7,6 +10,7 @@ import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/rounded_button_with_icon.dart';
 import 'package:intl/intl.dart';
@@ -36,17 +40,23 @@ class _EventDetailsState extends State<EventDetails> {
   @override
   void didChangeDependencies() {
     args = ModalRoute.of(context)!.settings.arguments;
+    getDetails(args);
+    super.didChangeDependencies();
+  }
 
+  getDetails(args) {
+    GlobalMethods.showLoader();
     _userStore.Event_Detail(args, (value) {
       print(value);
       setState(() {
         contentData = EventDetailsResponseModel.fromJson(value);
         print('eventview');
       });
+        GlobalMethods.hideLoader();
     }, (error) {
+        GlobalMethods.hideLoader();
       print(error.toString());
     });
-    super.didChangeDependencies();
   }
 
   Widget getEventData(eID) {
@@ -71,6 +81,11 @@ class _EventDetailsState extends State<EventDetails> {
                               IconButton(
                                 onPressed: () {
                                   // TODO: Init Group Chat
+                                  GlobalMethods.showLoader();
+                                  G.socketUtils.emitJoinEventChat(contentData!);
+                                        GlobalMethods.hideLoader();
+                                    Routes.navigateToScreen(
+                                        context, Routes.event_chat);
                                 },
                                 icon: Icon(Icons.message_rounded,
                                     size: 20,
@@ -87,12 +102,20 @@ class _EventDetailsState extends State<EventDetails> {
                             size: 40,
                             color: Theme.of(context).colorScheme.primary),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                ( DateFormat.yMMMd().format(DateTime.parse(contentData?.event?.startDate.toString() ?? ''))) + ' - ' + (contentData?.event?.endDate ?? ''),
+                                (DateFormat.yMMMd().format(DateTime.parse(
+                                        contentData?.event?.startDate
+                                                .toString() ??
+                                            ''))) +
+                                    ' - ' +
+                                    (DateFormat.yMMMd().format(DateTime.parse(
+                                        contentData?.event?.endDate
+                                                .toString() ??
+                                            ''))),
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
@@ -113,51 +136,71 @@ class _EventDetailsState extends State<EventDetails> {
                         Icon(Icons.location_on,
                             size: 40,
                             color: Theme.of(context).colorScheme.primary),
-                        Column(
-                          children: [
-                            Text(
-                              'Gala Convention Center',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                contentData?.event?.category ??
+                                    'No Category added',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
-                            Text(
-                              '36, Guild Street London, UK',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
+                              Text(
+                                contentData?.event?.location ??
+                                    'No Address added',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ]),
-                      Row(children: [
-                        Icon(Icons.person_rounded,
-                            size: 40,
-                            color: Theme.of(context).colorScheme.primary),
-                        Column(
-                          children: [
-                            Text(
-                              (contentData?.event?.organizer?.firstname ?? '') +
-                                  ' ' +
-                                  (contentData?.event?.organizer?.lastname ??
-                                      ''),
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
+                      GestureDetector(
+                        onTap: () {
+                          Routes.navigateToScreenWithArgs(
+                              context,
+                              Routes.organizerprof,
+                              contentData?.event?.organizer);
+                        },
+                        child: Row(children: [
+                          Icon(Icons.person_rounded,
+                              size: 40,
+                              color: Theme.of(context).colorScheme.primary),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  (contentData?.event?.organizer?.firstname ??
+                                          '') +
+                                      ' ' +
+                                      (contentData
+                                              ?.event?.organizer?.lastname ??
+                                          ''),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  '(Organizer)',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              '(Organizer)',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ]),
+                          ),
+                        ]),
+                      ),
                     ],
                   ),
                   Divider(
@@ -175,7 +218,7 @@ class _EventDetailsState extends State<EventDetails> {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(
-                            left: 20.0, top: 5.0, bottom: 5.0, right: 215.0),
+                            left: 0.0, top: 5.0, bottom: 5.0, right: 215.0),
                         child: Text(
                           'About Event',
                           style: TextStyle(
@@ -184,11 +227,9 @@ class _EventDetailsState extends State<EventDetails> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            left: 20.0, top: 5.0, bottom: 5.0, right: 20.0),
+                            left: 0.0, top: 5.0, bottom: 5.0, right: 20.0),
                         child: Text(
-                          'age elle-même. Lavantage du Lorem Ipsum sur un texte générique comme Du texte.'
-                          ' Du texte.est quil possède une distribution de lettres plus ou '
-                          'moins normale, et en tout cas comparable avec celle du français standard',
+                          'Event description is not added',
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500),
                         ),
@@ -199,11 +240,20 @@ class _EventDetailsState extends State<EventDetails> {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(
-                            left: 20.0, top: 20.0, bottom: 5.0, right: 255.0),
+                            left: 0.0, top: 20.0, bottom: 5.0, right: 255.0),
                         child: Text(
                           'Photos',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w900),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 0.0, top: 5.0, bottom: 5.0, right: 20.0),
+                        child: Text(
+                          'No any photos added',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w500),
                         ),
                       ),
                       // Row(
@@ -268,14 +318,19 @@ class _EventDetailsState extends State<EventDetails> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Routes.navigateToScreen(context, Routes.atendees);
+          Routes.navigateToScreenWithArgs(
+              context, Routes.atendees, jsonEncode(contentData));
         },
         icon: Icon(
           Icons.supervised_user_circle_rounded,
           color: Colors.grey,
         ),
         label: Text(
-          '+20 Attendees',
+          ((contentData?.event?.eventAttendees?.length != 0)
+                  ? contentData?.event?.eventAttendees?.length.toString() ?? '1'
+                  : contentData?.event?.eventAttendees?.length.toString() ??
+                      '1') +
+              ' Attendees',
           style: TextStyle(color: AppColors.primaryColor, fontSize: 12),
         ),
         backgroundColor: Colors.white,

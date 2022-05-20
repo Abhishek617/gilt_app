@@ -53,7 +53,7 @@ class _HomeTabState extends State<HomeTab> {
       iconWithText(Icons.account_balance_wallet, Strings.wallet),
       iconWithText(
           Icons.calendar_month,
-          _userStore.getUserRole().toString() == AppSettings.businessUserRole
+          _userStore.getUserRole().toString() != AppSettings.businessUserRole
               ? Strings.addEvent
               : Strings.booking),
       iconWithText(Icons.question_answer_rounded, Strings.chat),
@@ -62,7 +62,7 @@ class _HomeTabState extends State<HomeTab> {
     screens = [
       HomeExploreScreen(),
       Wallet(),
-      _userStore.getUserRole() == AppSettings.businessUserRole
+      _userStore.getUserRole() != AppSettings.businessUserRole
           ? Create_event()
           : Add_business(),
       Messages(),

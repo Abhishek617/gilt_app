@@ -39,7 +39,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
 
   @override
   void initState() {
-    //initSetup();
+    initSetup();
     super.initState();
   }
 
@@ -58,6 +58,8 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
     });
     getEventsList('upcoming');
     getEventsList('past');
+    G.initSocket();
+    G.socketUtils.initSocket();
   }
 
   getEventsList(type) {
@@ -65,13 +67,13 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
         (UpcomingPastEventModal eventListResponse) {
       if (eventListResponse.success == true) {
         if (type == 'upcoming') {
-          setState(() {
-            upcomingEventList = eventListResponse.events.listData;
-          });
+            setState(() {
+              upcomingEventList = eventListResponse.events.listData;
+            });
         } else {
-          setState(() {
-            pastEventList = eventListResponse.events.listData;
-          });
+            setState(() {
+              pastEventList = eventListResponse.events.listData;
+            });
         }
       }
     }, (error) {
@@ -211,11 +213,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
       appBar: AppBar(
         shadowColor: Colors.transparent,
         centerTitle: true,
-        title: Observer(
-            builder: (_) => Text(
-                (ProfileData?.user?.firstname.toString() ?? '') +
-                    '  ' +
-                    (ProfileData?.user?.lastname.toString() ?? ''))),
+        title: Text('Explore Events'),
         actions: [
           IconButton(
             padding: EdgeInsets.only(
@@ -234,106 +232,62 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100.0),
-                    child: Observer(
-                        builder: (_) => Image.network(
-                              ProfileData?.user?.profile?.toString() ??
-                                  'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
-                              width: DeviceUtils.getScaledWidth(context, 0.30),
-                              height: DeviceUtils.getScaledWidth(context, 0.30),
-                              fit: BoxFit.cover,
-                            )),
-                  ),
-                ),
-                getFixSizedBox(),
                 Observer(
-                    builder: (_) => Text(
-                          ProfileData?.user?.email.toString() ?? 'User Email',
-                          style: TextStyle(
-                              color: AppColors.primaryColor,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600),
-                        )),
-                getFixSizedBox(size: 5),
-                Text(
-                  ProfileData?.user?.roleId.toString() ==
-                          AppSettings.businessUserRole
-                      ? 'Business Account'
-                      : 'Individual Account',
-                ),
-                ProfileData?.user?.roleId.toString() ==
-                        AppSettings.businessUserRole
-                    ? ElevatedButtonWidget(
-                        buttonColor: AppColors.primaryColor,
-                        onPressed: () {
-                          Routes.navigateToScreen(context, Routes.create_event);
-                        },
-                        buttonText: ('Create Event'),
-                      )
-                    : ElevatedButtonWidget(
-                        buttonColor: AppColors.primaryColor,
-                        onPressed: () {
-                          Routes.navigateToScreen(context, Routes.add_business);
-                        },
-                        buttonText: ('Add Business'),
-                      ),
-                getFixSizedBox(),
-                Card(
-                  color: Colors.white60,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              'Invite Your Friends',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w900),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'Get \$20 off on Your Ticket',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w700),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            ElevatedButton(
-                              child: Text('Invite'),
-                              onPressed: () {
-                                GlobalMethods.askPermissions(
-                                    context, Routes.add_contacts);
-                              },
-                            ),
-                          ],
-                        ),
-                        Column(children: <Widget>[
-                          Icon(
-                            Icons.image,
-                            color: Theme.of(context).primaryColor,
-                            size: 60,
-                          ),
-                          Text(
-                            'Insert \n Graphics',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w700),
-                            textAlign: TextAlign.center,
-                          ),
-                        ]),
-                      ],
-                    ),
+                  builder: (_) => Text(
+                    'Welcome, ' +
+                        (ProfileData?.user?.firstname.toString() ?? '') +
+                        '  ' +
+                        (ProfileData?.user?.lastname.toString() ?? ''),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                 ),
-                getFixSizedBox(),
+                // Container(
+                //   child: ClipRRect(
+                //     borderRadius: BorderRadius.circular(100.0),
+                //     child: Observer(
+                //         builder: (_) => Image.network(
+                //               ProfileData?.user?.profile?.toString() ??
+                //                   'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                //               width: DeviceUtils.getScaledWidth(context, 0.30),
+                //               height: DeviceUtils.getScaledWidth(context, 0.30),
+                //               fit: BoxFit.cover,
+                //             )),
+                //   ),
+                // ),
+                // getFixSizedBox(),
+                // Observer(
+                //     builder: (_) => Text(
+                //           ProfileData?.user?.email.toString() ?? 'User Email',
+                //           style: TextStyle(
+                //               color: AppColors.primaryColor,
+                //               fontSize: 18,
+                //               fontWeight: FontWeight.w600),
+                //         )),
+                // getFixSizedBox(size: 5),
+                // Text(
+                //   ProfileData?.user?.roleId.toString() ==
+                //           AppSettings.businessUserRole
+                //       ? 'Business Account'
+                //       : 'Individual Account',
+                // ),
+                // ProfileData?.user?.roleId.toString() !=
+                //         AppSettings.businessUserRole
+                //     ? ElevatedButtonWidget(
+                //         buttonColor: AppColors.primaryColor,
+                //         onPressed: () {
+                //           Routes.navigateToScreen(context, Routes.create_event);
+                //         },
+                //         buttonText: ('Create Event'),
+                //       )
+                //     : ElevatedButtonWidget(
+                //         buttonColor: AppColors.primaryColor,
+                //         onPressed: () {
+                //           Routes.navigateToScreen(context, Routes.add_business);
+                //         },
+                //         buttonText: ('Add Business'),
+                //       ),
+                // getFixSizedBox(),
+
                 (upcomingEventList.length > 0)
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -364,7 +318,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                         children: [
                           Container(
                               height:
-                                  DeviceUtils.getScaledHeight(context, 0.20),
+                                  DeviceUtils.getScaledHeight(context, 0.22),
                               child: ListView.builder(
                                 itemCount: upcomingEventList.length,
                                 scrollDirection: Axis.horizontal,
@@ -406,7 +360,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                         children: [
                           Container(
                               height:
-                                  DeviceUtils.getScaledHeight(context, 0.20),
+                                  DeviceUtils.getScaledHeight(context, 0.22),
                               child: ListView.builder(
                                 itemCount: pastEventList.length,
                                 scrollDirection: Axis.horizontal,

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:guilt_app/constants/app_settings.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
@@ -239,10 +240,23 @@ class _FullProfileState extends State<FullProfile> {
               textAlign: TextAlign.center,
             ),
           ),
+        ), Padding(
+          padding: const EdgeInsets.only(
+              left: 00.0, top: 5.0, bottom: 00.0, right: 00.0),
+          child: Observer(
+            builder: (_) => Text(
+              addData?.user?.roleId.toString() ==
+              AppSettings.businessUserRole
+          ? 'Business Account'
+          : 'Individual Account',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
         Padding(
           padding:
-              EdgeInsets.only(left: 80.0, top: 20.0, bottom: 20.0, right: 80.0),
+              EdgeInsets.only(left: 80.0, top: 10.0, bottom: 20.0, right: 80.0),
           child: ElevatedButtonWidgetWithIcon(
             buttonColor: AppColors.primaryColor,
             onPressed: () {

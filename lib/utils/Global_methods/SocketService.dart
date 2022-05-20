@@ -11,6 +11,7 @@ import 'package:guilt_app/models/Chat/SocketUserModel.dart';
 import 'package:guilt_app/models/Chat/UserChatMessageListModel.dart';
 import 'package:guilt_app/models/Chat/UserChatMessagesModel.dart';
 import 'package:guilt_app/models/Chat/roomListModel.dart';
+import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,6 +54,7 @@ class SocketUtils {
   static const String DISCONNECT_USER = 'disconnect';
   static const String GET_ROOM_LIST = 'roomList';
   static const String GET_MESSAGE_LIST = 'loadMessage';
+  static const String GET_MESSAGE_LIST_EMIT = 'loadMessages';
   static const String SEND_NEW_MESSAGE = 'sendMessage';
   static const String MARK_THREAD_AS_READ = 'markReadThreadMessages';
 
@@ -104,26 +106,118 @@ class SocketUtils {
 
   @action
   void joinChat(roomData, callback) {
-    _socket.emit(JOIN_USER_PRIVATE_CHAT, {'phone': roomData.phone});
-    _socket.on(JOIN_USER_PRIVATE_CHAT, (response) {
-      callback(response);
-    });
+    if (isSocketConnected) {
+      _socket.emit(JOIN_USER_PRIVATE_CHAT, {'phone': roomData.phone});
+      _socket.on(JOIN_USER_PRIVATE_CHAT, (response) {
+        callback(response);
+      });
+    } else {
+      initSocket();
+    }
+  }
+
+  emitJoinEventChat(EventDetailsResponseModel eventData) {
+    if (isSocketConnected) {
+      var event = eventData.event;
+      if (event != null) {
+        getUserData((data) {
+          print('socketUserData');
+          print(data);
+          if (data != null) {
+            socketUserData = data;
+            var eData = {
+              "eventName": event.name,
+              "id": event.id,
+              "user_id": socketUserData.sId,
+              "type": "event",
+              "eventInfo": {
+                "name": event.name,
+                "image": event.eventImages?.length == 0
+                    ? "https://guiltapp.s3.amazonaws.com/profile/1648029484683bird-thumbnail.jpg"
+                    : event.eventImages?[0],
+                "hostedUsername":
+                    (event.organizer?.firstname.toString() ?? '') +
+                        ' ' +
+                        (event.organizer?.lastname.toString() ?? ''),
+                "sqlId": event.id
+              }
+            };
+            print('eData');
+            print(eData);
+            _socket.emit(JOIN_USER_EVENT_CHAT, eData);
+            _socket.off(GET_MESSAGE_LIST);
+            _socket.on(GET_MESSAGE_LIST, (response) {
+              currentMessageList = UserChatMessageListModel.fromJson(response);
+              currentChatRoomKey = currentMessageList.roomData['roomKey'];
+              print(response);
+            });
+          }
+        });
+      }
+    } else {
+      initSocket();
+    }
+  }
+  joinEventUser(Rooms eventRoomData) {
+    if (isSocketConnected) {
+      var event = eventRoomData;
+      if (event != null) {
+        getUserData((data) {
+          print('socketUserData');
+          print(data);
+          if (data != null) {
+            socketUserData = data;
+            var eData = {
+              "eventName": event.eventInfo?.name,
+              "id": socketUserData.sqlId,
+              "user_id": socketUserData.sId,
+              "type": "event",
+              "eventInfo": {
+                "name": event.eventInfo?.name,
+                "image": event.eventInfo?.image
+                    ?? "https://guiltapp.s3.amazonaws.com/profile/1648029484683bird-thumbnail.jpg",
+                "hostedUsername":event.eventInfo?.hostedUsername,
+                "sqlId": event.eventInfo?.sqlId
+              }
+            };
+            print(eData);
+            _socket.emit(JOIN_USER_EVENT_CHAT, eData);
+            _socket.off(GET_MESSAGE_LIST);
+            _socket.on(GET_MESSAGE_LIST, (response) {
+              currentMessageList = response;
+              print(response);
+
+            });
+          }
+        });
+      }
+    } else {
+      initSocket();
+    }
   }
 
   getUserData(userDataHandler) {
-    _socket.emit(GET_USER_DATA);
-    _socket.on(GET_USER_DATA, (response) {
-      print('SocketUserData:');
-      print(response);
-      var uD = SocketUserModel.fromJson(response);
-      userDataHandler(uD);
-    });
+    if (isSocketConnected) {
+      _socket.emit(GET_USER_DATA);
+      _socket.on(GET_USER_DATA, (response) {
+        print('SocketUserData:');
+        print(response);
+        var uD = SocketUserModel.fromJson(response);
+        userDataHandler(uD);
+      });
+    } else {
+      initSocket();
+    }
   }
 
   setOnMessageBackFromServer(Function onMessageBackFromServer) {
-    _socket.on(SEND_NEW_MESSAGE, (data) {
-      onMessageBackFromServer(data);
-    });
+    if (isSocketConnected) {
+      _socket.on(SEND_NEW_MESSAGE, (data) {
+        onMessageBackFromServer(data);
+      });
+    } else {
+      initSocket();
+    }
   }
 
   setOnErrorListener(Function onError) {
@@ -137,131 +231,189 @@ class SocketUtils {
   }
 
   emitRoomList() {
-    _socket.emit(GET_ROOM_LIST);
+    if (isSocketConnected) {
+      _socket.emit(GET_ROOM_LIST);
+    } else {
+      initSocket();
+    }
   }
 
   @action
   handleRoomList(roomListListener) {
-    if (_socket != null) {
-      _socket.emit(GET_ROOM_LIST);
-      print('emitted room List');
-      _socket.off(GET_ROOM_LIST);
-      _socket.on(GET_ROOM_LIST, (roomData) {
-        roomListListener(roomData);
-      });
+    if (isSocketConnected) {
+      if (_socket != null) {
+        _socket.emit(GET_ROOM_LIST);
+        print('emitted room List');
+        _socket.off(GET_ROOM_LIST);
+        _socket.on(GET_ROOM_LIST, (roomData) {
+          roomListListener(roomData);
+        });
+      }
+    } else {
+      initSocket();
     }
   }
 
-  emitLoadMessage(chatType,offset) {
-    print('loadMessage Offset : '+offset.toString());
-    if (currentChatRoom != null) {
-      var loadMsgData = {
-        "room_key": currentChatRoom.roomName,
-        "type": currentChatRoom.type,
-        "user_id": socketUserData.sId,
-        "offset":offset
-      };
-      _socket.emit(GET_MESSAGE_LIST, loadMsgData);
+  emitLoadMessage(chatType, offset) {
+    if (isSocketConnected) {
+      print('loadMessage Offset : ' + offset.toString());
+        var loadMsgData = {
+          "room_key":(currentChatRoom != null) ? currentChatRoom.roomName:currentChatRoomKey,
+          "type": currentChatRoom.type,
+          "user_id": socketUserData.sId,
+          "offset": offset,
+          "limit": 20,
+        };
+        if(currentChatRoom.type == 'private'){
+          loadMsgData['other_user_id'] = currentChatRoom.users[0].sqlId;
+        }
+        print('LoadMessage Emit Data : ' + loadMsgData.toString());
+        _socket.emit(GET_MESSAGE_LIST_EMIT, loadMsgData);
     } else {
-      var loadMsgData = {
-        "room_key": currentChatRoomKey,
-        "type": chatType,
-        "user_id": socketUserData.sId,
-        "offset":offset,
-        "limit":20,
-      };
-      _socket.emit(GET_MESSAGE_LIST, loadMsgData);
+      initSocket();
     }
   }
 
   onLoadMessageListener(loadMessageHandler) {
-    print('onLoadMessageListener : currentChatRoom');
-    _socket.on(GET_MESSAGE_LIST, (messageList) {
-      var d = UserChatMessageListModel.fromJson(messageList);
-      currentChatRoomKey = d.roomKey;
-      print('loadMessage:');
-      print(messageList);
-      loadMessageHandler(messageList);
-    });
+    if (isSocketConnected) {
+      print('onLoadMessageListener : currentChatRoom');
+      //_socket.off(GET_MESSAGE_LIST);
+      _socket.on(GET_MESSAGE_LIST, (messageList) {
+        currentMessageList = messageList;
+        var d = UserChatMessageListModel.fromJson(messageList);
+        currentChatRoomKey = d.roomKey == null ? d.roomData?.roomKey : d.roomKey;
+        //currentChatRoomKey = d.roomKey;
+        print('loadMessage:');
+        print(messageList);
+        loadMessageHandler(messageList);
+      });
+    } else {
+      initSocket();
+    }
   }
-  markThreadAsRead(roomKey){
-    _socket.emit(MARK_THREAD_AS_READ,{
-      "room_key": roomKey ?? currentChatRoomKey,
-      "user_id": socketUserData.sId
-    });
+
+  markThreadAsRead(roomKey) {
+    if (isSocketConnected) {
+      _socket.emit(MARK_THREAD_AS_READ, {
+        "room_key": roomKey ?? currentChatRoomKey,
+        "user_id": socketUserData.sId
+      });
+    } else {
+      initSocket();
+    }
   }
+
   onNewMessageListener(newMessageHandler) {
-    _socket.on(SEND_NEW_MESSAGE, (newMessage) {
-      emitRoomList();
-      newMessageHandler(newMessage);
-    });
+    if (isSocketConnected) {
+      _socket.off(SEND_NEW_MESSAGE);
+      _socket.on(SEND_NEW_MESSAGE, (newMessage) {
+        emitRoomList();
+        newMessageHandler(newMessage);
+      });
+    } else {
+      initSocket();
+    }
   }
 
   @action
   void joinPrivateUser(roomData) {
-    currentChatRoom = roomData;
-    var users = roomData.roomName.split('_');
-    print('users split from room');
-    print(users.toString());
-    _socket.emit(JOIN_USER_PRIVATE_CHAT, {
-      "type": roomData.type,
-      "room_key": roomData.roomName,
-      // userid of the user whom you want to chat
-      "user_id": socketUserData.sId
-      // mongodb userid of the loggedin user
-    });
-    _socket.on(GET_MESSAGE_LIST, (messageList) {
-      print('loadMessage:');
-      print(messageList);
-      // loadMessageHandler(messageList);
-    });
-    _socket.on(JOIN_USER_PRIVATE_CHAT, (joinedUData) {
-      joinedUserData = joinedUData;
-      print('onJoinUserPrivateChat');
-      print(joinedUserData);
-    });
+    if (isSocketConnected) {
+      currentChatRoom = roomData;
+      var users = roomData.roomName.split('_');
+      print('users split from room');
+      print(users.toString());
+      _socket.emit(JOIN_USER_PRIVATE_CHAT, {
+        "type": roomData.type,
+        "room_key": roomData.roomName,
+        // userid of the user whom you want to chat
+        "user_id": socketUserData.sId
+        // mongodb userid of the loggedin user
+      });
+      _socket.off(GET_MESSAGE_LIST);
+      _socket.on(GET_MESSAGE_LIST, (messageList) {
+        print('loadMessage:');
+        print(messageList);
+        currentMessageList = messageList;
+        // loadMessageHandler(messageList);
+      });
+      _socket.on(JOIN_USER_PRIVATE_CHAT, (joinedUData) {
+        joinedUserData = joinedUData;
+        print('onJoinUserPrivateChat');
+        print(joinedUserData);
+      });
+    } else {
+      initSocket();
+    }
   }
 
   @action
   void joinNewPrivateUser(newUserData) {
-    print('New User Create/Join Room');
-    print(newUserData.toString());
-    var udata = {
-      "type": 'private',
-      "sqlId": newUserData.userId,
-      // userid of the user whom you want to chat
-      "user_id": socketUserData.sId
-      // mongodb userid of the loggedin user
-    };
-    _socket.emit(JOIN_USER_PRIVATE_CHAT, udata);
-    _socket.on(GET_MESSAGE_LIST, (messageList) {
-      print('loadMessage:');
-      print(messageList);
-      // loadMessageHandler(messageList);
-    });
-    _socket.on(JOIN_USER_PRIVATE_CHAT, (joinedUData) {
-      joinedUserData = joinedUData;
-      print('onJoinUserPrivateChat');
-      print(joinedUserData);
-    });
+    if (isSocketConnected) {
+      print('New User Create/Join Room');
+      print(newUserData.toString());
+      var udata = {
+        "type": 'private',
+        "sqlId": newUserData.userId,
+        // userid of the user whom you want to chat
+        "user_id": socketUserData.sId
+        // mongodb userid of the loggedin user
+      };
+      _socket.emit(JOIN_USER_PRIVATE_CHAT, udata);
+      _socket.off(GET_MESSAGE_LIST);
+      _socket.on(GET_MESSAGE_LIST, (messageList) {
+        print('loadMessage:');
+        print(messageList);
+        currentChatRoomKey = messageList.roomKey;
+        currentMessageList = messageList;
+        // loadMessageHandler(messageList);
+      });
+      _socket.on(JOIN_USER_PRIVATE_CHAT, (joinedUData) {
+        joinedUserData = joinedUData;
+        print('onJoinUserPrivateChat');
+        print(joinedUserData);
+      });
+    } else {
+      initSocket();
+    }
   }
 
   @action
-  void sendMessage(textMessage, threadInfo, type, callback) {
-    if(type == 'text') {
-      String messageText = textMessage.trim();
-      print(currentMessageList);
-      print(currentChatRoom);
-      print(messageText);
-      if (messageText != '') {
+  void sendMessage(textMessage, roomKey, type, callback) {
+    if (isSocketConnected) {
+      if (type == 'text') {
+        String messageText = textMessage.trim();
+        print(currentMessageList);
+        print(currentChatRoom);
+        print(messageText);
+        if (messageText != '') {
+          var msg = {
+            // "_id": socketUserData.sId,
+            "room_key": roomKey ?? currentChatRoomKey,
+            "message": messageText,
+            "user_type": userData.user.roleId.toString() ?? '1',
+            "message_type": "text",
+            "senderUserId": socketUserData.sId,
+            "files": [],
+            "user": {
+              "userSqlId": socketUserData.sqlId,
+              "firstName": (socketUserData.firstName ?? ''),
+              "lastName": (socketUserData.lastName ?? ''),
+              "profile": socketUserData.profile
+            }
+          };
+          _socket.emit('sendMessage', msg);
+          callback();
+        }
+      } else {
+        print(textMessage);
         var msg = {
           // "_id": socketUserData.sId,
-          "room_key": currentChatRoomKey,
-          "message": messageText,
+          "room_key": currentChatRoom.roomName,
+          "message": '',
           "user_type": userData.user.roleId.toString() ?? '1',
-          "message_type": "text",
+          "message_type": type,
           "senderUserId": socketUserData.sId,
-          "files": [],
+          "files": [textMessage.data],
           "user": {
             "userSqlId": socketUserData.sqlId,
             "firstName": (socketUserData.firstName ?? ''),
@@ -272,25 +424,8 @@ class SocketUtils {
         _socket.emit('sendMessage', msg);
         callback();
       }
-    }else{
-      print(textMessage);
-      var msg = {
-        // "_id": socketUserData.sId,
-        "room_key": currentChatRoom.roomName,
-        "message": '',
-        "user_type": userData.user.roleId.toString() ?? '1',
-        "message_type": type,
-        "senderUserId": socketUserData.sId,
-        "files": [textMessage.data],
-        "user": {
-          "userSqlId": socketUserData.sqlId,
-          "firstName": (socketUserData.firstName ?? ''),
-          "lastName": (socketUserData.lastName ?? ''),
-          "profile": socketUserData.profile
-        }
-      };
-      _socket.emit('sendMessage', msg);
-      callback();
+    } else {
+      initSocket();
     }
   }
 

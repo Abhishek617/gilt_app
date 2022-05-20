@@ -99,29 +99,38 @@ class _Create_eventState extends State<Create_event> {
   TextEditingController _eventDateAndTimeController = TextEditingController(text: DateTime.now().toString());
   TextEditingController _eventPlaceDescriptionController = TextEditingController();
 
-
+  continuePressEventHandler(){
+    String eData = jsonEncode({
+      "name": _eventNameController.value.text,
+      "category": _eventCategoryController.value.text,
+      "location": _eventLocationController.value.text,
+      "startDate": _eventDateAndTimeController.value.text,
+      "description":_eventPlaceDescriptionController.value.text
+    });
+    Routes.navigateToScreenWithArgs(
+        context, Routes.expense_screen, eData);
+  }
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
         isMenu: false,
         appBar: AppBar(
-          leading: GestureDetector(
-            onTap: () {
-              Routes.goBack(context);
-            },
-            child: Icon(
-              Icons.arrow_back_ios_outlined,
-              //color: Colors.black,
-              size: 16,
-            ),
-          ),
           title: Text('Create Event'),
           centerTitle: true,
           shadowColor: Colors.transparent,
+          actions: [
+            ElevatedButton(
+              style: ButtonStyle(shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),),
+              child: Text('SAVE'),
+              onPressed: (){
+                continuePressEventHandler();
+              },
+            )
+          ],
         ),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(25),
+            padding: const EdgeInsets.only(top:25,left:25,right: 25,bottom: 100),
             child: Column(
               children: [
                 SizedBox(
@@ -507,26 +516,18 @@ class _Create_eventState extends State<Create_event> {
                     ),
                   ],
                 ),
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 20),
-                    child: ElevatedButtonWidget(
-                      buttonText: 'Continue',
-                      buttonColor: AppColors.primaryColor,
-                      onPressed: () {
-                        String eData = jsonEncode({
-                          "name": _eventNameController.value.text,
-                          "category": _eventCategoryController.value.text,
-                          "location": _eventLocationController.value.text,
-                          "startDate": _eventDateAndTimeController.value.text,
-                          "description":_eventPlaceDescriptionController.value.text
-                        });
-                        Routes.navigateToScreenWithArgs(
-                            context, Routes.expense_screen, eData);
-                      },
-                    ),
-                  ),
-                ),
+                // Container(
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(left: 10, top: 20),
+                //     child: ElevatedButtonWidget(
+                //       buttonText: 'Continue',
+                //       buttonColor: AppColors.primaryColor,
+                //       onPressed: () {
+                //        continuePressEventHandler();
+                //       },
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

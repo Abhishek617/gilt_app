@@ -125,10 +125,7 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
   }
 
   Widget about() => Column(
-        children: [
-          Text(
-              'vsvdcjbkdsvjhbkjbdchjbkjbdhsadknjczcjxbkjhbsjcd\nhdghchvcsgvdcszvdsgzxzdgdbhbdfjfvkjszfhsxzcxz')
-        ],
+        children: [Text('No Description Available')],
       );
 
   List<String> item = [' b', 'c ', ' d', 'd'];
@@ -223,20 +220,20 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
                   child: segmentedControl(),
                 ),
                 Container(
-                  height: DeviceUtils.getScaledHeight(context, 0.51),
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    children: item.map((item1) {
-                      return segmentedControlValue == 0
-                          ? about()
-                          : box(
+                  height: DeviceUtils.getScaledHeight(context, 0.45),
+                  child: segmentedControlValue == 0
+                      ? about()
+                      : ListView(
+                          scrollDirection: Axis.vertical,
+                          children: item.map((item1) {
+                            return box(
                               item1,
                               Colors.white,
                               Image.network(
                                   'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0'),
                             );
-                    }).toList(),
-                  ),
+                          }).toList(),
+                        ),
                 ),
               ],
             ),

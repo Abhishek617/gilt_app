@@ -154,18 +154,26 @@ class PostApi {
   }
 
   // Get Business Places
-  Future uploadChatImage(image, token) async {
+  Future uploadChatImage(file, token) async {
     try {
-      String fileName = image.path.split('/').last;
+      String fileName = file.path.split('/').last;
+
+      FormData data = FormData.fromMap({
+        "files": await MultipartFile.fromFile(
+          file.path,
+          filename: fileName,
+        ),
+      });
+     // String fileName = image.path.split('/').last;
       String type = fileName.split('.').last;
-      var imageData = await MultipartFile.fromFile(image.path,
-          contentType: new MediaType('image', type));
-      // MultipartFile.fromBytes(image.bytes!, filename: fileName);
-      FormData formData = FormData();
-      formData.files.add(MapEntry('files', imageData));
+      // var imageData = await MultipartFile.fromFile(image.path,
+      //     contentType: new MediaType('image', type));
+      // // MultipartFile.fromBytes(image.bytes!, filename: fileName);
+      // FormData formData = FormData();
+      // formData.files.add(MapEntry('files', imageData));
       return await _dioClient.post(
         Endpoints.uploadChatImage,
-        data: formData,
+        data: data,
         options: Options(headers: {
           'Authorization': 'Bearer ' + token,
           'Content-Type': 'multipart/form-data'

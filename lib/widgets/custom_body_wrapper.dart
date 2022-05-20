@@ -17,6 +17,7 @@ class _CustomBodyWrapperState extends State<CustomBodyWrapper> {
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(50), topRight: Radius.circular(50)),
         child: Container(
+          height: double.infinity,
           padding: EdgeInsets.only(bottom: 80),
           color: Colors.white,
           child: widget.child,

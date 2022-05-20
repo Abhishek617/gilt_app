@@ -3,9 +3,10 @@ class UserChatMessageListModel {
   int? offset;
   ThreadUserInfo? threadUserInfo;
   String? roomKey;
+  RoomData? roomData;
 
   UserChatMessageListModel(
-      {this.messages, this.offset, this.threadUserInfo, this.roomKey});
+      {this.messages, this.offset, this.threadUserInfo, this.roomKey, this.roomData});
 
   UserChatMessageListModel.fromJson(Map<String, dynamic> json) {
     if (json['messages'] != null) {
@@ -18,6 +19,9 @@ class UserChatMessageListModel {
     threadUserInfo = json['threadUserInfo'] != null
         ? new ThreadUserInfo.fromJson(json['threadUserInfo'])
         : null;
+    roomData = json['roomData'] != null
+        ? new RoomData.fromJson(json['roomData'])
+        : null;
     roomKey = json['room_key'];
   }
 
@@ -29,6 +33,9 @@ class UserChatMessageListModel {
     data['offset'] = this.offset;
     if (this.threadUserInfo != null) {
       data['threadUserInfo'] = this.threadUserInfo!.toJson();
+    }
+    if (this.roomData != null) {
+      data['roomData'] = this.roomData!.toJson();
     }
     data['room_key'] = this.roomKey;
     return data;
@@ -173,6 +180,34 @@ class ThreadUserInfo {
     data['profile'] = this.profile;
     data['isActive'] = this.isActive;
     data['lastOnline'] = this.lastOnline;
+    return data;
+  }
+}
+class RoomData {
+  String? name;
+  String? image;
+  String? hostedUsername;
+  int? sqlId;
+  String? roomKey;
+
+  RoomData(
+      {this.name, this.image, this.hostedUsername, this.sqlId, this.roomKey});
+
+  RoomData.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    image = json['image'];
+    hostedUsername = json['hostedUsername'];
+    sqlId = json['sqlId'];
+    roomKey = json['room_key'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['image'] = this.image;
+    data['hostedUsername'] = this.hostedUsername;
+    data['sqlId'] = this.sqlId;
+    data['room_key'] = this.roomKey;
     return data;
   }
 }

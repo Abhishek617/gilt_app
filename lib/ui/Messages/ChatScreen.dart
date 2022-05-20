@@ -46,28 +46,42 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
+    //initSetup();
     super.initState();
+  }
+
+  @override
+  didChangeDependencies() {
+    initSetup();
+    super.didChangeDependencies();
+  }
+
+  initSetup() {
     _messageController = TextEditingController();
     _listScrollController = ScrollController();
-   // focusNode.addListener(onFocusChange);
+    // focusNode.addListener(onFocusChange);
     _listScrollController.addListener(_scrollListener);
-    currentUserName = G.socketUtils.userData.user.firstname +
-        ' ' +
-        G.socketUtils.userData.user.lastname;
-    G.socketUtils.emitLoadMessage('private', currentPageOffset);
-    G.socketUtils.onLoadMessageListener(loadMessageHandler);
-    G.socketUtils.onNewMessageListener(newMessageHandler);
+    if (G.socketUtils != null) {
+      currentUserName = G.socketUtils.userData.user.firstname +
+          ' ' +
+          G.socketUtils.userData.user.lastname;
+      G.socketUtils.emitLoadMessage('private', currentPageOffset);
+      G.socketUtils.onLoadMessageListener(loadMessageHandler);
+      G.socketUtils.onNewMessageListener(newMessageHandler);
+    }
   }
+
   void onFocusChange() {
     if (focusNode.hasFocus) {
       // Hide sticker when keyboard appear
       setState(() {
-       // isShowSticker = false;
+        // isShowSticker = false;
       });
     }
   }
+
   loadMessageHandler(messageData) {
-    if (mounted) {
+   if (mounted) {
       setState(() {
         loadMessageData = UserChatMessageListModel.fromJson(messageData);
         currentMessageList = loadMessageData?.messages ?? [];
@@ -75,20 +89,20 @@ class _ChatScreenState extends State<ChatScreen> {
         print(currentMessageList);
         G.socketUtils.markThreadAsRead(loadMessageData.roomKey);
         if (currentMessageList.length > 0) {
-          WidgetsBinding.instance?.addPostFrameCallback((_) => {
-               scrollToBottom()
-              });
+          WidgetsBinding.instance
+              ?.addPostFrameCallback((_) => {scrollToBottom()});
         }
       });
     }
   }
-scrollToBottom(){
+
+  scrollToBottom() {
     setState(() {
       _listScrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     });
+  }
 
-}
   pickImage(ImageSource imageType) async {
     try {
       final photo = await ImagePicker().pickImage(source: imageType);
@@ -108,7 +122,7 @@ scrollToBottom(){
     if (pickedImage != null) {
       _postStore.uploadChatImage(pickedImage).then((imageData) {
         G.socketUtils?.sendMessage(
-            imageData, loadMessageData?.threadUserInfo, 'image', () {
+            imageData, loadMessageData?.roomKey, 'image', () {
           _messageController.text = '';
         });
       }).catchError((err) {
@@ -125,7 +139,7 @@ scrollToBottom(){
       setState(() {
         // Messages newMsg = Messages.fromJson(messageData.data);
         currentMessageList = [...currentMessageList, messageData.data];
-       scrollToBottom();
+        scrollToBottom();
       });
     }
   }
@@ -220,30 +234,30 @@ scrollToBottom(){
       ),
     );
   }
-  
+
   _scrollListener() {
     if (_listScrollController.offset >=
-        _listScrollController.position.maxScrollExtent &&
+            _listScrollController.position.maxScrollExtent &&
         !_listScrollController.position.outOfRange) {
       print("reach the bottom");
       setState(() {
-        if(currentPageOffset > 1){
+        if (currentPageOffset > 1) {
           currentPageOffset -= currentPageOffset;
-        }else{
+        } else {
           currentPageOffset = 1;
         }
         G.socketUtils.emitLoadMessage('private', currentPageOffset);
-       // currentPageOffset += currentPageOffset;
+        // currentPageOffset += currentPageOffset;
       });
     }
     if (_listScrollController.offset <=
-        _listScrollController.position.minScrollExtent &&
+            _listScrollController.position.minScrollExtent &&
         !_listScrollController.position.outOfRange) {
       print("reach the top");
       setState(() {
-        if(currentPageOffset > 0){
+        if (currentPageOffset > 0) {
           currentPageOffset += currentPageOffset;
-        }else{
+        } else {
           currentPageOffset = 1;
         }
         G.socketUtils.emitLoadMessage('private', currentPageOffset);
@@ -252,88 +266,96 @@ scrollToBottom(){
   }
 
   sender(messageDetails) => Column(
-    mainAxisAlignment: MainAxisAlignment.end,
-    children: [
-      Align(
-        alignment: Alignment.centerRight,
-        child: Container(
-          constraints: BoxConstraints(
-              minWidth: 50,
-              maxWidth: DeviceUtils.getScaledWidth(context, 0.80)),
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                messageDetails.message ?? '',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              constraints: BoxConstraints(
+                  minWidth: 50,
+                  maxWidth: DeviceUtils.getScaledWidth(context, 0.80)),
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    messageDetails.message ?? '',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    G.convertToAgo(DateTime.parse(messageDetails.createdAt)),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 8,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 8,),
-              Text(G.convertToAgo(DateTime.parse(messageDetails.createdAt)),style: TextStyle(
-                color: Colors.black,
-                fontSize: 8,
-                fontWeight: FontWeight.w500,
-              ),),
-            ],
+              margin: EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                color: AppColors.cream_app,
+                borderRadius: BorderRadius.circular(17.00),
+              ),
+            ),
           ),
-          margin: EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-            color: AppColors.cream_app,
-            borderRadius: BorderRadius.circular(17.00),
-          ),
-        ),
-      ),
-
-    ],
-  );
+        ],
+      );
 
   receiver(messageDetails) => Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      Align(
-        alignment: Alignment.centerLeft,
-        child: Container(
-          constraints: BoxConstraints(
-              minWidth: 50,
-              maxWidth: DeviceUtils.getScaledWidth(context, 0.80)),
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                messageDetails.message ?? '',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              constraints: BoxConstraints(
+                  minWidth: 50,
+                  maxWidth: DeviceUtils.getScaledWidth(context, 0.80)),
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    messageDetails.message ?? '',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    G.convertToAgo(DateTime.parse(messageDetails.createdAt)),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 8,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 8,),
-              Text(G.convertToAgo(DateTime.parse(messageDetails.createdAt)),style: TextStyle(
-                color: Colors.white,
-                fontSize: 8,
-                fontWeight: FontWeight.w500,
-              ),),
-            ],
+              margin: EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                color: AppColors.primaryColor,
+                borderRadius: BorderRadius.circular(17.00),
+              ),
+            ),
           ),
-          margin: EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-            color: AppColors.primaryColor,
-            borderRadius: BorderRadius.circular(17.00),
-          ),
-        ),
-      ),
-
-    ],
-  );
+        ],
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -439,7 +461,7 @@ scrollToBottom(){
                   FloatingActionButton(
                     onPressed: () {
                       G.socketUtils?.sendMessage(_messageController.text,
-                          loadMessageData?.threadUserInfo, 'text', () {
+                          loadMessageData?.roomKey, 'text', () {
                         _messageController.text = '';
                       });
                     },

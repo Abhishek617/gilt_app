@@ -24,6 +24,7 @@ class _MessagesState extends State<Messages> {
 
   @override
   void initState() {
+    //bindSocketListeners();
     super.initState();
   }
 
@@ -56,10 +57,11 @@ class _MessagesState extends State<Messages> {
                     backgroundColor: AppColors.primaryColor,
                     radius: 22,
                     child: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          msgData.users[0].profile ??
-                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                        ),
+                        backgroundImage: NetworkImage((msgData.type == 'event')
+                            ? (msgData.eventInfo.image ??
+                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU')
+                            : (msgData.users[0].profile ??
+                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU')),
                         onBackgroundImageError: (e, s) {
                           debugPrint('image issue, $e,$s');
                         }),
@@ -72,10 +74,12 @@ class _MessagesState extends State<Messages> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          msgData.users[0].firstName +
-                                  ' ' +
-                                  msgData.users[0].lastName ??
-                              'No Name',
+                          (msgData.type == 'event')
+                              ? (msgData.eventInfo.name ?? 'Event Chat')
+                              : (msgData.users[0].firstName +
+                                      ' ' +
+                                      msgData.users[0].lastName ??
+                                  'No Name'),
                           style: TextStyle(
                             color: AppColors.primaryColor,
                             fontSize: 16,
@@ -85,7 +89,7 @@ class _MessagesState extends State<Messages> {
                         Text(
                           msgData.lastMessage?.messageType == 'image'
                               ? 'Image'
-                              : (msgData.lastMessage?.message ?? 'No Message'),
+                              : msgData.lastMessage?.message ?? 'No Message',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -103,7 +107,8 @@ class _MessagesState extends State<Messages> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(G.convertToAgo(DateTime.parse(msgData.lastMessageAt)),
+                      Text(
+                        G.convertToAgo(DateTime.parse(msgData.lastMessageAt)),
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
@@ -151,11 +156,12 @@ class _MessagesState extends State<Messages> {
         ),
         onTap: () {
           G.socketUtils.currentChatRoom = msgData;
-          G.socketUtils.joinPrivateUser(msgData);
           if (msgData.type == 'private') {
+           // G.socketUtils.joinPrivateUser(msgData);
             Routes.navigateToScreen(context, Routes.chat);
           } else if (msgData.type == 'event') {
-            Routes.navigateToScreen(context, Routes.event_chat);
+            //G.socketUtils.joinEventUser(msgData);
+              Routes.navigateToScreen(context, Routes.event_chat);
           } else {
             Routes.navigateToScreen(context, Routes.business_chat);
           }
@@ -287,27 +293,31 @@ class _MessagesState extends State<Messages> {
         // ],
       ),
       body: CustomBodyWrapper(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 15,
-            ),
-            screenRoomList.length > 0
-                ? SingleChildScrollView(
-                    child: Container(
-                      width: DeviceUtils.getScaledWidth(context, 1.05),
-                      height: DeviceUtils.getScaledHeight(context, 0.73),
-                      child: Observer(
-                          builder: (_) => ListView.builder(
-                              itemCount: screenRoomList.length,
-                              itemBuilder: (context, index) =>
-                                  Message_list(screenRoomList[index]))),
+        child: Container(
+          height: double.infinity,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 15,
+              ),
+              screenRoomList.length > 0
+                  ? SingleChildScrollView(
+                      child: Container(
+                        color: Colors.white,
+                        width: DeviceUtils.getScaledWidth(context, 1.05),
+                        height: DeviceUtils.getScaledHeight(context, 0.73),
+                        child: Observer(
+                            builder: (_) => ListView.builder(
+                                itemCount: screenRoomList.length,
+                                itemBuilder: (context, index) =>
+                                    Message_list(screenRoomList[index]))),
+                      ),
+                    )
+                  : Center(
+                      child: Text('No Messages Found'),
                     ),
-                  )
-                : Center(
-                    child: Text('No Messages Found'),
-                  ),
-          ],
+            ],
+          ),
         ),
       ),
     );

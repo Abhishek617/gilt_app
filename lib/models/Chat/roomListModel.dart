@@ -54,6 +54,7 @@ class Rooms {
   String? roomName;
   int? unreadMessageCount;
   List<Users>? users;
+  EventInfo? eventInfo;
 
   Rooms(
       {this.sId,
@@ -64,7 +65,8 @@ class Rooms {
         this.index,
         this.roomName,
         this.unreadMessageCount,
-        this.users});
+        this.users,
+        this.eventInfo});
 
   Rooms.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -83,6 +85,9 @@ class Rooms {
         users!.add(new Users.fromJson(v));
       });
     }
+    eventInfo = json['eventInfo'] != null
+        ? new EventInfo.fromJson(json['eventInfo'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -100,6 +105,9 @@ class Rooms {
     if (this.users != null) {
       data['users'] = this.users!.map((v) => v.toJson()).toList();
     }
+    if (this.eventInfo != null) {
+      data['eventInfo'] = this.eventInfo!.toJson();
+    }
     return data;
   }
 }
@@ -108,9 +116,9 @@ class LastMessage {
   String? messageType;
   String? message;
   String? senderUserId;
-  String? username;
+  Null? username;
   String? userType;
-  int? userSqlId;
+  Null? userSqlId;
   String? date;
   String? timestamp;
 
@@ -153,6 +161,7 @@ class Users {
   String? sId;
   String? firstName;
   String? lastName;
+  int? sqlId;
   int? roleId;
   String? profile;
   bool? isActive;
@@ -162,6 +171,7 @@ class Users {
       {this.sId,
         this.firstName,
         this.lastName,
+        this.sqlId,
         this.roleId,
         this.profile,
         this.isActive,
@@ -171,6 +181,7 @@ class Users {
     sId = json['_id'];
     firstName = json['firstName'];
     lastName = json['lastName'];
+    sqlId = json['sqlId'];
     roleId = json['roleId'];
     profile = json['profile'];
     isActive = json['isActive'];
@@ -182,10 +193,39 @@ class Users {
     data['_id'] = this.sId;
     data['firstName'] = this.firstName;
     data['lastName'] = this.lastName;
+    data['sqlId'] = this.sqlId;
     data['roleId'] = this.roleId;
     data['profile'] = this.profile;
     data['isActive'] = this.isActive;
     data['lastOnline'] = this.lastOnline;
+    return data;
+  }
+}
+
+class EventInfo {
+  String? name;
+  String? image;
+  String? hostedUsername;
+  int? sqlId;
+  String? sId;
+
+  EventInfo({this.name, this.image, this.hostedUsername, this.sqlId, this.sId});
+
+  EventInfo.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    image = json['image'];
+    hostedUsername = json['hostedUsername'];
+    sqlId = json['sqlId'];
+    sId = json['_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['image'] = this.image;
+    data['hostedUsername'] = this.hostedUsername;
+    data['sqlId'] = this.sqlId;
+    data['_id'] = this.sId;
     return data;
   }
 }

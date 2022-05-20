@@ -285,7 +285,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                   FloatingActionButton(
                     onPressed: () {
                       G.socketUtils?.sendMessage(_messageController.text,
-                          loadMessageData?.threadUserInfo, 'text', () {
+                          loadMessageData?.roomKey, 'text', () {
                             _messageController.text = '';
                           });
                     },
