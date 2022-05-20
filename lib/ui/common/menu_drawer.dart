@@ -233,11 +233,12 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                 })
                         : Container(),
                     getMenuTile(
-                        'INVITE FRIENDS',
-                        () => {
-                              GlobalMethods.askPermissions(
-                                  context, Routes.add_contacts)
-                            }),
+                      'INVITE FRIENDS',
+                      () => {
+                        GlobalMethods.askPermissions(
+                            context, Routes.invite_contact)
+                      },
+                    ),
                     getMenuTile(
                       'EXPENSE HISTORY',
                       () => {
@@ -260,11 +261,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
                     //   () => {
                     //     Routes.navigateToScreen(context, Routes.add_business)
                     //   },
-                    // ) : Container(),
-                    getMenuTile(
-                      'MESSAGE',
-                      () => {Routes.navigateToScreen(context, Routes.message)},
-                    ),
                     getMenuTile(
                       'ABOUT APP',
                       () => {
@@ -320,14 +316,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             'Settings',
                             () => {
                               Routes.navigateToScreen(context, Routes.setting)
-                            },
-                          ),
-                          getBottomMenuTile(
-                            Icons.person_pin_rounded,
-                            'Profile',
-                            () => {
-                              Routes.navigateToScreen(
-                                  context, Routes.view_profile)
                             },
                           ),
                           getBottomMenuTile(

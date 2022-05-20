@@ -14,6 +14,7 @@ import 'package:guilt_app/ui/Messages/ChatScreen.dart';
 import 'package:guilt_app/ui/Messages/EventChatScreen.dart';
 import 'package:guilt_app/ui/Messages/add_chat_contacts.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
+import 'package:guilt_app/ui/common/InviteContacts.dart';
 import 'package:guilt_app/ui/home/home_explore_screen.dart';
 import 'package:guilt_app/ui/Profile/organizer_profile.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
@@ -98,7 +99,7 @@ class Routes {
   static const String my_business = '/my_business';
   static const String search_business = '/search_business';
   static const String business_payment = '/business_payment';
-
+  static const String invite_contact = '/invite_contact';
   static const String event = '/event';
   static const  String event_details = '/event_details';
   static const  String atendees = '/atendees';
@@ -152,19 +153,18 @@ class Routes {
     prof: (BuildContext context) => Profile(),
     view_profile: (BuildContext context) => FullProfile(),
     explore_home: (BuildContext context) => HomeExploreScreen(),
+    invite_contact: (BuildContext context) => InviteContact(),
     add_business: (BuildContext context) => Add_business(),
     business_list: (BuildContext context) => Business_list(),
     my_business: (BuildContext context) => MyBusiness(),
     business_payment: (BuildContext context) => BusinessPayment(),
     search_business: (BuildContext context) => SearchUserForBusinessPayment(),
-    explore_home: (BuildContext context) => HomeExploreScreen(),
     event: (BuildContext context) => Event(),
     event_details: (BuildContext context) => EventDetails(),
     atendees: (BuildContext context) => Attendees(),
     notifi: (BuildContext context) => Notifications(),
     book_event: (BuildContext context) => BookEvent(),
     book_event_details: (BuildContext context) => BookEventDetails(),
-    notifi: (BuildContext context) => Notifications(),
     help_and_support: (BuildContext context) => HelpAndSupport(),
     about_screen: (BuildContext context) => About_screen(),
     create_event: (BuildContext context) => Create_event(),
