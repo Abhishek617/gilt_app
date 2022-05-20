@@ -51,20 +51,14 @@ class _HomeTabState extends State<HomeTab> {
     items = [
       iconWithText(Icons.explore, Strings.explore),
       iconWithText(Icons.account_balance_wallet, Strings.wallet),
-      iconWithText(
-          Icons.calendar_month,
-          _userStore.getUserRole().toString() != AppSettings.businessUserRole
-              ? Strings.addEvent
-              : Strings.booking),
+      iconWithText(Icons.calendar_month, Strings.addEvent),
       iconWithText(Icons.question_answer_rounded, Strings.chat),
       iconWithText(Icons.account_circle_rounded, Strings.profile),
     ];
     screens = [
       HomeExploreScreen(),
       Wallet(),
-      _userStore.getUserRole() != AppSettings.businessUserRole
-          ? Create_event()
-          : Add_business(),
+      Create_event(),
       Messages(),
       FullProfile(),
     ];

@@ -1,5 +1,8 @@
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
+import 'package:guilt_app/ui/Business/SearchUserForBusinessPayment.dart';
+import 'package:guilt_app/ui/Business/business_payment.dart';
+import 'package:guilt_app/ui/Business/mybusiness.dart';
 import 'package:guilt_app/ui/Event/create_event.dart';
 import 'package:guilt_app/ui/Event/book_event.dart';
 import 'package:guilt_app/ui/Event/book_event_details.dart';
@@ -92,6 +95,9 @@ class Routes {
   static const String view_profile = '/view_profile';
   static const String add_business = '/add_business';
   static const String business_list = '/business_list';
+  static const String my_business = '/my_business';
+  static const String search_business = '/search_business';
+  static const String business_payment = '/business_payment';
 
   static const String event = '/event';
   static const  String event_details = '/event_details';
@@ -148,7 +154,9 @@ class Routes {
     explore_home: (BuildContext context) => HomeExploreScreen(),
     add_business: (BuildContext context) => Add_business(),
     business_list: (BuildContext context) => Business_list(),
-
+    my_business: (BuildContext context) => MyBusiness(),
+    business_payment: (BuildContext context) => BusinessPayment(),
+    search_business: (BuildContext context) => SearchUserForBusinessPayment(),
     explore_home: (BuildContext context) => HomeExploreScreen(),
     event: (BuildContext context) => Event(),
     event_details: (BuildContext context) => EventDetails(),

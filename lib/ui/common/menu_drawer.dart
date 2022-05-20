@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -117,18 +119,23 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           100.0),
-                                                  child: Image.network(
-                                                    _userStore.Profile_data
-                                                            ?.user?.profile
-                                                            .toString() ??
-                                                        'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
-                                                    width: DeviceUtils
-                                                        .getScaledWidth(
-                                                            context, 0.20),
-                                                    height: DeviceUtils
-                                                        .getScaledWidth(
-                                                            context, 0.20),
-                                                    fit: BoxFit.cover,
+                                                  child: Container(
+                                                    color: Colors.white,
+                                                    padding:
+                                                        EdgeInsets.all(5.0),
+                                                    child: Image.network(
+                                                      _userStore.Profile_data
+                                                              ?.user?.profile
+                                                              .toString() ??
+                                                          'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                                                      width: DeviceUtils
+                                                          .getScaledWidth(
+                                                              context, 0.20),
+                                                      height: DeviceUtils
+                                                          .getScaledWidth(
+                                                              context, 0.20),
+                                                      fit: BoxFit.contain,
+                                                    ),
                                                   )))
                                           : Icon(
                                               Icons.account_circle,
@@ -146,32 +153,48 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 4),
-                                child: Observer(
-                                    builder: (_) => Text(
-                                          (_userStore.Profile_data?.user
-                                                      ?.firstname
-                                                      .toString() ??
-                                                  '') +
-                                              '  ' +
-                                              (_userStore.Profile_data?.user
-                                                      ?.lastname
-                                                      .toString() ??
-                                                  ''),
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        )),
+                              Observer(
+                                builder: (_) => Text(
+                                  (_userStore.Profile_data?.user?.firstname
+                                              .toString() ??
+                                          '') +
+                                      '  ' +
+                                      (_userStore.Profile_data?.user?.lastname
+                                              .toString() ??
+                                          ''),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
                               ),
                               Observer(
-                                  builder: (_) => Text(
-                                        _userStore.Profile_data?.user?.email
-                                                .toString() ??
-                                            '',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 14),
-                                      )),
+                                builder: (_) => Text(
+                                  _userStore.Profile_data?.user?.email
+                                          .toString() ??
+                                      '',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Observer(
+                                builder: (_) => Text(
+                                  _userStore.Profile_data?.user?.roleId
+                                              .toString() ==
+                                          AppSettings.businessUserRole
+                                      ? 'Business Account'
+                                      : 'Individual Account',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -187,17 +210,33 @@ class _MenuDrawerState extends State<MenuDrawer> {
                   children: [
                     userRole == AppSettings.businessUserRole
                         ? getMenuTile(
-                            'ADD EVENT',
+                            'ADD BUSINESS',
                             () => {
                                   Routes.navigateToScreen(
-                                      context, Routes.create_event)
+                                      context, Routes.add_business)
+                                })
+                        : Container(),
+                    userRole == AppSettings.businessUserRole
+                        ? getMenuTile(
+                            'MY BUSINESS',
+                            () => {
+                                  Routes.navigateToScreen(
+                                      context, Routes.my_business)
+                                })
+                        : Container(),
+                    userRole == AppSettings.businessUserRole
+                        ? getMenuTile(
+                            'SEARCH BUSINESS',
+                            () => {
+                                  Routes.navigateToScreen(
+                                      context, Routes.search_business)
                                 })
                         : Container(),
                     getMenuTile(
                         'INVITE FRIENDS',
                         () => {
-                             GlobalMethods.askPermissions(
-                        context, Routes.add_contacts)
+                              GlobalMethods.askPermissions(
+                                  context, Routes.add_contacts)
                             }),
                     getMenuTile(
                       'EXPENSE HISTORY',
@@ -206,7 +245,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                       },
                     ),
                     getMenuTile(
-                      'SEARCH BUSINESS',
+                      'MY EVENT',
                       () =>
                           {Routes.navigateToScreen(context, Routes.book_event)},
                     ),
@@ -232,14 +271,14 @@ class _MenuDrawerState extends State<MenuDrawer> {
                         Routes.navigateToScreen(context, Routes.about_screen)
                       },
                     ),
-                    getMenuTile(
-                      'PAYMENT METHOD',
-                      () => {
-                        Navigator.of(context).pop()
-                        // Routes.navigateRootToScreen(context, Routes.bank_lists),
-                        // GlobalMethods.showErrorMessage(context, error.message.toString(), 'Logout Error');
-                      },
-                    ),
+                    // getMenuTile(
+                    //   'PAYMENT METHOD',
+                    //   () => {
+                    //     Navigator.of(context).pop()
+                    //     // Routes.navigateRootToScreen(context, Routes.bank_lists),
+                    //     // GlobalMethods.showErrorMessage(context, error.message.toString(), 'Logout Error');
+                    //   },
+                    // ),
                     getMenuTile(
                       'PAYMENT HISTORY',
                       () => {
