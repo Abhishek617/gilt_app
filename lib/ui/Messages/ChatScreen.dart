@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:full_screen_image/full_screen_image.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/Chat/UploadImageChatRespponseModel.dart';
 import 'package:guilt_app/models/Chat/UserChatMessageListModel.dart';
 import 'package:guilt_app/models/Chat/UserChatMessageListModel.dart';
 import 'package:guilt_app/models/Chat/UserChatMessagesModel.dart';
@@ -41,7 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
   File? pickedImage;
   @observable
   UserChatMessageListModel loadMessageData = UserChatMessageListModel();
-  int currentPageOffset = 1;
+  int currentPageOffset = 0;
   final FocusNode focusNode = FocusNode();
 
   @override
@@ -81,7 +83,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   loadMessageHandler(messageData) {
-   if (mounted) {
+    if (mounted) {
       setState(() {
         loadMessageData = UserChatMessageListModel.fromJson(messageData);
         currentMessageList = loadMessageData?.messages ?? [];
@@ -121,8 +123,9 @@ class _ChatScreenState extends State<ChatScreen> {
   uploadImage() {
     if (pickedImage != null) {
       _postStore.uploadChatImage(pickedImage).then((imageData) {
-        G.socketUtils?.sendMessage(
-            imageData, loadMessageData?.roomKey, 'image', () {
+        imageData = UploadChatImageResponseModel.fromJson(imageData);
+        G.socketUtils?.sendMessage(imageData, loadMessageData?.roomKey, 'image',
+            () {
           _messageController.text = '';
         });
       }).catchError((err) {
@@ -244,7 +247,7 @@ class _ChatScreenState extends State<ChatScreen> {
         if (currentPageOffset > 1) {
           currentPageOffset -= currentPageOffset;
         } else {
-          currentPageOffset = 1;
+          currentPageOffset = 0;
         }
         G.socketUtils.emitLoadMessage('private', currentPageOffset);
         // currentPageOffset += currentPageOffset;
@@ -258,7 +261,7 @@ class _ChatScreenState extends State<ChatScreen> {
         if (currentPageOffset > 0) {
           currentPageOffset += currentPageOffset;
         } else {
-          currentPageOffset = 1;
+          currentPageOffset = 0;
         }
         G.socketUtils.emitLoadMessage('private', currentPageOffset);
       });
@@ -279,15 +282,26 @@ class _ChatScreenState extends State<ChatScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    messageDetails.message ?? '',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  messageDetails.messageType == 'image'
+                      ? Container(
+                          height: 100,
+                          width: 100,
+                          child: FullScreenWidget(
+                            child: Image.network(
+                              messageDetails.message ??
+                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
+                            ),
+                          ),
+                        )
+                      : Text(
+                          messageDetails.message ?? '',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                   SizedBox(
                     height: 8,
                   ),
@@ -325,15 +339,26 @@ class _ChatScreenState extends State<ChatScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    messageDetails.message ?? '',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  messageDetails.messageType == 'image'
+                      ? Container(
+                          height: 100,
+                          width: 100,
+                          child: FullScreenWidget(
+                            child: Image.network(
+                              messageDetails.message ??
+                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
+                            ),
+                          ),
+                        )
+                      : Text(
+                          messageDetails.message ?? '',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                   SizedBox(
                     height: 8,
                   ),

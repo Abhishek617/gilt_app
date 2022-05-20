@@ -25,6 +25,7 @@ import 'package:guilt_app/models/PageModals/setting_model.dart';
 
 import '../../../../models/Event/upcoming_past_event_modal.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:mime_type/mime_type.dart';
 
 class PostApi {
   // dio instance
@@ -157,15 +158,20 @@ class PostApi {
   Future uploadChatImage(file, token) async {
     try {
       String fileName = file.path.split('/').last;
+      String? mimeType = mime(fileName);
+      String mimee = mimeType!.split('/')[0];
+      String type = mimeType!.split('/')[1];
 
-      FormData data = FormData.fromMap({
-        "files": await MultipartFile.fromFile(
-          file.path,
-          filename: fileName,
-        ),
+      FormData formData = new FormData.fromMap({
+        'files':await MultipartFile.fromFile(file.path,
+            filename: fileName, contentType: MediaType(mimee, type))
       });
-     // String fileName = image.path.split('/').last;
-      String type = fileName.split('.').last;
+      // FormData data = FormData.fromMap({
+      //   "files": await MultipartFile.fromFile(
+      //     file.path,
+      //     filename: fileName,
+      //   ),
+      // });
       // var imageData = await MultipartFile.fromFile(image.path,
       //     contentType: new MediaType('image', type));
       // // MultipartFile.fromBytes(image.bytes!, filename: fileName);
@@ -173,7 +179,7 @@ class PostApi {
       // formData.files.add(MapEntry('files', imageData));
       return await _dioClient.post(
         Endpoints.uploadChatImage,
-        data: data,
+        data: formData,
         options: Options(headers: {
           'Authorization': 'Bearer ' + token,
           'Content-Type': 'multipart/form-data'

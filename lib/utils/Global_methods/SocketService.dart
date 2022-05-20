@@ -158,6 +158,7 @@ class SocketUtils {
       initSocket();
     }
   }
+
   joinEventUser(Rooms eventRoomData) {
     if (isSocketConnected) {
       var event = eventRoomData;
@@ -174,9 +175,9 @@ class SocketUtils {
               "type": "event",
               "eventInfo": {
                 "name": event.eventInfo?.name,
-                "image": event.eventInfo?.image
-                    ?? "https://guiltapp.s3.amazonaws.com/profile/1648029484683bird-thumbnail.jpg",
-                "hostedUsername":event.eventInfo?.hostedUsername,
+                "image": event.eventInfo?.image ??
+                    "https://guiltapp.s3.amazonaws.com/profile/1648029484683bird-thumbnail.jpg",
+                "hostedUsername": event.eventInfo?.hostedUsername,
                 "sqlId": event.eventInfo?.sqlId
               }
             };
@@ -186,7 +187,6 @@ class SocketUtils {
             _socket.on(GET_MESSAGE_LIST, (response) {
               currentMessageList = response;
               print(response);
-
             });
           }
         });
@@ -257,18 +257,20 @@ class SocketUtils {
   emitLoadMessage(chatType, offset) {
     if (isSocketConnected) {
       print('loadMessage Offset : ' + offset.toString());
-        var loadMsgData = {
-          "room_key":(currentChatRoom != null) ? currentChatRoom.roomName:currentChatRoomKey,
-          "type": currentChatRoom.type,
-          "user_id": socketUserData.sId,
-          "offset": offset,
-          "limit": 20,
-        };
-        if(currentChatRoom.type == 'private'){
-          loadMsgData['other_user_id'] = currentChatRoom.users[0].sqlId;
-        }
-        print('LoadMessage Emit Data : ' + loadMsgData.toString());
-        _socket.emit(GET_MESSAGE_LIST_EMIT, loadMsgData);
+      var loadMsgData = {
+        "room_key": (currentChatRoom != null)
+            ? currentChatRoom.roomName
+            : currentChatRoomKey,
+        "type": currentChatRoom.type,
+        "user_id": socketUserData.sId,
+        "offset": offset,
+        "limit": 20,
+      };
+      if (currentChatRoom.type == 'private') {
+        loadMsgData['other_user_id'] = currentChatRoom.users[0].sqlId;
+      }
+      print('LoadMessage Emit Data : ' + loadMsgData.toString());
+      _socket.emit(GET_MESSAGE_LIST_EMIT, loadMsgData);
     } else {
       initSocket();
     }
@@ -281,7 +283,8 @@ class SocketUtils {
       _socket.on(GET_MESSAGE_LIST, (messageList) {
         currentMessageList = messageList;
         var d = UserChatMessageListModel.fromJson(messageList);
-        currentChatRoomKey = d.roomKey == null ? d.roomData?.roomKey : d.roomKey;
+        currentChatRoomKey =
+            d.roomKey == null ? d.roomData?.roomKey : d.roomKey;
         //currentChatRoomKey = d.roomKey;
         print('loadMessage:');
         print(messageList);
@@ -406,14 +409,20 @@ class SocketUtils {
         }
       } else {
         print(textMessage);
+        var iData = textMessage.data[0];
         var msg = {
           // "_id": socketUserData.sId,
           "room_key": currentChatRoom.roomName,
-          "message": '',
+          "message": iData.location,
           "user_type": userData.user.roleId.toString() ?? '1',
           "message_type": type,
           "senderUserId": socketUserData.sId,
-          "files": [textMessage.data],
+          "files": [{
+            "originalFileName": iData.originalname,
+            "fileName": 'GUILT_' + iData.originalname,
+            "contentType": iData.contentType,
+            "size": iData.size
+          }],
           "user": {
             "userSqlId": socketUserData.sqlId,
             "firstName": (socketUserData.firstName ?? ''),
