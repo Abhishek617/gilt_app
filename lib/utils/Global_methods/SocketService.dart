@@ -148,7 +148,7 @@ class SocketUtils {
             _socket.off(GET_MESSAGE_LIST);
             _socket.on(GET_MESSAGE_LIST, (response) {
               currentMessageList = UserChatMessageListModel.fromJson(response);
-              currentChatRoomKey = currentMessageList.roomData['roomKey'];
+              currentChatRoomKey = currentMessageList.roomKey;
               print(response);
             });
           }
@@ -261,12 +261,12 @@ class SocketUtils {
         "room_key": (currentChatRoom != null)
             ? currentChatRoom.roomName
             : currentChatRoomKey,
-        "type": currentChatRoom.type,
+        "type": chatType,
         "user_id": socketUserData.sId,
         "offset": offset,
         "limit": 20,
       };
-      if (currentChatRoom.type == 'private') {
+      if (chatType == 'private') {
         loadMsgData['other_user_id'] = currentChatRoom.users[0].sqlId;
       }
       print('LoadMessage Emit Data : ' + loadMsgData.toString());

@@ -64,8 +64,8 @@ class _SearchUserForBusinessPaymentState extends State<SearchUserForBusinessPaym
           separatorBuilder: (BuildContext context, int index) => const Divider(),
           itemBuilder: (context, index) {
             return ListTile(
-              title: Text("Abhishek Singh"),
-              subtitle: Text("+91 905369889"),
+              title: Text("User Name"),
+              subtitle: Text("9898989898"),
               leading: CircleAvatar(
                 backgroundImage: NetworkImage('https://cdn-icons-png.flaticon.com/512/1077/1077012.png'),
               ),
@@ -81,7 +81,9 @@ class _SearchUserForBusinessPaymentState extends State<SearchUserForBusinessPaym
                     child: Text('PAY', style: TextStyle(fontSize: 12,)
 
                       ,),
-                    onPressed:(){},
+                    onPressed:(){
+                      Routes.navigateToScreenWithArgs(context, Routes.business_payment, {"type":'Pay','username':'User Name',"phone":"9898989898"});
+                    },
                   ),
                   SizedBox(
                     width: 5,
@@ -93,7 +95,9 @@ class _SearchUserForBusinessPaymentState extends State<SearchUserForBusinessPaym
                       ),
                     ),
                     child: Text('REQUEST', style: TextStyle(fontSize: 12,),),
-                    onPressed:(){},
+                    onPressed:(){
+                      Routes.navigateToScreenWithArgs(context, Routes.business_payment, {"type":'Request','username':'User Name',"phone":"9898989898"});
+                    },
                   ),
                 ],
               )
