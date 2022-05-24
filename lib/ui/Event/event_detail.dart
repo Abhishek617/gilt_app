@@ -311,15 +311,68 @@ class _EventDetailsState extends State<EventDetails> {
           )
         : Center(child: Text('No Details found.'));
   }
-
+  Widget setupAlertDialoadContainer() {
+    print(contentData);
+    return Container(
+      height: 300.0, // Change as per your requirement
+      width: 300.0, // Change as per your requirement
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: contentData?.event?.eventAttendees?.length,
+        itemBuilder: (BuildContext context, int index) {
+          return getContactTile(contentData?.event?.eventAttendees?[index]);
+        },
+      ),
+    );
+  }
+  getContactTile(user){
+    print('user');
+    print(user);
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
+      child: Row(
+        children: [
+          Container(
+            child: CircleAvatar(
+              backgroundColor: AppColors.primaryColor,
+              child: Icon(
+                Icons.person,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          SizedBox(width: 10,),
+          Text(
+            user?.admin?.firstname! +
+                ' ' +
+                user?.admin?.lastname! +
+                '\n' +
+                user?.admin?.phone!,
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
-    args = ModalRoute.of(context)!.settings.arguments as int;
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Routes.navigateToScreenWithArgs(
-              context, Routes.atendees, jsonEncode(contentData));
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Attendees'),
+                  content: setupAlertDialoadContainer(),
+                );
+              });
+
+          // Routes.navigateToScreenWithArgs(
+          //     context, Routes.atendees, jsonEncode(contentData));
         },
         icon: Icon(
           Icons.supervised_user_circle_rounded,

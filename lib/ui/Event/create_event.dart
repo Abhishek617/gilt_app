@@ -534,8 +534,11 @@ class _Create_eventState extends State<Create_event> {
                             ],
                           ),
                           onPressed: () {
-                            GlobalMethods.askPermissions(
+                            var result = GlobalMethods.askPermissions(
                                 context, Routes.add_contacts);
+                            setState(() {
+                              Selectedcontactlist = result as List<AppContact>;
+                            });
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(

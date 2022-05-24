@@ -50,7 +50,7 @@ class _AddContactsState extends State<AddContacts> {
       setState(() {
         _contacts = contacts.toList();
         _contactStrings = _contacts
-            .map((e) => e.phones?.map((i) => i.value).toList())
+            .map((e) => e.phones?.map((i) => i.value?.replaceAll(' ','')).toList())
             .toList()
             .reduce((p, el) {
           p?.addAll(el!);

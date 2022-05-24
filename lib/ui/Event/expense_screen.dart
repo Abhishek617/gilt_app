@@ -121,11 +121,11 @@ class _Expense_ScreenState extends State<Expense_Screen> {
 
   createEvent(eData, expenseData) async {
     GlobalMethods.showLoader();
-    String dData = jsonDecode(eData);
-    setState(() {
-      createEventDetails = dData;
-    });
-    return _userStore.createEvent(dData as CreateEventRequestModal, (val) {
+    var dData = CreateEventRequestModal.fromJson(eData);
+    // setState(() {
+    //   createEventDetails = dData;
+    // });
+     _userStore.createEvent(dData, (val) {
       GlobalMethods.hideLoader();
       if (val.success == true) {
         GlobalMethods.showSuccessMessage(context, val.message, 'Create Event');
@@ -421,18 +421,18 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                               buttonText: 'Confirm',
                               buttonColor: AppColors.primaryColor,
                               onPressed: () {
-                                final expenseData =
-                                    CreateEventRequestModal.fromJson({
-                                  "name": createEventDetails.name,
-                                  "category": createEventDetails.category,
-                                  "location": createEventDetails.location,
-                                  "startDate": createEventDetails.startDate,
-                                  "description": createEventDetails.description,
-                                  " expenseDescription":
-                                      _expensedescription.value.text,
-                                  "totalExpense": _amount.value.text,
-                                });
-                                createEvent(args, expenseData);
+                                // final expenseData =
+                                //     CreateEventRequestModal.fromJson({
+                                //   "name": createEventDetails['name'],
+                                //   "category": createEventDetails.category,
+                                //   "location": createEventDetails.location,
+                                //   "startDate": createEventDetails.startDate,
+                                //   "description": createEventDetails.description,
+                                //   " expenseDescription":
+                                //       _expensedescription.value.text,
+                                //   "totalExpense": _amount.value.text,
+                                // });
+                                createEvent(args, {});
                               },
                             )
                           : disableButton(),

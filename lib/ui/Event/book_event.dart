@@ -131,8 +131,10 @@ class _BookEventState extends State<BookEvent> {
         ),
       ),
       onTap: () {
-        Routes.navigateToScreenWithArgs(
-            context, Routes.book_event_details, eventItem.id);
+    Routes.navigateToScreenWithArgs(
+    context, Routes.event_details, eventItem.id);
+        // Routes.navigateToScreenWithArgs(
+        //     context, Routes.book_event_details, eventItem.id);
       },
     );
   }

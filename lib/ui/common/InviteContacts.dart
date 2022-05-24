@@ -62,7 +62,7 @@ class _InviteContactState extends State<InviteContact> {
             setState(() {
               appContacts = value.contact;
               if (appContacts.length > 0) {
-                appContacts.removeWhere((item) => item.isExist != 0);
+                appContacts.removeWhere((item) => item.isExist == 1);
                 filteredContactList = appContacts;
                 print(appContacts);
               } else {
