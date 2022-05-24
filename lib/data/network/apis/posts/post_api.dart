@@ -52,8 +52,8 @@ class PostApi {
 // Login POST API
   Future<LoginModal> login(email, pass) async {
     try {
-      final res = await _dioClient
-          .post(Endpoints.login, data: {"username": email, "password": pass});
+      final res = await _dioClient.post(Endpoints.login,
+          data: {"username": email, "password": pass, "fcmToken": 'eda9qAS-S0O_E2-MWPXULx:APA91bGWnkMM-t-EKesueQrtjT-CotPLXwhXI375wy1n68-F7vOffR6lQmrU_odqE6powk9UJp1jb9CGIxauvH2Ih00dsJkK4AI9gvffxbcVNDqGGc1w6hOq-Ia9ddmcC7KokR0UhLWh'});
       return LoginModal.fromJson(res);
     } catch (e) {
       print(e.toString());
@@ -163,7 +163,7 @@ class PostApi {
       String type = mimeType!.split('/')[1];
 
       FormData formData = new FormData.fromMap({
-        'files':await MultipartFile.fromFile(file.path,
+        'files': await MultipartFile.fromFile(file.path,
             filename: fileName, contentType: MediaType(mimee, type))
       });
       // FormData data = FormData.fromMap({
@@ -192,11 +192,11 @@ class PostApi {
   }
 
   // Get Search Event
-  Future getSearchEvent(searchQuery,token) async {
+  Future getSearchEvent(searchQuery, token) async {
     try {
       return await _dioClient.get(
         Endpoints.searchEvent,
-        queryParameters: {"search":searchQuery,"page": 0, "size": 20},
+        queryParameters: {"search": searchQuery, "page": 0, "size": 20},
         options: Options(headers: {'Authorization': 'Bearer ' + token}),
       );
     } catch (e) {
