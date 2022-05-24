@@ -7,7 +7,9 @@ import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
+import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/ui/Event/expense_screen.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 
 import 'package:guilt_app/widgets/custom_scaffold.dart';
@@ -20,16 +22,22 @@ import 'package:intl/intl.dart';
 import '../../utils/device/device_utils.dart';
 
 class Create_event extends StatefulWidget {
-  const Create_event({Key? key}) : super(key: key);
+  final List<AppContact> Selectedcontactlist;
+
+  const Create_event({Key? key, required this.Selectedcontactlist})
+      : super(key: key);
 
   @override
-  State<Create_event> createState() => _Create_eventState();
+  State<Create_event> createState() => _Create_eventState(Selectedcontactlist);
 }
 
 class _Create_eventState extends State<Create_event> {
+  List<AppContact> Selectedcontactlist;
+
+  _Create_eventState(this.Selectedcontactlist);
+
   File? pickedImage;
   final UserStore _userStore = UserStore(getIt<Repository>());
-
 
   void imagePickerOption() {
     Get.bottomSheet(
@@ -96,41 +104,85 @@ class _Create_eventState extends State<Create_event> {
   TextEditingController _eventNameController = TextEditingController();
   TextEditingController _eventCategoryController = TextEditingController();
   TextEditingController _eventLocationController = TextEditingController();
-  TextEditingController _eventDateAndTimeController = TextEditingController(text: DateTime.now().toString());
-  TextEditingController _eventPlaceDescriptionController = TextEditingController();
+  TextEditingController _eventDateAndTimeController =
+      TextEditingController(text: DateTime.now().toString());
+  TextEditingController _eventPlaceDescriptionController =
+      TextEditingController();
 
-  continuePressEventHandler(){
-    String eData = jsonEncode({
-      "name": _eventNameController.value.text,
-      "category": _eventCategoryController.value.text,
-      "location": _eventLocationController.value.text,
-      "startDate": _eventDateAndTimeController.value.text,
-      "description":_eventPlaceDescriptionController.value.text
-    });
-    Routes.navigateToScreenWithArgs(
-        context, Routes.expense_screen, eData);
+  Widget getConditionsWidgets() {
+    if (Selectedcontactlist!.length > 0) {
+      return Row(
+        children: Selectedcontactlist.map(
+            (item) => Selectedcontactlist.indexOf(item) < 5
+                ? Container(
+                    margin: EdgeInsets.only(left: 10),
+                    height: 40,
+                    width: 40,
+                    // margin: EdgeInsets.all(100.0),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              'https://img.icons8.com/color/344/person-male.png'),
+                          fit: BoxFit.fill,
+                        ),
+                        color: Colors.orange,
+                        shape: BoxShape.circle),
+                  )
+                : Selectedcontactlist.lastIndexOf(item) == 5
+                    ? Container(
+              height: 40,
+              width: 40,
+              child: Padding(
+                padding: EdgeInsets.only(top: 11),
+                child: Text('+'+
+                    (Selectedcontactlist.length - Selectedcontactlist.lastIndexOf(item)).toString(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              margin: EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                  color: AppColors.primaryColor,
+                  shape: BoxShape.circle),
+
+            ):Container()
+
+
+
+        ).toList(),
+        
+      );
+    } else {
+      return IconButton(icon: Icon(Icons.add), onPressed: () {});
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
         isMenu: false,
         appBar: AppBar(
+          leading: GestureDetector(
+            onTap: () {
+              Routes.goBack(context);
+            },
+            child: Icon(
+              Icons.arrow_back_ios_outlined,
+              //color: Colors.black,
+              size: 16,
+            ),
+          ),
           title: Text('Create Event'),
           centerTitle: true,
           shadowColor: Colors.transparent,
-          actions: [
-            ElevatedButton(
-              style: ButtonStyle(shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),),
-              child: Text('SAVE'),
-              onPressed: (){
-                continuePressEventHandler();
-              },
-            )
-          ],
         ),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(top:25,left:25,right: 25,bottom: 100),
+            padding: const EdgeInsets.all(25),
             child: Column(
               children: [
                 SizedBox(
@@ -277,33 +329,34 @@ class _Create_eventState extends State<Create_event> {
                 Row(
                   children: [
                     Container(
-                      width: DeviceUtils.getScaledWidth(context, 0.85),
-                      child: DateTimePicker(
-                        controller: _eventDateAndTimeController,
-                        decoration: InputDecoration(border: InputBorder.none, focusedBorder: InputBorder.none, contentPadding: EdgeInsets.all(0)),
-                        type: DateTimePickerType.dateTime,
-                        dateMask: 'd MMM, yyyy HH:mm',
-                        //initialValue: DateTime.now().toString(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(2100),
-                        icon: Icon(Icons.event),
-                        selectableDayPredicate: (date) {
-                          // Disable weekend days to select from the calendar
-                          if (date.weekday == 6 || date.weekday == 7) {
-                            return false;
-                          }
+                        width: DeviceUtils.getScaledWidth(context, 0.85),
+                        child: DateTimePicker(
+                          controller: _eventDateAndTimeController,
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.all(0)),
+                          type: DateTimePickerType.dateTime,
+                          dateMask: 'd MMM, yyyy HH:mm',
+                          //initialValue: DateTime.now().toString(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2100),
+                          icon: Icon(Icons.event),
+                          selectableDayPredicate: (date) {
+                            // Disable weekend days to select from the calendar
+                            if (date.weekday == 6 || date.weekday == 7) {
+                              return false;
+                            }
 
-                          return true;
-                        },
-                        onChanged: (val) => print(val),
-                        validator: (val) {
-                          print(val);
-                          return null;
-                        },
-                        onSaved: (val) => print(val),
-                      )
-                    ),
-
+                            return true;
+                          },
+                          onChanged: (val) => print(val),
+                          validator: (val) {
+                            print(val);
+                            return null;
+                          },
+                          onSaved: (val) => print(val),
+                        )),
                   ],
                 ),
                 Container(
@@ -433,7 +486,7 @@ class _Create_eventState extends State<Create_event> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           "Invite Attended",
                           style: TextStyle(fontWeight: FontWeight.bold),
@@ -441,10 +494,17 @@ class _Create_eventState extends State<Create_event> {
                         SizedBox(
                           height: 5,
                         ),
-                        Text(
-                          "Add Attendence with control list",
-                          style: TextStyle(fontWeight: FontWeight.w400),
-                        ),
+                        Selectedcontactlist!.length > 0
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  getConditionsWidgets(),
+                                ],
+                              )
+                            : Text(
+                                "Add Attendence with control list",
+                                style: TextStyle(fontWeight: FontWeight.w400),
+                              )
                       ],
                     )
                   ],
@@ -505,7 +565,10 @@ class _Create_eventState extends State<Create_event> {
                               ),
                             ],
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            GlobalMethods.askPermissions(
+                                context, Routes.add_contacts);
+                          },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(32.0),
@@ -516,18 +579,34 @@ class _Create_eventState extends State<Create_event> {
                     ),
                   ],
                 ),
-                // Container(
-                //   child: Padding(
-                //     padding: const EdgeInsets.only(left: 10, top: 20),
-                //     child: ElevatedButtonWidget(
-                //       buttonText: 'Continue',
-                //       buttonColor: AppColors.primaryColor,
-                //       onPressed: () {
-                //        continuePressEventHandler();
-                //       },
-                //     ),
-                //   ),
-                // ),
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 20),
+                    child: ElevatedButtonWidget(
+                      buttonText: 'Continue',
+                      buttonColor: AppColors.primaryColor,
+                      onPressed: () {
+                       String eData = jsonEncode({
+                          "name": _eventNameController.value.text,
+                          "category": _eventCategoryController.value.text,
+                          "location": _eventLocationController.value.text,
+                          "startDate": _eventDateAndTimeController.value.text,
+                          "description":
+                              _eventPlaceDescriptionController.value.text,
+                         "selectedcontactexpenselist":  Selectedcontactlist,
+                        });
+
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //     builder: (context) =>Expense_Screen(
+                        //         sdata: eData,
+                        //         selectedcontactexpenselist: Selectedcontactlist)));
+                        //
+                        Routes.navigateToScreenWithContactArgs(
+                            context, Routes.expense_screen, eData);
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

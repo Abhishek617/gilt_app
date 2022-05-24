@@ -1,59 +1,84 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
-import 'package:guilt_app/models/PageModals/faqs_model.dart';
-import 'package:flutter/material.dart';
+import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
+import 'package:guilt_app/models/PageModals/expensemodel.dart';
+import 'package:guilt_app/ui/Event/create_event.dart';
+
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
-import 'package:guilt_app/widgets/custom_scaffold.dart';
+
 import '../../constants/colors.dart';
 import '../../utils/routes/routes.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
-import 'package:guilt_app/constants/assets.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
-import 'package:guilt_app/models/PageModals/success_error_args.dart';
-import 'package:guilt_app/stores/form/form_store.dart';
-import 'package:guilt_app/stores/theme/theme_store.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
-import 'package:guilt_app/widgets/app_logo.dart';
-import 'package:guilt_app/widgets/textfield_widget.dart';
-import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
 import '../../widgets/rounded_button_widget.dart';
 
 class Expense_Screen extends StatefulWidget {
-  const Expense_Screen({Key? key}) : super(key: key);
+  // final List<AppContact> selectedcontactexpenselist;
+  // String sdata;
+  Expense_Screen({Key? key}) : super(key: key);
 
   @override
   State<Expense_Screen> createState() => _Expense_ScreenState();
 }
 
 class _Expense_ScreenState extends State<Expense_Screen> {
+  List<AppContact> selectedcontactexpenselist = [];
+  String sdata = '';
   bool viewVisible = false;
   bool status = true;
   final UserStore _userStore = UserStore(getIt<Repository>());
-  TextEditingController _amount = TextEditingController();
+  TextEditingController _amount = TextEditingController(text: 0.toString());
+  TextEditingController _expensedescription = TextEditingController();
   bool isChecked = false;
-
-  //bool _value = false;
-  int val = -1;
+  var myControllers = [];
   int _count = 0;
+  var createEventDetails;
+  var expensedata;
+  var addexpensedata;
 
-  void _incrementCounter() {
+  createControllers(elist) {
+    for (var i = 0; i < elist.selectedcontactexpenselist.length; i++) {
+      myControllers.add(TextEditingController(text: 0.toString()));
+    }
+  }
+
+  void _incrementCounter(amount) {
     setState(() {
-      _count++;
-      _amount.text = _count.toString();
+      int ival = int.parse(amount.text);
+      addexpensedata = ival;
+      addexpensedata = addexpensedata + 1;
+      amount.text = addexpensedata.toString();
+      // _count++;
+      // _amount.text = _count.toString();
+    });
+  }
+
+  void _incrementCounterelist(expensecontroller) {
+    setState(() {
+      int currentval = int.parse(expensecontroller.text);
+      expensedata = currentval;
+      expensedata = expensedata + 1;
+      expensecontroller.text = expensedata.toString();
+    });
+  }
+
+  void _decrementCounterelist(expensecontroller) {
+    setState(() {
+      int currentvald = int.parse(expensecontroller.text);
+      expensedata = currentvald;
+      expensedata = expensedata - 1;
+      expensecontroller.text = expensedata.toString();
     });
   }
 
@@ -69,10 +94,14 @@ class _Expense_ScreenState extends State<Expense_Screen> {
     });
   }
 
-  void _decrementCounter() {
+  void _decrementCounter(amount) {
     setState(() {
-      _count--;
-      _amount.text = _count.toString();
+      int dval = int.parse(amount.text);
+      addexpensedata = dval;
+      addexpensedata = addexpensedata - 1;
+      amount.text = addexpensedata.toString();
+      // _count--;
+      // _amount.text = _count.toString();
     });
   }
 
@@ -90,10 +119,13 @@ class _Expense_ScreenState extends State<Expense_Screen> {
     setState(() {});
   }
 
-  createEvent(eData) {
+  createEvent(eData, expenseData) async {
     GlobalMethods.showLoader();
     String dData = jsonDecode(eData);
-    _userStore.createEvent(dData as CreateEventRequestModal, (val) {
+    setState(() {
+      createEventDetails = dData;
+    });
+    return _userStore.createEvent(dData as CreateEventRequestModal, (val) {
       GlobalMethods.hideLoader();
       if (val.success == true) {
         GlobalMethods.showSuccessMessage(context, val.message, 'Create Event');
@@ -104,12 +136,104 @@ class _Expense_ScreenState extends State<Expense_Screen> {
       GlobalMethods.hideLoader();
       print(error.data.toString());
     });
-    // Routes.navigateToScreen(context, Routes.before_login);
+  }
+
+  expenseslist(args) {
+    ExpenseModal elist = ExpenseModal.fromJson(jsonDecode(args));
+    createControllers(elist);
+    return Visibility(
+      maintainSize: true,
+      maintainAnimation: true,
+      maintainState: true,
+      visible: viewVisible,
+      child: Container(
+        height: DeviceUtils.getScaledHeight(context, 0.366),
+        child: ListView.builder(
+            itemCount: elist.selectedcontactexpenselist?.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                leading: Container(
+                  height: DeviceUtils.getScaledHeight(context, 0.7),
+                  width: DeviceUtils.getScaledWidth(context, 0.127),
+                  // margin: EdgeInsets.all(100.0),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU'),
+                        fit: BoxFit.fill,
+                      ),
+                      color: Colors.orange,
+                      shape: BoxShape.circle),
+                ),
+                trailing: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  // space between two icons
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 0),
+                      child: Container(
+                        child: IconButton(
+                          icon: Icon(Icons.remove),
+                          onPressed: () {
+                            setState(() {
+                              _decrementCounterelist(myControllers[index]);
+                            });
+                          },
+                          iconSize: 15,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.topCenter,
+                      height: DeviceUtils.getScaledHeight(context, 0.030),
+                      width: DeviceUtils.getScaledWidth(context, 0.17),
+                      child: TextField(
+                        style: TextStyle(fontSize: 11),
+                        controller: myControllers[index],
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d+\.?\d{0,0}')),
+                        ],
+                        //WhitelistingTextInputFormatter(RegExp(r'^\d+\.?\d{0,2}')),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(5.0),
+                          border: OutlineInputBorder(),
+                          hintText: '',
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 0),
+                      child: Container(
+                        child: IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            setState(() {
+                              _incrementCounterelist(myControllers[index]);
+                            });
+                          },
+                          iconSize: 15,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                title: Text(
+                  elist.selectedcontactexpenselist![index].phone.toString(),
+                  style: TextStyle(fontSize: 9),
+                ),
+              );
+            }),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as String;
+    final args = ModalRoute.of(context)?.settings.arguments;
+    print(args);
+
     return ScaffoldWrapper(
         isMenu: false,
         appBar: AppBar(
@@ -144,7 +268,9 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                   children: [
                     IconButton(
                       icon: Icon(Icons.remove),
-                      onPressed: _decrementCounter,
+                      onPressed: () {
+                        _decrementCounter(_amount);
+                      },
                       iconSize: 15,
                     ),
                     SizedBox(
@@ -152,10 +278,8 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                     ),
                     Container(
                       alignment: Alignment.topCenter,
-                      height: DeviceUtils.getScaledHeight(
-                          context, 0.07),
-                      width: DeviceUtils.getScaledWidth(
-                          context, 0.35),
+                      height: DeviceUtils.getScaledHeight(context, 0.07),
+                      width: DeviceUtils.getScaledWidth(context, 0.35),
                       child: Center(
                         child: TextField(
                           controller: _amount,
@@ -178,10 +302,11 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                       width: 10,
                     ),
                     IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: _incrementCounter,
-                      iconSize: 15,
-                    ),
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          _incrementCounter(_amount);
+                        },
+                        iconSize: 15),
                   ],
                 ),
                 SizedBox(
@@ -208,6 +333,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                 ),
                 Container(
                   child: TextFormField(
+                    controller: _expensedescription,
                     minLines: 2,
                     maxLines: 40,
                     keyboardType: TextInputType.multiline,
@@ -221,12 +347,12 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                   height: 10,
                 ),
                 Container(
-                  child: viewVisible == false ? ElevatedButtonWidget(
-                      buttonText: 'Confirm',
-                      buttonColor: AppColors.primaryColor,
-                      onPressed: () {
-
-                      }) : disableButton(),
+                  child: viewVisible == false
+                      ? ElevatedButtonWidget(
+                          buttonText: 'Confirm',
+                          buttonColor: AppColors.primaryColor,
+                          onPressed: () {})
+                      : disableButton(),
                 ),
                 SizedBox(
                   height: 5,
@@ -245,8 +371,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
-                      width: DeviceUtils.getScaledWidth(
-                          context, 0.43),
+                      width: DeviceUtils.getScaledWidth(context, 0.43),
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -285,104 +410,32 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                   height: 5,
                 ),
                 Column(
-
                   children: [
-                    Visibility(
-                      maintainSize: true,
-                      maintainAnimation: true,
-                      maintainState: true,
-                      visible: viewVisible,
-                      child: Container(
-                        height: DeviceUtils.getScaledHeight(context, 0.366),
-                        child: ListView.builder(
-                            itemCount: 10,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                  leading: Container(
-                                    height: DeviceUtils.getScaledHeight(
-                                        context, 0.7),
-                                    width: DeviceUtils.getScaledWidth(
-                                        context, 0.127),
-                                    // margin: EdgeInsets.all(100.0),
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU'),
-                                          fit: BoxFit.fill,
-                                        ),
-                                        color: Colors.orange,
-                                        shape: BoxShape.circle),
-                                  ),
-                                  trailing: Wrap(
-                                    spacing: 7, // space between two icons
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 10),
-                                        child: Container(
-                                            child: Icon(
-                                          Icons.remove,
-                                          size: 15,
-                                        )),
-                                      ),
-                                      Container(
-                                        alignment: Alignment.topCenter,
-                                        height: DeviceUtils.getScaledHeight(
-                                            context, 0.049),
-                                        width: DeviceUtils.getScaledWidth(
-                                            context, 0.25),
-
-                                        child: TextField(
-
-                                            style: TextStyle(fontSize: 11),
-                                            controller: _amount,
-                                            keyboardType: TextInputType.number,
-                                            inputFormatters: <
-                                                TextInputFormatter>[
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp(r'^\d+\.?\d{0,0}')),
-                                            ],
-                                            //WhitelistingTextInputFormatter(RegExp(r'^\d+\.?\d{0,2}')),
-                                            decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.all(5.0),
-
-                                              border: OutlineInputBorder(
-                                              ),
-                                              hintText: '',
-                                            ),
-
-                                          ),
-
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 10),
-                                        child: Container(
-                                            child: Icon(
-                                          Icons.add,
-                                          size: 15,
-                                        )),
-                                      )
-                                    ],
-                                  ),
-
-                                  title: Text("Abc $index"));
-
-                            }
-                            ),
-
-                      ),
-                    ),
+                    expenseslist(args),
                     SizedBox(
                       height: 5,
                     ),
                     Container(
-
-                      child: viewVisible == true? ElevatedButtonWidget(
-                        buttonText: 'Confirm',
-                        buttonColor: AppColors.primaryColor,
-                        onPressed: () {
-                          createEvent(args);
-                        },
-                      ): disableButton(),
+                      child: viewVisible == true
+                          ? ElevatedButtonWidget(
+                              buttonText: 'Confirm',
+                              buttonColor: AppColors.primaryColor,
+                              onPressed: () {
+                                final expenseData =
+                                    CreateEventRequestModal.fromJson({
+                                  "name": createEventDetails.name,
+                                  "category": createEventDetails.category,
+                                  "location": createEventDetails.location,
+                                  "startDate": createEventDetails.startDate,
+                                  "description": createEventDetails.description,
+                                  " expenseDescription":
+                                      _expensedescription.value.text,
+                                  "totalExpense": _amount.value.text,
+                                });
+                                createEvent(args, expenseData);
+                              },
+                            )
+                          : disableButton(),
                     ),
                   ],
                 ),
