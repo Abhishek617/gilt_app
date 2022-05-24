@@ -10,6 +10,7 @@ import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/ui/Event/expense_screen.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 
 import 'package:guilt_app/widgets/custom_scaffold.dart';
@@ -22,22 +23,22 @@ import 'package:intl/intl.dart';
 import '../../utils/device/device_utils.dart';
 
 class Create_event extends StatefulWidget {
-  final List<AppContact> Selectedcontactlist;
-
-  const Create_event({Key? key, required this.Selectedcontactlist})
-      : super(key: key);
+  const Create_event({Key? key}) : super(key: key);
 
   @override
-  State<Create_event> createState() => _Create_eventState(Selectedcontactlist);
+  State<Create_event> createState() => _Create_eventState();
 }
 
 class _Create_eventState extends State<Create_event> {
-  List<AppContact> Selectedcontactlist;
-
-  _Create_eventState(this.Selectedcontactlist);
-
+  late List<AppContact> Selectedcontactlist = [];
   File? pickedImage;
   final UserStore _userStore = UserStore(getIt<Repository>());
+
+  @override
+  void initState() {
+
+    super.initState();
+  }
 
   void imagePickerOption() {
     Get.bottomSheet(
@@ -100,6 +101,18 @@ class _Create_eventState extends State<Create_event> {
 
   final format = DateFormat("yyyy-MM-dd HH:mm");
 
+  @override
+  void didChangeDependencies() {
+    final args = ModalRoute.of(context)?.settings.arguments as List<AppContact>;
+    if (args != null) {
+      print(args);
+      setState(() {
+        Selectedcontactlist = args;
+      });
+    }
+    super.didChangeDependencies();
+  }
+
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController _eventNameController = TextEditingController();
   TextEditingController _eventCategoryController = TextEditingController();
@@ -130,31 +143,29 @@ class _Create_eventState extends State<Create_event> {
                   )
                 : Selectedcontactlist.lastIndexOf(item) == 5
                     ? Container(
-              height: 40,
-              width: 40,
-              child: Padding(
-                padding: EdgeInsets.only(top: 11),
-                child: Text('+'+
-                    (Selectedcontactlist.length - Selectedcontactlist.lastIndexOf(item)).toString(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              margin: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
-                  shape: BoxShape.circle),
-
-            ):Container()
-
-
-
-        ).toList(),
-        
+                        height: 40,
+                        width: 40,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 11),
+                          child: Text(
+                            '+' +
+                                (Selectedcontactlist.length -
+                                        Selectedcontactlist.lastIndexOf(item))
+                                    .toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        margin: EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                            color: AppColors.primaryColor,
+                            shape: BoxShape.circle),
+                      )
+                    : Container()).toList(),
       );
     } else {
       return IconButton(icon: Icon(Icons.add), onPressed: () {});
@@ -277,8 +288,6 @@ class _Create_eventState extends State<Create_event> {
                               hintText: 'Enter Location'),
                         )),
                     Container(
-                      width: DeviceUtils.getScaledWidth(context, 0.32),
-                      height: DeviceUtils.getScaledHeight(context, 0.05),
                       child: ElevatedButton(
                         child: Row(
                           children: [
@@ -445,8 +454,6 @@ class _Create_eventState extends State<Create_event> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Container(
-                      width: DeviceUtils.getScaledWidth(context, 0.32),
-                      height: DeviceUtils.getScaledHeight(context, 0.05),
                       child: ElevatedButton(
                         child: Row(
                           children: [
@@ -516,63 +523,30 @@ class _Create_eventState extends State<Create_event> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Container(
-                      width: DeviceUtils.getScaledWidth(context, 0.30),
-                      height: DeviceUtils.getScaledHeight(context, 0.04),
                       child: ElevatedButton(
                         child: Row(
                           children: [
                             Icon(
-                              Icons.edit_note_sharp,
+                              Icons.person,
                               size: 13,
                             ),
                             SizedBox(
                               width: 5,
                             ),
                             Text(
-                              'Browse',
+                              'Add Contact',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 13),
                             ),
                           ],
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          GlobalMethods.askPermissions(
+                              context, Routes.add_contacts);
+                        },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(32.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: Container(
-                        width: DeviceUtils.getScaledWidth(context, 0.35),
-                        height: DeviceUtils.getScaledHeight(context, 0.04),
-                        child: ElevatedButton(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.person,
-                                size: 13,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                'Add Contect',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 13),
-                              ),
-                            ],
-                          ),
-                          onPressed: () {
-                            GlobalMethods.askPermissions(
-                                context, Routes.add_contacts);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(32.0),
-                            ),
                           ),
                         ),
                       ),
@@ -586,14 +560,14 @@ class _Create_eventState extends State<Create_event> {
                       buttonText: 'Continue',
                       buttonColor: AppColors.primaryColor,
                       onPressed: () {
-                       String eData = jsonEncode({
+                        String eData = jsonEncode({
                           "name": _eventNameController.value.text,
                           "category": _eventCategoryController.value.text,
                           "location": _eventLocationController.value.text,
                           "startDate": _eventDateAndTimeController.value.text,
                           "description":
                               _eventPlaceDescriptionController.value.text,
-                         "selectedcontactexpenselist":  Selectedcontactlist,
+                          "selectedcontactexpenselist": Selectedcontactlist,
                         });
 
                         // Navigator.of(context).push(MaterialPageRoute(
@@ -601,7 +575,7 @@ class _Create_eventState extends State<Create_event> {
                         //         sdata: eData,
                         //         selectedcontactexpenselist: Selectedcontactlist)));
                         //
-                        Routes.navigateToScreenWithContactArgs(
+                        Routes.navigateToScreenWithArgs(
                             context, Routes.expense_screen, eData);
                       },
                     ),

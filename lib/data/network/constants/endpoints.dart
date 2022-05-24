@@ -16,7 +16,6 @@ class Endpoints {
 
   static const String oauth = baseUrl + "admin/oauth";
 
-
   //Terms and conditions
   static const String terms_and_conditions =
       baseUrl + "api/home/term-condition";
@@ -46,10 +45,10 @@ class Endpoints {
   //change password
   static const String changePassword = baseUrl + "api/admin/changepassword";
 
-
   //---------Business
   //Get Business Places
   static const String getBusinessPlaces = baseUrl + "api/business-places";
+
   //Get Business Spaces
   static const String getBusinessSpaces = baseUrl + "api/business-spaces";
   static const String uploadChatImage = baseUrl + "api/chatImage/upload";
@@ -83,19 +82,19 @@ class Endpoints {
   //feedback_add
   static const String feedbackadd = baseUrl + 'api/eventFeedback/add';
 
-
   //Feddback List
   static const String feedbacklist = baseUrl + 'api/eventFeedback/';
-
 
 //Notificationlist
   static const String notificationlist = baseUrl + 'api/notification';
 
+//--------Events------------>
 //EventView
   static const String eventview = baseUrl + 'api/event';
 
+  //Search Event List
+  static const String searchEvent = baseUrl + 'api/event/search';
+
 //CreateEvent
   static const String addEvent = baseUrl + 'api/event/add';
-
-
 }

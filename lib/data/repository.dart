@@ -248,6 +248,13 @@ class Repository {
         .then((EventData) => EventData)
         .catchError((error) => throw error);
   }
+  //eventview
+  Future getSearchEvent(String searchQuery) async {
+    var token = await authToken;
+    return await _postApi.getSearchEvent(searchQuery, token)
+        .then((eventListData) => eventListData)
+        .catchError((error) => throw error);
+  }
 
   // Feedback list
   Future<FeedbackListModel> Feedback_list(int eventId) async {

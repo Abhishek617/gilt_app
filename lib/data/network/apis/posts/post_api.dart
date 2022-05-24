@@ -191,6 +191,20 @@ class PostApi {
     }
   }
 
+  // Get Search Event
+  Future getSearchEvent(searchQuery,token) async {
+    try {
+      return await _dioClient.get(
+        Endpoints.searchEvent,
+        queryParameters: {"search":searchQuery,"page": 0, "size": 20},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
   // Get Business Spaces
   Future getBusinessSpaces(token) async {
     try {

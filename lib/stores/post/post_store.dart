@@ -59,6 +59,13 @@ abstract class _PostStore with Store {
         .catchError((error) => throw error);
   }
   @action
+  Future getSearchEvent(searchQuery) async {
+    return await _repository
+        .getSearchEvent(searchQuery)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+  @action
   Future checkContacts(contacts) async {
     return await _repository
         .checkContacts(contacts)

@@ -4,6 +4,9 @@ import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/stores/post/post_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import '../../constants/colors.dart';
 import 'package:flutter/rendering.dart';
@@ -20,6 +23,7 @@ class _AddContactsState extends State<AddContacts> {
   final PostStore _postStore = PostStore(getIt<Repository>());
   int selectedRadio = -1;
   late List<Contact> _contacts = [];
+  late List<bool> _selectedContacts = [];
   late List<String?> _contactStrings = [];
   late var appContacts = [];
   late var filteredContactList = [];
@@ -32,6 +36,7 @@ class _AddContactsState extends State<AddContacts> {
 
   @override
   void initState() {
+    GlobalMethods.showLoader();
     getContacts();
     super.initState();
   }
@@ -58,8 +63,11 @@ class _AddContactsState extends State<AddContacts> {
             setState(() {
               appContacts = value.contact;
               if (appContacts.length > 0) {
-                appContacts.removeWhere((item) => item.isExists == '0');
+                appContacts.removeWhere((item) => item.isExist == 0);
                 filteredContactList = appContacts;
+                _selectedContacts = List.filled(
+                    filteredContactList.length, false,
+                    growable: true);
               } else {
                 appContacts = [];
                 filteredContactList = [];
@@ -69,11 +77,14 @@ class _AddContactsState extends State<AddContacts> {
             appContacts = [];
             filteredContactList = [];
           }
+          GlobalMethods.hideLoader();
         }).catchError((err) {
+          GlobalMethods.hideLoader();
           print(err.toString());
         });
       });
     } else {
+      GlobalMethods.hideLoader();
       setState(() {
         appContacts = [];
         filteredContactList = appContacts;
@@ -81,7 +92,7 @@ class _AddContactsState extends State<AddContacts> {
     }
   }
 
-  Widget getContactListTile(AppContact contactData) {
+  Widget getContactListTile(AppContact contactData, index) {
     return ListTile(
         leading: Container(
           height: 40,
@@ -112,21 +123,18 @@ class _AddContactsState extends State<AddContacts> {
                 borderRadius: BorderRadius.all(Radius.circular(10.00))),
             onChanged: (changeValue) {
               setState(() {
-                // if (changeValue == true) {
-                //   //checked[index] = true;
-                //   checked = true;
-                //   isChecked[index] = checked;
-                // } else {
-                //   isChecked[index] = false;
-                // }
-                //isChecked[index] = checked;
+                _selectedContacts[index] = changeValue!;
                 //_title = _getTitle();
               });
             },
-            value: true,
+            value: _selectedContacts[index],
           ),
         ),
-        title: Text(contactData.phone!));
+        title: Text(contactData.firstname! +
+            ' ' +
+            contactData.lastname! +
+            '\n' +
+            contactData.phone!));
   }
 
   @override
@@ -143,6 +151,12 @@ class _AddContactsState extends State<AddContacts> {
           child: Column(
             children: [
               TextField(
+                onChanged: (data) {
+                  if (data.length > 0) {
+                    print('Searched Text : ' + data);
+                    // TODO : Filter Contact List as per search Text
+                  }
+                },
                 decoration: InputDecoration(
                   hintText: "Search Contact",
                   suffixIcon: Icon(Icons.search),
@@ -165,26 +179,35 @@ class _AddContactsState extends State<AddContacts> {
                   ? Column(
                       children: [
                         Container(
-                          height: 500,
+                          height: DeviceUtils.getScaledHeight(context, 0.58),
                           // width: 460,
-                          width: MediaQuery.of(context).size.width / 0.0,
+                          width: MediaQuery.of(context).size.width,
                           child: ListView.builder(
                               itemCount: filteredContactList.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return getContactListTile(
-                                    filteredContactList[index]);
+                                    filteredContactList[index], index);
                               }),
                         ),
                         Container(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 20),
-                            child: ElevatedButtonWidget(
-                              buttonText: 'Confirm',
-                              buttonColor: AppColors.primaryColor,
-                              onPressed: () {},
-                            ),
-                          ),
-                        ),
+                            child: Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: ElevatedButtonWidget(
+                                    buttonText: 'Confirm',
+                                    buttonColor: AppColors.primaryColor,
+                                    onPressed: () {
+                                      List<AppContact> selectedPhones = [];
+                                      for (var i = 0;
+                                          i < _selectedContacts.length;
+                                          i++) {
+                                        if (_selectedContacts[i] == true) {
+                                          selectedPhones
+                                              .add(filteredContactList[i]);
+                                        }
+                                      }
+                                      Routes.navigateToScreenWithArgs(context,
+                                          Routes.create_event, selectedPhones);
+                                    }))),
                       ],
                     )
                   : Text('No Contacts available'),

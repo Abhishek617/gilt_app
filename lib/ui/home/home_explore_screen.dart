@@ -10,6 +10,7 @@ import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 import 'package:guilt_app/utils/Global_methods/SocketService.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
@@ -30,7 +31,6 @@ class HomeExploreScreen extends StatefulWidget {
 
 class _HomeExploreScreenState extends State<HomeExploreScreen> {
   late SocketUtils socketUtils;
-  late UserStore _userStore = UserStore(getIt<Repository>());
   List<UpcomingAndPastEventListDetail> upcomingEventList = [];
   List<UpcomingAndPastEventListDetail> pastEventList = [];
 
@@ -40,21 +40,24 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
   @override
   void initState() {
     initSetup();
+    GlobalStoreHandler.initStores();
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    initSetup();
-    G.initSocket();
-    G.socketUtils.initSocket();
-    super.didChangeDependencies();
+    if (this.mounted) {
+      initSetup();
+      G.initSocket();
+      G.socketUtils.initSocket();
+      super.didChangeDependencies();
+    }
   }
 
   void initSetup() async {
-    await _userStore.getProfile();
+    await GlobalStoreHandler.userStore.getProfile();
     setState(() {
-      ProfileData = _userStore.Profile_data;
+      ProfileData = GlobalStoreHandler.userStore.Profile_data;
     });
     getEventsList('upcoming');
     getEventsList('past');
@@ -63,17 +66,17 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
   }
 
   getEventsList(type) {
-    _userStore.getUpcomingPastEventList(type, 0, 5,
+    GlobalStoreHandler.userStore.getUpcomingPastEventList(type, 0, 5,
         (UpcomingPastEventModal eventListResponse) {
       if (eventListResponse.success == true) {
         if (type == 'upcoming') {
-            setState(() {
-              upcomingEventList = eventListResponse.events.listData;
-            });
+          setState(() {
+            upcomingEventList = eventListResponse.events.listData;
+          });
         } else {
-            setState(() {
-              pastEventList = eventListResponse.events.listData;
-            });
+          setState(() {
+            pastEventList = eventListResponse.events.listData;
+          });
         }
       }
     }, (error) {
