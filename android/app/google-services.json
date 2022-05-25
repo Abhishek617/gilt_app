@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:900115571748:android:a1f1924a90c81f6b8324b1",
         "android_client_info": {
-          "package_name": "com.iotecksolutions.todoapp"
+          "package_name": "com.guilt.trip"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "900115571748-msg80fepl44r5qqcnjrtgm0pfgau2qjg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.iotecksolutions.todoapp",
+            "package_name": "com.guilt.trip",
             "certificate_hash": "bc0f04dbadeee0b2879959eddadc20ff867ed42e"
           }
         },

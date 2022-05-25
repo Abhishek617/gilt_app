@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+ import 'dart:async';import 'dart:io';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,13 +32,11 @@ class Create_event extends StatefulWidget {
 }
 
 class _Create_eventState extends State<Create_event> {
-  late List<AppContact> Selectedcontactlist = [];
+  late List<Attendees> Selectedcontactlist = [];
   File? pickedImage;
-  final UserStore _userStore = UserStore(getIt<Repository>());
 
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -105,7 +103,7 @@ class _Create_eventState extends State<Create_event> {
 
   @override
   void didChangeDependencies() {
-    final args = ModalRoute.of(context)?.settings.arguments as List<AppContact>;
+    final args = ModalRoute.of(context)?.settings.arguments as List<Attendees>;
     if (args != null) {
       print(args);
       setState(() {
@@ -293,8 +291,8 @@ class _Create_eventState extends State<Create_event> {
                               ),
                               Text(
                                 'Set on Map',
-                                style:
-                                    TextStyle(color: Colors.white, fontSize: 13),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 13),
                               ),
                             ],
                           ),
@@ -459,8 +457,8 @@ class _Create_eventState extends State<Create_event> {
                               ),
                               Text(
                                 'Browse',
-                                style:
-                                    TextStyle(color: Colors.white, fontSize: 13),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 13),
                               ),
                             ],
                           ),
@@ -528,16 +526,19 @@ class _Create_eventState extends State<Create_event> {
                               ),
                               Text(
                                 'Add Contact',
-                                style:
-                                    TextStyle(color: Colors.white, fontSize: 13),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 13),
                               ),
                             ],
                           ),
                           onPressed: () {
-                            var result = GlobalMethods.askPermissions(
-                                context, Routes.add_contacts);
-                            setState(() {
-                              Selectedcontactlist = result as List<AppContact>;
+                            GlobalMethods.askPermissionsOnly(context, () async{
+                              var result = await Navigator.of(context)
+                                  .pushNamed(Routes.add_contacts);
+                              setState(() {
+                                Selectedcontactlist =
+                                    result as List<Attendees>;
+                              });
                             });
                           },
                           style: ElevatedButton.styleFrom(
@@ -556,23 +557,74 @@ class _Create_eventState extends State<Create_event> {
                         buttonText: 'Continue',
                         buttonColor: AppColors.primaryColor,
                         onPressed: () {
-                          String eData = jsonEncode({
-                            "name": _eventNameController.value.text,
-                            "category": _eventCategoryController.value.text,
-                            "location": _eventLocationController.value.text,
-                            "startDate": _eventDateAndTimeController.value.text,
-                            "description":
-                                _eventPlaceDescriptionController.value.text,
-                            "selectedcontactexpenselist": Selectedcontactlist,
-                          });
-
-                          // Navigator.of(context).push(MaterialPageRoute(
-                          //     builder: (context) =>Expense_Screen(
-                          //         sdata: eData,
-                          //         selectedcontactexpenselist: Selectedcontactlist)));
-                          //
-                          Routes.navigateToScreenWithArgs(
-                              context, Routes.expense_screen, eData);
+                          if (_eventNameController.value.text.trim() != '') {
+                            if (_eventCategoryController.value.text.trim() !=
+                                '') {
+                              if (_eventLocationController.value.text.trim() !=
+                                  '') {
+                                if (_eventDateAndTimeController.value.text
+                                        .trim() !=
+                                    '') {
+                                  if (_eventPlaceDescriptionController
+                                          .value.text
+                                          .trim() !=
+                                      '') {
+                                    if (pickedImage != null) {
+                                      if (Selectedcontactlist.length > 0) {
+                                        CreateEventRequestModal eData =
+                                            CreateEventRequestModal.fromJson({
+                                          "name":
+                                              _eventNameController.value.text,
+                                          "category": _eventCategoryController
+                                              .value.text,
+                                          "location": _eventLocationController
+                                              .value.text,
+                                          "startDate":
+                                              _eventDateAndTimeController
+                                                  .value.text,
+                                          "description":
+                                              _eventPlaceDescriptionController
+                                                  .value.text,
+                                          "attendees": Selectedcontactlist.map((e)=>e.toJson()).toList(),
+                                        });
+                                        Routes.navigateToScreenWithArgs(context,
+                                            Routes.expense_screen, eData);
+                                      } else {
+                                        GlobalMethods.showErrorMessage(
+                                            context,
+                                            'Please select attendees',
+                                            'Create Event');
+                                      }
+                                    } else {
+                                      GlobalMethods.showErrorMessage(
+                                          context,
+                                          'Please upload an image',
+                                          'Create Event');
+                                    }
+                                  } else {
+                                    GlobalMethods.showErrorMessage(
+                                        context,
+                                        'Event Description Required',
+                                        'Create Event');
+                                  }
+                                } else {
+                                  GlobalMethods.showErrorMessage(
+                                      context,
+                                      'Event Date and Time Required',
+                                      'Create Event');
+                                }
+                              } else {
+                                GlobalMethods.showErrorMessage(context,
+                                    'Event Location Required', 'Create Event');
+                              }
+                            } else {
+                              GlobalMethods.showErrorMessage(context,
+                                  'Event Category Required', 'Create Event');
+                            }
+                          } else {
+                            GlobalMethods.showErrorMessage(
+                                context, 'Event Name Required', 'Create Event');
+                          }
                         },
                       ),
                     ),

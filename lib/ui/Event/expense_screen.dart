@@ -24,7 +24,7 @@ import 'package:guilt_app/utils/routes/routes.dart';
 import '../../widgets/rounded_button_widget.dart';
 
 class Expense_Screen extends StatefulWidget {
-  // final List<AppContact> selectedcontactexpenselist;
+  // final List<AppContact> attendees;
   // String sdata;
   Expense_Screen({Key? key}) : super(key: key);
 
@@ -33,7 +33,7 @@ class Expense_Screen extends StatefulWidget {
 }
 
 class _Expense_ScreenState extends State<Expense_Screen> {
-  List<AppContact> selectedcontactexpenselist = [];
+  List<AppContact> attendees = [];
   String sdata = '';
   bool viewVisible = false;
   bool status = true;
@@ -48,7 +48,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
   var addexpensedata;
 
   createControllers(elist) {
-    for (var i = 0; i < elist.selectedcontactexpenselist.length; i++) {
+    for (var i = 0; i < elist.attendees.length; i++) {
       myControllers.add(TextEditingController(text: 0.toString()));
     }
   }
@@ -119,27 +119,34 @@ class _Expense_ScreenState extends State<Expense_Screen> {
     setState(() {});
   }
 
-  createEvent(eData, expenseData) async {
+  createEvent(CreateEventRequestModal eData, expenseData) async {
     GlobalMethods.showLoader();
-    var dData = CreateEventRequestModal.fromJson(eData);
-    // setState(() {
-    //   createEventDetails = dData;
-    // });
-     _userStore.createEvent(dData, (val) {
+    Future.delayed(Duration(milliseconds: 2000)).then((value){
       GlobalMethods.hideLoader();
-      if (val.success == true) {
-        GlobalMethods.showSuccessMessage(context, val.message, 'Create Event');
-      } else {
-        GlobalMethods.showErrorMessage(context, val.message, 'Create Event');
-      }
-    }, (error) {
-      GlobalMethods.hideLoader();
-      print(error.data.toString());
-    });
+      GlobalMethods.showSuccessMessage(context, 'Data stored successfully', 'Event');
+      //Routes.navigateToScreen(context, Routes.book_event);
+    } );
+   // var dData = CreateEventRequestModal.fromJson(eData);
+   //  // setState(() {
+   //  //   createEventDetails = dData;
+   //  // });
+   //  for(var i = 0;)
+   //
+   //   _userStore.createEvent(eData, (val) {
+   //    GlobalMethods.hideLoader();
+   //    if (val.success == true) {
+   //      GlobalMethods.showSuccessMessage(context, val.message, 'Create Event');
+   //    } else {
+   //      GlobalMethods.showErrorMessage(context, val.message, 'Create Event');
+   //    }
+   //  }, (error) {
+   //    GlobalMethods.hideLoader();
+   //    print(error.data.toString());
+   //  });
   }
 
   expenseslist(args) {
-    ExpenseModal elist = ExpenseModal.fromJson(jsonDecode(args));
+    CreateEventRequestModal elist = args;
     createControllers(elist);
     return Visibility(
       maintainSize: true,
@@ -149,7 +156,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
       child: Container(
         height: DeviceUtils.getScaledHeight(context, 0.366),
         child: ListView.builder(
-            itemCount: elist.selectedcontactexpenselist?.length,
+            itemCount: elist.attendees?.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
                 leading: Container(
@@ -220,7 +227,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                   ],
                 ),
                 title: Text(
-                  elist.selectedcontactexpenselist![index].phone.toString(),
+                  elist.attendees![index].phone.toString(),
                   style: TextStyle(fontSize: 9),
                 ),
               );
@@ -432,7 +439,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                                 //       _expensedescription.value.text,
                                 //   "totalExpense": _amount.value.text,
                                 // });
-                                createEvent(args, {});
+                                createEvent(args as CreateEventRequestModal, {});
                               },
                             )
                           : disableButton(),

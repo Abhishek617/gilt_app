@@ -1,4 +1,4 @@
-package com.iotecksolutions.todoapp;
+package com.guilt.trip;
 import android.os.Bundle;
 import io.flutter.app.FlutterFragmentActivity;
 import io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin;

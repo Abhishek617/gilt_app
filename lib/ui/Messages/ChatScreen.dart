@@ -1,4 +1,4 @@
-import 'dart:io';
+ import 'dart:async';import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:full_screen_image/full_screen_image.dart';
+//import 'package:full_screen_image/full_screen_image.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:guilt_app/constants/colors.dart';
@@ -286,11 +286,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       ? Container(
                           height: 100,
                           width: 100,
-                          child: FullScreenWidget(
-                            child: Image.network(
+                          child: Image.network(
                               messageDetails.message ??
                                   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                            ),
                           ),
                         )
                       : Text(
@@ -343,12 +341,10 @@ class _ChatScreenState extends State<ChatScreen> {
                       ? Container(
                           height: 100,
                           width: 100,
-                          child: FullScreenWidget(
-                            child: Image.network(
+                          child:Image.network(
                               messageDetails.message ??
                                   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
                             ),
-                          ),
                         )
                       : Text(
                           messageDetails.message ?? '',

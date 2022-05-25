@@ -2,6 +2,7 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/stores/post/post_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
@@ -196,17 +197,18 @@ class _AddContactsState extends State<AddContacts> {
                                     buttonText: 'Confirm',
                                     buttonColor: AppColors.primaryColor,
                                     onPressed: () {
-                                      List<AppContact> selectedPhones = [];
+                                      List<Attendees> selectedPhones = [];
                                       for (var i = 0;
                                           i < _selectedContacts.length;
                                           i++) {
                                         if (_selectedContacts[i] == true) {
                                           selectedPhones
-                                              .add(filteredContactList[i]);
+                                              .add(Attendees.fromJson({'phone':filteredContactList[i].phone,'expense':0}) );
                                         }
                                       }
-                                      Routes.navigateToScreenWithArgs(context,
-                                          Routes.create_event, selectedPhones);
+                                      Navigator.pop(context,selectedPhones);
+                                      // Routes.navigateToScreenWithArgs(context,
+                                      //     Routes.create_event, selectedPhones);
                                     }))),
                       ],
                     )

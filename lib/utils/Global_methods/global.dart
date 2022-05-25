@@ -47,6 +47,14 @@ class GlobalMethods {
       handleInvalidPermissions(context, permissionStatus);
     }
   }
+  static Future<void> askPermissionsOnly(context, callback) async {
+    PermissionStatus permissionStatus = await getContactPermission();
+    if (permissionStatus == PermissionStatus.granted) {
+     callback();
+    } else {
+      handleInvalidPermissions(context, permissionStatus);
+    }
+  }
 
   static Future<PermissionStatus> getContactPermission() async {
     PermissionStatus permission = await Permission.contacts.status;

@@ -90,7 +90,7 @@ dependencies:
   fluttertoast: ^8.0.9
   http_parser: ^4.0.0
   mime_type: ^1.0.0
-  full_screen_image: ^1.0.2
+  #full_screen_image: ^1.0.2
   #date and time picker
   date_time_picker: ^2.1.0
 

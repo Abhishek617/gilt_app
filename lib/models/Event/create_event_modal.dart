@@ -1,5 +1,6 @@
 class CreateEventRequestModal {
   CreateEventRequestModal({
+    required this.files,
     required this.name,
     required this.category,
     required this.location,
@@ -12,6 +13,7 @@ class CreateEventRequestModal {
     required this.long,
     required this.totalExpense,
   });
+  late final dynamic files;
   late final String name;
   late final String category;
   late final String location;
@@ -25,6 +27,7 @@ class CreateEventRequestModal {
   late final String totalExpense;
 
   CreateEventRequestModal.fromJson(Map<String, dynamic> json){
+    files = json['files'];
     name = json['name'];
     category = json['category'];
     location = json['location'];
@@ -40,6 +43,7 @@ class CreateEventRequestModal {
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
+    _data['files'] = files;
     _data['name'] = name;
     _data['category'] = category;
     _data['location'] = location;

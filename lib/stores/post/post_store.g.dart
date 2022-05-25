@@ -85,6 +85,14 @@ mixin _$PostStore on _PostStore, Store {
     return _$getBusinessSpacesAsyncAction.run(() => super.getBusinessSpaces());
   }
 
+  final _$getSearchEventAsyncAction = AsyncAction('_PostStore.getSearchEvent');
+
+  @override
+  Future<dynamic> getSearchEvent(dynamic searchQuery) {
+    return _$getSearchEventAsyncAction
+        .run(() => super.getSearchEvent(searchQuery));
+  }
+
   final _$checkContactsAsyncAction = AsyncAction('_PostStore.checkContacts');
 
   @override
