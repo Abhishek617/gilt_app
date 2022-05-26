@@ -17,10 +17,11 @@ abstract class NetworkModule {
     Future<void> refreshToken() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var refreshToken = prefs.getString(Preferences.refresh_token);
+      var fcmToken = prefs.getString(Preferences.fcm_token);
       print('refreshToken');
       print(refreshToken);
-      final response = await dio
-          .post(Endpoints.refreshToken, data: {'refreshToken': refreshToken});
+      final response = await dio.post(Endpoints.refreshToken,
+          data: {'refreshToken': refreshToken, 'fcmToken': fcmToken});
       var refreshResponse = await RefreshTokenModal.fromJson(response.data);
       if (response.statusCode == 200) {
         newToken = refreshResponse.accessToken;

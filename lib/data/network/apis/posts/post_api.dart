@@ -50,14 +50,10 @@ class PostApi {
   }
 
 // Login POST API
-  Future<LoginModal> login(email, pass) async {
+  Future<LoginModal> login(email, pass, fcmToken) async {
     try {
-      final res = await _dioClient.post(Endpoints.login, data: {
-        "username": email,
-        "password": pass,
-        "fcmToken":
-            'eda9qAS-S0O_E2-MWPXULx:APA91bGWnkMM-t-EKesueQrtjT-CotPLXwhXI375wy1n68-F7vOffR6lQmrU_odqE6powk9UJp1jb9CGIxauvH2Ih00dsJkK4AI9gvffxbcVNDqGGc1w6hOq-Ia9ddmcC7KokR0UhLWh'
-      });
+      final res = await _dioClient.post(Endpoints.login,
+          data: {"username": email, "password": pass, "fcmToken": fcmToken});
       return LoginModal.fromJson(res);
     } catch (e) {
       print(e.toString());
@@ -66,10 +62,14 @@ class PostApi {
   }
 
 //google login Oauth Api
-  Future<OauthModal> oauth(email, firstname, lastname) async {
+  Future<OauthModal> oauth(email, firstname, lastname, fcmTkn) async {
     try {
-      final res = await _dioClient.post(Endpoints.oauth,
-          data: {"email": email, "firstName": firstname, "lastName": lastname});
+      final res = await _dioClient.post(Endpoints.oauth, data: {
+        "email": email,
+        "firstName": firstname,
+        "lastName": lastname,
+        "fcmToken": fcmTkn
+      });
       return OauthModal.fromJson(res);
     } catch (e) {
       print(e.toString());

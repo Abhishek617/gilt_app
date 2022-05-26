@@ -98,7 +98,9 @@ abstract class _UserStore with Store {
     print(Profile_data);
     return Profile_data;
   }
-
+saveFcmToken(fcmToken){
+    _repository.saveFcmToken(fcmToken);
+}
   @action
   Future getAppContent(type) async {
     GlobalMethods.showLoader();

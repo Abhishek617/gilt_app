@@ -26,6 +26,20 @@ class SharedPreferenceHelper {
   Future<bool> removeAuthToken() async {
     return _sharedPreference.remove(Preferences.auth_token);
   }
+
+  //FCM Token
+  Future<String?> get fcmToken async {
+    return _sharedPreference.getString(Preferences.fcm_token);
+  }
+
+  Future<bool> saveFcmToken(String authToken) async {
+    return _sharedPreference.setString(Preferences.fcm_token, authToken);
+  }
+
+  Future<bool> removeFcmToken() async {
+    return _sharedPreference.remove(Preferences.fcm_token);
+  }
+
   // Refresh Token
   Future<String?> get refreshToken async {
     return _sharedPreference.getString(Preferences.refresh_token);

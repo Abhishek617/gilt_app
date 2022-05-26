@@ -51,6 +51,11 @@ class Repository {
 
   Future<String?> get authToken => _sharedPrefsHelper.authToken;
 
+  Future<void> saveFcmToken(String? value) =>
+      _sharedPrefsHelper.saveFcmToken(value!);
+
+  Future<String?> get fcmToken => _sharedPrefsHelper.fcmToken;
+
   Future<void> saveRefreshToken(String? value) =>
       _sharedPrefsHelper.saveRefreshToken(value!);
 
@@ -125,16 +130,18 @@ class Repository {
 
   // Login:---------------------------------------------------------------------
   Future<LoginModal> login(String email, String password) async {
+    var fToken = await fcmToken;
     return await _postApi
-        .login(email, password)
+        .login(email, password,fToken)
         .then((loginData) => loginData)
         .catchError((error) => throw error);
   }
 
   Future<OauthModal> oauth(
       String email, String firstname, String lastname) async {
+    var fToken = await fcmToken;
     return await _postApi
-        .oauth(email, firstname, lastname)
+        .oauth(email, firstname, lastname,fcmToken)
         .then((oauthData) => oauthData)
         .catchError((error) => throw error);
   }
