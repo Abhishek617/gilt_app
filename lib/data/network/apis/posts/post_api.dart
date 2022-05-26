@@ -209,6 +209,20 @@ class PostApi {
     }
   }
 
+  // Get Search Event
+  Future getMyBookedEvents(token, {page = 0, pageSize = 20}) async {
+    try {
+      return await _dioClient.get(
+        Endpoints.myBookedEvent,
+        queryParameters: {"page": page, "size": pageSize},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
   // Get Business Spaces
   Future getBusinessSpaces(token) async {
     try {
@@ -418,7 +432,7 @@ class PostApi {
           filename: fileName, contentType: MediaType(mimee, type));
       FormData formData = new FormData.fromMap(eventData.toJson());
 
-     // formData.fields.addAll(formData.fields);
+      // formData.fields.addAll(formData.fields);
 
       final res = await _dioClient.post(
         Endpoints.addEvent,

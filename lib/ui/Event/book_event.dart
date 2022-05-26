@@ -12,14 +12,14 @@ import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:intl/intl.dart';
 
-class BookEvent extends StatefulWidget {
-  const BookEvent({Key? key}) : super(key: key);
+class SearchEvent extends StatefulWidget {
+  const SearchEvent({Key? key}) : super(key: key);
 
   @override
-  State<BookEvent> createState() => _BookEventState();
+  State<SearchEvent> createState() => _SearchEventState();
 }
 
-class _BookEventState extends State<BookEvent> {
+class _SearchEventState extends State<SearchEvent> {
   List<EventItem> eventList = [];
 
   @override
@@ -31,35 +31,38 @@ class _BookEventState extends State<BookEvent> {
   }
 
   Widget eventItemContainer(EventItem eventItem) {
-    var startDate = DateFormat('dd MMMM yyyy  HH:mma')
-        .format(DateTime.parse(eventItem.startDate!));
-    var endDate = DateFormat('dd MMMM yyyy  HH:mma')
-        .format(DateTime.parse(eventItem.endDate!));
-    return GestureDetector(
-      child: Container(
-        padding: EdgeInsets.only(left: 5, top: 10, right: 00, bottom: 0),
-        child: Card(
-          child: Container(
-            margin: EdgeInsets.all(5),
-            color: Colors.white,
-            alignment: Alignment.center,
-            child: Row(
-              children: [
-                Column(
-                  children: [
-                    Image.network(
-                      eventItem.eventImages!.length > 0
-                          ? eventItem.eventImages![0].file ??
-                              'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg'
-                          : 'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
-                      width: 80,
-                      height: 80,
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 15),
-                  child: Column(
+    print('eventItem');
+    print(eventItem);
+    if(eventItem != null) {
+
+      var startDate =eventItem.startDate!= null ? DateFormat('dd MMMM yyyy  HH:mma')
+          .format(DateTime.parse(eventItem.startDate!)) : 'Start Date Not found';
+      var endDate = eventItem.endDate!= null ? DateFormat('dd MMMM yyyy  HH:mma')
+          .format(DateTime.parse(eventItem.endDate!)) : 'End Date not found';
+      return GestureDetector(
+        child: Container(
+          padding: EdgeInsets.only(left: 5, top: 10, right: 00, bottom: 0),
+          child: Card(
+            child: Container(
+              margin: EdgeInsets.all(5),
+              color: Colors.white,
+              alignment: Alignment.center,
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      Image.network(
+                        eventItem.eventImages!.length > 0
+                            ? eventItem.eventImages![0].file ??
+                            'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg'
+                            : 'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                        width: 80,
+                        height: 80,
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 8,),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(eventItem.name ?? 'No Name',
@@ -67,16 +70,15 @@ class _BookEventState extends State<BookEvent> {
                               color: Colors.black,
                               fontSize: 18,
                               fontWeight: FontWeight.w700)),
-                      Padding(
-                        padding:
-                            EdgeInsets.only(right: 25, bottom: 10, top: 10),
-                        child: Text(startDate + ' to ' + endDate,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400)),
-                      ),
+
+                      SizedBox(height: 5,),
+                      Text(startDate + ' to ' + endDate,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400)),
                       Row(
                         children: [
                           Padding(
@@ -85,18 +87,25 @@ class _BookEventState extends State<BookEvent> {
                                   top: 0.0,
                                   bottom: 00.0,
                                   right: 0.0),
-                              child: Icon(Icons.supervised_user_circle_rounded,
+                              child: Icon(
+                                  Icons.supervised_user_circle_rounded,
                                   size: 20,
                                   color:
-                                      Theme.of(context).colorScheme.primary)),
+                                  Theme
+                                      .of(context)
+                                      .colorScheme
+                                      .primary)),
                           Padding(
                             padding: EdgeInsets.only(
-                                left: 0.0, top: 0.0, bottom: 00.0, right: 00.0),
+                                left: 0.0,
+                                top: 0.0,
+                                bottom: 00.0,
+                                right: 00.0),
                             child: Text(
                               (eventItem.eventAttendees!.length < 20
-                                      ? eventItem.eventAttendees!.length
-                                          .toString()
-                                      : '+20') +
+                                  ? eventItem.eventAttendees!.length
+                                  .toString()
+                                  : '+20') +
                                   ' Attendee(s)',
                               style: TextStyle(
                                 fontSize: 10,
@@ -110,7 +119,7 @@ class _BookEventState extends State<BookEvent> {
                                 padding: EdgeInsets.all(5.0),
                                 decoration: BoxDecoration(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(50)),
+                                  BorderRadius.all(Radius.circular(50)),
                                   color: AppColors.primaryColor,
                                   shape: BoxShape.rectangle,
                                 ),
@@ -124,19 +133,21 @@ class _BookEventState extends State<BookEvent> {
                       ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      onTap: () {
-    Routes.navigateToScreenWithArgs(
-    context, Routes.event_details, eventItem.id);
-        // Routes.navigateToScreenWithArgs(
-        //     context, Routes.book_event_details, eventItem.id);
-      },
-    );
+        onTap: () {
+          Routes.navigateToScreenWithArgs(
+              context, Routes.event_details, eventItem.id);
+          // Routes.navigateToScreenWithArgs(
+          //     context, Routes.book_event_details, eventItem.id);
+        },
+      );
+    }else{
+      return Container();
+    }
   }
 
   Widget _searchTextField() {

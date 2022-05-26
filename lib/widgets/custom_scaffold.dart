@@ -49,8 +49,7 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
       drawer: widget.isMenu == true ? MenuDrawer() : null,
       appBar: widget.appBar,
       floatingActionButton: widget.isTab == true
-          ? _userStore.getUserRole() == AppSettings.businessUserRole
-              ? FloatingActionButton(
+          ? FloatingActionButton(
                   backgroundColor: AppColors.primaryColor,
                   //Floating action button on Scaffold
                   onPressed: () {
@@ -60,16 +59,7 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
                   child: IconWithText(Icons.calendar_month, 'Add Event',
                       fontSize: 8), //icon inside button
                 )
-              : FloatingActionButton(
-                  backgroundColor: AppColors.primaryColor,
-                  //Floating action button on Scaffold
-                  onPressed: () {
-                    //code to execute on button press
-                    Routes.navigateToScreen(context, Routes.book_event);
-                  },
-                  child: IconWithText(Icons.calendar_month, 'Booking',
-                      fontSize: 8), //icon inside button
-                )
+
           : null,
       floatingActionButtonLocation: widget.isTab == true
           ? FloatingActionButtonLocation.centerDocked

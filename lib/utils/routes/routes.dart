@@ -8,6 +8,7 @@ import 'package:guilt_app/ui/Event/book_event.dart';
 import 'package:guilt_app/ui/Event/book_event_details.dart';
 import 'package:guilt_app/ui/Event/event_detail.dart';
 import 'package:guilt_app/ui/Event/expense_screen.dart';
+import 'package:guilt_app/ui/Event/my_event.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Messages/BusinessChatScreen.dart';
 import 'package:guilt_app/ui/Messages/ChatScreen.dart';
@@ -84,6 +85,7 @@ class Routes {
   static const String home_tab = '/home_tab';
   static const String reset_password = '/reset_password';
   static const String change_old_password = '/change_old_password';
+
   //after forget password
   static const String otp = '/otp';
   static const String signup = '/signup';
@@ -101,23 +103,22 @@ class Routes {
   static const String business_payment = '/business_payment';
   static const String invite_contact = '/invite_contact';
   static const String event = '/event';
-  static const  String event_details = '/event_details';
-  static const  String atendees = '/atendees';
-  static const  String notifi = '/notifi';
-  static const  String book_event = '/book_event ';
-  static const  String book_event_details = '/book_event_details ';
-  static const  String help_and_support = '/help_and_support';
-  static const  String about_screen = '/about_screen';
-  static const  String create_event = '/createevent';
-  static const  String expense_screen = '/expense_screen';
-  static const  String attendees_profile= '/attendees_profile';
-  static const  String add_contacts= '/add_contacts';
-  static const  String bank_lists= '/Bank_lists';
-  static const  String card_details= '/card_details';
-  static const  String add_feedback= '/add_feedback';
-  static const  String feedback_list= '/feedback_list';
-
-
+  static const String event_details = '/event_details';
+  static const String atendees = '/atendees';
+  static const String notifi = '/notifi';
+  static const String my_book_event = '/my_book_event ';
+  static const String search_event = '/search_event ';
+  static const String book_event_details = '/book_event_details ';
+  static const String help_and_support = '/help_and_support';
+  static const String about_screen = '/about_screen';
+  static const String create_event = '/createevent';
+  static const String expense_screen = '/expense_screen';
+  static const String attendees_profile = '/attendees_profile';
+  static const String add_contacts = '/add_contacts';
+  static const String bank_lists = '/Bank_lists';
+  static const String card_details = '/card_details';
+  static const String add_feedback = '/add_feedback';
+  static const String feedback_list = '/feedback_list';
 
   static final routes = <String, WidgetBuilder>{
     otpvalidate: (BuildContext context) => Otp_Validate_Screen(),
@@ -163,7 +164,8 @@ class Routes {
     event_details: (BuildContext context) => EventDetails(),
     atendees: (BuildContext context) => Attendees(),
     notifi: (BuildContext context) => Notifications(),
-    book_event: (BuildContext context) => BookEvent(),
+    search_event: (BuildContext context) => SearchEvent(),
+    my_book_event: (BuildContext context) => MyBookEvent(),
     book_event_details: (BuildContext context) => BookEventDetails(),
     help_and_support: (BuildContext context) => HelpAndSupport(),
     about_screen: (BuildContext context) => About_screen(),
@@ -175,10 +177,6 @@ class Routes {
     card_details: (BuildContext context) => Card_details(),
     add_feedback: (BuildContext context) => Add_feedback(),
     feedback_list: (BuildContext context) => Feedback_list(),
-
-
-
-
   };
 
   static navigateToScreen(BuildContext context, route) {
@@ -190,10 +188,8 @@ class Routes {
         .pushNamedAndRemoveUntil(route, (Route route) => false);
   }
 
-  static navigateToScreenWithArgs(
-      BuildContext context, route, pageArgs) {
-    Navigator.of(context)
-        .pushNamed(route, arguments: pageArgs);
+  static navigateToScreenWithArgs(BuildContext context, route, pageArgs) {
+    Navigator.of(context).pushNamed(route, arguments: pageArgs);
   }
 
   static goBack(BuildContext context) {

@@ -95,6 +95,9 @@ class Endpoints {
   //Search Event List
   static const String searchEvent = baseUrl + 'api/event/search';
 
+  //My Booked Event List
+  static const String myBookedEvent = baseUrl + 'api/event/myBookedEvents';
+
 //CreateEvent
   static const String addEvent = baseUrl + 'api/event/add';
 }

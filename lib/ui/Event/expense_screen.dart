@@ -442,7 +442,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                                   totalExpense: _amount.value.text,
                                   attendees: args.attendees,
                                   lat: '',
-                                  endDate: args!.startDate,
+                                  endDate: args!.endDate,
                                   long: '',
                                   files: args!.files,
                                 );

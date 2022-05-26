@@ -118,7 +118,9 @@ class _Create_eventState extends State<Create_event> {
   TextEditingController _eventNameController = TextEditingController();
   TextEditingController _eventCategoryController = TextEditingController();
   TextEditingController _eventLocationController = TextEditingController();
-  TextEditingController _eventDateAndTimeController =
+  TextEditingController _eventStartDateAndTimeController =
+      TextEditingController(text: DateTime.now().toString());
+  TextEditingController _eventEndDateAndTimeController =
       TextEditingController(text: DateTime.now().toString());
   TextEditingController _eventPlaceDescriptionController =
       TextEditingController();
@@ -318,52 +320,106 @@ class _Create_eventState extends State<Create_event> {
                   ),
                   Row(
                     children: [
-                      Text(
-                        "Date & Time",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Start Date & Time",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Container(
+                                margin: EdgeInsets.only(right: 10),
+                                child: DateTimePicker(
+                                  controller: _eventStartDateAndTimeController,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      contentPadding: EdgeInsets.all(0)),
+                                  type: DateTimePickerType.dateTime,
+                                  dateMask: 'd MMM, yyyy HH:mm',
+                                  //initialValue: DateTime.now().toString(),
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime(2100),
+                                  icon: Icon(Icons.event),
+                                  selectableDayPredicate: (date) {
+                                    // Disable weekend days to select from the calendar
+                                    if (date.weekday == 6 ||
+                                        date.weekday == 7) {
+                                      return false;
+                                    }
+
+                                    return true;
+                                  },
+                                  onChanged: (val) => print(val),
+                                  validator: (val) {
+                                    print(val);
+                                    return null;
+                                  },
+                                  onSaved: (val) => print(val),
+                                )),
+                            Container(
+                              height: 1, // Thickness
+                              color: Colors.grey,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "End Date & Time",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Container(
+                                child: DateTimePicker(
+                              controller: _eventEndDateAndTimeController,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  contentPadding: EdgeInsets.all(0)),
+                              type: DateTimePickerType.dateTime,
+                              dateMask: 'd MMM, yyyy HH:mm',
+                              //initialValue: DateTime.now().toString(),
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime(2100),
+                              icon: Icon(Icons.event),
+                              selectableDayPredicate: (date) {
+                                // Disable weekend days to select from the calendar
+                                if (date.weekday == 6 || date.weekday == 7) {
+                                  return false;
+                                }
+
+                                return true;
+                              },
+                              onChanged: (val) => print(val),
+                              validator: (val) {
+                                print(val);
+                                return null;
+                              },
+                              onSaved: (val) => print(val),
+                            )),
+                            Container(
+                              height: 1, // Thickness
+                              color: Colors.grey,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                          width: DeviceUtils.getScaledWidth(context, 0.85),
-                          child: DateTimePicker(
-                            controller: _eventDateAndTimeController,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                contentPadding: EdgeInsets.all(0)),
-                            type: DateTimePickerType.dateTime,
-                            dateMask: 'd MMM, yyyy HH:mm',
-                            //initialValue: DateTime.now().toString(),
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime(2100),
-                            icon: Icon(Icons.event),
-                            selectableDayPredicate: (date) {
-                              // Disable weekend days to select from the calendar
-                              if (date.weekday == 6 || date.weekday == 7) {
-                                return false;
-                              }
-
-                              return true;
-                            },
-                            onChanged: (val) => print(val),
-                            validator: (val) {
-                              print(val);
-                              return null;
-                            },
-                            onSaved: (val) => print(val),
-                          )),
-                    ],
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 1, // Thickness
-                    color: Colors.grey,
                   ),
                   SizedBox(
                     height: 20,
@@ -562,59 +618,72 @@ class _Create_eventState extends State<Create_event> {
                                 '') {
                               if (_eventLocationController.value.text.trim() !=
                                   '') {
-                                if (_eventDateAndTimeController.value.text
+                                if (_eventStartDateAndTimeController.value.text
                                         .trim() !=
                                     '') {
-                                  if (_eventPlaceDescriptionController
-                                          .value.text
+                                  if (_eventEndDateAndTimeController.value.text
                                           .trim() !=
                                       '') {
-                                    if (pickedImage != null) {
-                                      if (Selectedcontactlist.length > 0) {
-                                        CreateEventRequestModal eData =
-                                            CreateEventRequestModal.fromJson({
-                                          "name":
-                                              _eventNameController.value.text,
-                                          "category": _eventCategoryController
-                                              .value.text,
-                                          "location": _eventLocationController
-                                              .value.text,
-                                          "startDate":
-                                              _eventDateAndTimeController
-                                                  .value.text,
-                                          "endDate": _eventDateAndTimeController
-                                              .value.text,
-                                          "description":
-                                              _eventPlaceDescriptionController
-                                                  .value.text,
-                                          "files": pickedImage,
-                                          "attendees": Selectedcontactlist.map(
-                                              (e) => e.toJson()).toList(),
-                                        });
-                                        Routes.navigateToScreenWithArgs(context,
-                                            Routes.expense_screen, eData);
+                                    if (_eventPlaceDescriptionController
+                                            .value.text
+                                            .trim() !=
+                                        '') {
+                                      if (pickedImage != null) {
+                                        if (Selectedcontactlist.length > 0) {
+                                          CreateEventRequestModal eData =
+                                              CreateEventRequestModal.fromJson({
+                                            "name":
+                                                _eventNameController.value.text,
+                                            "category": _eventCategoryController
+                                                .value.text,
+                                            "location": _eventLocationController
+                                                .value.text,
+                                            "startDate":
+                                                _eventStartDateAndTimeController
+                                                    .value.text,
+                                            "endDate":
+                                                _eventEndDateAndTimeController
+                                                    .value.text,
+                                            "description":
+                                                _eventPlaceDescriptionController
+                                                    .value.text,
+                                            "files": pickedImage,
+                                            "attendees":
+                                                Selectedcontactlist.map(
+                                                    (e) => e.toJson()).toList(),
+                                          });
+                                          Routes.navigateToScreenWithArgs(
+                                              context,
+                                              Routes.expense_screen,
+                                              eData);
+                                        } else {
+                                          GlobalMethods.showErrorMessage(
+                                              context,
+                                              'Please select attendees',
+                                              'Create Event');
+                                        }
                                       } else {
                                         GlobalMethods.showErrorMessage(
                                             context,
-                                            'Please select attendees',
+                                            'Please upload an image',
                                             'Create Event');
                                       }
                                     } else {
                                       GlobalMethods.showErrorMessage(
                                           context,
-                                          'Please upload an image',
+                                          'Event Description Required',
                                           'Create Event');
                                     }
                                   } else {
                                     GlobalMethods.showErrorMessage(
                                         context,
-                                        'Event Description Required',
+                                        'Event End Date and Time Required',
                                         'Create Event');
                                   }
                                 } else {
                                   GlobalMethods.showErrorMessage(
                                       context,
-                                      'Event Date and Time Required',
+                                      'Event Start Date and Time Required',
                                       'Create Event');
                                 }
                               } else {
@@ -642,7 +711,8 @@ class _Create_eventState extends State<Create_event> {
 
   @override
   void dispose() {
-    _eventDateAndTimeController.dispose();
+    _eventStartDateAndTimeController.dispose();
+    _eventEndDateAndTimeController.dispose();
     _eventPlaceDescriptionController.dispose();
     _eventCategoryController.dispose();
     _eventLocationController.dispose();

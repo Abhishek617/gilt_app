@@ -243,12 +243,12 @@ class _MenuDrawerState extends State<MenuDrawer> {
                     getMenuTile(
                       'MY EVENT',
                       () =>
-                          {Routes.navigateToScreen(context, Routes.book_event)},
+                          {Routes.navigateToScreen(context, Routes.my_book_event)},
                     ),
                     getMenuTile(
                       'SEARCH EVENT',
                       () =>
-                          {Routes.navigateToScreen(context, Routes.book_event)},
+                          {Routes.navigateToScreen(context, Routes.search_event)},
                     ),
                     // userRole != AppSettings.businessUserRole
                     //     ?  getMenuTile(

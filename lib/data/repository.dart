@@ -255,10 +255,17 @@ class Repository {
         .then((EventData) => EventData)
         .catchError((error) => throw error);
   }
-  //eventview
+  //search event
   Future getSearchEvent(String searchQuery) async {
     var token = await authToken;
     return await _postApi.getSearchEvent(searchQuery, token)
+        .then((eventListData) => eventListData)
+        .catchError((error) => throw error);
+  }
+  //my booked event
+  Future getMyBookedEvents() async {
+    var token = await authToken;
+    return await _postApi.getMyBookedEvents(token)
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -17,7 +18,8 @@ class PushNotificationService {
 
     // 2. Instantiate Firebase Messaging
     _messaging = FirebaseMessaging.instance;
-    _messaging.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
+    _messaging.setForegroundNotificationPresentationOptions(
+        alert: true, badge: true, sound: true);
     String? token = await _messaging.getToken();
     print('--------------push notification token------------------');
     print(token);
@@ -30,32 +32,40 @@ class PushNotificationService {
       sound: true,
     );
 
-      // TODO: handle the received notifications
-      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-        print('User granted permission');
+    // TODO: handle the received notifications
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
 
-        // For handling the received notifications
-        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-          print('On Push Notification...........');
-          print(message);
-          // Parse the message received
-          PushNotificationMessage notification = PushNotificationMessage(
-            title: message?.notification?.title,
-            body: message?.notification?.body,
+      // For handling the received notifications
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        print('On Push Notification...........');
+        print(message);
+        // Parse the message received
+        PushNotificationMessage notification = PushNotificationMessage(
+          title: message?.notification?.title,
+          body: message?.notification?.body,
+        );
+        if (notification != null) {
+          // For displaying the notification as an overlay
+          showSimpleNotification(
+
+            Text(
+              notification!.title!,
+              style: TextStyle(color: AppColors.primaryColor),
+            ),
+            subtitle: Text(
+              notification!.body!,
+              style: TextStyle(color: AppColors.primaryColor),
+            ),
+            background: AppColors.cream_app,
+            duration: Duration(seconds: 3),
+            position: NotificationPosition.bottom
           );
-          if (notification != null) {
-            // For displaying the notification as an overlay
-            showSimpleNotification(
-              Text(notification!.title!),
-              subtitle: Text(notification!.body!),
-              background: Colors.cyan.shade700,
-              duration: Duration(seconds: 2),
-            );
-          }
-        });
-      } else {
-        print('User declined or has not accepted permission');
-      }
+        }
+      });
+    } else {
+      print('User declined or has not accepted permission');
+    }
 
     // _fcm.configure(
     //     onMessage: (Map<String, dynamic> message) async {
