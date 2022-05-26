@@ -13,18 +13,18 @@ class CreateEventRequestModal {
     required this.long,
     required this.totalExpense,
   });
-  late final dynamic files;
-  late final String name;
-  late final String category;
-  late final String location;
-  late final String startDate;
-  late final String endDate;
-  late final String description;
-  late final List<Attendees> attendees;
-  late final String expenseDescription;
-  late final String lat;
-  late final String long;
-  late final String totalExpense;
+  late dynamic files;
+  late String name;
+  late String category;
+  late String location;
+  late String startDate;
+  late String endDate;
+  late String description;
+  late List<Attendees> attendees;
+  late String expenseDescription;
+  late String lat;
+  late String long;
+  late String totalExpense;
 
   CreateEventRequestModal.fromJson(Map<String, dynamic> json){
     files = json['files'];
@@ -48,7 +48,7 @@ class CreateEventRequestModal {
     _data['category'] = category;
     _data['location'] = location;
     _data['startDate'] = startDate;
-
+    _data['endDate'] = endDate;
     _data['description'] = description;
     _data['attendees'] = attendees.map((e)=>e.toJson()).toList();
     _data['expenseDescription'] = expenseDescription;
@@ -64,8 +64,8 @@ class Attendees {
     required this.phone,
     required this.expanse,
   });
-  late final String phone;
-  late final int expanse;
+  late String phone;
+  late double expanse;
 
   Attendees.fromJson(Map<String, dynamic> json){
     phone = json['phone'];

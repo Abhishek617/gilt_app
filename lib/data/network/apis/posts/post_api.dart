@@ -414,26 +414,13 @@ class PostApi {
       String? mimeType = mime(fileName);
       String mimee = mimeType!.split('/')[0];
       String type = mimeType!.split('/')[1];
+      eventData.files = await MultipartFile.fromFile(eventData.files.path,
+          filename: fileName, contentType: MediaType(mimee, type));
+      FormData formData = new FormData.fromMap(eventData.toJson());
 
-      FormData formData = new FormData.fromMap({
-        'files': await MultipartFile.fromFile(eventData.files.path,
-            filename: fileName, contentType: MediaType(mimee, type)),
-        "name": eventData.name,
-        "category": eventData.category,
-        "location": eventData.location,
-        "startDate": eventData.startDate,
-        "endDate": eventData.endDate,
-        "description": eventData.description,
-        "attendees": eventData.attendees,
-        "expenseDescription": eventData.expenseDescription,
-        "lat": eventData.lat,
-        "long": eventData.long,
-        "totalExpense": eventData.totalExpense
-      });
+     // formData.fields.addAll(formData.fields);
 
-      formData.fields.addAll(formData.fields);
-
-      final res = await _dioClient.put(
+      final res = await _dioClient.post(
         Endpoints.addEvent,
         data: formData,
         options: Options(headers: {

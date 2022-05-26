@@ -77,8 +77,10 @@ class _Expense_ScreenState extends State<Expense_Screen> {
     setState(() {
       int currentvald = int.parse(expensecontroller.text);
       expensedata = currentvald;
-      expensedata = expensedata - 1;
-      expensecontroller.text = expensedata.toString();
+      if (expensedata > 0) {
+        expensedata = expensedata - 1;
+        expensecontroller.text = expensedata.toString();
+      }
     });
   }
 
@@ -98,8 +100,10 @@ class _Expense_ScreenState extends State<Expense_Screen> {
     setState(() {
       int dval = int.parse(amount.text);
       addexpensedata = dval;
-      addexpensedata = addexpensedata - 1;
-      amount.text = addexpensedata.toString();
+      if (addexpensedata > 0) {
+        addexpensedata = addexpensedata - 1;
+        amount.text = addexpensedata.toString();
+      }
       // _count--;
       // _amount.text = _count.toString();
     });
@@ -119,30 +123,21 @@ class _Expense_ScreenState extends State<Expense_Screen> {
     setState(() {});
   }
 
-  createEvent(CreateEventRequestModal eData, expenseData) async {
+  createEvent(CreateEventRequestModal eData) async {
+    print('createEvent RequestData :');
+    //print(eData);
     GlobalMethods.showLoader();
-    Future.delayed(Duration(milliseconds: 2000)).then((value){
+    _userStore.createEvent(eData, (val) {
       GlobalMethods.hideLoader();
-      GlobalMethods.showSuccessMessage(context, 'Data stored successfully', 'Event');
-      //Routes.navigateToScreen(context, Routes.book_event);
-    } );
-   // var dData = CreateEventRequestModal.fromJson(eData);
-   //  // setState(() {
-   //  //   createEventDetails = dData;
-   //  // });
-   //  for(var i = 0;)
-   //
-   //   _userStore.createEvent(eData, (val) {
-   //    GlobalMethods.hideLoader();
-   //    if (val.success == true) {
-   //      GlobalMethods.showSuccessMessage(context, val.message, 'Create Event');
-   //    } else {
-   //      GlobalMethods.showErrorMessage(context, val.message, 'Create Event');
-   //    }
-   //  }, (error) {
-   //    GlobalMethods.hideLoader();
-   //    print(error.data.toString());
-   //  });
+      if (val.success == true) {
+        GlobalMethods.showSuccessMessage(context, val.message, 'Create Event');
+      } else {
+        GlobalMethods.showErrorMessage(context, val.message, 'Create Event');
+      }
+    }, (error) {
+      GlobalMethods.hideLoader();
+      print(error.data.toString());
+    });
   }
 
   expenseslist(args) {
@@ -238,9 +233,10 @@ class _Expense_ScreenState extends State<Expense_Screen> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments;
+    final args =
+        ModalRoute.of(context)?.settings.arguments as CreateEventRequestModal;
     print(args);
-
+    print(expensedata);
     return ScaffoldWrapper(
         isMenu: false,
         appBar: AppBar(
@@ -340,15 +336,17 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                 ),
                 Container(
                   child: TextFormField(
-                    controller: _expensedescription,
-                    minLines: 2,
-                    maxLines: 40,
-                    keyboardType: TextInputType.multiline,
-                    decoration: InputDecoration(
-                      hintText: 'Add description',
-                      hintStyle: TextStyle(color: Colors.grey),
-                    ),
-                  ),
+                      controller: _expensedescription,
+                      minLines: 2,
+                      maxLines: 40,
+                      keyboardType: TextInputType.multiline,
+                      decoration: InputDecoration(
+                        hintText: 'Add description',
+                        hintStyle: TextStyle(color: Colors.grey),
+                      ),
+                      onChanged: (String) {
+                        print(_expensedescription.value.text);
+                      }),
                 ),
                 SizedBox(
                   height: 10,
@@ -428,18 +426,27 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                               buttonText: 'Confirm',
                               buttonColor: AppColors.primaryColor,
                               onPressed: () {
-                                // final expenseData =
-                                //     CreateEventRequestModal.fromJson({
-                                //   "name": createEventDetails['name'],
-                                //   "category": createEventDetails.category,
-                                //   "location": createEventDetails.location,
-                                //   "startDate": createEventDetails.startDate,
-                                //   "description": createEventDetails.description,
-                                //   " expenseDescription":
-                                //       _expensedescription.value.text,
-                                //   "totalExpense": _amount.value.text,
-                                // });
-                                createEvent(args as CreateEventRequestModal, {});
+                                for (int i = 0; i < myControllers.length; i++) {
+                                  args.attendees.forEach((element) {
+                                    element.expanse =  double.parse(myControllers[i].text);
+                                  });
+                                }
+                                final expenseData = CreateEventRequestModal(
+                                  name: args!.name,
+                                  category: args!.category,
+                                  location: args!.location,
+                                  startDate: args!.startDate,
+                                  description: args!.description,
+                                  expenseDescription:
+                                      _expensedescription.value.text,
+                                  totalExpense: _amount.value.text,
+                                  attendees: args.attendees,
+                                  lat: '',
+                                  endDate: args!.startDate,
+                                  long: '',
+                                  files: args!.files,
+                                );
+                                createEvent(expenseData);
                               },
                             )
                           : disableButton(),

@@ -1,5 +1,6 @@
 import 'dart:convert';
- import 'dart:async';import 'dart:io';
+import 'dart:async';
+import 'dart:io';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -532,12 +533,11 @@ class _Create_eventState extends State<Create_event> {
                             ],
                           ),
                           onPressed: () {
-                            GlobalMethods.askPermissionsOnly(context, () async{
+                            GlobalMethods.askPermissionsOnly(context, () async {
                               var result = await Navigator.of(context)
                                   .pushNamed(Routes.add_contacts);
                               setState(() {
-                                Selectedcontactlist =
-                                    result as List<Attendees>;
+                                Selectedcontactlist = result as List<Attendees>;
                               });
                             });
                           },
@@ -582,10 +582,14 @@ class _Create_eventState extends State<Create_event> {
                                           "startDate":
                                               _eventDateAndTimeController
                                                   .value.text,
+                                          "endDate": _eventDateAndTimeController
+                                              .value.text,
                                           "description":
                                               _eventPlaceDescriptionController
                                                   .value.text,
-                                          "attendees": Selectedcontactlist.map((e)=>e.toJson()).toList(),
+                                          "files": pickedImage,
+                                          "attendees": Selectedcontactlist.map(
+                                              (e) => e.toJson()).toList(),
                                         });
                                         Routes.navigateToScreenWithArgs(context,
                                             Routes.expense_screen, eData);
