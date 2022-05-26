@@ -40,6 +40,7 @@ class Event {
   Organizer? organizer;
   List<EventImages>? eventImages;
   List<EventAttendees>? eventAttendees;
+  bool? isUserAtendee;
 
   Event(
       {this.id,
@@ -58,7 +59,8 @@ class Event {
         this.updatedAt,
         this.organizer,
         this.eventImages,
-        this.eventAttendees});
+        this.eventAttendees,
+        this.isUserAtendee});
 
   Event.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -91,6 +93,7 @@ class Event {
         eventAttendees!.add(new EventAttendees.fromJson(v));
       });
     }
+    isUserAtendee = json['isUserAtendee'];
   }
 
   Map<String, dynamic> toJson() {
@@ -121,6 +124,7 @@ class Event {
       data['eventAttendees'] =
           this.eventAttendees!.map((v) => v.toJson()).toList();
     }
+    data['isUserAtendee'] = this.isUserAtendee;
     return data;
   }
 }

@@ -1,19 +1,41 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
-import '../../constants/dimens.dart';
-import '../../utils/device/device_utils.dart';
-import '../../widgets/custom_scaffold.dart';
+import 'package:guilt_app/constants/dimens.dart';
+import 'package:guilt_app/models/Auth/profile_modal.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/widgets/custom_scaffold.dart';
 
 class OrganizerProfile extends StatefulWidget {
-  const OrganizerProfile({Key? key}) : super(key: key);
+  final userId;
+
+  const OrganizerProfile({Key? key, this.userId}) : super(key: key);
 
   @override
-  State<OrganizerProfile> createState() => _OrganizerProfileState();
+  State<OrganizerProfile> createState() => _OrganizerProfileState(userId);
 }
 
 class _OrganizerProfileState extends State<OrganizerProfile> {
   int segmentedControlValue = 0;
+  final int uID;
+
+  _OrganizerProfileState(this.uID);
+
+  User? user;
+
+  @override
+  initState() {
+    getUserDetails();
+    super.initState();
+  }
+
+  getUserDetails() {
+    var uID = this.uID;
+    GlobalStoreHandler.userStore.getProfile(userId: uID).then((value) {
+      setState(() => {user = GetProfileResponseModal.fromJson(value).user});
+    });
+  }
 
   Widget segmentedControl() {
     return Padding(

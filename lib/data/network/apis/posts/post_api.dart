@@ -38,10 +38,17 @@ class PostApi {
   PostApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future getProfile(token) async {
+  Future getProfile(userId, token) async {
     try {
+      var headersData = {'Authorization': 'Bearer ' + token!};
+      var reqData = {};
+      if (userId == 0) {
+        reqData = {};
+      } else {
+        reqData = {"id": userId};
+      }
       final res = await _dioClient.post(Endpoints.getProfile,
-          options: Options(headers: {'Authorization': 'Bearer ' + token!}));
+          options: Options(headers: headersData), data: reqData);
       return res;
     } catch (e) {
       print(e.toString());

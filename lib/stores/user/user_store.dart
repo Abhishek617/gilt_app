@@ -359,9 +359,9 @@ saveFcmToken(fcmToken){
     });
   }
   @action
-  Future getProfile() {
+  Future getProfile({userId = 0}) {
     GlobalMethods.showLoader();
-    return _repository.getProfile().then((profileData) {
+    return _repository.getProfile(userId).then((profileData) {
       Profile_data = GetProfileResponseModal.fromJson(profileData);
       _repository.saveProfileData(Profile_data!);
       GlobalMethods.hideLoader();

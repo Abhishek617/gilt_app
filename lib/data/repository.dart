@@ -77,12 +77,12 @@ class Repository {
   Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource);
 
   // Post: ---------------------------------------------------------------------
-  Future getProfile() async {
+  Future getProfile(userId) async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
     var token = await authToken;
-    return await _postApi.getProfile(token).then((profileData) {
+    return await _postApi.getProfile(userId,token).then((profileData) {
       return profileData;
     }).catchError((error) => throw error);
   }

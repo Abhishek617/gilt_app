@@ -93,6 +93,14 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.getSearchEvent(searchQuery));
   }
 
+  final _$getMyBookedEventsAsyncAction =
+      AsyncAction('_PostStore.getMyBookedEvents');
+
+  @override
+  Future<dynamic> getMyBookedEvents() {
+    return _$getMyBookedEventsAsyncAction.run(() => super.getMyBookedEvents());
+  }
+
   final _$checkContactsAsyncAction = AsyncAction('_PostStore.checkContacts');
 
   @override

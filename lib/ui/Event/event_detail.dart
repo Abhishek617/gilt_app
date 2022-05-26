@@ -52,9 +52,9 @@ class _EventDetailsState extends State<EventDetails> {
         contentData = EventDetailsResponseModel.fromJson(value);
         print('eventview');
       });
-        GlobalMethods.hideLoader();
+      GlobalMethods.hideLoader();
     }, (error) {
-        GlobalMethods.hideLoader();
+      GlobalMethods.hideLoader();
       print(error.toString());
     });
   }
@@ -69,7 +69,7 @@ class _EventDetailsState extends State<EventDetails> {
                   Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.only(top: 16.0),
+                        padding: EdgeInsets.only(top: 25.0),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -78,20 +78,21 @@ class _EventDetailsState extends State<EventDetails> {
                                       color: Colors.black,
                                       fontSize: 18,
                                       fontWeight: FontWeight.w700)),
+                             contentData?.event?.isUserAtendee == true ?
                               IconButton(
                                 onPressed: () {
                                   // TODO: Init Group Chat
                                   GlobalMethods.showLoader();
                                   G.socketUtils.emitJoinEventChat(contentData!);
-                                        GlobalMethods.hideLoader();
-                                    Routes.navigateToScreen(
-                                        context, Routes.event_chat);
+                                  GlobalMethods.hideLoader();
+                                  Routes.navigateToScreen(
+                                      context, Routes.event_chat);
                                 },
                                 icon: Icon(Icons.message_rounded,
                                     size: 20,
                                     color:
                                         Theme.of(context).colorScheme.primary),
-                              ),
+                              ) : Container(),
                             ]),
                       ),
                       SizedBox(
@@ -111,11 +112,14 @@ class _EventDetailsState extends State<EventDetails> {
                                         contentData?.event?.startDate
                                                 .toString() ??
                                             ''))) +
-                                    ' - ' +
-                                    (DateFormat.yMMMd().format(DateTime.parse(
-                                        contentData?.event?.endDate
-                                                .toString() ??
-                                            ''))),
+                                    (contentData!.event!.endDate != null
+                                        ? ' - ' +
+                                            (DateFormat.yMMMd().format(
+                                              DateTime.parse(contentData!
+                                                  .event!.endDate
+                                                  .toString()),
+                                            ))
+                                        : ''),
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
@@ -311,6 +315,7 @@ class _EventDetailsState extends State<EventDetails> {
           )
         : Center(child: Text('No Details found.'));
   }
+
   Widget setupAlertDialoadContainer() {
     print(contentData);
     return Container(
@@ -325,7 +330,8 @@ class _EventDetailsState extends State<EventDetails> {
       ),
     );
   }
-  getContactTile(user){
+
+  getContactTile(user) {
     print('user');
     print(user);
     return Container(
@@ -341,7 +347,9 @@ class _EventDetailsState extends State<EventDetails> {
               ),
             ),
           ),
-          SizedBox(width: 10,),
+          SizedBox(
+            width: 10,
+          ),
           Text(
             user?.admin?.firstname! +
                 ' ' +
@@ -357,6 +365,7 @@ class _EventDetailsState extends State<EventDetails> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

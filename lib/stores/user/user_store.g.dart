@@ -177,11 +177,11 @@ mixin _$UserStore on _UserStore, Store {
   final _$_UserStoreActionController = ActionController(name: '_UserStore');
 
   @override
-  Future<dynamic> getProfile() {
+  Future<dynamic> getProfile({dynamic userId = 0}) {
     final _$actionInfo =
         _$_UserStoreActionController.startAction(name: '_UserStore.getProfile');
     try {
-      return super.getProfile();
+      return super.getProfile(userId: userId);
     } finally {
       _$_UserStoreActionController.endAction(_$actionInfo);
     }

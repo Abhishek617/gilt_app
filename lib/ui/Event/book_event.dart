@@ -35,9 +35,9 @@ class _SearchEventState extends State<SearchEvent> {
     print(eventItem);
     if(eventItem != null) {
 
-      var startDate =eventItem.startDate!= null ? DateFormat('dd MMMM yyyy  HH:mma')
+      var startDate =eventItem.startDate != null ? DateFormat('dd MMMM yyyy  HH:mma')
           .format(DateTime.parse(eventItem.startDate!)) : 'Start Date Not found';
-      var endDate = eventItem.endDate!= null ? DateFormat('dd MMMM yyyy  HH:mma')
+      var endDate = eventItem.endDate != null ? DateFormat('dd MMMM yyyy  HH:mma')
           .format(DateTime.parse(eventItem.endDate!)) : 'End Date not found';
       return GestureDetector(
         child: Container(

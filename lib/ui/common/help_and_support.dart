@@ -147,7 +147,7 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                     buttonColor: AppColors.primaryColor,
                     buttonText: 'Send',
                     onPressed: ()async {
-                      Routes.navigateToScreen(context, Routes.message);
+                     // Routes.navigateToScreen(context, Routes.message);
                     },
                   ),
                 ]
