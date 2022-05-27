@@ -16,6 +16,7 @@ import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Auth/valid_otp_model.dart';
+import 'package:guilt_app/models/Event/CreateEventResponseModel.dart';
 import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
@@ -449,7 +450,7 @@ class PostApi {
           'Content-Type': 'multipart/form-data'
         }),
       );
-      return CommonResponseModal.fromJson(res);
+      return CreateEventResponseModel.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:guilt_app/models/Event/CreateEventResponseModel.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/models/PageModals/expensemodel.dart';
@@ -127,12 +128,16 @@ class _Expense_ScreenState extends State<Expense_Screen> {
     print('createEvent RequestData :');
     //print(eData);
     GlobalMethods.showLoader();
-    _userStore.createEvent(eData, (val) {
+    _userStore.createEvent(eData, (CreateEventResponseModel val) {
       GlobalMethods.hideLoader();
       if (val.success == true) {
-        GlobalMethods.showSuccessMessage(context, val.message, 'Create Event');
+        GlobalMethods.showSuccessMessage(context, val.message ?? 'Success', 'Create Event');
+        if(val.data != null){
+          Routes.navigateToScreenWithArgs(
+              context, Routes.event_details, val.data?.id);
+        }
       } else {
-        GlobalMethods.showErrorMessage(context, val.message, 'Create Event');
+        GlobalMethods.showErrorMessage(context, val.message ?? 'Failed', 'Create Event');
       }
     }, (error) {
       GlobalMethods.hideLoader();
