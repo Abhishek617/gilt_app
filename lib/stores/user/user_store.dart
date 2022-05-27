@@ -372,6 +372,16 @@ saveFcmToken(fcmToken){
     });
   }
 
+  @action
+  Future getUserProfile(userId) {
+    return _repository.getProfile(userId).then((profileData) => profileData
+    ).catchError((error) {
+      print(error.toString());
+      GlobalMethods.hideLoader();
+      // errorStore.errorMessage = DioErrorUtil.handleError(error);
+    });
+  }
+
   Future getUpcomingPastEventList(
       String filterby,int page, int size, successCallback, errorCallback) async {
     // final future = _repository.login(email, password);

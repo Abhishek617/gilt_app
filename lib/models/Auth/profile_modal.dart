@@ -38,6 +38,7 @@ class User {
   bool? isEmailVerified;
   bool? isPhoneVerified;
   String? authToken;
+  Null? customerProfileId;
 
   User(
       {this.id,
@@ -57,7 +58,8 @@ class User {
         this.deletedAt,
         this.isEmailVerified,
         this.isPhoneVerified,
-        this.authToken});
+        this.authToken,
+        this.customerProfileId});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -78,6 +80,7 @@ class User {
     isEmailVerified = json['isEmailVerified'];
     isPhoneVerified = json['isPhoneVerified'];
     authToken = json['auth_token'];
+    customerProfileId = json['customerProfileId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -100,6 +103,7 @@ class User {
     data['isEmailVerified'] = this.isEmailVerified;
     data['isPhoneVerified'] = this.isPhoneVerified;
     data['auth_token'] = this.authToken;
+    data['customerProfileId'] = this.customerProfileId;
     return data;
   }
 }

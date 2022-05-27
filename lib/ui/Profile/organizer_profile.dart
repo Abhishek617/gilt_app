@@ -31,10 +31,13 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
   }
 
   getUserDetails() {
-    var uID = this.uID;
-    GlobalStoreHandler.userStore.getProfile(userId: uID).then((value) {
-      setState(() => {user = GetProfileResponseModal.fromJson(value).user});
-    });
+    if (uID != null) {
+      GlobalStoreHandler.userStore.getUserProfile(uID).then((value) {
+        setState(() {
+          user = value.user;
+        });
+      });
+    }
   }
 
   Widget segmentedControl() {

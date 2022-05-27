@@ -151,18 +151,21 @@ class LatLong {
 class Organizer {
   String? firstname;
   String? lastname;
+  int? id;
 
-  Organizer({this.firstname, this.lastname});
+  Organizer({this.firstname, this.lastname, this.id});
 
   Organizer.fromJson(Map<String, dynamic> json) {
     firstname = json['firstname'];
     lastname = json['lastname'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['firstname'] = this.firstname;
     data['lastname'] = this.lastname;
+    data['id'] = this.id;
     return data;
   }
 }

@@ -170,7 +170,7 @@ class _EventDetailsState extends State<EventDetails> {
                           Routes.navigateToScreenWithArgs(
                               context,
                               Routes.organizerprof,
-                              contentData?.event?.organizer);
+                              contentData?.event?.organizer?.id);
                         },
                         child: Row(children: [
                           Icon(Icons.person_rounded,
