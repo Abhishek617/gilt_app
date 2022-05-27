@@ -43,158 +43,175 @@ class _NotificationsState extends State<Notifications> {
     });
   }
 
-  withButton(notificationData) => Container(
-        padding: EdgeInsets.only(top: 5),
-        child: Row(
-          children: [
-            SizedBox(width: 15),
-            Align(
-              alignment: Alignment.center,
-              child: Stack(
-                children: [
-                  Container(
-                    child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
+  withButton(notificationData) => Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(width: 1.0, color: Colors.grey),
             ),
-            SizedBox(
-              width: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 15,
-                ),
-                Text(
-                  notificationData.message,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  notificationData.username,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Row(
+            color: Colors.white,
+          ),
+          child: Row(
+            children: [
+              SizedBox(width: 15),
+              Align(
+                alignment: Alignment.center,
+                child: Stack(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text('Accept'),
-                      style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50.0),
-                      ))),
-                    ),
-                    SizedBox(width: 15),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Reject',
-                        style: TextStyle(color: Colors.black),
+                    Container(
+                      child: Image.network(
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
                       ),
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith(
-                              (states) => Colors.white),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50.0),
-                          ))),
                     ),
                   ],
                 ),
-              ],
-            ),
-            SizedBox(
-              width: DeviceUtils.getScaledWidth(context, 0.02),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 45),
-              child: Text(
-                DateFormat('dd MMMM yyyy')
-                    .format(DateTime.parse(notificationData.createdAt)),
-                style: TextStyle(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w500,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    notificationData.message,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    notificationData.username,
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: Text('Accept'),
+                        style: ButtonStyle(
+                            shape:
+                                MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        ))),
+                      ),
+                      SizedBox(width: 15),
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: Text(
+                          'Reject',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateColor.resolveWith(
+                                (states) => Colors.white),
+                            shape:
+                                MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50.0),
+                            ))),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(
+                width: DeviceUtils.getScaledWidth(context, 0.02),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 45),
+                child: Text(
+                  DateFormat('dd MMMM yyyy')
+                      .format(DateTime.parse(notificationData.createdAt)),
+                  style: TextStyle(
+                    fontSize: 8,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      );
+  );
 
-  withOutButton(notificationData) => Container(
-        padding: EdgeInsets.only(top: 10),
-        child: Row(
-          children: [
-            SizedBox(width: 15),
-            Align(
-              alignment: Alignment.center,
-              child: Stack(
+  withOutButton(notificationData) => Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(width: 1.0, color: Colors.grey),
+        ),
+        color: Colors.white,
+      ),
+      padding: EdgeInsets.all(5),
+          child: Row(
+            children: [
+              SizedBox(width: 15),
+              Align(
+                alignment: Alignment.center,
+                child: Stack(
+                  children: [
+                    Container(
+                      child: Image.network(
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover,
+                  Text(
+                    notificationData.message,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    notificationData.username,
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  notificationData.message,
+              SizedBox(
+                width: DeviceUtils.getScaledWidth(context, 0.11),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10.0),
+                child: Text(
+                  DateFormat('dd MMMM yyyy')
+                      .format(DateTime.parse(notificationData.createdAt)),
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 8,
                     fontWeight: FontWeight.w500,
                   ),
-                ),
-                Text(
-                  notificationData.username,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              width: DeviceUtils.getScaledWidth(context, 0.11),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: Text(
-                DateFormat('dd MMMM yyyy')
-                    .format(DateTime.parse(notificationData.createdAt)),
-                style: TextStyle(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w500,
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      );
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -215,7 +232,7 @@ class _NotificationsState extends State<Notifications> {
                     child: ListView.builder(
                       itemCount: contentData.length,
                       itemBuilder: (context, index) =>
-                          contentData[index].isButton == 'Yes'
+                          contentData[index].isButton == true
                               ? withButton(contentData[index])
                               : withOutButton(contentData[index]),
                     ),
@@ -224,7 +241,8 @@ class _NotificationsState extends State<Notifications> {
                     heightFactor: 12.0,
                     child: Text(
                       'No Notification found',
-                      style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     )),
           ),
         ],

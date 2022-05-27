@@ -1,61 +1,160 @@
 class NotificationListModal {
-  NotificationListModal({
-    required this.success,
-    required this.message,
-    required this.notification,
-  });
-  late final bool success;
-  late final String message;
-  late final List<NotificationItem> notification;
+  bool? success;
+  String? message;
+  List<NotificationItem>? notification;
 
-  NotificationListModal.fromJson(Map<String, dynamic> json){
+  NotificationListModal({this.success, this.message, this.notification});
+
+  NotificationListModal.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    notification = List.from(json['notification']).map((e)=>NotificationItem.fromJson(e)).toList();
+    if (json['notification'] != null) {
+      notification = <NotificationItem>[];
+      json['notification'].forEach((v) {
+        notification!.add(new NotificationItem.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['success'] = success;
-    _data['message'] = message;
-    _data['notification'] = notification.map((e)=>e.toJson()).toList();
-    return _data;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['success'] = this.success;
+    data['message'] = this.message;
+    if (this.notification != null) {
+      data['notification'] = this.notification!.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
 
 class NotificationItem {
-  NotificationItem({
-    required this.id,
-    required this.userId,
-    required this.message,
-    required this.isButton,
-    required this.username,
-    required this.createdAt,
-  });
-  late final int id;
-  late final int userId;
-  late final String message;
-  late final String isButton;
-  late final String username;
-  late final String createdAt;
+  int? id;
+  int? fromUser;
+  String? message;
+  bool? isButton;
+  String? username;
+  String? createdAt;
+  User? user;
 
-  NotificationItem.fromJson(Map<String, dynamic> json){
+  NotificationItem(
+      {this.id,
+        this.fromUser,
+        this.message,
+        this.isButton,
+        this.username,
+        this.createdAt,
+        this.user});
+
+  NotificationItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    userId = json['userId'];
+    fromUser = json['fromUser'];
     message = json['message'];
     isButton = json['is_button'];
     username = json['username'];
     createdAt = json['createdAt'];
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['id'] = id;
-    _data['userId'] = userId;
-    _data['message'] = message;
-    _data['is_button'] = isButton;
-    _data['username'] = username;
-    _data['createdAt'] = createdAt;
-    return _data;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['fromUser'] = this.fromUser;
+    data['message'] = this.message;
+    data['is_button'] = this.isButton;
+    data['username'] = this.username;
+    data['createdAt'] = this.createdAt;
+    if (this.user != null) {
+      data['user'] = this.user!.toJson();
+    }
+    return data;
+  }
+}
+
+class User {
+  int? id;
+  String? firstname;
+  String? lastname;
+  String? email;
+  String? password;
+  String? phone;
+  Null? profile;
+  String? aboutme;
+  String? address;
+  String? city;
+  String? state;
+  String? country;
+  int? zip;
+  int? roleId;
+  Null? deletedAt;
+  bool? isEmailVerified;
+  bool? isPhoneVerified;
+  String? authToken;
+  Null? customerProfileId;
+
+  User(
+      {this.id,
+        this.firstname,
+        this.lastname,
+        this.email,
+        this.password,
+        this.phone,
+        this.profile,
+        this.aboutme,
+        this.address,
+        this.city,
+        this.state,
+        this.country,
+        this.zip,
+        this.roleId,
+        this.deletedAt,
+        this.isEmailVerified,
+        this.isPhoneVerified,
+        this.authToken,
+        this.customerProfileId});
+
+  User.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    firstname = json['firstname'];
+    lastname = json['lastname'];
+    email = json['email'];
+    password = json['password'];
+    phone = json['phone'];
+    profile = json['profile'];
+    aboutme = json['aboutme'];
+    address = json['address'];
+    city = json['city'];
+    state = json['state'];
+    country = json['country'];
+    zip = json['zip'];
+    roleId = json['role_id'];
+    deletedAt = json['deleted_at'];
+    isEmailVerified = json['isEmailVerified'];
+    isPhoneVerified = json['isPhoneVerified'];
+    authToken = json['auth_token'];
+    customerProfileId = json['customerProfileId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['firstname'] = this.firstname;
+    data['lastname'] = this.lastname;
+    data['email'] = this.email;
+    data['password'] = this.password;
+    data['phone'] = this.phone;
+    data['profile'] = this.profile;
+    data['aboutme'] = this.aboutme;
+    data['address'] = this.address;
+    data['city'] = this.city;
+    data['state'] = this.state;
+    data['country'] = this.country;
+    data['zip'] = this.zip;
+    data['role_id'] = this.roleId;
+    data['deleted_at'] = this.deletedAt;
+    data['isEmailVerified'] = this.isEmailVerified;
+    data['isPhoneVerified'] = this.isPhoneVerified;
+    data['auth_token'] = this.authToken;
+    data['customerProfileId'] = this.customerProfileId;
+    return data;
   }
 }
