@@ -126,7 +126,7 @@ class _Create_eventState extends State<Create_event> {
       TextEditingController();
 
   Widget getConditionsWidgets() {
-    if (Selectedcontactlist!.length > 0) {
+    if (Selectedcontactlist.length > 0) {
       return Row(
         children: Selectedcontactlist.map(
             (item) => Selectedcontactlist.indexOf(item) < 5
@@ -549,7 +549,7 @@ class _Create_eventState extends State<Create_event> {
                           SizedBox(
                             height: 5,
                           ),
-                          Selectedcontactlist!.length > 0
+                          Selectedcontactlist.length > 0
                               ? Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -593,7 +593,10 @@ class _Create_eventState extends State<Create_event> {
                               var result = await Navigator.of(context)
                                   .pushNamed(Routes.add_contacts);
                               setState(() {
-                                Selectedcontactlist = result as List<Attendees>;
+                                if(result != null) {
+                                  Selectedcontactlist =
+                                  result as List<Attendees>;
+                                }
                               });
                             });
                           },
