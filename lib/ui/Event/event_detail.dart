@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 // import 'package:full_screen_image/full_screen_image.dart';
 import 'package:guilt_app/constants/colors.dart';
@@ -44,6 +45,13 @@ class _EventDetailsState extends State<EventDetails> {
     super.didChangeDependencies();
   }
 
+  Widget getImageContainer(EventImages photo) {
+    return Container(
+        height: 100,
+        margin: EdgeInsets.only(right: 10, left: 10, top: 10),
+        child: Image.network(photo.file.toString()));
+  }
+
   getDetails(args) {
     GlobalMethods.showLoader();
     _userStore.Event_Detail(args, (value) {
@@ -78,21 +86,24 @@ class _EventDetailsState extends State<EventDetails> {
                                       color: Colors.black,
                                       fontSize: 18,
                                       fontWeight: FontWeight.w700)),
-                             contentData?.event?.isUserAtendee == true ?
-                              IconButton(
-                                onPressed: () {
-                                  // TODO: Init Group Chat
-                                  GlobalMethods.showLoader();
-                                  G.socketUtils.emitJoinEventChat(contentData!);
-                                  GlobalMethods.hideLoader();
-                                  Routes.navigateToScreen(
-                                      context, Routes.event_chat);
-                                },
-                                icon: Icon(Icons.message_rounded,
-                                    size: 20,
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                              ) : Container(),
+                              contentData?.event?.isUserAtendee == true
+                                  ? IconButton(
+                                      onPressed: () {
+                                        // TODO: Init Group Chat
+                                        GlobalMethods.showLoader();
+                                        G.socketUtils
+                                            .emitJoinEventChat(contentData!);
+                                        GlobalMethods.hideLoader();
+                                        Routes.navigateToScreen(
+                                            context, Routes.event_chat);
+                                      },
+                                      icon: Icon(Icons.message_rounded,
+                                          size: 20,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                    )
+                                  : Container(),
                             ]),
                       ),
                       SizedBox(
@@ -219,6 +230,7 @@ class _EventDetailsState extends State<EventDetails> {
                     endIndent: 20, //spacing at the end of divider
                   ),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
                         padding: EdgeInsets.only(
@@ -233,7 +245,8 @@ class _EventDetailsState extends State<EventDetails> {
                         padding: EdgeInsets.only(
                             left: 0.0, top: 5.0, bottom: 5.0, right: 20.0),
                         child: Text(
-                          'Event description is not added',
+                          (contentData?.event?.description ??
+                              'No description added'),
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500),
                         ),
@@ -251,15 +264,23 @@ class _EventDetailsState extends State<EventDetails> {
                               fontSize: 20, fontWeight: FontWeight.w900),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 0.0, top: 5.0, bottom: 5.0, right: 20.0),
-                        child: Text(
-                          'No any photos added',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
-                        ),
-                      ),
+                      contentData?.event?.eventImages?.length == 0
+                          ? Padding(
+                              padding: EdgeInsets.only(
+                                  left: 0.0,
+                                  top: 5.0,
+                                  bottom: 5.0,
+                                  right: 20.0),
+                              child: Text(
+                                'No any photos added',
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w500),
+                              ),
+                            )
+                          : Row(
+                              children: contentData!.event!.eventImages!
+                                  .map((e) => getImageContainer(e))
+                                  .toList()),
                       // Row(
                       //   children: [
                       //     FullScreenWidget(
