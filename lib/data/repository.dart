@@ -313,7 +313,7 @@ class Repository {
         .catchError((error) => throw error);
   }
 //addevent
-  Future<CommonResponseModal> createEvent(CreateEventRequestModal eventData,) async {
+  Future createEvent(CreateEventRequestModal eventData,) async {
     var token = await authToken;
     return await _postApi
         .createEvent(eventData, token)
