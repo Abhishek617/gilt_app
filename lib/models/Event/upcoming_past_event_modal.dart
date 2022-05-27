@@ -1,143 +1,128 @@
 class UpcomingPastEventModal {
-  UpcomingPastEventModal( {
-    required this.success,
-    required this.message,
-    required this.events,
-  });
-  late final bool success;
-  late final String message;
-  late final Events events;
+  bool? success;
+  String? message;
+  Events? events;
 
-  UpcomingPastEventModal.fromJson(Map<String, dynamic> json){
+  UpcomingPastEventModal({this.success, this.message, this.events});
+
+  UpcomingPastEventModal.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    events = Events.fromJson(json['events']);
+    events =
+    json['events'] != null ? new Events.fromJson(json['events']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['success'] = success;
-    _data['message'] = message;
-    _data['events'] = events.toJson();
-    return _data;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['success'] = this.success;
+    data['message'] = this.message;
+    if (this.events != null) {
+      data['events'] = this.events!.toJson();
+    }
+    return data;
   }
 }
 
 class Events {
-  Events({
-    required this.totalItems,
-    required this.listData,
-    required this.totalPages,
-    required this.currentPage,
-  });
-  late final int totalItems;
-  late final List<UpcomingAndPastEventListDetail> listData;
-  late final int totalPages;
-  late final int currentPage;
+  int? totalItems;
+  List<UpcomingAndPastEventListDetail>? listData;
+  int? totalPages;
+  int? currentPage;
 
-  Events.fromJson(Map<String, dynamic> json){
+  Events({this.totalItems, this.listData, this.totalPages, this.currentPage});
+
+  Events.fromJson(Map<String, dynamic> json) {
     totalItems = json['totalItems'];
-    listData = List.from(json['listData']).map((e)=>UpcomingAndPastEventListDetail.fromJson(e)).toList();
+    if (json['listData'] != null) {
+      listData = <UpcomingAndPastEventListDetail>[];
+      json['listData'].forEach((v) {
+        listData!.add(new UpcomingAndPastEventListDetail.fromJson(v));
+      });
+    }
     totalPages = json['totalPages'];
     currentPage = json['currentPage'];
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['totalItems'] = totalItems;
-    _data['listData'] = listData.map((e)=>e.toJson()).toList();
-    _data['totalPages'] = totalPages;
-    _data['currentPage'] = currentPage;
-    return _data;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['totalItems'] = this.totalItems;
+    if (this.listData != null) {
+      data['listData'] = this.listData!.map((v) => v.toJson()).toList();
+    }
+    data['totalPages'] = this.totalPages;
+    data['currentPage'] = this.currentPage;
+    return data;
   }
 }
 
 class UpcomingAndPastEventListDetail {
-  UpcomingAndPastEventListDetail({
-    required this.id,
-    required this.name,
-    required this.category,
-    required this.location,
-    required this.latLong,
-    required this.startDate,
-    required this.endDate,
-    required this.description,
-    required this.expenseDescription,
-    required this.totalExpense,
-    required this.createdBy,
-    required this.status,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-  late final int id;
-  late final String name;
-  late final String category;
-  late final String location;
-  late final LatLong latLong;
-  late final String startDate;
-  late final String endDate;
-  late final String description;
-  late final String expenseDescription;
-  late final int totalExpense;
-  late final int createdBy;
-  late final String status;
-  late final String createdAt;
-  late final String updatedAt;
+  int? id;
+  String? name;
+  int? createdBy;
+  String? status;
+  String? startDate;
+  String? endDate;
+  String? location;
+  List<EventImages>? eventImages;
+  int? attendeeCount;
 
-  UpcomingAndPastEventListDetail.fromJson(Map<String, dynamic> json){
+  UpcomingAndPastEventListDetail(
+      {this.id,
+        this.name,
+        this.createdBy,
+        this.status,
+        this.startDate,
+        this.endDate,
+        this.location,
+        this.eventImages,
+        this.attendeeCount});
+
+  UpcomingAndPastEventListDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    category = json['category'];
-    location = json['location'];
-    latLong = LatLong.fromJson(json['latLong']);
-    startDate = json['startDate'];
-    endDate = json['endDate'];
-    description = json['description'];
-    expenseDescription = json['expenseDescription'];
-    totalExpense = json['totalExpense'];
     createdBy = json['createdBy'];
     status = json['status'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
+    startDate = json['startDate'];
+    endDate = json['endDate'];
+    location = json['location'];
+    if (json['eventImages'] != null) {
+      eventImages = <EventImages>[];
+      json['eventImages'].forEach((v) {
+        eventImages!.add(new EventImages.fromJson(v));
+      });
+    }
+    attendeeCount = json['attendeeCount'];
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['id'] = id;
-    _data['name'] = name;
-    _data['category'] = category;
-    _data['location'] = location;
-    _data['latLong'] = latLong.toJson();
-    _data['startDate'] = startDate;
-    _data['endDate'] = endDate;
-    _data['description'] = description;
-    _data['expenseDescription'] = expenseDescription;
-    _data['totalExpense'] = totalExpense;
-    _data['createdBy'] = createdBy;
-    _data['status'] = status;
-    _data['createdAt'] = createdAt;
-    _data['updatedAt'] = updatedAt;
-    return _data;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['createdBy'] = this.createdBy;
+    data['status'] = this.status;
+    data['startDate'] = this.startDate;
+    data['endDate'] = this.endDate;
+    data['location'] = this.location;
+    if (this.eventImages != null) {
+      data['eventImages'] = this.eventImages!.map((v) => v.toJson()).toList();
+    }
+    data['attendeeCount'] = this.attendeeCount;
+    return data;
   }
 }
 
-class LatLong {
-  LatLong({
-    required this.type,
-    required this.coordinates,
-  });
-  late final String type;
-  late final List<double> coordinates;
+class EventImages {
+  String? file;
 
-  LatLong.fromJson(Map<String, dynamic> json){
-    type = json['type'];
-    coordinates = List.castFrom<dynamic, double>(json['coordinates']);
+  EventImages({this.file});
+
+  EventImages.fromJson(Map<String, dynamic> json) {
+    file = json['file'];
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['type'] = type;
-    _data['coordinates'] = coordinates;
-    return _data;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['file'] = this.file;
+    return data;
   }
 }

@@ -361,7 +361,26 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                       ? ElevatedButtonWidget(
                           buttonText: 'Confirm',
                           buttonColor: AppColors.primaryColor,
-                          onPressed: () {})
+                          onPressed: () {
+                            if(_expensedescription.value.text.trim() !=  '') {
+                              final expenseData = CreateEventRequestModal(
+                                name: args!.name,
+                                category: args!.category,
+                                location: args!.location,
+                                startDate: args!.startDate,
+                                description: args!.description,
+                                expenseDescription:
+                                _expensedescription.value.text,
+                                totalExpense: _amount.value.text,
+                                attendees: args.attendees,
+                                lat: '',
+                                endDate: args!.endDate,
+                                long: '',
+                                files: args!.files,
+                              );
+                              createEvent(expenseData);
+                            }
+                          })
                       : disableButton(),
                 ),
                 SizedBox(

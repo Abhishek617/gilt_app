@@ -71,11 +71,11 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
       if (eventListResponse.success == true) {
         if (type == 'upcoming') {
           setState(() {
-            upcomingEventList = eventListResponse.events.listData;
+            upcomingEventList = eventListResponse?.events?.listData ?? [];
           });
         } else {
           setState(() {
-            pastEventList = eventListResponse.events.listData;
+            pastEventList = eventListResponse.events?.listData ?? [];
           });
         }
       }
@@ -110,16 +110,17 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
       child: Card(
         margin: EdgeInsets.only(right: 12, bottom: 5),
         child: Container(
+          padding: EdgeInsets.only(left: 1),
           color: Colors.white,
           alignment: Alignment.center,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.network(
                 // eventItem['imageURL'] ?? 'https://zillifurniture.com/images/product/1601279977-pro-placeholder.png',
                 type == 'upcoming'
-                    ? 'https://vanguardian.org/wp-content/uploads/2021/02/UpcomingEvents.jpg'
-                    : 'https://sathyaeducare.com/assets/img/recent.jpg',
+                    ? eventItem!.eventImages!.length > 0 ? eventItem!.eventImages![0].file ?? 'https://vanguardian.org/wp-content/uploads/2021/02/UpcomingEvents.jpg' : 'https://vanguardian.org/wp-content/uploads/2021/02/UpcomingEvents.jpg'
+                    :  eventItem!.eventImages!.length > 0 ? eventItem!.eventImages![0]?.file ?? 'https://sathyaeducare.com/assets/img/recent.jpg':'https://vanguardian.org/wp-content/uploads/2021/02/UpcomingEvents.jpg',
                 width: DeviceUtils.getScaledWidth(context, 0.40),
                 height: DeviceUtils.getScaledHeight(context, 0.10),
               ),
@@ -129,7 +130,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(eventItem.name,
+                    Text(eventItem.name ?? 'Name',
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
@@ -143,7 +144,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                           color: Theme.of(context).colorScheme.primary,
                         ),
                         Text(
-                          '20+ Attendees',
+                          (eventItem.attendeeCount.toString() ?? '1') + ' Attendees',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -160,7 +161,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                             size: 20,
                             color: Theme.of(context).colorScheme.primary),
                         Text(
-                          eventItem.location,
+                          eventItem.location ?? 'No Location',
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w500,

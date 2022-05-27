@@ -92,7 +92,7 @@ class _EventState extends State<Event> {
   Widget getConditionsWidgets() {
     if (event_list_data != null) {
         return  Column(
-          children: event_list_data!.events.listData
+          children: event_list_data!.events!.listData!
               .map(
                 (item) =>
                 event(item, Colors.white,
@@ -138,12 +138,12 @@ class _EventState extends State<Event> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(DateFormat('dd MMMM yyyy  HH:mma').format(DateTime.parse(eventData.startDate)),
+                              Text(DateFormat('dd MMMM yyyy  HH:mma').format(DateTime.parse(eventData.startDate ?? '2022-05-27')),
                                   style: TextStyle(
                                       color: AppColors.primaryColor,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400)),
-                              Text(eventData.name,
+                              Text(eventData.name ?? 'NO NAME',
                                   style: TextStyle(
                                       fontSize: 18, fontWeight: FontWeight.w700)),
                               Row(
@@ -154,7 +154,7 @@ class _EventState extends State<Event> {
                                     color: AppColors.grayTextColor,
                                   ),
 
-                                  Text(eventData.location,
+                                  Text(eventData.location ?? 'No Location',
                                     style: TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w500,
