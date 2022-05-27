@@ -650,6 +650,10 @@ class _Create_eventState extends State<Create_event> {
                                             "description":
                                                 _eventPlaceDescriptionController
                                                     .value.text,
+                                                "expenseDescription": '',
+                                                "lat": '',
+                                                "long": '',
+                                                "totalExpense": '',
                                             "files": pickedImage,
                                             "attendees":
                                                 Selectedcontactlist.map(

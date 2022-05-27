@@ -203,7 +203,7 @@ class _AddContactsState extends State<AddContacts> {
                                           i++) {
                                         if (_selectedContacts[i] == true) {
                                           selectedPhones
-                                              .add(Attendees.fromJson({'phone':filteredContactList[i].phone,'expense':0}) );
+                                              .add(Attendees(phone:filteredContactList[i].phone,expanse:0) );
                                         }
                                       }
                                       Navigator.pop(context,selectedPhones);
