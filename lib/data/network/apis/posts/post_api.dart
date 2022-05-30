@@ -403,6 +403,14 @@ class PostApi {
       UpdateProfileRequestModal UpdateProfileData, token) async {
     try {
       FormData formData = FormData();
+      String fileName = UpdateProfileData.files.path.split('/').last;
+      String? mimeType = mime(fileName);
+      String mimee = mimeType!.split('/')[0];
+      String type = mimeType!.split('/')[1];
+      UpdateProfileData.files = await MultipartFile.fromFile(UpdateProfileData.files.path,
+          filename: fileName, contentType: MediaType(mimee, type));
+      //FormData forData = new FormData.fromMap(UpdateProfileData.toJson());
+
       var form = FormData.fromMap({
         "email": UpdateProfileData.email.toString(),
         "firstname": UpdateProfileData.firstname.toString(),
@@ -413,14 +421,17 @@ class PostApi {
         "city": UpdateProfileData.city.toString(),
         "state": UpdateProfileData.state.toString(),
         "country": UpdateProfileData.country.toString(),
-        "zip": UpdateProfileData.zip.toString()
+        "zip": UpdateProfileData.zip.toString(),
+
       });
       formData.fields.addAll(form.fields);
 
       final res = await _dioClient.put(
         Endpoints.updateProfile,
         data: formData,
-        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+        options: Options(headers: {'Authorization': 'Bearer ' + token!,
+                                 'Content-Type': 'multipart/form-data'
+        }),
       );
       return UpdateProfileResponseModal.fromJson(res);
     } catch (e) {

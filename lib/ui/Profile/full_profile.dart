@@ -184,6 +184,7 @@ class _FullProfileState extends State<FullProfile> {
       "state": _userStateController.value.text,
       "country": _userCountryController.value.text,
       "zip": int.parse(_userZipController.value.text),
+      "files": pickedImage,
     });
     _userStore.updateprofile(UpdateProfileData, (val) {
       if (val.success == true) {
