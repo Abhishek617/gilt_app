@@ -5,25 +5,17 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
-import 'package:guilt_app/data/repository.dart';
-import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
-import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
-import 'package:guilt_app/stores/user/user_store.dart';
-import 'package:guilt_app/ui/Event/expense_screen.dart';
 import 'package:guilt_app/ui/common/menu_drawer.dart';
-import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
-
-import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:flutter/rendering.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '../../utils/device/device_utils.dart';
 
 class Create_event extends StatefulWidget {
   const Create_event({Key? key}) : super(key: key);
@@ -34,7 +26,7 @@ class Create_event extends StatefulWidget {
 
 class _Create_eventState extends State<Create_event> {
   late List<Attendees> Selectedcontactlist = [];
-  File? pickedImage;
+  List<File> pickedImageList = [];
 
   @override
   void initState() {
@@ -91,7 +83,7 @@ class _Create_eventState extends State<Create_event> {
       if (photo == null) return;
       final tempImage = File(photo.path);
       setState(() {
-        pickedImage = tempImage;
+        pickedImageList = [...pickedImageList, tempImage];
       });
 
       Get.back();
@@ -172,6 +164,15 @@ class _Create_eventState extends State<Create_event> {
       );
     } else {
       return IconButton(icon: Icon(Icons.add), onPressed: () {});
+    }
+  }
+
+  deleteImage(img) {
+    var indexOfImage = pickedImageList.indexOf(img);
+    if (indexOfImage >= 0) {
+      setState(() {
+        pickedImageList.removeAt(indexOfImage);
+      });
     }
   }
 
@@ -271,6 +272,7 @@ class _Create_eventState extends State<Create_event> {
                           width: DeviceUtils.getScaledWidth(context, 0.54),
                           height: DeviceUtils.getScaledHeight(context, 0.06),
                           child: TextFormField(
+                            onChanged: (val) {},
                             controller: _eventLocationController,
                             cursorColor: Colors.black,
                             decoration: new InputDecoration(
@@ -299,8 +301,22 @@ class _Create_eventState extends State<Create_event> {
                               ),
                             ],
                           ),
-                          onPressed: () =>
-                              {Routes.navigateToScreen(context, Routes.map)},
+                          onPressed: () {
+                            GlobalMethods.askLocationPermissionsOnly(context,
+                                () async {
+                              var result = await Navigator.of(context)
+                                  .pushNamed(Routes.map, arguments: {
+                                'address': _eventLocationController.value.text
+                              });
+                              setState(() {
+                                if (result != null) {
+                                  Selectedcontactlist =
+                                      result as List<Attendees>;
+                                }
+                              });
+                            });
+                            //var result =  Routes.navigateToScreen(context, Routes.map);
+                          },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(32.0),
@@ -466,38 +482,59 @@ class _Create_eventState extends State<Create_event> {
                   SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Stack(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: AppColors.primaryColor, width: 2),
-                              ),
-                              child: ClipRect(
-                                child: pickedImage != null
-                                    ? Image.file(
-                                        pickedImage!,
-                                        width: 70,
-                                        height: 70,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Image.network(
-                                        'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
-                                        width: 60,
-                                        height: 60,
-                                        fit: BoxFit.cover,
+                  Wrap(
+                      alignment: WrapAlignment.start,
+                      children: pickedImageList
+                          .map(
+                            (image) => Stack(
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: AppColors.primaryColor,
+                                        width: 2),
+                                  ),
+                                  child: ClipRect(
+                                    child: image != null
+                                        ? Image.file(
+                                            image!,
+                                            width: 70,
+                                            height: 70,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.network(
+                                            'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                                            width: 60,
+                                            height: 60,
+                                            fit: BoxFit.cover,
+                                          ),
+                                  ),
+                                ),
+                                Positioned(
+                                  left: 65,
+                                  child: InkWell(
+                                    onTap: () {
+                                      deleteImage(image);
+                                    },
+                                    child: CircleAvatar(
+                                      backgroundColor: AppColors.primaryColor,
+                                      radius: 12,
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 16,
+                                        color: Colors.white,
                                       ),
-                              ),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
-                          ],
-                        ),
+                          )
+                          .toList()
+                      //getImages()
+
                       ),
-                    ],
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -593,9 +630,9 @@ class _Create_eventState extends State<Create_event> {
                               var result = await Navigator.of(context)
                                   .pushNamed(Routes.add_contacts);
                               setState(() {
-                                if(result != null) {
+                                if (result != null) {
                                   Selectedcontactlist =
-                                  result as List<Attendees>;
+                                      result as List<Attendees>;
                                 }
                               });
                             });
@@ -631,7 +668,7 @@ class _Create_eventState extends State<Create_event> {
                                             .value.text
                                             .trim() !=
                                         '') {
-                                      if (pickedImage != null) {
+                                      if (pickedImageList.length > 0) {
                                         if (Selectedcontactlist.length > 0) {
                                           CreateEventRequestModal eData =
                                               CreateEventRequestModal.fromJson({
@@ -650,7 +687,7 @@ class _Create_eventState extends State<Create_event> {
                                             "description":
                                                 _eventPlaceDescriptionController
                                                     .value.text,
-                                            "files": pickedImage,
+                                            "files": pickedImageList,
                                             "attendees":
                                                 Selectedcontactlist.map(
                                                     (e) => e.toJson()).toList(),

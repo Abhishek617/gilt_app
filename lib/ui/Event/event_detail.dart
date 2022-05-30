@@ -178,10 +178,10 @@ class _EventDetailsState extends State<EventDetails> {
                       ]),
                       GestureDetector(
                         onTap: () {
-                          Routes.navigateToScreenWithArgs(
-                              context,
-                              Routes.organizerprof,
-                              contentData?.event?.organizer?.id);
+                          // Routes.navigateToScreenWithArgs(
+                          //     context,
+                          //     Routes.organizerprof,
+                          //     contentData?.event?.organizer?.id);
                         },
                         child: Row(children: [
                           Icon(Icons.person_rounded,

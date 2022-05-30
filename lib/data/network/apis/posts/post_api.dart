@@ -429,32 +429,44 @@ class PostApi {
     }
   }
 
-//create event
-  Future createEvent(CreateEventRequestModal eventData, token) async {
-    try {
-      String fileName = eventData.files.path.split('/').last;
+  getEventImages(imageArray, callback) {
+    var newImageArray = [];
+    imageArray.forEach((imgFile) async{
+      String fileName = imgFile.path.split('/').last;
       String? mimeType = mime(fileName);
       String mimee = mimeType!.split('/')[0];
       String type = mimeType!.split('/')[1];
-      eventData.files = await MultipartFile.fromFile(eventData.files.path,
-          filename: fileName, contentType: MediaType(mimee, type));
-      FormData formData = new FormData.fromMap(eventData.toJson());
+      newImageArray.add(await MultipartFile.fromFile(imgFile.path,
+          filename: fileName, contentType: MediaType(mimee, type)));
 
-      // formData.fields.addAll(formData.fields);
+      if (imageArray.indexOf(imgFile) == (imageArray.length - 1)) {
+        callback(newImageArray);
+      }
+    });
+  }
 
-      final res = await _dioClient.post(
-        Endpoints.addEvent,
-        data: formData,
-        options: Options(headers: {
-          'Authorization': 'Bearer ' + token!,
-          'Content-Type': 'multipart/form-data'
-        }),
-      );
-      return CreateEventResponseModel.fromJson(res);
-    } catch (e) {
-      print(e.toString());
-      throw e;
+//create event
+  Future createEvent(CreateEventRequestModal eventData, token) async {
+    try {
+      await getEventImages(eventData.files, (newFilesArray) async {
+        eventData.files = newFilesArray;
+        FormData formData = await new FormData.fromMap(eventData.toJson());
+        final res = await _dioClient.post(
+          Endpoints.addEvent,
+          data: formData,
+          options: Options(headers: {
+            'Authorization': 'Bearer ' + token!,
+            'Content-Type': 'multipart/form-data'
+          }),
+        );
+        return CreateEventResponseModel.fromJson(res);
+      });
     }
+       catch (e) {
+        print(e.toString());
+        throw e;
+      }
+
   }
 
   Future<SignUpResponseModal> signup(SignUpRequestModal signUpData) async {

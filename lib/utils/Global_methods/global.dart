@@ -38,7 +38,8 @@ class GlobalMethods {
 
 
   static Future<void> askPermissions(context, String routeName) async {
-    PermissionStatus permissionStatus = await getContactPermission();
+    PermissionStatus permission = await Permission.contacts.status;
+    PermissionStatus permissionStatus = await getPermission(permission);
     if (permissionStatus == PermissionStatus.granted) {
       if (routeName != null) {
         Navigator.of(context).pushNamed(routeName);
@@ -48,7 +49,17 @@ class GlobalMethods {
     }
   }
   static Future<void> askPermissionsOnly(context, callback) async {
-    PermissionStatus permissionStatus = await getContactPermission();
+    PermissionStatus permission = await Permission.contacts.status;
+    PermissionStatus permissionStatus = await getPermission(permission);
+    if (permissionStatus == PermissionStatus.granted) {
+     callback();
+    } else {
+      handleInvalidPermissions(context, permissionStatus);
+    }
+  }
+  static Future<void> askLocationPermissionsOnly(context, callback) async {
+    PermissionStatus permission = await Permission.location.status;
+    PermissionStatus permissionStatus = await getPermission(permission);
     if (permissionStatus == PermissionStatus.granted) {
      callback();
     } else {
@@ -56,7 +67,7 @@ class GlobalMethods {
     }
   }
 
-  static Future<PermissionStatus> getContactPermission() async {
+  static Future<PermissionStatus> getPermission(permission) async {
     PermissionStatus permission = await Permission.contacts.status;
     if (permission != PermissionStatus.granted &&
         permission != PermissionStatus.permanentlyDenied) {
@@ -70,11 +81,11 @@ class GlobalMethods {
   static void handleInvalidPermissions(
       context, PermissionStatus permissionStatus) {
     if (permissionStatus == PermissionStatus.denied) {
-      final snackBar = SnackBar(content: Text('Access to contact data denied'));
+      final snackBar = SnackBar(content: Text('Permission is denied'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else if (permissionStatus == PermissionStatus.permanentlyDenied) {
       final snackBar =
-          SnackBar(content: Text('Contact data not available on device'));
+          SnackBar(content: Text('Permission is permanently denied'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }

@@ -122,7 +122,7 @@ class Routes {
 
   static final routes = <String, WidgetBuilder>{
     otpvalidate: (BuildContext context) => Otp_Validate_Screen(),
-    map: (BuildContext context) => Map(),
+    map: (BuildContext context) => SetOnMapScreen(),
     addmoney: (BuildContext context) => AddMoney(),
     wallet: (BuildContext context) => Wallet(),
     expensehistory: (BuildContext context) => Expense(),

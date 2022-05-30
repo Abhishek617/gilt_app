@@ -114,6 +114,10 @@ dependencies:
   firebase_messaging: ^11.4.0
   overlay_support: 2.0.0
 
+  #Get address/place list from google map api
+  geocoding: ^2.0.4
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
