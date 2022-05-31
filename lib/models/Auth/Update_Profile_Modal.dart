@@ -1,5 +1,6 @@
 class UpdateProfileRequestModal {
   UpdateProfileRequestModal({
+    required this.files,
     required this.email,
     required this.firstname,
     required this.lastname,
@@ -11,6 +12,7 @@ class UpdateProfileRequestModal {
     required this.country,
     required this.zip,
   });
+  late dynamic files;
   late final String email;
   late final String firstname;
   late final String lastname;
@@ -23,6 +25,7 @@ class UpdateProfileRequestModal {
   late final int zip;
 
   UpdateProfileRequestModal.fromJson(Map<String, dynamic> json){
+    files = json['files'];
     email = json['email'];
     firstname = json['firstname'];
     lastname = json['lastname'];
@@ -37,6 +40,7 @@ class UpdateProfileRequestModal {
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
+    _data['files'] = files;
     _data['email'] = email;
     _data['firstname'] = firstname;
     _data['lastname'] = lastname;
@@ -80,6 +84,7 @@ class UpdateProfileResponseModal {
 
 class User {
   User({
+    required this.files,
     required this.id,
     required this.firstname,
     required this.lastname,
@@ -99,6 +104,7 @@ class User {
     required this.isPhoneVerified,
     required this.authToken,
   });
+  late dynamic files;
   late final int id;
   late final String firstname;
   late final String lastname;
@@ -119,6 +125,7 @@ class User {
   late final String authToken;
 
   User.fromJson(Map<String, dynamic> json){
+    files = json['files'];
     id = json['id'];
     firstname = json['firstname'];
     lastname = json['lastname'];
@@ -141,6 +148,7 @@ class User {
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
+    _data['files'] = files;
     _data['id'] = id;
     _data['firstname'] = firstname;
     _data['lastname'] = lastname;

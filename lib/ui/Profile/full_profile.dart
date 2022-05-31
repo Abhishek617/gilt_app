@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:guilt_app/constants/app_settings.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
@@ -15,8 +17,10 @@ import 'package:guilt_app/ui/common/menu_drawer.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
@@ -96,7 +100,78 @@ class _FullProfileState extends State<FullProfile> {
 
     setData();
   }
+  File? pickedImage;
 
+  void imagePickerOption() {
+    Get.bottomSheet(
+      SingleChildScrollView(
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10.0),
+            topRight: Radius.circular(10.0),
+          ),
+          child: Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    "Select a Photo",
+                    style: TextStyle(fontSize: 20, color: Colors.grey),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Divider(
+                    height: 1,
+                    color: Colors.grey,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      pickImage(ImageSource.camera);
+                    },
+                    child: Text("Take Photo...",
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.center),
+                  ),
+                  const Divider(
+                    height: 1,
+                    color: Colors.grey,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      pickImage(ImageSource.gallery);
+                    },
+                    child: Text("Choose from Library...",
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.center),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  pickImage(ImageSource imageType) async {
+    try {
+      final photo = await ImagePicker().pickImage(source: imageType);
+      if (photo == null) return;
+      final tempImage = File(photo.path);
+      setState(() {
+        pickedImage = tempImage;
+      });
+
+      Get.back();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
   updatedata() {
     final UpdateProfileData = UpdateProfileRequestModal.fromJson({
       "firstname": _userFirstNameController.value.text,
@@ -109,6 +184,7 @@ class _FullProfileState extends State<FullProfile> {
       "state": _userStateController.value.text,
       "country": _userCountryController.value.text,
       "zip": int.parse(_userZipController.value.text),
+      "files": pickedImage,
     });
     _userStore.updateprofile(UpdateProfileData, (val) {
       if (val.success == true) {
@@ -582,18 +658,64 @@ class _FullProfileState extends State<FullProfile> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100.0),
-                    child: Observer(
-                        builder: (_) => Image.network(
-                              _userStore.Profile_data?.user?.profile
-                                      ?.toString() ??
-                                  'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
-                              width: DeviceUtils.getScaledWidth(context, 0.30),
-                              height: DeviceUtils.getScaledWidth(context, 0.30),
+                  child:  Align(
+                    alignment: Alignment.center,
+                    child: Stack(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border:
+                            Border.all(color: AppColors.primaryColor, width: 2),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(100),
+                            ),
+                          ),
+                          child: ClipOval(
+                            child: pickedImage != null
+                                ? Image.file(
+                              pickedImage!,
+                              width: 100,
+                              height: 100,
                               fit: BoxFit.cover,
-                            )),
+                            )
+                                : Image.network(
+                              'https://i.pinimg.com/236x/f9/75/81/f9758151b717582c500f0dcc33beca4f.jpg',
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: -13,
+                          right: -10,
+                         child: IconButton(
+                              onPressed: (){
+                                imagePickerOption();
+                              },
+                              icon:  Icon(
+                                Icons.add_a_photo,
+                                color: AppColors.primaryColor,
+                                size: 30,
+                              ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
+
+                  // child: ClipRRect(
+                  //   borderRadius: BorderRadius.circular(100.0),
+                  //   child: Observer(
+                  //       builder: (_) => Image.network(
+                  //             _userStore.Profile_data?.user?.profile
+                  //                     ?.toString() ??
+                  //                 'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                  //             width: DeviceUtils.getScaledWidth(context, 0.30),
+                  //             height: DeviceUtils.getScaledWidth(context, 0.30),
+                  //             fit: BoxFit.cover,
+                  //           )),
+                  // ),
                 ),
                 checkProfile(),
                 Divider(
