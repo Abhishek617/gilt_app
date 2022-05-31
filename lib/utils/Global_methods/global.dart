@@ -68,7 +68,6 @@ class GlobalMethods {
   }
 
   static Future<PermissionStatus> getPermission(permission) async {
-    PermissionStatus permission = await Permission.contacts.status;
     if (permission != PermissionStatus.granted &&
         permission != PermissionStatus.permanentlyDenied) {
       PermissionStatus permissionStatus = await Permission.contacts.request();

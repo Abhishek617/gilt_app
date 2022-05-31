@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/ui/common/menu_drawer.dart';
@@ -116,6 +117,8 @@ class _Create_eventState extends State<Create_event> {
       TextEditingController(text: DateTime.now().toString());
   TextEditingController _eventPlaceDescriptionController =
       TextEditingController();
+
+  late LatLng addressLatLng;
 
   Widget getConditionsWidgets() {
     if (Selectedcontactlist.length > 0) {
@@ -268,21 +271,23 @@ class _Create_eventState extends State<Create_event> {
                   ),
                   Row(
                     children: [
-                      Container(
-                          width: DeviceUtils.getScaledWidth(context, 0.54),
-                          height: DeviceUtils.getScaledHeight(context, 0.06),
-                          child: TextFormField(
-                            onChanged: (val) {},
-                            controller: _eventLocationController,
-                            cursorColor: Colors.black,
-                            decoration: new InputDecoration(
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                hintText: 'Enter Location'),
-                          )),
+                      Expanded(
+                        child: Container(
+                            child: TextFormField(
+                              maxLines: 3,
+                              onChanged: (val) {},
+                              controller: _eventLocationController,
+                              cursorColor: Colors.black,
+                              decoration: new InputDecoration(
+
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  hintText: 'Enter Location'),
+                            ),),
+                      ),
                       Container(
                         child: ElevatedButton(
                           child: Row(
@@ -302,19 +307,26 @@ class _Create_eventState extends State<Create_event> {
                             ],
                           ),
                           onPressed: () {
-                            GlobalMethods.askLocationPermissionsOnly(context,
-                                () async {
-                              var result = await Navigator.of(context)
-                                  .pushNamed(Routes.map, arguments: {
-                                'address': _eventLocationController.value.text
+                            if (_eventLocationController.value.text.trim() !=
+                                '') {
+                              GlobalMethods.askLocationPermissionsOnly(context,
+                                  () async {
+                                Map<String, dynamic> result =
+                                    await Navigator.of(context)
+                                        .pushNamed(Routes.map, arguments: {
+                                  'address': _eventLocationController.value.text
+                                }) as Map<String, dynamic>;
+                                setState(() {
+                                  if (result != null) {
+                                    addressLatLng = result['position'] as LatLng;
+                                    _eventLocationController.text = result['address'];
+                                  }
+                                });
                               });
-                              setState(() {
-                                if (result != null) {
-                                  Selectedcontactlist =
-                                      result as List<Attendees>;
-                                }
-                              });
-                            });
+                            } else {
+                              GlobalMethods.showErrorMessage(context,
+                                  'Please Enter Address', 'Address Required');
+                            }
                             //var result =  Routes.navigateToScreen(context, Routes.map);
                           },
                           style: ElevatedButton.styleFrom(
@@ -671,27 +683,33 @@ class _Create_eventState extends State<Create_event> {
                                       if (pickedImageList.length > 0) {
                                         if (Selectedcontactlist.length > 0) {
                                           CreateEventRequestModal eData =
-                                              CreateEventRequestModal.fromJson({
-                                            "name":
+                                              CreateEventRequestModal(
+                                            name:
                                                 _eventNameController.value.text,
-                                            "category": _eventCategoryController
+                                            category: _eventCategoryController
                                                 .value.text,
-                                            "location": _eventLocationController
+                                            location: _eventLocationController
                                                 .value.text,
-                                            "startDate":
+                                            startDate:
                                                 _eventStartDateAndTimeController
                                                     .value.text,
-                                            "endDate":
+                                            endDate:
                                                 _eventEndDateAndTimeController
                                                     .value.text,
-                                            "description":
+                                            description:
                                                 _eventPlaceDescriptionController
                                                     .value.text,
-                                            "files": pickedImageList,
-                                            "attendees":
-                                                Selectedcontactlist.map(
-                                                    (e) => e.toJson()).toList(),
-                                          });
+                                            files: pickedImageList,
+                                            attendees: Selectedcontactlist,
+                                            expenseDescription: '',
+                                            totalExpense: '0',
+                                            long: addressLatLng?.longitude
+                                                    .toString() ??
+                                                '',
+                                            lat: (addressLatLng?.longitude
+                                                    .toString() ??
+                                                ''),
+                                          );
                                           Routes.navigateToScreenWithArgs(
                                               context,
                                               Routes.expense_screen,
