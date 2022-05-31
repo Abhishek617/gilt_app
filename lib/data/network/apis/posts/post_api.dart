@@ -402,35 +402,23 @@ class PostApi {
   Future<UpdateProfileResponseModal> updateprofile(
       UpdateProfileRequestModal UpdateProfileData, token) async {
     try {
-      FormData formData = FormData();
-      String fileName = UpdateProfileData.files.path.split('/').last;
+      String fileName = UpdateProfileData.profile.path.split('/').last;
       String? mimeType = mime(fileName);
       String mimee = mimeType!.split('/')[0];
       String type = mimeType!.split('/')[1];
-      UpdateProfileData.files = await MultipartFile.fromFile(UpdateProfileData.files.path,
-          filename: fileName, contentType: MediaType(mimee, type));
+      UpdateProfileData.profile = (await MultipartFile.fromFile(
+          UpdateProfileData.profile.path,
+          filename: fileName,
+          contentType: MediaType(mimee, type)));
       //FormData forData = new FormData.fromMap(UpdateProfileData.toJson());
 
-      var form = FormData.fromMap({
-        "email": UpdateProfileData.email.toString(),
-        "firstname": UpdateProfileData.firstname.toString(),
-        "lastname": UpdateProfileData.lastname.toString(),
-        "phone": UpdateProfileData.phone.toString(),
-        "aboutme": UpdateProfileData.aboutme.toString(),
-        "address": UpdateProfileData.address.toString(),
-        "city": UpdateProfileData.city.toString(),
-        "state": UpdateProfileData.state.toString(),
-        "country": UpdateProfileData.country.toString(),
-        "zip": UpdateProfileData.zip.toString(),
-
-      });
-      formData.fields.addAll(form.fields);
-
+      var form = FormData.fromMap(UpdateProfileData.toJson());
       final res = await _dioClient.put(
         Endpoints.updateProfile,
-        data: formData,
-        options: Options(headers: {'Authorization': 'Bearer ' + token!,
-                                 'Content-Type': 'multipart/form-data'
+        data: form,
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'multipart/form-data'
         }),
       );
       return UpdateProfileResponseModal.fromJson(res);
@@ -442,7 +430,7 @@ class PostApi {
 
   getEventImages(imageArray, callback) {
     var newImageArray = [];
-    imageArray.forEach((imgFile) async{
+    imageArray.forEach((imgFile) async {
       String fileName = imgFile.path.split('/').last;
       String? mimeType = mime(fileName);
       String mimee = mimeType!.split('/')[0];
@@ -472,12 +460,10 @@ class PostApi {
         );
         return CreateEventResponseModel.fromJson(res);
       });
+    } catch (e) {
+      print(e.toString());
+      throw e;
     }
-       catch (e) {
-        print(e.toString());
-        throw e;
-      }
-
   }
 
   Future<SignUpResponseModal> signup(SignUpRequestModal signUpData) async {

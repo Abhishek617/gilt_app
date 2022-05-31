@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:guilt_app/constants/app_settings.dart';
-import 'package:mobx/mobx.dart';
 
 class SetOnMapScreen extends StatefulWidget {
   @override
@@ -60,7 +58,15 @@ class _MapState extends State<SetOnMapScreen> {
         currentPos.latitude, currentPos.longitude);
     setState(() {
       Placemark add = placemarks[0];
-      selectedAddress = (add.name ?? '') + ',' + (add.subLocality ?? '') + ',' + (add.locality ?? '') + ',' + (add.country ?? '') + ',' + (add.postalCode ?? '');
+      selectedAddress = (add.name ?? '') +
+          ',' +
+          (add.subLocality ?? '') +
+          ',' +
+          (add.locality ?? '') +
+          ',' +
+          (add.country ?? '') +
+          ',' +
+          (add.postalCode ?? '');
     });
   }
 
@@ -70,8 +76,7 @@ class _MapState extends State<SetOnMapScreen> {
     MyMarker = Marker(
         markerId: MarkerId('Address_Marker'),
         draggable: true,
-        infoWindow:
-            InfoWindow(title: 'Address', snippet: selectedAddress),
+        infoWindow: InfoWindow(title: 'Address', snippet: selectedAddress),
         position: markerPosition);
     _pageController = PageController(initialPage: 1, viewportFraction: 0.8)
       ..addListener(_onScroll);
@@ -110,7 +115,9 @@ class _MapState extends State<SetOnMapScreen> {
                     markers: Set.from([MyMarker]),
                     onMapCreated: mapCreated,
                   )
-                : Center(child: Text('Map is loading...')),
+                : Center(
+                    child: Text('Map is loading...'),
+                  ),
           ),
         ],
       ),

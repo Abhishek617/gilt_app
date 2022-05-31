@@ -100,6 +100,7 @@ class _FullProfileState extends State<FullProfile> {
 
     setData();
   }
+
   File? pickedImage;
 
   void imagePickerOption() {
@@ -165,6 +166,7 @@ class _FullProfileState extends State<FullProfile> {
       final tempImage = File(photo.path);
       setState(() {
         pickedImage = tempImage;
+        updatedata();
       });
 
       Get.back();
@@ -172,6 +174,7 @@ class _FullProfileState extends State<FullProfile> {
       debugPrint(error.toString());
     }
   }
+
   updatedata() {
     final UpdateProfileData = UpdateProfileRequestModal.fromJson({
       "firstname": _userFirstNameController.value.text,
@@ -184,11 +187,11 @@ class _FullProfileState extends State<FullProfile> {
       "state": _userStateController.value.text,
       "country": _userCountryController.value.text,
       "zip": int.parse(_userZipController.value.text),
-      "files": pickedImage,
+      "profile": pickedImage,
     });
     _userStore.updateprofile(UpdateProfileData, (val) {
       if (val.success == true) {
-        GlobalMethods.showErrorMessage(
+        GlobalMethods.showSuccessMessage(
             context, 'Profile Updated Successfully.', 'Update Profile');
         if (val.user != null) {
           setState(() {
@@ -316,15 +319,15 @@ class _FullProfileState extends State<FullProfile> {
               textAlign: TextAlign.center,
             ),
           ),
-        ), Padding(
+        ),
+        Padding(
           padding: const EdgeInsets.only(
               left: 00.0, top: 5.0, bottom: 00.0, right: 00.0),
           child: Observer(
             builder: (_) => Text(
-              addData?.user?.roleId.toString() ==
-              AppSettings.businessUserRole
-          ? 'Business Account'
-          : 'Individual Account',
+              addData?.user?.roleId.toString() == AppSettings.businessUserRole
+                  ? 'Business Account'
+                  : 'Individual Account',
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
               textAlign: TextAlign.center,
             ),
@@ -658,14 +661,14 @@ class _FullProfileState extends State<FullProfile> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  child:  Align(
+                  child: Align(
                     alignment: Alignment.center,
                     child: Stack(
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            border:
-                            Border.all(color: AppColors.primaryColor, width: 2),
+                            border: Border.all(
+                                color: AppColors.primaryColor, width: 2),
                             borderRadius: const BorderRadius.all(
                               Radius.circular(100),
                             ),
@@ -673,31 +676,37 @@ class _FullProfileState extends State<FullProfile> {
                           child: ClipOval(
                             child: pickedImage != null
                                 ? Image.file(
-                              pickedImage!,
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            )
+                                    pickedImage!,
+                                    width: DeviceUtils.getScaledWidth(
+                                        context, 0.30),
+                                    height: DeviceUtils.getScaledWidth(
+                                        context, 0.30),
+                                    fit: BoxFit.cover,
+                                  )
                                 : Image.network(
-                              'https://i.pinimg.com/236x/f9/75/81/f9758151b717582c500f0dcc33beca4f.jpg',
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
+                                    _userStore.Profile_data?.user?.profile
+                                            ?.toString() ??
+                                        'https://i.pinimg.com/236x/f9/75/81/f9758151b717582c500f0dcc33beca4f.jpg',
+                                    width: DeviceUtils.getScaledWidth(
+                                        context, 0.30),
+                                    height: DeviceUtils.getScaledWidth(
+                                        context, 0.30),
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         ),
                         Positioned(
                           bottom: -13,
-                          right: -10,
-                         child: IconButton(
-                              onPressed: (){
-                                imagePickerOption();
-                              },
-                              icon:  Icon(
-                                Icons.add_a_photo,
-                                color: AppColors.primaryColor,
-                                size: 30,
-                              ),
+                          right: -5,
+                          child: IconButton(
+                            onPressed: () {
+                              imagePickerOption();
+                            },
+                            icon: Icon(
+                              Icons.add_a_photo,
+                              color: AppColors.primaryColor,
+                              size: 30,
+                            ),
                           ),
                         )
                       ],

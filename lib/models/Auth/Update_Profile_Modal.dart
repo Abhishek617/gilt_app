@@ -1,10 +1,10 @@
 class UpdateProfileRequestModal {
   UpdateProfileRequestModal({
-    required this.files,
     required this.email,
     required this.firstname,
     required this.lastname,
     required this.phone,
+    required this.profile,
     required this.aboutme,
     required this.address,
     required this.city,
@@ -12,24 +12,25 @@ class UpdateProfileRequestModal {
     required this.country,
     required this.zip,
   });
-  late dynamic files;
-  late final String email;
-  late final String firstname;
-  late final String lastname;
-  late final String phone;
-  late final String aboutme;
-  late final String address;
-  late final String city;
-  late final String state;
-  late final String country;
-  late final int zip;
 
-  UpdateProfileRequestModal.fromJson(Map<String, dynamic> json){
-    files = json['files'];
+  late String email;
+  late String firstname;
+  late String lastname;
+  late String phone;
+  late dynamic profile;
+  late String aboutme;
+  late String address;
+  late String city;
+  late String state;
+  late String country;
+  late int zip;
+
+  UpdateProfileRequestModal.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     firstname = json['firstname'];
     lastname = json['lastname'];
     phone = json['phone'];
+    profile = json['profile'];
     aboutme = json['aboutme'];
     address = json['address'];
     city = json['city'];
@@ -40,11 +41,11 @@ class UpdateProfileRequestModal {
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['files'] = files;
     _data['email'] = email;
     _data['firstname'] = firstname;
     _data['lastname'] = lastname;
     _data['phone'] = phone;
+    _data['profile'] = profile;
     _data['aboutme'] = aboutme;
     _data['address'] = address;
     _data['city'] = city;
@@ -55,19 +56,18 @@ class UpdateProfileRequestModal {
   }
 }
 
-
-
 class UpdateProfileResponseModal {
   UpdateProfileResponseModal({
     required this.success,
     required this.user,
     required this.refreshToken,
   });
-  late final bool success;
-  late final User user;
-  late final String refreshToken;
 
-  UpdateProfileResponseModal.fromJson(Map<String, dynamic> json){
+  late bool success;
+  late User user;
+  late String refreshToken;
+
+  UpdateProfileResponseModal.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     user = User.fromJson(json['user']);
     refreshToken = json['refreshToken'];
@@ -84,14 +84,13 @@ class UpdateProfileResponseModal {
 
 class User {
   User({
-    required this.files,
     required this.id,
     required this.firstname,
     required this.lastname,
     required this.email,
     required this.password,
     required this.phone,
-    this.profile,
+    required this.profile,
     required this.aboutme,
     required this.address,
     required this.city,
@@ -99,40 +98,39 @@ class User {
     required this.country,
     required this.zip,
     required this.roleId,
-    this.deletedAt,
+    required this.deletedAt,
     required this.isEmailVerified,
     required this.isPhoneVerified,
     required this.authToken,
   });
-  late dynamic files;
-  late final int id;
-  late final String firstname;
-  late final String lastname;
-  late final String email;
-  late final String password;
-  late final String phone;
-  late final Null profile;
-  late final String aboutme;
-  late final String address;
-  late final String city;
-  late final String state;
-  late final String country;
-  late final int zip;
-  late final int roleId;
-  late final Null deletedAt;
-  late final bool isEmailVerified;
-  late final bool isPhoneVerified;
-  late final String authToken;
 
-  User.fromJson(Map<String, dynamic> json){
-    files = json['files'];
+  late int id;
+  late String firstname;
+  late String lastname;
+  late String email;
+  late String password;
+  late String phone;
+  late dynamic profile;
+  late String aboutme;
+  late String address;
+  late String city;
+  late String state;
+  late String country;
+  late int zip;
+  late int roleId;
+  late String deletedAt;
+  late bool isEmailVerified;
+  late bool isPhoneVerified;
+  late String authToken;
+
+  User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     firstname = json['firstname'];
     lastname = json['lastname'];
     email = json['email'];
     password = json['password'];
     phone = json['phone'];
-    profile = null;
+    profile = json['profile'];
     aboutme = json['aboutme'];
     address = json['address'];
     city = json['city'];
@@ -140,7 +138,7 @@ class User {
     country = json['country'];
     zip = json['zip'];
     roleId = json['role_id'];
-    deletedAt = null;
+    deletedAt = json['deleted_at'];
     isEmailVerified = json['isEmailVerified'];
     isPhoneVerified = json['isPhoneVerified'];
     authToken = json['auth_token'];
@@ -148,7 +146,6 @@ class User {
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['files'] = files;
     _data['id'] = id;
     _data['firstname'] = firstname;
     _data['lastname'] = lastname;
@@ -170,4 +167,3 @@ class User {
     return _data;
   }
 }
-
