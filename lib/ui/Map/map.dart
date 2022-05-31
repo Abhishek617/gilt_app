@@ -81,7 +81,7 @@ class _MapState extends State<SetOnMapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Set On Map"),
+        title: Text("Event Location"),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {

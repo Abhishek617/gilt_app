@@ -147,35 +147,54 @@ class _EventDetailsState extends State<EventDetails> {
                           ),
                         ),
                       ]),
-                      Row(children: [
-                        Icon(Icons.location_on,
-                            size: 40,
-                            color: Theme.of(context).colorScheme.primary),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                contentData?.event?.category ??
-                                    'No Category added',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
+                      GestureDetector(
+                        onTap: (){
+                          if ( contentData?.event?.location
+                              !=
+                              null) {
+                            GlobalMethods.askLocationPermissionsOnly(context,
+                                    () async {
+                                  Map<String, dynamic> result =
+                                  await Navigator.of(context)
+                                      .pushNamed(Routes.map, arguments: {
+                                    'address':  contentData?.event?.location
+                                  }) as Map<String, dynamic>;
+                                });
+                          } else {
+                            GlobalMethods.showErrorMessage(context,
+                                'Please Enter Address', 'Address Required');
+                          }
+                        },
+                        child: Row(children: [
+                          Icon(Icons.location_on,
+                              size: 40,
+                              color: Theme.of(context).colorScheme.primary),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  contentData?.event?.category ??
+                                      'No Category added',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                contentData?.event?.location ??
-                                    'No Address added',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
+                                Text(
+                                  contentData?.event?.location ??
+                                      'No Address added',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ]),
+                        ]),
+                      ),
                       GestureDetector(
                         onTap: () {
                           // Routes.navigateToScreenWithArgs(
