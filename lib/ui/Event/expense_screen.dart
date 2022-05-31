@@ -60,6 +60,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
       addexpensedata = ival;
       addexpensedata = addexpensedata + 1;
       amount.text = addexpensedata.toString();
+      //changeTotalExpanse();
       // _count++;
       // _amount.text = _count.toString();
     });
@@ -71,6 +72,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
       expensedata = currentval;
       expensedata = expensedata + 1;
       expensecontroller.text = expensedata.toString();
+      changeTotalExpanse();
     });
   }
 
@@ -82,6 +84,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
         expensedata = expensedata - 1;
         expensecontroller.text = expensedata.toString();
       }
+      changeTotalExpanse();
     });
   }
 
@@ -105,6 +108,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
         addexpensedata = addexpensedata - 1;
         amount.text = addexpensedata.toString();
       }
+      //changeTotalExpanse();
       // _count--;
       // _amount.text = _count.toString();
     });
@@ -131,17 +135,31 @@ class _Expense_ScreenState extends State<Expense_Screen> {
     _userStore.createEvent(eData, (CreateEventResponseModel val) {
       GlobalMethods.hideLoader();
       if (val.success == true) {
-        GlobalMethods.showSuccessMessage(context, val.message ?? 'Success', 'Create Event');
-        if(val.data != null){
+        GlobalMethods.showSuccessMessage(
+            context, val.message ?? 'Success', 'Create Event');
+        if (val.data != null) {
           Routes.navigateToScreenWithArgs(
               context, Routes.event_details, val.data?.id);
         }
       } else {
-        GlobalMethods.showErrorMessage(context, val.message ?? 'Failed', 'Create Event');
+        GlobalMethods.showErrorMessage(
+            context, val.message ?? 'Failed', 'Create Event');
       }
     }, (error) {
       GlobalMethods.hideLoader();
       print(error.data.toString());
+    });
+  }
+
+  changeTotalExpanse() {
+    var totalExp = 0;
+    myControllers.forEach((cntrl) {
+      totalExp = totalExp + int.parse(cntrl.value.text);
+    });
+    setState(() {
+      print('totalExp : ');
+      print(totalExp.toString());
+      _amount.text = totalExp.toString();
     });
   }
 
@@ -194,7 +212,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                       alignment: Alignment.topCenter,
                       height: DeviceUtils.getScaledHeight(context, 0.030),
                       width: DeviceUtils.getScaledWidth(context, 0.17),
-                      child: TextField(
+                      child: TextFormField(
                         style: TextStyle(fontSize: 11),
                         controller: myControllers[index],
                         keyboardType: TextInputType.number,
@@ -208,6 +226,9 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                           border: OutlineInputBorder(),
                           hintText: '',
                         ),
+                        onChanged: (value) {
+                          changeTotalExpanse();
+                        },
                       ),
                     ),
                     Padding(
@@ -289,7 +310,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                       height: DeviceUtils.getScaledHeight(context, 0.07),
                       width: DeviceUtils.getScaledWidth(context, 0.35),
                       child: Center(
-                        child: TextField(
+                        child: TextFormField(
                           controller: _amount,
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
@@ -301,7 +322,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.all(5),
                             border: OutlineInputBorder(),
-                            hintText: '\$ 5000',
+                            hintText: '500',
                           ),
                         ),
                       ),
@@ -362,23 +383,34 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                           buttonText: 'Confirm',
                           buttonColor: AppColors.primaryColor,
                           onPressed: () {
-                            if(_expensedescription.value.text.trim() !=  '') {
-                              final expenseData = CreateEventRequestModal(
-                                name: args!.name,
-                                category: args!.category,
-                                location: args!.location,
-                                startDate: args!.startDate,
-                                description: args!.description,
-                                expenseDescription:
-                                _expensedescription.value.text,
-                                totalExpense: _amount.value.text,
-                                attendees: args.attendees,
-                                lat: '',
-                                endDate: args!.endDate,
-                                long: '',
-                                files: args!.files,
-                              );
-                              createEvent(expenseData);
+                            if (_amount.value.text.trim() != '0' &&
+                                _amount.value.text.trim() != '') {
+                              if (_expensedescription.value.text.trim() != '') {
+                                final expenseData = CreateEventRequestModal(
+                                  name: args!.name,
+                                  category: args!.category,
+                                  location: args!.location,
+                                  startDate: args!.startDate,
+                                  description: args!.description,
+                                  expenseDescription:
+                                      _expensedescription.value.text,
+                                  totalExpense: _amount.value.text,
+                                  attendees: args.attendees,
+                                  lat: args.lat,
+                                  endDate: args!.endDate,
+                                  long: args.long,
+                                  files: args!.files,
+                                );
+                                createEvent(expenseData);
+                              } else {
+                                GlobalMethods.showErrorMessage(
+                                    context,
+                                    'Please add expense description',
+                                    'Description required');
+                              }
+                            } else {
+                              GlobalMethods.showErrorMessage(context,
+                                  'Please add expense', 'Expense required');
                             }
                           })
                       : disableButton(),
@@ -452,7 +484,8 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                               onPressed: () {
                                 for (int i = 0; i < myControllers.length; i++) {
                                   args.attendees.forEach((element) {
-                                    element.expanse =  double.parse(myControllers[i].text);
+                                    element.expanse =
+                                        double.parse(myControllers[i].text);
                                   });
                                 }
                                 final expenseData = CreateEventRequestModal(
