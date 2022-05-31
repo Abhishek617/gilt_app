@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/constants/dimens.dart';
+import 'package:guilt_app/models/Auth/OrganizerProfileResponseModel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 
 class OrganizerProfile extends StatefulWidget {
@@ -18,11 +20,11 @@ class OrganizerProfile extends StatefulWidget {
 
 class _OrganizerProfileState extends State<OrganizerProfile> {
   int segmentedControlValue = 0;
-  final int uID;
+  late int uID;
 
   _OrganizerProfileState(this.uID);
 
-  User? user;
+  OrganizerUser? user;
 
   @override
   initState() {
@@ -34,10 +36,22 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
     if (uID != null) {
       GlobalStoreHandler.userStore.getUserProfile(uID).then((value) {
         setState(() {
+          value = OrganizerProfileResponseModel.fromJson(value);
           user = value.user;
         });
       });
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    var args = ModalRoute.of(context)!.settings.arguments as int;
+    setState(() {
+      uID = args;
+      getUserDetails();
+    });
+
+    super.didChangeDependencies();
   }
 
   Widget segmentedControl() {
@@ -112,12 +126,12 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('13 JAN 2022, 2:00PM - Upcoming',
+                          Text('31 May 2022, 2:00PM - Upcoming',
                               style: TextStyle(
                                   color: AppColors.primaryColor,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400)),
-                          Text('A Virtual Evening of \nSmooth Jazz ',
+                          Text('Birthday Celebration',
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.w700)),
                           Row(
@@ -128,7 +142,7 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
                                 color: AppColors.grayTextColor,
                               ),
                               Text(
-                                '36, guild street, london, uk',
+                                'Sunrise Cafe, NY',
                                 style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
@@ -150,15 +164,14 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
   }
 
   Widget about() => Column(
-        children: [Text('No Description Available')],
+        children: [Text(user?.aboutme ?? 'No Description Available')],
       );
 
   List<String> item = [' b', 'c ', ' d', 'd'];
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldWrapper(
-      isMenu: false,
+    return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
@@ -173,98 +186,108 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
         title: Text('Organizer Profile'),
         centerTitle: true,
       ),
-      child: Column(children: [
-        Column(
-          children: [
-            SizedBox(
-              height: 30,
-              width: 10,
+      body: CustomBodyWrapper(
+        child: SingleChildScrollView(
+          child: Column(children: [
+            Column(
+              children: [
+                SizedBox(
+                  height: 30,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Stack(
+                    children: [
+                      Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: AppColors.primaryColor, width: 2),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(100),
+                            ),
+                          ),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100.0),
+                              child: Image.network(
+                                user?.profile ??
+                                    'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                                width: DeviceUtils.getScaledWidth(context, 0.30),
+                                height: DeviceUtils.getScaledWidth(context, 0.30),
+                                fit: BoxFit.contain,
+                              )))
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  ((user?.firstname ?? 'No') + ' ' + (user?.lastname ?? 'Name')),
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  (user?.email ?? 'No Email'),
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Divider(
+                  color: Colors.black12,
+                  //color of divider
+                  height: 20,
+                  //height spacing of divider
+                  thickness: 1,
+                  //thickness of divier line
+                  indent: 20,
+                  //spacing at the start of divider
+                  endIndent: 20, //spacing at the end of divider
+                ),
+              ],
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Stack(
+            Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: Dimens.horizontal_padding,
+                  vertical: Dimens.vertical_padding),
+              child: Column(
                 children: [
+                  Center(
+                    child: segmentedControl(),
+                  ),
                   Container(
-                    child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    ),
+
+                    child: segmentedControlValue == 0
+                        ? about()
+                        : Container(
+                      height: DeviceUtils.getScaledHeight(context, 0.35),
+                          child: ListView(
+                              scrollDirection: Axis.vertical,
+                              children: item.map((item1) {
+                                return box(
+                                  item1,
+                                  Colors.white,
+                                  Image.network(
+                                      'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0'),
+                                );
+                              }).toList(),
+                            ),
+                        ),
                   ),
                 ],
               ),
             ),
-            SizedBox(
-              height: 10,
-              width: 10,
-            ),
-            Text(
-              'David Silbia',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            SizedBox(
-              height: 5,
-              width: 10,
-            ),
-            Text(
-              'david.silbia@gmail.com',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            SizedBox(
-              height: 5,
-              width: 10,
-            ),
-            Divider(
-              color: Colors.black12,
-              //color of divider
-              height: 20,
-              //height spacing of divider
-              thickness: 1,
-              //thickness of divier line
-              indent: 20,
-              //spacing at the start of divider
-              endIndent: 20, //spacing at the end of divider
-            ),
-          ],
+          ]),
         ),
-        Column(children: [
-          Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: Dimens.horizontal_padding,
-                vertical: Dimens.vertical_padding + 5),
-            child: Column(
-              children: [
-                Center(
-                  child: segmentedControl(),
-                ),
-                Container(
-                  height: DeviceUtils.getScaledHeight(context, 0.45),
-                  child: segmentedControlValue == 0
-                      ? about()
-                      : ListView(
-                          scrollDirection: Axis.vertical,
-                          children: item.map((item1) {
-                            return box(
-                              item1,
-                              Colors.white,
-                              Image.network(
-                                  'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0'),
-                            );
-                          }).toList(),
-                        ),
-                ),
-              ],
-            ),
-          ),
-        ]),
-      ]),
+      ),
     );
   }
 }
