@@ -148,18 +148,16 @@ class _EventDetailsState extends State<EventDetails> {
                         ),
                       ]),
                       GestureDetector(
-                        onTap: (){
-                          if ( contentData?.event?.location
-                              !=
-                              null) {
+                        onTap: () {
+                          if (contentData?.event?.location != null) {
                             GlobalMethods.askLocationPermissionsOnly(context,
-                                    () async {
-                                  Map<String, dynamic> result =
+                                () async {
+                              Map<String, dynamic> result =
                                   await Navigator.of(context)
                                       .pushNamed(Routes.map, arguments: {
-                                    'address':  contentData?.event?.location
-                                  }) as Map<String, dynamic>;
-                                });
+                                'address': contentData?.event?.location
+                              }) as Map<String, dynamic>;
+                            });
                           } else {
                             GlobalMethods.showErrorMessage(context,
                                 'Please Enter Address', 'Address Required');
@@ -356,7 +354,7 @@ class _EventDetailsState extends State<EventDetails> {
         : Center(child: Text('No Details found.'));
   }
 
-  Widget setupAlertDialoadContainer() {
+  Widget setupAlertDialogContainer() {
     print(contentData);
     return Container(
       height: 300.0, // Change as per your requirement
@@ -394,6 +392,9 @@ class _EventDetailsState extends State<EventDetails> {
             user?.admin?.firstname! +
                 ' ' +
                 user?.admin?.lastname! +
+                (contentData?.event?.organizer?.id == user?.userId
+                    ? ' (Host)'
+                    : '') +
                 '\n' +
                 user?.admin?.phone!,
             style: TextStyle(
@@ -416,7 +417,7 @@ class _EventDetailsState extends State<EventDetails> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: Text('Attendees'),
-                  content: setupAlertDialoadContainer(),
+                  content: setupAlertDialogContainer(),
                 );
               });
 

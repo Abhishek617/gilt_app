@@ -1,4 +1,4 @@
-import 'EventDetailResponseModel.dart';
+import 'package:guilt_app/models/Event/SearchEventResponseModel.dart';
 
 class MyBookedEventModel {
   bool? success;
@@ -27,7 +27,7 @@ class MyBookedEventModel {
 
 class Events {
   int? totalItems;
-  List<Event>? listData;
+  List<EventItem>? listData;
   int? totalPages;
   int? currentPage;
 
@@ -36,9 +36,9 @@ class Events {
   Events.fromJson(Map<String, dynamic> json) {
     totalItems = json['totalItems'];
     if (json['listData'] != null) {
-      listData = <Event>[];
+      listData = <EventItem>[];
       json['listData'].forEach((v) {
-        listData!.add(new Event.fromJson(v));
+        listData!.add(new EventItem.fromJson(v));
       });
     }
     totalPages = json['totalPages'];

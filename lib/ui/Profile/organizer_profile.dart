@@ -4,8 +4,12 @@ import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/constants/dimens.dart';
 import 'package:guilt_app/models/Auth/OrganizerProfileResponseModel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
+import 'package:guilt_app/models/Event/MyBookedEventModel.dart';
+import 'package:guilt_app/models/Event/SearchEventResponseModel.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 
@@ -21,6 +25,7 @@ class OrganizerProfile extends StatefulWidget {
 class _OrganizerProfileState extends State<OrganizerProfile> {
   int segmentedControlValue = 0;
   late int uID;
+  List<EventItem> eventList = [];
 
   _OrganizerProfileState(this.uID);
 
@@ -38,9 +43,24 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
         setState(() {
           value = OrganizerProfileResponseModel.fromJson(value);
           user = value.user;
+          getUserEventList();
         });
       });
     }
+  }
+
+  getUserEventList() {
+    GlobalStoreHandler.postStore.getUserEvent(user?.id).then((value) {
+      if (value['success'] == true) {
+        setState(() {
+          MyBookedEventModel res =
+             MyBookedEventModel.fromJson(value);
+          eventList = (res.events!.listData!.length! > 0
+              ? res.events!.listData!
+              : []);
+        });
+      }
+    }).catchError((err) {});
   }
 
   @override
@@ -95,79 +115,78 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
     );
   }
 
-  Widget box(String title, Color backgroundcolor, Image demo) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.all(5),
-          child: Card(
-            shadowColor: AppColors.grayTextColor,
-            elevation: 2.5,
-            child: Container(
-              margin: EdgeInsets.all(5),
-              width: DeviceUtils.getScaledWidth(context, 0.90),
-              color: backgroundcolor,
-              alignment: Alignment.center,
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network(
-                      'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
-                      width: DeviceUtils.getScaledWidth(context, 0.20),
-                      height: DeviceUtils.getScaledWidth(context, 0.20),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: Dimens.horizontal_padding),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget eventContainer(EventItem event) {
+    return GestureDetector(
+      onTap: (){
+        if (event.id != null)
+          Routes.navigateToScreenWithArgs(
+              context, Routes.event_details, event.id);
+      },
+      child: Card(
+        shadowColor: AppColors.grayTextColor,
+        elevation: 2.5,
+        child: Container(
+          margin: EdgeInsets.all(5),
+          width: DeviceUtils.getScaledWidth(context, 0.90),
+          color: Colors.white,
+          alignment: Alignment.center,
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.network(
+                  event!.eventImages!.length! > 0 ? event!.eventImages![0].file ?? '' :
+                  'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                  width: DeviceUtils.getScaledWidth(context, 0.20),
+                  height: DeviceUtils.getScaledWidth(context, 0.20),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: Dimens.horizontal_padding),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(event?.startDate ?? 'Upcoming Event',
+                          style: TextStyle(
+                              color: AppColors.primaryColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400)),
+                      Text(event?.name ?? 'No name',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w700)),
+                      Row(
                         children: [
-                          Text('31 May 2022, 2:00PM - Upcoming',
-                              style: TextStyle(
-                                  color: AppColors.primaryColor,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400)),
-                          Text('Birthday Celebration',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w700)),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.location_on,
-                                size: 12,
-                                color: AppColors.grayTextColor,
-                              ),
-                              Text(
-                                'Sunrise Cafe, NY',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColors.grayTextColor),
-                              ),
-                            ],
+                          Icon(
+                            Icons.location_on,
+                            size: 12,
+                            color: AppColors.grayTextColor,
+                          ),
+                          Text(
+                            event?.location ?? 'No Address',
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.grayTextColor),
                           ),
                         ],
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
   Widget about() => Column(
         children: [Text(user?.aboutme ?? 'No Description Available')],
       );
-
-  List<String> item = [' b', 'c ', ' d', 'd'];
 
   @override
   Widget build(BuildContext context) {
@@ -211,8 +230,10 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
                               child: Image.network(
                                 user?.profile ??
                                     'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
-                                width: DeviceUtils.getScaledWidth(context, 0.30),
-                                height: DeviceUtils.getScaledWidth(context, 0.30),
+                                width:
+                                    DeviceUtils.getScaledWidth(context, 0.30),
+                                height:
+                                    DeviceUtils.getScaledWidth(context, 0.30),
                                 fit: BoxFit.contain,
                               )))
                     ],
@@ -222,7 +243,9 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
                   height: 10,
                 ),
                 Text(
-                  ((user?.firstname ?? 'No') + ' ' + (user?.lastname ?? 'Name')),
+                  ((user?.firstname ?? 'No') +
+                      ' ' +
+                      (user?.lastname ?? 'Name')),
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -264,23 +287,17 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
                     child: segmentedControl(),
                   ),
                   Container(
-
                     child: segmentedControlValue == 0
                         ? about()
                         : Container(
-                      height: DeviceUtils.getScaledHeight(context, 0.35),
-                          child: ListView(
+                            height: DeviceUtils.getScaledHeight(context, 0.35),
+                            child: eventList.length > 0 ? ListView(
                               scrollDirection: Axis.vertical,
-                              children: item.map((item1) {
-                                return box(
-                                  item1,
-                                  Colors.white,
-                                  Image.network(
-                                      'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0'),
-                                );
-                              }).toList(),
-                            ),
-                        ),
+                              children: eventList
+                                  .map((item) => eventContainer(item))
+                                  .toList(),
+                            ) : Center(child: Text('No Events Added'),),
+                          ),
                   ),
                 ],
               ),

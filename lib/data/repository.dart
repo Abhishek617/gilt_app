@@ -82,7 +82,7 @@ class Repository {
     // else make a network call to get all posts, store them into database for
     // later use
     var token = await authToken;
-    return await _postApi.getProfile(userId,token).then((profileData) {
+    return await _postApi.getProfile(userId, token).then((profileData) {
       return profileData;
     }).catchError((error) => throw error);
   }
@@ -124,15 +124,15 @@ class Repository {
   Future<void> saveProfileData(GetProfileResponseModal value) =>
       _sharedPrefsHelper.saveProfileData(value);
 
-  Future<GetProfileResponseModal> profileData(){
-   return _sharedPrefsHelper.profileData.then((value) => jsonDecode(value));
+  Future<GetProfileResponseModal> profileData() {
+    return _sharedPrefsHelper.profileData.then((value) => jsonDecode(value));
   }
 
   // Login:---------------------------------------------------------------------
   Future<LoginModal> login(String email, String password) async {
     var fToken = await fcmToken;
     return await _postApi
-        .login(email, password,fToken)
+        .login(email, password, fToken)
         .then((loginData) => loginData)
         .catchError((error) => throw error);
   }
@@ -141,7 +141,7 @@ class Repository {
       String email, String firstname, String lastname) async {
     var fToken = await fcmToken;
     return await _postApi
-        .oauth(email, firstname, lastname,fcmToken)
+        .oauth(email, firstname, lastname, fcmToken)
         .then((oauthData) => oauthData)
         .catchError((error) => throw error);
   }
@@ -153,8 +153,10 @@ class Repository {
       return settingData;
     }).catchError((error) => throw error);
   }
+
 //update setting
-  Future<SettingGetModal> settingpost(SettingPostModal UpdateSettingData) async {
+  Future<SettingGetModal> settingpost(
+      SettingPostModal UpdateSettingData) async {
     return await _postApi
         .settingpost(UpdateSettingData)
         .then((settingData) => settingData)
@@ -229,7 +231,6 @@ class Repository {
         .catchError((error) => throw error);
   }
 
-
   //notification list
   Future<NotificationListModal> Notification_list() async {
     var token = await authToken;
@@ -237,7 +238,6 @@ class Repository {
         .then((NotificationData) => NotificationData)
         .catchError((error) => throw error);
   }
-
 
   //feedback add
 
@@ -248,24 +248,38 @@ class Repository {
         .then((feedbackAdd) => feedbackAdd)
         .catchError((error) => throw error);
   }
+
 //eventview
   Future Event_Detail(int eventId) async {
     var token = await authToken;
-    return await _postApi.getEventDetail(eventId, token)
+    return await _postApi
+        .getEventDetail(eventId, token)
         .then((EventData) => EventData)
         .catchError((error) => throw error);
   }
+
   //search event
   Future getSearchEvent(String searchQuery) async {
     var token = await authToken;
-    return await _postApi.getSearchEvent(searchQuery, token)
+    return await _postApi
+        .getSearchEvent(searchQuery, token)
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
+
+  Future getUserEvent(userID) async {
+    var token = await authToken;
+    return await _postApi
+        .getUserEvent(userID, token)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+
   //my booked event
   Future getMyBookedEvents() async {
     var token = await authToken;
-    return await _postApi.getMyBookedEvents(token)
+    return await _postApi
+        .getMyBookedEvents(token)
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
@@ -312,8 +326,11 @@ class Repository {
         .then((profileData) => profileData)
         .catchError((error) => throw error);
   }
+
 //addevent
-  Future createEvent(CreateEventRequestModal eventData,) async {
+  Future createEvent(
+    CreateEventRequestModal eventData,
+  ) async {
     var token = await authToken;
     return await _postApi
         .createEvent(eventData, token)

@@ -217,6 +217,20 @@ class PostApi {
     }
   }
 
+  // Get User Event
+  Future getUserEvent(userID, token, {page = 0, pageSize = 20}) async {
+    try {
+      return await _dioClient.get(
+        Endpoints.userEvents,
+        queryParameters: {"id": userID, "page": page, "size": pageSize},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
   // Get Search Event
   Future getMyBookedEvents(token, {page = 0, pageSize = 20}) async {
     try {

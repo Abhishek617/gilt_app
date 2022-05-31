@@ -90,7 +90,7 @@ class Endpoints {
 
 //--------Events------------>
 //EventView
-  static const String eventview = baseUrl + 'api/event';
+  static const String userEvents = baseUrl + 'api/event';
 
   //Search Event List
   static const String searchEvent = baseUrl + 'api/event/search';
