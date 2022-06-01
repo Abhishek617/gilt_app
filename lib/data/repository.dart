@@ -12,6 +12,7 @@ import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
+import 'package:guilt_app/models/Business/AddBusinessRequestModel.dart';
 import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
@@ -329,12 +330,22 @@ class Repository {
 
 //addevent
   Future createEvent(
-    CreateEventRequestModal eventData,
+    CreateEventRequestModal eventData, successCB, errorCB
   ) async {
     var token = await authToken;
     return await _postApi
-        .createEvent(eventData, token)
+        .createEvent(eventData, token, successCB, errorCB)
         .then((addeventData) => addeventData)
+        .catchError((error) => throw error);
+  }
+
+  //add business
+  Future addBusiness(
+      AddBusinessRequestModel businessData, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .addBusiness(businessData, token, successCB, errorCB)
+        .then((addedBusinessData) => addedBusinessData)
         .catchError((error) => throw error);
   }
 

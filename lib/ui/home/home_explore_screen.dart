@@ -110,6 +110,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
       child: Card(
         margin: EdgeInsets.only(right: 12, bottom: 5),
         child: Container(
+          width: DeviceUtils.getScaledWidth(context, 0.40),
           padding: EdgeInsets.only(left: 1),
           color: Colors.white,
           alignment: Alignment.center,
@@ -123,6 +124,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                     :  eventItem!.eventImages!.length > 0 ? eventItem!.eventImages![0]?.file ?? 'https://sathyaeducare.com/assets/img/recent.jpg':'https://vanguardian.org/wp-content/uploads/2021/02/UpcomingEvents.jpg',
                 width: DeviceUtils.getScaledWidth(context, 0.40),
                 height: DeviceUtils.getScaledHeight(context, 0.10),
+                fit: BoxFit.cover,
               ),
               getFixSizedBox(size: 5),
               Container(
@@ -160,11 +162,14 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                         Icon(Icons.location_on,
                             size: 20,
                             color: Theme.of(context).colorScheme.primary),
-                        Text(
-                          eventItem.location ?? 'No Location',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
+                        Flexible(
+                          child: Text(
+                            eventItem.location ?? 'No Location',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ],

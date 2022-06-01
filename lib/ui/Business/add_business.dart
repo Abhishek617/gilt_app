@@ -14,6 +14,7 @@ import 'package:guilt_app/models/Business/AddBusinessResponseModel.dart';
 import 'package:guilt_app/models/Business/BusinessPlaceLostModal.dart';
 import 'package:guilt_app/models/Business/BusinessSpaceListModal.dart';
 import 'package:guilt_app/stores/post/post_store.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
@@ -47,12 +48,9 @@ class _Add_businessState extends State<Add_business> {
   List<File> pickedImageList = [];
   late LatLng addressLatLng;
 
-
   @override
   void initState() {
     super.initState();
-    _businessPriceController.text = '0';
-    //getPlacesAndSpaces();
   }
 
   void imagePickerOption() {
@@ -123,38 +121,6 @@ class _Add_businessState extends State<Add_business> {
     }
   }
 
-  getPlacesAndSpaces() {
-    // Get Places
-    _postStore.getBusinessPlaces().then((placeData) {
-      if (BusinessPlaceListModal.fromJson(placeData).businessPlaces != null) {
-        setState(() {
-          placeList =
-              BusinessPlaceListModal.fromJson(placeData).businessPlaces!;
-          selectedPlace = placeList[0];
-        });
-      }
-    }).onError((error, stackTrace) {
-      setState(() {
-        placeList = [];
-      });
-    });
-
-    //Get Spaces
-    _postStore.getBusinessSpaces().then((placeData) {
-      if (BusinessSpaceListModal.fromJson(placeData).businessSpaces != null) {
-        setState(() {
-          spaceList =
-              BusinessSpaceListModal.fromJson(placeData).businessSpaces!;
-          selectedSpace = spaceList[0];
-        });
-      }
-    }).onError((error, stackTrace) {
-      setState(() {
-        spaceList = [];
-      });
-    });
-  }
-
   addNewBusiness() {
     if (_businessNameController.value.text.trim() != '') {
       if (_businessLocationController.value.text.trim() != '') {
@@ -163,15 +129,30 @@ class _Add_businessState extends State<Add_business> {
             if (_businessDescriptionController.value.text.trim() != '') {
               if (pickedImageList.length > 0) {
                 AddBusinessRequestModel reqData = AddBusinessRequestModel(
-                  name: _businessNameController.value.text,
-                  description: _businessDescriptionController.value.text,
-                  location: _businessLocationController.value.text,
-                  lat: addressLatLng.latitude.toString(),
-                  long: addressLatLng.longitude.toString(),
-                  files: pickedImageList,
-                  email: _businessEmailController.value.text,
-                  contact: _businessContactController.value.text
-                );
+                    name: _businessNameController.value.text,
+                    description: _businessDescriptionController.value.text,
+                    location: _businessLocationController.value.text,
+                    lat: addressLatLng.latitude.toString(),
+                    long: addressLatLng.longitude.toString(),
+                    files: pickedImageList,
+                    email: _businessEmailController.value.text,
+                    contact: _businessContactController.value.text);
+
+                GlobalStoreHandler.userStore.addBusiness(reqData, (AddBusinessResponseModel response) {
+                //  var response = AddBusinessResponseModel.fromJson(value);
+                  if (response.success == true) {
+                    GlobalMethods.showSuccessMessage(
+                        context, response.message ?? 'Success', 'Add Business');
+                    // Routes.navigateToScreenWithArgs(context, Routes.book_event_details, response.business?.id);
+                  } else {
+                    GlobalMethods.showErrorMessage(
+                        context,
+                        response.message ?? 'Something went wrong',
+                        'Add Business');
+                  }
+                }, (error, stackTrace) {
+                  print(error.toString());
+                });
                 // TODO : Call Add New Business
               } else {
                 GlobalMethods.showErrorMessage(context,
@@ -276,6 +257,7 @@ class _Add_businessState extends State<Add_business> {
                       Container(
                           width: DeviceUtils.getScaledWidth(context, 0.60),
                           child: TextFormField(
+                            controller: _businessLocationController,
                             cursorColor: Colors.black,
                             decoration: new InputDecoration(
                                 border: InputBorder.none,
@@ -303,19 +285,21 @@ class _Add_businessState extends State<Add_business> {
                           if (_businessLocationController.value.text.trim() !=
                               '') {
                             GlobalMethods.askLocationPermissionsOnly(context,
-                                    () async {
-                                  Map<String, dynamic> result =
+                                () async {
+                              Map<String, dynamic> result =
                                   await Navigator.of(context)
                                       .pushNamed(Routes.map, arguments: {
-                                    'address': _businessLocationController.value.text
-                                  }) as Map<String, dynamic>;
-                                  setState(() {
-                                    if (result != null) {
-                                      addressLatLng = result['position'] as LatLng;
-                                      _businessLocationController.text = result['address'];
-                                    }
-                                  });
-                                });
+                                'address':
+                                    _businessLocationController.value.text
+                              }) as Map<String, dynamic>;
+                              setState(() {
+                                if (result != null) {
+                                  addressLatLng = result['position'] as LatLng;
+                                  _businessLocationController.text =
+                                      result['address'];
+                                }
+                              });
+                            });
                           } else {
                             GlobalMethods.showErrorMessage(context,
                                 'Please Enter Address', 'Address Required');

@@ -1,6 +1,7 @@
 import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
+import 'package:guilt_app/models/Business/AddBusinessRequestModel.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
 import 'package:guilt_app/ui/notification/notification.dart';
@@ -10,7 +11,9 @@ import '../../data/repository.dart';
 import '../../models/Auth/profile_modal.dart';
 import '../../models/PageModals/setting_model.dart';
 import '../form/form_store.dart';
+
 part 'user_store.g.dart';
+
 class UserStore = _UserStore with _$UserStore;
 
 abstract class _UserStore with Store {
@@ -39,7 +42,6 @@ abstract class _UserStore with Store {
   @observable
   GetProfileResponseModal? Profile_data;
 
-
   // constructor:---------------------------------------------------------------
   _UserStore(Repository repository) : this._repository = repository {
     // setting up disposers
@@ -61,7 +63,6 @@ abstract class _UserStore with Store {
     repository.refreshToken.then((value) {
       this.refreshToken = value;
     });
-
   }
 
   // disposers:-----------------------------------------------------------------
@@ -72,35 +73,37 @@ abstract class _UserStore with Store {
       reaction((_) => success, (_) => success = false, delay: 200),
     ];
   }
+
   // store variables:-----------------------------------------------------------
-
-
 
   // store variables:-----------------------------------------------------------
   @observable
   bool success = false;
 
   handleError(error) async {
-    if(error.response.statusCode == 401){
+    if (error.response.statusCode == 401) {
       _repository.saveIsLoggedIn(false);
       this.isLoggedIn = false;
       return error;
-    }else{
+    } else {
       return error;
     }
   }
 
-  getUserRole() async{
+  getUserRole() async {
     print(await _repository.userRole);
     return await _repository.userRole;
   }
-  getProfileDetails(){
+
+  getProfileDetails() {
     print(Profile_data);
     return Profile_data;
   }
-saveFcmToken(fcmToken){
+
+  saveFcmToken(fcmToken) {
     _repository.saveFcmToken(fcmToken);
-}
+  }
+
   @action
   Future getAppContent(type) async {
     GlobalMethods.showLoader();
@@ -117,8 +120,9 @@ saveFcmToken(fcmToken){
         .then((settingData) => settingData)
         .catchError((error) => throw error);
   }
+
   @action
-  Future changePassword(oldPassword,newPassword) async {
+  Future changePassword(oldPassword, newPassword) async {
     return await _repository
         .changePassword(oldPassword, newPassword)
         .then((contentData) => contentData)
@@ -150,7 +154,7 @@ saveFcmToken(fcmToken){
         }
         if (value.user?.roleId != null) {
           var role = value.user?.roleId.toString() ?? '1';
-          print('roleID : '+ role);
+          print('roleID : ' + role);
           _repository.saveUserRole(role);
         }
         this.isFirst = false;
@@ -173,79 +177,74 @@ saveFcmToken(fcmToken){
 
   //SETTING
 
-  Future Feedback_add(
-      String description, int eventId, String rate, successCallback, errorCallback) async{
-    _repository.Feedback_add(description, eventId, rate).then((value)async{
-      if(value != null){
+  Future Feedback_add(String description, int eventId, String rate,
+      successCallback, errorCallback) async {
+    _repository.Feedback_add(description, eventId, rate).then((value) async {
+      if (value != null) {
         successCallback(value);
-      }else{
+      } else {
         print('failed to Feedback Add');
       }
-    }, onError: (error){
+    }, onError: (error) {
       print(error.toString());
       errorCallback(error.response);
     }).catchError((e) {
       print(e);
       throw e;
     });
-
   }
 
-  Future Notification_list(successCallback, errorCallback)
-  async{
-    _repository.Notification_list().then((value)async{
-      if(value != null){
+  Future Notification_list(successCallback, errorCallback) async {
+    _repository.Notification_list().then((value) async {
+      if (value != null) {
         successCallback(value);
-      }else{
+      } else {
         print("Faild to Feedback List");
       }
-    }, onError: (error){
+    }, onError: (error) {
       print(error.toString());
       errorCallback(error.respone);
-    }).catchError((e){
+    }).catchError((e) {
       print(e);
       throw e;
     });
   }
+
 //EventView
-  Future Event_Detail( int eventId, successCallback, errorCallback) async{
-    _repository.Event_Detail(eventId).then((value)async{
-      if(value != null){
+  Future Event_Detail(int eventId, successCallback, errorCallback) async {
+    _repository.Event_Detail(eventId).then((value) async {
+      if (value != null) {
         successCallback(value);
-      }else{
+      } else {
         print("Faild to Feedback List");
       }
-    }, onError: (error){
+    }, onError: (error) {
       print(error.toString());
       errorCallback(error.respone);
-    }).catchError((e){
+    }).catchError((e) {
       print(e);
       throw e;
     });
   }
 
-  Future Feedback_list( String description, int eventId, String rate, successCallback, errorCallback) async{
-    _repository.Feedback_list(eventId).then((value)async{
-      if(value != null){
+  Future Feedback_list(String description, int eventId, String rate,
+      successCallback, errorCallback) async {
+    _repository.Feedback_list(eventId).then((value) async {
+      if (value != null) {
         successCallback(value);
-      }else{
+      } else {
         print("Faild to Feedback List");
       }
-    }, onError: (error){
+    }, onError: (error) {
       print(error.toString());
       errorCallback(error.respone);
-    }).catchError((e){
+    }).catchError((e) {
       print(e);
       throw e;
     });
   }
 
-
-
-
-
-  Future Send_Otp(
-      String email, successCallback, errorCallback) async {
+  Future Send_Otp(String email, successCallback, errorCallback) async {
     // final future = _repository.login(email, password);
 
     // loginFuture = ObservableFuture(future);
@@ -263,12 +262,13 @@ saveFcmToken(fcmToken){
       throw e;
     });
   }
-  Future oauth(
-      String email, String firstname, String lastname,successCallback, errorCallback) async {
+
+  Future oauth(String email, String firstname, String lastname, successCallback,
+      errorCallback) async {
     // final future = _repository.login(email, password);
 
     // loginFuture = ObservableFuture(future);
-    _repository.oauth(email, lastname, firstname ).then((value) async {
+    _repository.oauth(email, lastname, firstname).then((value) async {
       if (value != null) {
         print('isFirst : false');
         _repository.saveIsLoggedIn(true);
@@ -303,11 +303,11 @@ saveFcmToken(fcmToken){
   }
 
   Future Valid_Otp(
-      String email, String otp,successCallback, errorCallback) async {
+      String email, String otp, successCallback, errorCallback) async {
     // final future = _repository.login(email, password);
 
     // loginFuture = ObservableFuture(future);
-    _repository.Valid_Otp(email,otp).then((value) async {
+    _repository.Valid_Otp(email, otp).then((value) async {
       if (value != null) {
         successCallback(value);
       } else {
@@ -324,11 +324,11 @@ saveFcmToken(fcmToken){
 
   //after signup login
   Future OtpValidate(
-      String email, String otp,successCallback, errorCallback) async {
+      String email, String otp, successCallback, errorCallback) async {
     // final future = _repository.login(email, password);
 
     // loginFuture = ObservableFuture(future);
-    _repository.OtpValidate(email,otp).then((value) async {
+    _repository.OtpValidate(email, otp).then((value) async {
       if (value.success == true && value.data.user != null) {
         _repository.saveIsLoggedIn(true);
         this.isLoggedIn = true;
@@ -358,6 +358,7 @@ saveFcmToken(fcmToken){
       throw e;
     });
   }
+
   @action
   Future getProfile({userId = 0}) {
     GlobalMethods.showLoader();
@@ -374,20 +375,23 @@ saveFcmToken(fcmToken){
 
   @action
   Future getUserProfile(userId) {
-    return _repository.getProfile(userId).then((profileData) => profileData
-    ).catchError((error) {
+    return _repository
+        .getProfile(userId)
+        .then((profileData) => profileData)
+        .catchError((error) {
       print(error.toString());
       GlobalMethods.hideLoader();
       // errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }
 
-  Future getUpcomingPastEventList(
-      String filterby,int page, int size, successCallback, errorCallback) async {
+  Future getUpcomingPastEventList(String filterby, int page, int size,
+      successCallback, errorCallback) async {
     // final future = _repository.login(email, password);
 
     // loginFuture = ObservableFuture(future);
-    _repository.getUpcomingPastEventList(filterby, page, size).then((value) async {
+    _repository.getUpcomingPastEventList(filterby, page, size).then(
+        (value) async {
       if (value != null) {
         successCallback(value);
       } else {
@@ -401,8 +405,6 @@ saveFcmToken(fcmToken){
       throw e;
     });
   }
-
-
 
   @action
   Future logout(successCallback, errorCallback) async {
@@ -438,62 +440,65 @@ saveFcmToken(fcmToken){
       throw e;
     });
   }
+
   //update setting
   @action
-  Future settingpost(
-      SettingPostModal UpdateSettingData, successCallback, errorCallback) async {
+  Future settingpost(SettingPostModal UpdateSettingData, successCallback,
+      errorCallback) async {
     _repository.settingpost(UpdateSettingData).then(
-          (value) async {
+      (value) async {
         successCallback(value);
-      }
-      ,onError: (exception) {
-      print('onError : exception');
-      errorCallback(exception.response);
-      //Handle exception message
-      if (exception.message != null) {
-        print(exception
-            .message); // Here you get : "Connection  Timeout Exception" or even handled 500 errors on your backend.
-      }
-    },
+      },
+      onError: (exception) {
+        print('onError : exception');
+        errorCallback(exception.response);
+        //Handle exception message
+        if (exception.message != null) {
+          print(exception
+              .message); // Here you get : "Connection  Timeout Exception" or even handled 500 errors on your backend.
+        }
+      },
     );
   }
+
   @action
   Future createEvent(
       CreateEventRequestModal eventData, successCallback, errorCallback) async {
-    _repository.createEvent(eventData).then(
-          (value) async {
+    _repository.createEvent(eventData, successCallback, errorCallback)
+        .then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future addBusiness(AddBusinessRequestModel businessData, successCallback,
+      errorCallback) async {
+    _repository
+        .addBusiness(businessData, successCallback, errorCallback)
+        .then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future updateprofile(UpdateProfileRequestModal UpdateProfileData,
+      successCallback, errorCallback) async {
+    _repository.updateprofile(UpdateProfileData).then(
+      (value) async {
         successCallback(value);
-      }
-      ,onError: (exception) {
-      print('onError : exception');
-      errorCallback(exception.response);
-      //Handle exception message
-      if (exception.message != null) {
-        print(exception
-            .message); // Here you get : "Connection  Timeout Exception" or even handled 500 errors on your backend.
-      }
-    },
+      },
+      onError: (exception) {
+        print('onError : exception');
+        errorCallback(exception.response);
+        //Handle exception message
+        if (exception.message != null) {
+          print(exception
+              .message); // Here you get : "Connection  Timeout Exception" or even handled 500 errors on your backend.
+        }
+      },
     );
   }
-  @action
-  Future updateprofile(
-    UpdateProfileRequestModal UpdateProfileData, successCallback, errorCallback) async {
-    _repository.updateprofile(UpdateProfileData).then(
-            (value) async {
-              successCallback(value);
 
-            }
-        ,onError: (exception) {
-      print('onError : exception');
-      errorCallback(exception.response);
-      //Handle exception message
-      if (exception.message != null) {
-        print(exception
-            .message); // Here you get : "Connection  Timeout Exception" or even handled 500 errors on your backend.
-      }
-    },
-            );
-  }
   @action
   Future signUp(
       SignUpRequestModal signUpData, successCallback, errorCallback) async {

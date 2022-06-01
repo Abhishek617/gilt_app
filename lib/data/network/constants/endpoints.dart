@@ -46,6 +46,8 @@ class Endpoints {
   static const String changePassword = baseUrl + "api/admin/changepassword";
 
   //---------Business
+  // Add Business
+  static const String addBusiness = baseUrl + "api/business/add";
   //Get Business Places
   static const String getBusinessPlaces = baseUrl + "api/business-places";
 

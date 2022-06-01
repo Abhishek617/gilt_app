@@ -156,6 +156,15 @@ mixin _$UserStore on _UserStore, Store {
         () => super.createEvent(eventData, successCallback, errorCallback));
   }
 
+  final _$addBusinessAsyncAction = AsyncAction('_UserStore.addBusiness');
+
+  @override
+  Future<dynamic> addBusiness(AddBusinessRequestModel businessData,
+      dynamic successCallback, dynamic errorCallback) {
+    return _$addBusinessAsyncAction.run(
+        () => super.addBusiness(businessData, successCallback, errorCallback));
+  }
+
   final _$updateprofileAsyncAction = AsyncAction('_UserStore.updateprofile');
 
   @override
@@ -182,6 +191,17 @@ mixin _$UserStore on _UserStore, Store {
         _$_UserStoreActionController.startAction(name: '_UserStore.getProfile');
     try {
       return super.getProfile(userId: userId);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Future<dynamic> getUserProfile(dynamic userId) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.getUserProfile');
+    try {
+      return super.getUserProfile(userId);
     } finally {
       _$_UserStoreActionController.endAction(_$actionInfo);
     }

@@ -16,6 +16,8 @@ import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Auth/valid_otp_model.dart';
+import 'package:guilt_app/models/Business/AddBusinessRequestModel.dart';
+import 'package:guilt_app/models/Business/AddBusinessResponseModel.dart';
 import 'package:guilt_app/models/Event/CreateEventResponseModel.dart';
 import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
@@ -459,22 +461,54 @@ class PostApi {
   }
 
 //create event
-  Future createEvent(CreateEventRequestModal eventData, token) async {
+  Future createEvent(CreateEventRequestModal eventData, token, successCB, errorCB) async {
     try {
       await getEventImages(eventData.files, (newFilesArray) async {
         eventData.files = newFilesArray;
         FormData formData = await new FormData.fromMap(eventData.toJson());
-        final res = await _dioClient.post(
+        await _dioClient.post(
           Endpoints.addEvent,
           data: formData,
           options: Options(headers: {
             'Authorization': 'Bearer ' + token!,
             'Content-Type': 'multipart/form-data'
           }),
-        );
-        return CreateEventResponseModel.fromJson(res);
+        )
+            .then((value) {
+          value = CreateEventResponseModel.fromJson(value);
+          successCB(value);
+        });
       });
     } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+//Add Business
+  Future addBusiness(
+      AddBusinessRequestModel businessData, token, successCB, errorCB) async {
+    try {
+      await getEventImages(businessData.files, (newFilesArray) async {
+        businessData.files = newFilesArray;
+        FormData formData = await new FormData.fromMap(businessData.toJson());
+        await _dioClient
+            .post(
+          Endpoints.addBusiness,
+          data: formData,
+          options: Options(headers: {
+            'Authorization': 'Bearer ' + token!,
+            'Content-Type': 'multipart/form-data'
+          }),
+        )
+            .then((value) {
+              value = AddBusinessResponseModel.fromJson(value);
+          successCB(value);
+        });
+      });
+    } catch (e) {
+      errorCB(e);
       print(e.toString());
       throw e;
     }
