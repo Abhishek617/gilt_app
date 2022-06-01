@@ -654,6 +654,7 @@ class _FullProfileState extends State<FullProfile> {
       ),
       body: CustomBodyWrapper(
         child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 80),
           child: Container(
             padding: EdgeInsets.all(16.0),
             height: DeviceUtils.getScaledHeight(context, 1.20),

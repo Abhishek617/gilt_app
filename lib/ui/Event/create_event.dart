@@ -486,7 +486,7 @@ class _Create_eventState extends State<Create_event> {
                   Row(
                     children: [
                       Text(
-                        "Upload Business Photo",
+                        "Upload Event Photo",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],

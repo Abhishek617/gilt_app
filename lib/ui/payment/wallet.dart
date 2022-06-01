@@ -211,6 +211,7 @@ class _WalletState extends State<Wallet> {
       ),
       body: CustomBodyWrapper(
         child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 80),
           child: Column(
             children: [
               Row(

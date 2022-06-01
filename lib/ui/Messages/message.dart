@@ -294,6 +294,7 @@ class _MessagesState extends State<Messages> {
       ),
       body: CustomBodyWrapper(
         child: Container(
+          padding: EdgeInsets.only(bottom: 80),
           height: double.infinity,
           child: Column(
             children: [

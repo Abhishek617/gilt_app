@@ -242,20 +242,24 @@ class _MenuDrawerState extends State<MenuDrawer> {
                     ),
                     getMenuTile(
                       'MY EVENT',
-                      () =>
-                          {Routes.navigateToScreen(context, Routes.my_book_event)},
+                      () => {
+                        Routes.navigateToScreen(context, Routes.my_book_event)
+                      },
                     ),
                     getMenuTile(
                       'SEARCH EVENT',
-                      () =>
-                          {Routes.navigateToScreen(context, Routes.search_event)},
+                      () => {
+                        Routes.navigateToScreen(context, Routes.search_event)
+                      },
                     ),
-                    // userRole != AppSettings.businessUserRole
-                    //     ?  getMenuTile(
-                    //   'BECOME A BUSINESS',
-                    //   () => {
-                    //     Routes.navigateToScreen(context, Routes.add_business)
-                    //   },
+                    userRole != AppSettings.businessUserRole
+                        ? getMenuTile(
+                            'BECOME A BUSINESS',
+                            () => {
+                                  Routes.navigateToScreen(
+                                      context, Routes.add_business)
+                                })
+                        : Container(),
                     getMenuTile(
                       'ABOUT APP',
                       () => {

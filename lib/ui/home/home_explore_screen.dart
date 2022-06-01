@@ -231,6 +231,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
       ),
       body: CustomBodyWrapper(
         child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 80),
           child: Container(
             padding: const EdgeInsets.all(16.0),
             child: Column(
