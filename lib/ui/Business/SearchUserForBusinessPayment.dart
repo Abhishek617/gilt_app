@@ -45,7 +45,7 @@ class _SearchUserForBusinessPaymentState extends State<SearchUserForBusinessPaym
                 ),
               ),
               filled: true,
-              contentPadding: EdgeInsets.all(16),
+              contentPadding: EdgeInsets.symmetric(horizontal: 16),
               fillColor: Colors.white,
             ),
           ),

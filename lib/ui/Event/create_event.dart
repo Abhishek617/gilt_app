@@ -97,12 +97,16 @@ class _Create_eventState extends State<Create_event> {
 
   @override
   void didChangeDependencies() {
-    final args = ModalRoute.of(context)?.settings.arguments as List<Attendees>;
-    if (args != null) {
-      print(args);
-      setState(() {
-        Selectedcontactlist = args;
-      });
+    try {
+      final args = ModalRoute.of(context)?.settings.arguments as List<Attendees>;
+      if (args != null) {
+        print(args);
+        setState(() {
+          Selectedcontactlist = args;
+        });
+      }
+    } catch (e) {
+      debugPrint("Exception: ${e.toString()}");
     }
     super.didChangeDependencies();
   }
