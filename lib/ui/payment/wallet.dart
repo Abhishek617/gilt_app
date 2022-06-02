@@ -194,6 +194,7 @@ class _WalletState extends State<Wallet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MenuDrawer(),
       appBar: AppBar(
         shadowColor: Colors.transparent,
         title: Text('Wallet'),

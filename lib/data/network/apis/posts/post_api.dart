@@ -169,6 +169,20 @@ class PostApi {
   }
 
   // Get Business Places
+  Future getMyBusinessList(searchQuery,token) async {
+    try {
+      return await _dioClient.get(
+        Endpoints.myBusinessList,
+        queryParameters: {"search":searchQuery ?? '',"page": 0, "size": 20},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Get Business Places
   Future uploadChatImage(file, token) async {
     try {
       String fileName = file.path.split('/').last;
@@ -407,7 +421,7 @@ class PostApi {
             'Authorization': 'Bearer ' + token!,
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
           }),
-          data: {"Filterby": filterby, "page": page, "size": size});
+          data: {"filterBy": filterby, "page": page, "size": size});
       return UpcomingPastEventModal.fromJson(res);
     } catch (e) {
       print(e.toString());

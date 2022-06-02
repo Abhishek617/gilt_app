@@ -194,7 +194,9 @@ class _Add_businessState extends State<Add_business> {
             icon: Icon(
               Icons.chevron_left,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Routes.goBack(context);
+            },
           ),
           title: Text('Add Business'),
           centerTitle: true,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/models/Chat/roomListModel.dart';
+import 'package:guilt_app/ui/common/menu_drawer.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
@@ -264,6 +265,7 @@ class _MessagesState extends State<Messages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MenuDrawer(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -277,7 +279,7 @@ class _MessagesState extends State<Messages> {
       ),
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: Center(child: Text('Messages')),
+        title: Text('Messages'),
         centerTitle: true,
         // actions: [
         //   IconButton(
