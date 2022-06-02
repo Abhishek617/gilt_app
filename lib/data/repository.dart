@@ -142,7 +142,7 @@ class Repository {
       String email, String firstname, String lastname) async {
     var fToken = await fcmToken;
     return await _postApi
-        .oauth(email, firstname, lastname, fcmToken)
+        .oauth(email, firstname, lastname, fToken)
         .then((oauthData) => oauthData)
         .catchError((error) => throw error);
   }
