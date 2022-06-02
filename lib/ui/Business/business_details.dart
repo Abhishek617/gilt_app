@@ -3,7 +3,6 @@ import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/models/Business/BusinessDetailResponseModel.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
-import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 
@@ -192,7 +191,7 @@ class _BusinessDetailState extends State<BusinessDetail> {
                 SizedBox(
                   height: 20,
                 ),
-                b?.businessPhotos?.length == 0
+                b.businessPhotos?.length == 0
                     ? Padding(
                         padding: EdgeInsets.only(
                             left: 0.0, top: 5.0, bottom: 5.0, right: 20.0),
@@ -203,7 +202,7 @@ class _BusinessDetailState extends State<BusinessDetail> {
                         ),
                       )
                     : Row(
-                        children: b!.businessPhotos!
+                        children: b.businessPhotos!
                             .map((e) => getImageContainer(e))
                             .toList(),
                       ),
