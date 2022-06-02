@@ -76,12 +76,14 @@ class _BusinessDetailState extends State<BusinessDetail> {
                   'About Business',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
                 ),
-                Text(
-                  b.description ?? 'No Description Added',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
+                Container(
+                  child: Text(
+                    b.description ?? 'No Description Added',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -94,12 +96,14 @@ class _BusinessDetailState extends State<BusinessDetail> {
                     SizedBox(
                       width: 10,
                     ),
-                    Text(
-                      b.location ?? 'No Address Added',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
+                    Flexible(
+                      child: Text(
+                        b.location ?? 'No Address Added',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ],
@@ -211,7 +215,9 @@ class _BusinessDetailState extends State<BusinessDetail> {
                   children: [
                     ElevatedButton(
                       onPressed: () =>
-                          {Routes.navigateToScreen(context, Routes.map)},
+                          {
+                           // Routes.navigateToScreen(context, Routes.map)
+                          },
                       child: Row(
                         children: [
                           Icon(Icons.directions),

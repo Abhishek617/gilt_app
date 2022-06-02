@@ -42,56 +42,62 @@ class _MyBusinessState extends State<SearchAllBusiness> {
 
   allBusinessListContainer(index) {
     MyBusinessListData business = businessList[index];
-    return Card(
-      child: Container(
-        margin: EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Container(
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(2),
-                    bottomLeft: Radius.circular(2)),
-                child: Image.network(
-                  business!.businessPhotos!.length > 0
-                      ? business!.businessPhotos![0]!.name!
-                      : 'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
-                  width: 70,
-                  height: 70,
-                  fit: BoxFit.contain,
+    return GestureDetector(
+      onTap: () {
+        Routes.navigateToScreenWithArgs(
+            context, Routes.business_details, business.id);
+      },
+      child: Card(
+        child: Container(
+          margin: EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(2),
+                      bottomLeft: Radius.circular(2)),
+                  child: Image.network(
+                    business!.businessPhotos!.length > 0
+                        ? business!.businessPhotos![0]!.name!
+                        : 'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                    width: 70,
+                    height: 70,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    business.name ?? 'No Name Added',
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    business.location ?? 'No Location Added',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
+              SizedBox(
+                width: 10,
               ),
-            ),
-          ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      business.name ?? 'No Name Added',
+                      style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      business.location ?? 'No Location Added',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -102,7 +108,7 @@ class _MyBusinessState extends State<SearchAllBusiness> {
     return TextFormField(
       onChanged: (searchVal) {
         if (searchVal.trim().length > 0) {
-          setState((){
+          setState(() {
             searchQuery = searchVal;
           });
           getAllBusinessList();
@@ -127,7 +133,6 @@ class _MyBusinessState extends State<SearchAllBusiness> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
         appBar: AppBar(
           shadowColor: Colors.transparent,
           leading: GestureDetector(
@@ -144,29 +149,29 @@ class _MyBusinessState extends State<SearchAllBusiness> {
           centerTitle: true,
           actions: !_isSearchBar
               ? [
-            //add
-            IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  setState(() {
-                    //add
-                    _isSearchBar = true;
-                    searchQuery = '';
-                    getAllBusinessList();
-                  });
-                })
-          ]
+                  //add
+                  IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () {
+                        setState(() {
+                          //add
+                          _isSearchBar = true;
+                          searchQuery = '';
+                          getAllBusinessList();
+                        });
+                      })
+                ]
               : [
-            IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () {
-                  setState(() {
-                    _isSearchBar = false;
-                    searchQuery = '';
-                    getAllBusinessList();
-                  });
-                })
-          ],
+                  IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        setState(() {
+                          _isSearchBar = false;
+                          searchQuery = '';
+                          getAllBusinessList();
+                        });
+                      })
+                ],
         ),
         body: CustomBodyWrapper(
           child: businessList.length > 0

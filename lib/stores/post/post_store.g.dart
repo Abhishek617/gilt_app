@@ -102,6 +102,76 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.getMyBusinessList(searchQuery));
   }
 
+  final _$getAllBusinessListAsyncAction =
+      AsyncAction('_PostStore.getAllBusinessList');
+
+  @override
+  Future<dynamic> getAllBusinessList(dynamic searchQuery) {
+    return _$getAllBusinessListAsyncAction
+        .run(() => super.getAllBusinessList(searchQuery));
+  }
+
+  final _$getAllUserListAsyncAction = AsyncAction('_PostStore.getAllUserList');
+
+  @override
+  Future<dynamic> getAllUserList(dynamic searchQuery) {
+    return _$getAllUserListAsyncAction
+        .run(() => super.getAllUserList(searchQuery));
+  }
+
+  final _$getBusinessDetailAsyncAction =
+      AsyncAction('_PostStore.getBusinessDetail');
+
+  @override
+  Future<dynamic> getBusinessDetail(dynamic businessId) {
+    return _$getBusinessDetailAsyncAction
+        .run(() => super.getBusinessDetail(businessId));
+  }
+
+  final _$updateBusinessDetailsAsyncAction =
+      AsyncAction('_PostStore.updateBusinessDetails');
+
+  @override
+  Future<dynamic> updateBusinessDetails(dynamic searchQuery, dynamic userID) {
+    return _$updateBusinessDetailsAsyncAction
+        .run(() => super.updateBusinessDetails(searchQuery, userID));
+  }
+
+  final _$getAllBusinessByUserListAsyncAction =
+      AsyncAction('_PostStore.getAllBusinessByUserList');
+
+  @override
+  Future<dynamic> getAllBusinessByUserList(
+      dynamic searchQuery, dynamic userID) {
+    return _$getAllBusinessByUserListAsyncAction
+        .run(() => super.getAllBusinessByUserList(searchQuery, userID));
+  }
+
+  final _$payForBusinessAsyncAction = AsyncAction('_PostStore.payForBusiness');
+
+  @override
+  Future<dynamic> payForBusiness(dynamic searchQuery) {
+    return _$payForBusinessAsyncAction
+        .run(() => super.payForBusiness(searchQuery));
+  }
+
+  final _$requestForBusinessAsyncAction =
+      AsyncAction('_PostStore.requestForBusiness');
+
+  @override
+  Future<dynamic> requestForBusiness(dynamic searchQuery) {
+    return _$requestForBusinessAsyncAction
+        .run(() => super.requestForBusiness(searchQuery));
+  }
+
+  final _$deleteBusinessAsyncAction = AsyncAction('_PostStore.deleteBusiness');
+
+  @override
+  Future<dynamic> deleteBusiness(dynamic businessId) {
+    return _$deleteBusinessAsyncAction
+        .run(() => super.deleteBusiness(businessId));
+  }
+
   final _$getUserEventAsyncAction = AsyncAction('_PostStore.getUserEvent');
 
   @override
