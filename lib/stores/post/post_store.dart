@@ -80,6 +80,48 @@ abstract class _PostStore with Store {
         .catchError((error) => throw error);
   }
   @action
+  Future getAllUserList(searchQuery, userID) async {
+    return await _repository
+        .getAllUserList(searchQuery, userID)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+  @action
+  Future getBusinessDetail(businessId) async {
+    return await _repository
+        .getBusinessDetail(businessId)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+  @action
+  Future updateBusinessDetails(searchQuery, userID) async {
+    return await _repository
+        .updateBusinessDetails(searchQuery, userID)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+  @action
+  Future getAllBusinessByUserList(searchQuery, userID) async {
+    return await _repository
+        .getAllBusinessByUserList(searchQuery, userID)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+  @action
+  Future payForBusiness(searchQuery) async {
+    return await _repository
+        .payForBusiness(searchQuery)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+  @action
+  Future requestForBusiness(searchQuery) async {
+    return await _repository
+        .requestForBusiness(searchQuery)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+  @action
   Future deleteBusiness(businessId) async {
     return await _repository
         .deleteBusiness(businessId)

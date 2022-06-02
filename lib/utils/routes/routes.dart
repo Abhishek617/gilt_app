@@ -6,7 +6,7 @@ import 'package:guilt_app/ui/Business/business_payment.dart';
 import 'package:guilt_app/ui/Business/mybusiness.dart';
 import 'package:guilt_app/ui/Event/create_event.dart';
 import 'package:guilt_app/ui/Event/book_event.dart';
-import 'package:guilt_app/ui/Event/book_event_details.dart';
+import 'package:guilt_app/ui/Business/business_details.dart';
 import 'package:guilt_app/ui/Event/event_detail.dart';
 import 'package:guilt_app/ui/Event/expense_screen.dart';
 import 'package:guilt_app/ui/Event/my_event.dart';
@@ -111,7 +111,7 @@ class Routes {
   static const String notifi = '/notifi';
   static const String my_book_event = '/my_book_event ';
   static const String search_event = '/search_event ';
-  static const String book_event_details = '/book_event_details ';
+  static const String business_details = '/business_details ';
   static const String help_and_support = '/help_and_support';
   static const String about_screen = '/about_screen';
   static const String create_event = '/createevent';
@@ -171,7 +171,7 @@ class Routes {
     notifi: (BuildContext context) => Notifications(),
     search_event: (BuildContext context) => SearchEvent(),
     my_book_event: (BuildContext context) => MyBookEvent(),
-    book_event_details: (BuildContext context) => BookEventDetails(),
+    business_details: (BuildContext context) => BusinessDetail(),
     help_and_support: (BuildContext context) => HelpAndSupport(),
     about_screen: (BuildContext context) => About_screen(),
     create_event: (BuildContext context) => Create_event(),

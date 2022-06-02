@@ -45,6 +45,10 @@ class Endpoints {
   //change password
   static const String changePassword = baseUrl + "api/admin/changepassword";
 
+
+  // Search User List
+  static const String searchUser = baseUrl + "api/admin/search";
+
   //---------Business
   // Add Business
   static const String addBusiness = baseUrl + "api/business/add";
@@ -54,6 +58,17 @@ class Endpoints {
   static const String myBusinessList = baseUrl + "api/business/search";
   // All Business List
   static const String allBusinessList = baseUrl + "api/business";
+  // Business Details
+  static const String businessDetail = baseUrl + "api/business";
+  // Update Business Details
+  static const String updateBusiness = baseUrl + "api/business";
+  // Search Business List of User
+  static const String searchByNameBusinessList = baseUrl + "api/business/getByName";
+  // Request for Business by Business Owner to User
+  static const String requestPaymentBusiness = baseUrl + "api/paymentRequest/add";
+  // Pay for Business by User to Business Owner
+  static const String payForBusiness = baseUrl + "api/business";
+
   //Get Business Places
   static const String getBusinessPlaces = baseUrl + "api/business-places";
 

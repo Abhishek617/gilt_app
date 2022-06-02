@@ -100,86 +100,93 @@ class _MyBusinessState extends State<MyBusiness> {
 
   myBusinessListContainer(index) {
     MyBusinessListData business = businessList[index];
-    return Card(
-      child: Container(
-        margin: EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Container(
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(2),
-                    bottomLeft: Radius.circular(2)),
-                child: Image.network(
-                  business!.businessPhotos!.length > 0
-                      ? business!.businessPhotos![0]!.name!
-                      : 'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
-                  width: 70,
-                  height: 70,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    business.name ?? 'No Name Added',
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
+    return GestureDetector(
+      onTap: (){
+        Routes.navigateToScreenWithArgs(context, Routes.business_details, business.id);
+      },
+      child: Card(
+        child: Container(
+          margin: EdgeInsets.all(8.0),
+          child: Flexible(
+            child: Row(
+              children: [
+                Container(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(2),
+                        bottomLeft: Radius.circular(2)),
+                    child: Image.network(
+                      business!.businessPhotos!.length > 0
+                          ? business!.businessPhotos![0]!.name!
+                          : 'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                      width: 70,
+                      height: 70,
+                      fit: BoxFit.contain,
                     ),
                   ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    business.location ?? 'No Location Added',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            PopupMenuButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(15.0))),
-              offset: Offset(-22.0, 40.0),
-              icon: Icon(Icons.more_vert),
-              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                PopupMenuItem(
-                  onTap: () {
-                    editBusiness(business, index);
-                  },
-                  height: 10,
-                  padding: EdgeInsets.only(left: 30, top: 10),
-                  child: Text(
-                    'Edit',
-                    style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        business.name ?? 'No Name Added',
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        business.location ?? 'No Location Added',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                PopupMenuItem(
-                  onTap: () {
-                    deleteBusiness(context, business, index);
-                  },
-                  height: 10,
-                  padding: EdgeInsets.only(left: 30, top: 15, bottom: 10),
-                  child: Text(
-                    'Delete',
-                    style: TextStyle(fontSize: 16),
-                  ),
+                PopupMenuButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  offset: Offset(-22.0, 40.0),
+                  icon: Icon(Icons.more_vert),
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                    PopupMenuItem(
+                      onTap: () {
+                        editBusiness(business, index);
+                      },
+                      height: 10,
+                      padding: EdgeInsets.only(left: 30, top: 10),
+                      child: Text(
+                        'Edit',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      onTap: () {
+                        deleteBusiness(context, business, index);
+                      },
+                      height: 10,
+                      padding: EdgeInsets.only(left: 30, top: 15, bottom: 10),
+                      child: Text(
+                        'Delete',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -140,9 +140,15 @@ class _Add_businessState extends State<Add_business> {
 
                 GlobalStoreHandler.userStore.addBusiness(reqData, (AddBusinessResponseModel response) {
                 //  var response = AddBusinessResponseModel.fromJson(value);
+                  GlobalMethods.hideLoader();
+
                   if (response.success == true) {
                     GlobalMethods.showSuccessMessage(
                         context, response.message ?? 'Success', 'Add Business');
+                    if (response.business != null) {
+                      Routes.navigateToScreenWithArgs(
+                          context, Routes.business_details, response.business?.id);
+                    }
                     // Routes.navigateToScreenWithArgs(context, Routes.book_event_details, response.business?.id);
                   } else {
                     GlobalMethods.showErrorMessage(

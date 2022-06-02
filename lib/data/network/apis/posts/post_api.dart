@@ -196,6 +196,33 @@ class PostApi {
     }
   }
 
+  // Get All User List
+  Future getAllUserList(searchQuery,token) async {
+    try {
+      return await _dioClient.get(
+        Endpoints.searchUser,
+        queryParameters: {"search":searchQuery ?? ''},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //get Business details
+  Future getBusinessDetail(businessId, token) async {
+    try {
+      return await _dioClient.get(
+        Endpoints.businessDetail + '/${businessId}',
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
   // Delete Business
   Future deleteBusiness(bID,token) async {
     try {

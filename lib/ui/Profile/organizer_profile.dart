@@ -157,6 +157,9 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
                       Text(event?.name ?? 'No name',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w700)),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Row(
                         children: [
                           Icon(
@@ -164,12 +167,16 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
                             size: 12,
                             color: AppColors.grayTextColor,
                           ),
-                          Text(
-                            event?.location ?? 'No Address',
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.grayTextColor),
+
+                          Flexible(
+                            child: Text(
+                              event?.location ?? 'No Address',
+                              style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.grayTextColor),
+                            ),
                           ),
                         ],
                       ),

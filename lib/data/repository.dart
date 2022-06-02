@@ -293,6 +293,55 @@ class Repository {
         .catchError((error) => throw error);
   }
 
+  
+  Future getAllUserList(searchQuery, userID) async {
+    var token = await authToken;
+    return await _postApi
+        .getAllUserList(searchQuery, userID)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+  
+  Future getBusinessDetail(businessId) async {
+    var token = await authToken;
+    return await _postApi
+        .getBusinessDetail(businessId,token)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+  
+  Future updateBusinessDetails(searchQuery, userID) async {
+    var token = await authToken;
+    // return await _postApi
+    //     .updateBusinessDetails(searchQuery, userID,token)
+    //     .then((placeData) => placeData)
+    //     .catchError((error) => throw error);
+  }
+  
+  Future getAllBusinessByUserList(searchQuery, userID) async {
+    var token = await authToken;
+    // return await _postApi
+    //     .getAllBusinessByUserList(searchQuery, userID,token)
+    //     .then((placeData) => placeData)
+    //     .catchError((error) => throw error);
+  }
+  
+  Future payForBusiness(searchQuery) async {
+    var token = await authToken;
+    // return await _postApi
+    //     .payForBusines(searchQuery,token)
+    //     .then((placeData) => placeData)
+    //     .catchError((error) => throw error);
+  }
+  
+  Future requestForBusiness(searchQuery) async {
+    var token = await authToken;
+    // return await _postApi
+    //     .requestForBusiness(searchQuery,token)
+    //     .then((placeData) => placeData)
+    //     .catchError((error) => throw error);
+  }
+  
   Future getUserEvent(userID) async {
     var token = await authToken;
     return await _postApi
