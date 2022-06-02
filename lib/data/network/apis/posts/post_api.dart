@@ -168,12 +168,25 @@ class PostApi {
     }
   }
 
-  // Get Business Places
+  // Get My Business List
   Future getMyBusinessList(searchQuery,token) async {
     try {
       return await _dioClient.get(
         Endpoints.myBusinessList,
         queryParameters: {"search":searchQuery ?? '',"page": 0, "size": 20},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Delete Business
+  Future deleteBusiness(bID,token) async {
+    try {
+      return await _dioClient.delete(
+        Endpoints.deleteBusiness + '/${bID}',
         options: Options(headers: {'Authorization': 'Bearer ' + token}),
       );
     } catch (e) {

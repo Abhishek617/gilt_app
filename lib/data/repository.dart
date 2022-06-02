@@ -266,11 +266,21 @@ class Repository {
         .getSearchEvent(searchQuery, token)
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
-  }//search event
+  }
+  //My Business List
   Future getMyBusinessList(searchQuery) async {
     var token = await authToken;
     return await _postApi
         .getMyBusinessList(searchQuery,token)
+        .then((eventListData) => eventListData)
+        .catchError((error) => throw error);
+  }
+
+  //Delete Business
+  Future deleteBusiness(bID) async {
+    var token = await authToken;
+    return await _postApi
+        .deleteBusiness(bID,token)
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }

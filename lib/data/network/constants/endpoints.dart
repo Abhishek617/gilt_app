@@ -48,6 +48,8 @@ class Endpoints {
   //---------Business
   // Add Business
   static const String addBusiness = baseUrl + "api/business/add";
+  // delete Business
+  static const String deleteBusiness = baseUrl + "api/business";
   // My Business List
   static const String myBusinessList = baseUrl + "api/business/search";
   //Get Business Places

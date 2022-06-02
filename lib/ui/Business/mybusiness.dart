@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/models/Auth/commonModal.dart';
 import 'package:guilt_app/models/Business/MyBusinessResponseModel.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 
 class MyBusiness extends StatefulWidget {
@@ -35,6 +38,66 @@ class _MyBusinessState extends State<MyBusiness> {
     });
   }
 
+  editBusiness(businessData, businessIndex) {}
+
+  deleteBusinessRequest(MyBusinessListData businessData, businessIndex) {
+    GlobalStoreHandler.postStore.deleteBusiness(businessData.id).then((value) {
+      CommonResponseModal res = CommonResponseModal.fromJson(value);
+      if (res.success == true) {
+        GlobalMethods.showSuccessMessage(
+            context, res.message ?? 'Delete successfully.', 'Delete Business');
+
+        getMyBusinessList();
+      } else {
+        GlobalMethods.showErrorMessage(
+            context, res.message ?? 'Delete failed.', 'Delete Business');
+      }
+    }).catchError((err) {
+      GlobalMethods.showErrorMessage(
+          context, err.message ?? 'Delete failed.', 'Delete Business');
+      print(err);
+    });
+  }
+
+  deleteBusiness(context, businessData, businessIndex) {
+    FocusScope.of(context).unfocus();
+
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Yes"),
+      onPressed: () {
+        deleteBusinessRequest(businessData, businessIndex);
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("No"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Delete Business"),
+      content: Text("Are you sure?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    Future.delayed(Duration(milliseconds: 300)).then((value) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    });
+  }
+
   myBusinessListContainer(index) {
     MyBusinessListData business = businessList[index];
     return Card(
@@ -49,7 +112,7 @@ class _MyBusinessState extends State<MyBusiness> {
                     bottomLeft: Radius.circular(2)),
                 child: Image.network(
                   business!.businessPhotos!.length > 0
-                      ? business!.businessPhotos![0].name ?? ''
+                      ? business!.businessPhotos![0]!.name!
                       : 'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
                   width: 70,
                   height: 70,
@@ -91,9 +154,11 @@ class _MyBusinessState extends State<MyBusiness> {
                   borderRadius: BorderRadius.all(Radius.circular(15.0))),
               offset: Offset(-22.0, 40.0),
               icon: Icon(Icons.more_vert),
-              itemBuilder: (BuildContext context) =>
-              <PopupMenuEntry>[
-                const PopupMenuItem(
+              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                PopupMenuItem(
+                  onTap: () {
+                    editBusiness(business, index);
+                  },
                   height: 10,
                   padding: EdgeInsets.only(left: 30, top: 10),
                   child: Text(
@@ -101,7 +166,10 @@ class _MyBusinessState extends State<MyBusiness> {
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
+                  onTap: () {
+                    deleteBusiness(context, business, index);
+                  },
                   height: 10,
                   padding: EdgeInsets.only(left: 30, top: 15, bottom: 10),
                   child: Text(
@@ -117,10 +185,9 @@ class _MyBusinessState extends State<MyBusiness> {
     );
   }
 
-    @override
-    Widget build(BuildContext context) {
-      return ScaffoldWrapper(
-        isMenu: false,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
         appBar: AppBar(
           shadowColor: Colors.transparent,
           leading: GestureDetector(
@@ -138,17 +205,19 @@ class _MyBusinessState extends State<MyBusiness> {
           ),
           centerTitle: true,
         ),
-        child: businessList.length > 0
-            ? Container(
-          child: ListView.builder(
-            itemCount: businessList.length,
-            itemBuilder: (context, index) =>
-                myBusinessListContainer(index),
-          ),
-        )
-            : Center(
-          child: Text('No Business Added.'),
-        ),
-      );
-    }
+        body: CustomBodyWrapper(
+          child: businessList.length > 0
+              ? Container(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: businessList.length,
+                  itemBuilder: (context, index) =>
+                      myBusinessListContainer(index),
+                ),
+              )
+              : Center(
+                  child: Text('No Business Added.'),
+                ),
+        ));
   }
+}
