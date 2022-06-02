@@ -182,6 +182,20 @@ class PostApi {
     }
   }
 
+  // Get All Business List
+  Future getAllBusinessList(searchQuery,token) async {
+    try {
+      return await _dioClient.get(
+        Endpoints.allBusinessList,
+        queryParameters: {"search":searchQuery ?? '',"page": 0, "size": 20},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
   // Delete Business
   Future deleteBusiness(bID,token) async {
     try {

@@ -8,7 +8,11 @@ class MyBusinessResponseModel {
   MyBusinessResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    data = json['data'] != null ? new MyBusinessData.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? new MyBusinessData.fromJson(json['data'])
+        : json['businesses'] != null
+            ? new MyBusinessData.fromJson(json['businesses'])
+            : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -28,7 +32,8 @@ class MyBusinessData {
   int? totalPages;
   int? currentPage;
 
-  MyBusinessData({this.totalItems, this.listData, this.totalPages, this.currentPage});
+  MyBusinessData(
+      {this.totalItems, this.listData, this.totalPages, this.currentPage});
 
   MyBusinessData.fromJson(Map<String, dynamic> json) {
     totalItems = json['totalItems'];
@@ -71,25 +76,25 @@ class MyBusinessListData {
 
   MyBusinessListData(
       {this.id,
-        this.name,
-        this.location,
-        this.latLong,
-        this.description,
-        this.email,
-        this.contact,
-        this.createdBy,
-        this.isDeleted,
-        this.createdAt,
-        this.updatedAt,
-        this.admin,
-        this.businessPhotos});
+      this.name,
+      this.location,
+      this.latLong,
+      this.description,
+      this.email,
+      this.contact,
+      this.createdBy,
+      this.isDeleted,
+      this.createdAt,
+      this.updatedAt,
+      this.admin,
+      this.businessPhotos});
 
   MyBusinessListData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     location = json['location'];
     latLong =
-    json['latLong'] != null ? new LatLong.fromJson(json['latLong']) : null;
+        json['latLong'] != null ? new LatLong.fromJson(json['latLong']) : null;
     description = json['description'];
     email = json['email'];
     contact = json['contact'];

@@ -73,6 +73,13 @@ abstract class _PostStore with Store {
         .catchError((error) => throw error);
   }
   @action
+  Future getAllBusinessList(searchQuery) async {
+    return await _repository
+        .getAllBusinessList(searchQuery)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+  @action
   Future deleteBusiness(businessId) async {
     return await _repository
         .deleteBusiness(businessId)

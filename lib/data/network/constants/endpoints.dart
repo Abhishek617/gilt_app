@@ -52,6 +52,8 @@ class Endpoints {
   static const String deleteBusiness = baseUrl + "api/business";
   // My Business List
   static const String myBusinessList = baseUrl + "api/business/search";
+  // All Business List
+  static const String allBusinessList = baseUrl + "api/business";
   //Get Business Places
   static const String getBusinessPlaces = baseUrl + "api/business-places";
 

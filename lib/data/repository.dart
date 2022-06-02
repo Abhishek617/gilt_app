@@ -284,6 +284,14 @@ class Repository {
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
+//get all Business
+  Future getAllBusinessList(searchQuery) async {
+    var token = await authToken;
+    return await _postApi
+        .getAllBusinessList(searchQuery,token)
+        .then((eventListData) => eventListData)
+        .catchError((error) => throw error);
+  }
 
   Future getUserEvent(userID) async {
     var token = await authToken;

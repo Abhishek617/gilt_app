@@ -224,10 +224,18 @@ class _MenuDrawerState extends State<MenuDrawer> {
                         : Container(),
                     userRole == AppSettings.businessUserRole
                         ? getMenuTile(
-                            'SEARCH BUSINESS',
+                            'SEARCH ALL BUSINESS',
                             () => {
                                   Routes.navigateToScreen(
-                                      context, Routes.search_business)
+                                      context, Routes.search_all_business)
+                                })
+                        : Container(),
+                    userRole == AppSettings.businessUserRole
+                        ? getMenuTile(
+                            'PAY/REQUEST BUSINESS',
+                            () => {
+                                  Routes.navigateToScreen(
+                                      context, Routes.pay_request_business)
                                 })
                         : Container(),
                     getMenuTile(

@@ -82,7 +82,7 @@ class _SearchUserForBusinessPaymentState extends State<SearchUserForBusinessPaym
 
                       ,),
                     onPressed:(){
-                      Routes.navigateToScreenWithArgs(context, Routes.business_payment, {"type":'Pay','username':'User Name',"phone":"9898989898"});
+                      Routes.navigateToScreenWithArgs(context, Routes.pay_request_business_payment, {"type":'Pay','username':'User Name',"phone":"9898989898"});
                     },
                   ),
                   SizedBox(
@@ -96,7 +96,7 @@ class _SearchUserForBusinessPaymentState extends State<SearchUserForBusinessPaym
                     ),
                     child: Text('REQUEST', style: TextStyle(fontSize: 12,),),
                     onPressed:(){
-                      Routes.navigateToScreenWithArgs(context, Routes.business_payment, {"type":'Request','username':'User Name',"phone":"9898989898"});
+                      Routes.navigateToScreenWithArgs(context, Routes.pay_request_business_payment, {"type":'Request','username':'User Name',"phone":"9898989898"});
                     },
                   ),
                 ],
