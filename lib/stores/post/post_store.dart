@@ -80,9 +80,9 @@ abstract class _PostStore with Store {
         .catchError((error) => throw error);
   }
   @action
-  Future getAllUserList(searchQuery, userID) async {
+  Future getAllUserList(searchQuery) async {
     return await _repository
-        .getAllUserList(searchQuery, userID)
+        .getAllUserList(searchQuery)
         .then((placeData) => placeData)
         .catchError((error) => throw error);
   }

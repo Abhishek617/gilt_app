@@ -1,23 +1,127 @@
-
 import 'package:flutter/material.dart';
+import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/models/Auth/AllUserResponseModel.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
+import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 import '../../utils/device/device_utils.dart';
 import '../../utils/routes/routes.dart';
 import '../../widgets/custom_scaffold.dart';
+
 class SearchUserForBusinessPayment extends StatefulWidget {
   const SearchUserForBusinessPayment({Key? key}) : super(key: key);
 
   @override
-  State<SearchUserForBusinessPayment> createState() => _SearchUserForBusinessPaymentState();
+  State<SearchUserForBusinessPayment> createState() =>
+      _SearchUserForBusinessPaymentState();
 }
 
-class _SearchUserForBusinessPaymentState extends State<SearchUserForBusinessPayment> {
+class _SearchUserForBusinessPaymentState
+    extends State<SearchUserForBusinessPayment> {
+  bool _isSearchBar = false;
+  String searchQuery = '';
+  List<SearchUserData> userList = [];
+
+  Widget _searchTextField() {
+    //add
+    return TextFormField(
+      onChanged: (searchVal) {
+        if (searchVal.trim().length > 0) {
+          setState(() {
+            searchQuery = searchVal;
+          });
+          getUserList();
+        }
+      },
+      cursorColor: Colors.white,
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        isDense: true,
+        hintText: 'Search User',
+        hintStyle: TextStyle(color: AppColors.cream_app),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.cream_app),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Widget getUserTileContainer(index) {
+    var user = userList[index];
+    var uname = (user.firstname ?? 'No') + ' ' + (user.lastname ?? 'Name');
+    return ListTile(
+        title: Text(uname),
+        subtitle: Text(user.phone ?? 'NA'),
+        leading: CircleAvatar(
+          backgroundImage: NetworkImage(
+              'https://cdn-icons-png.flaticon.com/512/1077/1077012.png'),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18), // <-- Radius
+                ),
+              ),
+              child: Text(
+                'PAY',
+                style: TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+              onPressed: () {
+                Routes.navigateToScreenWithArgs(
+                    context,
+                    Routes.pay_request_business_payment,
+                    {"type": 'Pay', "userData": user});
+              },
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18), // <-- Radius
+                ),
+              ),
+              child: Text(
+                'REQUEST',
+                style: TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+              onPressed: () {
+                Routes.navigateToScreenWithArgs(
+                    context,
+                    Routes.pay_request_business_payment,
+                    {"type": 'Request', "userData": user});
+              },
+            ),
+          ],
+        ));
+  }
+
+  getUserList() {
+    GlobalStoreHandler.postStore.getAllUserList(searchQuery).then((value) {
+      setState(() {
+        AllUserResponseModel val = AllUserResponseModel.fromJson(value);
+        userList = val.data ?? [];
+      });
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ScaffoldWrapper(
-
+    return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 80,
-
+        shadowColor: Colors.transparent,
         leading: GestureDetector(
           onTap: () {
             Routes.goBack(context);
@@ -25,92 +129,57 @@ class _SearchUserForBusinessPaymentState extends State<SearchUserForBusinessPaym
           child: Icon(
             Icons.arrow_back_ios_outlined,
             //color: Colors.black,
-            size: 15,
+            size: 16,
           ),
         ),
-        title:Container(
-          width: DeviceUtils.getScaledHeight(context, 0.6),
-          height: 40,
-          child: TextField(
-          //  textAlign: TextAlign.center,
-
-            decoration: InputDecoration(
-              hintText: 'Search Here...',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-
-                  width: 0,
-                  style: BorderStyle.none,
-                ),
-              ),
-              filled: true,
-              contentPadding: EdgeInsets.symmetric(horizontal: 16),
-              fillColor: Colors.white,
-            ),
-          ),
-        ),
+        title: !_isSearchBar ? Text('Search User') : _searchTextField(),
         centerTitle: true,
-        shadowColor: Colors.transparent,
+        actions: !_isSearchBar
+            ? [
+                //add
+                IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      setState(() {
+                        //add
+                        _isSearchBar = true;
+                        searchQuery = '';
+                        userList = [];
+                      });
+                    })
+              ]
+            : [
+                IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: () {
+                      setState(() {
+                        _isSearchBar = false;
+                        searchQuery = '';
+                        userList = [];
+                      });
+                    })
+              ],
       ),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-      Expanded(
-        child: ListView.separated(
-        itemCount:10,
-          separatorBuilder: (BuildContext context, int index) => const Divider(),
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text("User Name"),
-              subtitle: Text("9898989898"),
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage('https://cdn-icons-png.flaticon.com/512/1077/1077012.png'),
-              ),
-              trailing:Row(
-                mainAxisSize: MainAxisSize.min,
+      body: CustomBodyWrapper(
+        child: userList.length > 0
+            ? Column(
                 children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18), // <-- Radius
-                      ),
-                    ),
-                    child: Text('PAY', style: TextStyle(fontSize: 12,)
-
-                      ,),
-                    onPressed:(){
-                      Routes.navigateToScreenWithArgs(context, Routes.pay_request_business_payment, {"type":'Pay','username':'User Name',"phone":"9898989898"});
-                    },
-                  ),
                   SizedBox(
-                    width: 5,
+                    height: 20,
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18), // <-- Radius
-                      ),
-                    ),
-                    child: Text('REQUEST', style: TextStyle(fontSize: 12,),),
-                    onPressed:(){
-                      Routes.navigateToScreenWithArgs(context, Routes.pay_request_business_payment, {"type":'Request','username':'User Name',"phone":"9898989898"});
-                    },
-                  ),
+                  Expanded(
+                      child: ListView.separated(
+                    itemCount: userList.length,
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(),
+                    itemBuilder: (context, index) =>
+                        getUserTileContainer(index),
+                  )),
                 ],
               )
-
-            );
-
-          },
-
-        ),
-      ),
-
-
-        ],
+            : Center(
+                child: Text('Please search user to get results'),
+              ),
       ),
     );
   }

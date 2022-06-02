@@ -294,10 +294,10 @@ class Repository {
   }
 
   
-  Future getAllUserList(searchQuery, userID) async {
+  Future getAllUserList(searchQuery) async {
     var token = await authToken;
     return await _postApi
-        .getAllUserList(searchQuery, userID)
+        .getAllUserList(searchQuery,token)
         .then((placeData) => placeData)
         .catchError((error) => throw error);
   }
