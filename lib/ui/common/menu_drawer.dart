@@ -53,7 +53,10 @@ class _MenuDrawerState extends State<MenuDrawer> {
         title,
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
-      onTap: onTapEvent,
+      onTap: () {
+        Navigator.pop(context);
+        onTapEvent();
+      },
     );
   }
 
