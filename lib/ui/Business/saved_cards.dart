@@ -14,49 +14,50 @@ class SavedCards extends StatefulWidget {
 class _SavedCardsState extends State<SavedCards> {
   List<String> cardList = ["1234", "5678"];
 
-  final layoutAddNewCard = Container(
-    padding: EdgeInsets.symmetric(horizontal: 8),
-    child: InkWell(
-      onTap: () {},
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            child: Row(
-              children: [
-                Container(
-                  height: 26,
-                  width: 26,
-                  decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.all(Radius.circular(13))),
-                  child: Center(
-                    child: Icon(
-                      Icons.image_outlined,
-                      color: Colors.white,
-                      size: 12,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text("Add new"),
-              ],
-            ),
-          ),
-          Icon(
-            Icons.radio_button_off_outlined,
-            color: AppColors.primaryColor,
-          )
-        ],
-      ),
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
+    final layoutAddNewCard = Container(
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      child: InkWell(
+        onTap: () {
+          Routes.navigateToScreen(context, Routes.add_card);
+        },
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Row(
+                children: [
+                  Container(
+                    height: 26,
+                    width: 26,
+                    decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        borderRadius: BorderRadius.all(Radius.circular(13))),
+                    child: Center(
+                      child: Icon(
+                        Icons.image_outlined,
+                        color: Colors.white,
+                        size: 12,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text("Add new"),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.radio_button_off_outlined,
+              color: AppColors.primaryColor,
+            )
+          ],
+        ),
+      ),
+    );
     return Scaffold(
         appBar: AppBar(
           shadowColor: Colors.transparent,
@@ -89,7 +90,13 @@ class _SavedCardsState extends State<SavedCards> {
                         shrinkWrap: true,
                         physics: ClampingScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return SavedCardItem();
+                          return SavedCardItem(
+                            onEdit: (){
+                              Routes.navigateToScreen(
+                                  context, Routes.edit_cards);
+                            },
+                            onDelete: (){},
+                          );
                         },
                       ),
                       SizedBox(
@@ -103,7 +110,10 @@ class _SavedCardsState extends State<SavedCards> {
 }
 
 class SavedCardItem extends StatelessWidget {
-  const SavedCardItem({Key? key}) : super(key: key);
+  Function? onEdit;
+  Function? onDelete;
+
+  SavedCardItem({this.onEdit, this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -141,34 +151,44 @@ class SavedCardItem extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                height: 26,
-                width: 26,
-                decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
-                    borderRadius: BorderRadius.all(Radius.circular(13))),
-                child: Center(
-                  child: Icon(
-                    Icons.delete,
-                    color: Colors.white,
-                    size: 12,
+              InkWell(
+                onTap: () {
+                  onDelete!();
+                },
+                child: Container(
+                  height: 26,
+                  width: 26,
+                  decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                      borderRadius: BorderRadius.all(Radius.circular(13))),
+                  child: Center(
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                      size: 12,
+                    ),
                   ),
                 ),
               ),
               SizedBox(
                 width: 10,
               ),
-              Container(
-                height: 26,
-                width: 26,
-                decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
-                    borderRadius: BorderRadius.all(Radius.circular(13))),
-                child: Center(
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                    size: 12,
+              InkWell(
+                onTap: () {
+                  onEdit!();
+                },
+                child: Container(
+                  height: 26,
+                  width: 26,
+                  decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                      borderRadius: BorderRadius.all(Radius.circular(13))),
+                  child: Center(
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                      size: 12,
+                    ),
                   ),
                 ),
               ),

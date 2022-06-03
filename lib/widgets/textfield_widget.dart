@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final IconData icon;
@@ -7,6 +8,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool isObscure;
   final bool isIcon;
   final TextInputType? inputType;
+
   //final TextEditingController textController;
   final EdgeInsets padding;
   final Color hintColor;
@@ -24,8 +26,7 @@ class TextFieldWidget extends StatelessWidget {
       child: Container(
         width: 310,
         child: TextFormField(
-
-         // controller: textController,
+          // controller: textController,
           focusNode: focusNode,
           onFieldSubmitted: onFieldSubmitted,
           onChanged: onChanged,
@@ -38,8 +39,10 @@ class TextFieldWidget extends StatelessWidget {
           decoration: InputDecoration(
               border: OutlineInputBorder(),
               hintText: this.hint,
-              hintStyle:
-                  Theme.of(context).textTheme.bodyText2!.copyWith(color: hintColor),
+              hintStyle: Theme.of(context)
+                  .textTheme
+                  .bodyText2!
+                  .copyWith(color: hintColor),
               errorText: errorText,
               counterText: '',
               icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
@@ -52,7 +55,7 @@ class TextFieldWidget extends StatelessWidget {
     Key? key,
     required this.icon,
     required this.errorText,
-   // required this.textController,
+    // required this.textController,
     this.inputType,
     this.hint,
     this.isObscure = false,
@@ -65,7 +68,62 @@ class TextFieldWidget extends StatelessWidget {
     this.onChanged,
     this.autoFocus = false,
     this.inputAction,
-
   }) : super(key: key);
+}
 
+class TextFormFieldCustom extends StatelessWidget {
+  final TextEditingController? controller;
+  final String? hintText;
+  final TextInputAction? textInputAction;
+  final TextInputType? textInputType;
+  final bool? obscureText;
+  final bool? enabled;
+  final TextInputFormatter? inputFormatter;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final Color? hintColor;
+
+  TextFormFieldCustom(
+      {this.controller,
+      this.hintText,
+      this.textInputAction,
+      this.textInputType,
+      this.obscureText,
+      this.enabled,
+      this.inputFormatter,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.hintColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      //decoration: BoxDecoration(boxShadow: [shadow]),
+      child: TextFormField(
+        controller: controller,
+        textInputAction: textInputAction ?? TextInputAction.next,
+        keyboardType: textInputType ?? TextInputType.text,
+        obscureText: obscureText ?? false,
+        enabled: enabled ?? true,
+        inputFormatters: inputFormatter != null ? [inputFormatter!] : [],
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(left: 21, top: 15, bottom: 15),
+            fillColor: Colors.white,
+            filled: true,
+            hintText: hintText ?? "HintText",
+            prefixIcon: prefixIcon,
+            suffixIcon: suffixIcon,
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey, width: 1.0),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                borderRadius: BorderRadius.circular(8.0)),
+            disabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                borderRadius: BorderRadius.circular(8.0))),
+      ),
+    );
+  }
 }

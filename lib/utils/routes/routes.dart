@@ -2,7 +2,9 @@ import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:guilt_app/ui/Business/SearchAllBusiness.dart';
 import 'package:guilt_app/ui/Business/SearchUserForBusinessPayment.dart';
+import 'package:guilt_app/ui/Business/add_card.dart';
 import 'package:guilt_app/ui/Business/business_payment.dart';
+import 'package:guilt_app/ui/Business/edit_card.dart';
 import 'package:guilt_app/ui/Business/mybusiness.dart';
 import 'package:guilt_app/ui/Business/saved_cards.dart';
 import 'package:guilt_app/ui/Event/create_event.dart';
@@ -124,6 +126,8 @@ class Routes {
   static const String add_feedback = '/add_feedback';
   static const String feedback_list = '/feedback_list';
   static const String saved_cards = '/saved_cards';
+  static const String edit_cards = '/edit_cards';
+  static const String add_card = '/add_card';
 
   static final routes = <String, WidgetBuilder>{
     otpvalidate: (BuildContext context) => Otp_Validate_Screen(),
@@ -185,6 +189,8 @@ class Routes {
     add_feedback: (BuildContext context) => Add_feedback(),
     feedback_list: (BuildContext context) => Feedback_list(),
     saved_cards: (BuildContext context) => SavedCards(),
+    edit_cards: (BuildContext context) => EditCard(),
+    add_card: (BuildContext context) => AddCard(),
   };
 
   static navigateToScreen(BuildContext context, route) {
