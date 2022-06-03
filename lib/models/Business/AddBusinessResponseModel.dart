@@ -1,7 +1,7 @@
 class AddBusinessResponseModel {
   bool? success;
   String? message;
-  Business? business;
+  AddBusinessData? business;
 
   AddBusinessResponseModel({this.success, this.message, this.business});
 
@@ -9,7 +9,7 @@ class AddBusinessResponseModel {
     success = json['success'];
     message = json['message'];
     business = json['business'] != null
-        ? new Business.fromJson(json['business'])
+        ? new AddBusinessData.fromJson(json['business'])
         : null;
   }
 
@@ -24,7 +24,7 @@ class AddBusinessResponseModel {
   }
 }
 
-class Business {
+class AddBusinessData {
   int? id;
   String? name;
   String? location;
@@ -39,7 +39,7 @@ class Business {
   Admin? admin;
   List<BusinessPhotos>? businessPhotos;
 
-  Business(
+  AddBusinessData(
       {this.id,
         this.name,
         this.location,
@@ -54,7 +54,7 @@ class Business {
         this.admin,
         this.businessPhotos});
 
-  Business.fromJson(Map<String, dynamic> json) {
+  AddBusinessData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     location = json['location'];

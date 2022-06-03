@@ -89,7 +89,6 @@ class _EventDetailsState extends State<EventDetails> {
                               contentData?.event?.isUserAtendee == true
                                   ? IconButton(
                                       onPressed: () {
-                                        // TODO: Init Group Chat
                                         GlobalMethods.showLoader();
                                         G.socketUtils
                                             .emitJoinEventChat(contentData!);

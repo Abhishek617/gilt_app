@@ -2,17 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
-import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/data/sharedpref/constants/preferences.dart';
-import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
-import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
+import 'package:guilt_app/models/Business/BusinessDetailResponseModel.dart';
 import 'package:guilt_app/models/Chat/SocketUserModel.dart';
-import 'package:guilt_app/models/Chat/UserChatMessageListModel.dart';
 import 'package:guilt_app/models/Chat/UserChatMessagesModel.dart';
 import 'package:guilt_app/models/Chat/roomListModel.dart';
 import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
-import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -21,7 +17,6 @@ class SocketUtils {
   late IO.Socket _socket;
   late SocketUserModel socketUserData;
   bool isSocketConnected = false;
-  final UserStore _userStore = UserStore(getIt<Repository>());
 
   @observable
   late var userData;
@@ -87,7 +82,7 @@ class SocketUtils {
         }
         _socket.connect();
         _socket.onConnect((sUserData) {
-          print('connected to websocket');
+          print('connected to web socket');
           isSocketConnected = true;
           print(sUserData);
           if (sUserData != null) {
@@ -159,38 +154,52 @@ class SocketUtils {
     }
   }
 
-  joinEventUser(Rooms eventRoomData) {
+  emitJoinBusinessChat(Business businessData) {
     if (isSocketConnected) {
-      var event = eventRoomData;
-      if (event != null) {
-        getUserData((data) {
-          print('socketUserData');
-          print(data);
-          if (data != null) {
-            socketUserData = data;
-            var eData = {
-              "eventName": event.eventInfo?.name,
-              "id": socketUserData.sqlId,
-              "user_id": socketUserData.sId,
-              "type": "event",
-              "eventInfo": {
-                "name": event.eventInfo?.name,
-                "image": event.eventInfo?.image ??
-                    "https://guiltapp.s3.amazonaws.com/profile/1648029484683bird-thumbnail.jpg",
-                "hostedUsername": event.eventInfo?.hostedUsername,
-                "sqlId": event.eventInfo?.sqlId
-              }
-            };
-            print(eData);
-            _socket.emit(JOIN_USER_EVENT_CHAT, eData);
-            _socket.off(GET_MESSAGE_LIST);
-            _socket.on(GET_MESSAGE_LIST, (response) {
-              currentMessageList = response;
-              print(response);
-            });
-          }
-        });
-      }
+      getUserData((data) {
+        print('socketUserData');
+        print(data);
+        if (data != null) {
+          socketUserData = data;
+          var bData = {
+            "id": businessData.id,
+            // business Id
+            "user_id": socketUserData.sId,
+            // logged in userid
+            "type": "business",
+            // pass businessInfo only when new thread created otherwise when redirecting from thread to thread detail its not needed
+            "businessInfo": {
+              "name": businessData.name,
+              "image": businessData.businessPhotos!.length > 0
+                  ? businessData.businessPhotos![0]
+                  : '',
+              "hostedUsername": (businessData.admin?.firstname ?? '') +
+                  ' ' +
+                  (businessData.admin?.lastname ?? ''),
+              "sqlId": businessData.id
+            },
+            "room_key": "bs_" +
+                businessData.id.toString() +
+                "_" +
+                businessData.createdBy.toString() +
+                "_" +
+                socketUserData.sqlId.toString()
+            // room_key: bs_businessSQLID_businessHostSQLID_otherPersonWhoJoinSQLID
+          };
+          print('bData');
+          print(bData);
+          _socket.emit(JOIN_USER_BUSINESS_CHAT, bData);
+          _socket.off(GET_MESSAGE_LIST);
+          _socket.on(JOIN_USER_BUSINESS_CHAT, (response) {
+            print(response);
+          });
+          _socket.on(GET_MESSAGE_LIST, (response) {
+            currentMessageList = UserChatMessageListModel.fromJson(response);
+            currentChatRoomKey = currentMessageList.roomKey ?? currentMessageList?.roomData?.roomKey;
+            print(response);
+          });
+        }
+      });
     } else {
       initSocket();
     }
@@ -241,14 +250,12 @@ class SocketUtils {
   @action
   handleRoomList(roomListListener) {
     if (isSocketConnected) {
-      if (_socket != null) {
-        _socket.emit(GET_ROOM_LIST);
-        print('emitted room List');
-        _socket.off(GET_ROOM_LIST);
-        _socket.on(GET_ROOM_LIST, (roomData) {
-          roomListListener(roomData);
-        });
-      }
+      _socket.emit(GET_ROOM_LIST);
+      print('emitted room List');
+      _socket.off(GET_ROOM_LIST);
+      _socket.on(GET_ROOM_LIST, (roomData) {
+        roomListListener(roomData);
+      });
     } else {
       initSocket();
     }
@@ -330,7 +337,7 @@ class SocketUtils {
         "room_key": roomData.roomName,
         // userid of the user whom you want to chat
         "user_id": socketUserData.sId
-        // mongodb userid of the loggedin user
+        // mongodb userid of the logged in user
       });
       _socket.off(GET_MESSAGE_LIST);
       _socket.on(GET_MESSAGE_LIST, (messageList) {
@@ -354,14 +361,14 @@ class SocketUtils {
     if (isSocketConnected) {
       print('New User Create/Join Room');
       print(newUserData.toString());
-      var udata = {
+      var uData = {
         "type": 'private',
         "sqlId": newUserData.userId,
         // userid of the user whom you want to chat
         "user_id": socketUserData.sId
-        // mongodb userid of the loggedin user
+        // mongodb userid of the logged in user
       };
-      _socket.emit(JOIN_USER_PRIVATE_CHAT, udata);
+      _socket.emit(JOIN_USER_PRIVATE_CHAT, uData);
       _socket.off(GET_MESSAGE_LIST);
       _socket.on(GET_MESSAGE_LIST, (messageList) {
         print('loadMessage:');
@@ -388,12 +395,12 @@ class SocketUtils {
         print(currentMessageList);
         print(currentChatRoom);
         print(messageText);
-        if (messageText != '') {
+        if (messageText  != '') {
           var msg = {
             // "_id": socketUserData.sId,
             "room_key": roomKey ?? currentChatRoomKey,
             "message": messageText,
-            "user_type": userData.user.roleId.toString() ?? '1',
+            "user_type": userData.user.roleId.toString(),
             "message_type": "text",
             "senderUserId": socketUserData.sId,
             "files": [],
@@ -414,15 +421,17 @@ class SocketUtils {
           // "_id": socketUserData.sId,
           "room_key": currentChatRoom.roomName,
           "message": iData.location,
-          "user_type": userData.user.roleId.toString() ?? '1',
+          "user_type": userData.user.roleId.toString(),
           "message_type": type,
           "senderUserId": socketUserData.sId,
-          "files": [{
-            "originalFileName": iData.originalname,
-            "fileName": 'GUILT_' + iData.originalname,
-            "contentType": iData.contentType,
-            "size": iData.size
-          }],
+          "files": [
+            {
+              "originalFileName": iData.originalname,
+              "fileName": 'GUILT_' + iData.originalname,
+              "contentType": iData.contentType,
+              "size": iData.size
+            }
+          ],
           "user": {
             "userSqlId": socketUserData.sqlId,
             "firstName": (socketUserData.firstName ?? ''),

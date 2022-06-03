@@ -61,8 +61,11 @@ class _MessagesState extends State<Messages> {
                         backgroundImage: NetworkImage((msgData.type == 'event')
                             ? (msgData.eventInfo.image ??
                                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU')
-                            : (msgData.users[0].profile ??
-                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU')),
+                            : (msgData.type == 'business')
+                                ? (msgData.businessInfo.image ??
+                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU')
+                                : (msgData.users[0].profile ??
+                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU')),
                         onBackgroundImageError: (e, s) {
                           debugPrint('image issue, $e,$s');
                         }),
@@ -77,7 +80,8 @@ class _MessagesState extends State<Messages> {
                         Text(
                           (msgData.type == 'event')
                               ? (msgData.eventInfo.name ?? 'Event Chat')
-                              : (msgData.users[0].firstName +
+                              : (msgData.type == 'business')
+                              ? (msgData.businessInfo.name ?? 'Business Chat') : (msgData.users[0].firstName +
                                       ' ' +
                                       msgData.users[0].lastName ??
                                   'No Name'),
@@ -158,11 +162,11 @@ class _MessagesState extends State<Messages> {
         onTap: () {
           G.socketUtils.currentChatRoom = msgData;
           if (msgData.type == 'private') {
-           // G.socketUtils.joinPrivateUser(msgData);
+            // G.socketUtils.joinPrivateUser(msgData);
             Routes.navigateToScreen(context, Routes.chat);
           } else if (msgData.type == 'event') {
             //G.socketUtils.joinEventUser(msgData);
-              Routes.navigateToScreen(context, Routes.event_chat);
+            Routes.navigateToScreen(context, Routes.event_chat);
           } else {
             Routes.navigateToScreen(context, Routes.business_chat);
           }

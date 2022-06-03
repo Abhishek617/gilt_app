@@ -49,6 +49,7 @@ class Rooms {
   String? lastMessageAt;
   LastMessage? lastMessage;
   String? type;
+  BusinessInfo? businessInfo;
   String? roomId;
   String? index;
   String? roomName;
@@ -61,6 +62,7 @@ class Rooms {
         this.lastMessageAt,
         this.lastMessage,
         this.type,
+        this.businessInfo,
         this.roomId,
         this.index,
         this.roomName,
@@ -75,6 +77,9 @@ class Rooms {
         ? new LastMessage.fromJson(json['lastMessage'])
         : null;
     type = json['type'];
+    businessInfo = json['businessInfo'] != null
+        ? new BusinessInfo.fromJson(json['businessInfo'])
+        : null;
     roomId = json['roomId'];
     index = json['index'];
     roomName = json['roomName'];
@@ -98,6 +103,9 @@ class Rooms {
       data['lastMessage'] = this.lastMessage!.toJson();
     }
     data['type'] = this.type;
+    if (this.businessInfo != null) {
+      data['businessInfo'] = this.businessInfo!.toJson();
+    }
     data['roomId'] = this.roomId;
     data['index'] = this.index;
     data['roomName'] = this.roomName;
@@ -116,9 +124,9 @@ class LastMessage {
   String? messageType;
   String? message;
   String? senderUserId;
-  Null? username;
+  String? username;
   String? userType;
-  Null? userSqlId;
+  String? userSqlId;
   String? date;
   String? timestamp;
 
@@ -153,6 +161,31 @@ class LastMessage {
     data['userSqlId'] = this.userSqlId;
     data['date'] = this.date;
     data['timestamp'] = this.timestamp;
+    return data;
+  }
+}
+
+class BusinessInfo {
+  String? name;
+  String? image;
+  int? sqlId;
+  String? sId;
+
+  BusinessInfo({this.name, this.image, this.sqlId, this.sId});
+
+  BusinessInfo.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    image = json['image'];
+    sqlId = json['sqlId'];
+    sId = json['_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['image'] = this.image;
+    data['sqlId'] = this.sqlId;
+    data['_id'] = this.sId;
     return data;
   }
 }

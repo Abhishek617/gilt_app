@@ -99,15 +99,15 @@ class _MyBusinessState extends State<MyBusiness> {
   }
 
   myBusinessListContainer(index) {
-    MyBusinessListData business = businessList[index];
-    return GestureDetector(
-      onTap: (){
-        Routes.navigateToScreenWithArgs(context, Routes.business_details, business.id);
-      },
-      child: Card(
-        child: Container(
-          margin: EdgeInsets.all(8.0),
-          child: Flexible(
+      MyBusinessListData business = businessList[index];
+      return GestureDetector(
+        onTap: () {
+          Routes.navigateToScreenWithArgs(
+              context, Routes.business_details, business.id);
+        },
+        child: Card(
+          child: Container(
+            margin: EdgeInsets.all(8.0),
             child: Row(
               children: [
                 Container(
@@ -154,42 +154,11 @@ class _MyBusinessState extends State<MyBusiness> {
                     ],
                   ),
                 ),
-                PopupMenuButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  offset: Offset(-22.0, 40.0),
-                  icon: Icon(Icons.more_vert),
-                  itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                    PopupMenuItem(
-                      onTap: () {
-                        editBusiness(business, index);
-                      },
-                      height: 10,
-                      padding: EdgeInsets.only(left: 30, top: 10),
-                      child: Text(
-                        'Edit',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      onTap: () {
-                        deleteBusiness(context, business, index);
-                      },
-                      height: 10,
-                      padding: EdgeInsets.only(left: 30, top: 15, bottom: 10),
-                      child: Text(
-                        'Delete',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   @override

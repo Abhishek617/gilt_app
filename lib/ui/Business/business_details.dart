@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/models/Business/BusinessDetailResponseModel.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
@@ -262,7 +263,15 @@ class _BusinessDetailState extends State<BusinessDetail> {
                           ))),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        GlobalMethods.showLoader();
+                        G.socketUtils
+                            .emitJoinBusinessChat(b);
+                        GlobalMethods.hideLoader();
+                        Routes.navigateToScreen(
+                            context, Routes.business_chat);
+
+                      },
                       child: Row(
                         children: [
                           Icon(Icons.chat),
