@@ -74,6 +74,11 @@ class _SearchUserForBusinessPaymentState
                 ),
               ),
               onPressed: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+
+                if (!currentFocus.hasPrimaryFocus) {
+                  currentFocus.unfocus();
+                }
                 Routes.navigateToScreenWithArgs(
                     context,
                     Routes.pay_request_business_payment,
@@ -96,6 +101,11 @@ class _SearchUserForBusinessPaymentState
                 ),
               ),
               onPressed: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+
+                if (!currentFocus.hasPrimaryFocus) {
+                  currentFocus.unfocus();
+                }
                 Routes.navigateToScreenWithArgs(
                     context,
                     Routes.pay_request_business_payment,
