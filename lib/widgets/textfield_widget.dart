@@ -127,3 +127,73 @@ class TextFormFieldCustom extends StatelessWidget {
     );
   }
 }
+
+class TextFieldSearch extends StatelessWidget {
+  final TextEditingController? controller;
+  final String? hintText;
+  final TextInputAction? textInputAction;
+  final TextInputType? textInputType;
+  final bool? obscureText;
+  final bool? enabled;
+  final Function? onChanged;
+  final TextInputFormatter? inputFormatter;
+  final Widget? prefixIcon;
+  final Color? hintColor;
+  final FocusNode? focusNode;
+  final FormFieldValidator<String>? validator;
+
+  TextFieldSearch(
+      {this.controller,
+      this.hintText,
+      this.textInputAction,
+      this.textInputType,
+      this.obscureText,
+      this.enabled,
+      this.onChanged,
+      this.inputFormatter,
+      this.prefixIcon,
+      this.hintColor,
+      this.focusNode,
+      this.validator});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      //decoration: BoxDecoration(boxShadow: [shadow]),
+      width: double.infinity,
+      child: TextFormField(
+        controller: controller,
+        textInputAction: textInputAction ?? TextInputAction.next,
+        keyboardType: textInputType ?? TextInputType.text,
+        obscureText: obscureText ?? false,
+        enabled: enabled ?? true,
+        focusNode: focusNode ?? new FocusNode(),
+        inputFormatters: inputFormatter != null ? [inputFormatter!] : [],
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(left: 2, top: 15, bottom: 15),
+            filled: true,
+            hintText: hintText ?? "HintText",
+            prefixIcon: prefixIcon,
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey, width: 1.0),
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey, width: 1.0),
+            ),
+            disabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey, width: 1.0),
+            ),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey, width: 1.0),
+            ),
+            errorBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 1.0),
+            )),
+        onChanged: (value) {
+          if (onChanged != null) onChanged!(value);
+        },
+        validator: validator,
+      ),
+    );
+  }
+}

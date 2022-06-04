@@ -293,6 +293,14 @@ class Repository {
         .catchError((error) => throw error);
   }
 
+  // Get Businesses By Name
+  Future getBusinessByNameList(searchQuery) async {
+    var token = await authToken;
+    return await _postApi
+        .getBusinessByNameList(searchQuery,token)
+        .then((eventListData) => eventListData)
+        .catchError((error) => throw error);
+  }
   
   Future getAllUserList(searchQuery) async {
     var token = await authToken;
@@ -428,6 +436,25 @@ class Repository {
     return await _postApi
         .signup(signUpData)
         .then((registerData) => registerData)
+        .catchError((error) => throw error);
+  }
+
+  //Add payment request
+  Future requestUserForPayment(
+      toUserId, businessId, amount, remarks, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .requestUserForPayment(toUserId, businessId, amount, remarks, token, successCB, errorCB)
+        .then((addedBusinessData) => addedBusinessData)
+        .catchError((error) => throw error);
+  }
+
+  //Add payment request
+  Future getSavedCards(successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .getSavedCards(token, successCB, errorCB)
+        .then((addedBusinessData) => addedBusinessData)
         .catchError((error) => throw error);
   }
 }

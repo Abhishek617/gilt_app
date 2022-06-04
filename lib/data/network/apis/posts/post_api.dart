@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/network/dio_client.dart';
@@ -23,12 +24,15 @@ import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
+import 'package:guilt_app/models/payment/payment_request.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 
 import '../../../../models/Event/upcoming_past_event_modal.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
+
+import '../../../../models/payment/payment_card_master.dart';
 
 class PostApi {
   // dio instance
@@ -188,6 +192,22 @@ class PostApi {
       return await _dioClient.get(
         Endpoints.allBusinessList,
         queryParameters: {"search":searchQuery ?? '',"page": 0, "size": 20},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Get Business List By Name
+  // Get All Business List
+  Future getBusinessByNameList(searchQuery,token) async {
+    try {
+      print("Search query: $searchQuery");
+      return await _dioClient.get(
+        Endpoints.searchByNameBusinessList,
+        queryParameters: {"search":searchQuery ?? '',},
         options: Options(headers: {'Authorization': 'Bearer ' + token}),
       );
     } catch (e) {
@@ -594,6 +614,63 @@ class PostApi {
       });
       return SignUpResponseModal.fromJson(res);
     } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Add Payment Request
+  Future requestUserForPayment(
+      toUserId, businessId, amount, remarks, token, successCB, errorCB) async {
+
+    String getParams() {
+      var map = new Map<String, dynamic>();
+      map['toUser'] = toUserId;
+      map['businessId'] = businessId;
+      map['amount'] = amount;
+      map['remarks'] = remarks;
+      return json.encode(map);
+    }
+
+    try {
+      await _dioClient
+          .post(
+        Endpoints.requestPaymentBusiness,
+        data: getParams(),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = PaymentMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Add Payment Request
+  Future getSavedCards(
+      token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.savedCardList,
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = PaymentCardMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
       print(e.toString());
       throw e;
     }

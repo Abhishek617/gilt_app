@@ -537,6 +537,26 @@ abstract class _UserStore with Store {
     });
   }
 
+  @action
+  Future requestUserForPayment(toUserId, businessId, amount, remarks, successCallback,
+      errorCallback) async {
+    _repository
+        .requestUserForPayment(toUserId, businessId, amount, remarks, successCallback, errorCallback)
+        .then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future getSavedCards(successCallback,
+      errorCallback) async {
+    _repository
+        .getSavedCards(successCallback, errorCallback)
+        .then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
   // general methods:-----------------------------------------------------------
   void dispose() {
     for (final d in _disposers!) {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/models/payment/payment_card_master.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 
 import '../../utils/routes/routes.dart';
 import '../../widgets/custom_body_wrapper.dart';
@@ -12,7 +14,27 @@ class SavedCards extends StatefulWidget {
 }
 
 class _SavedCardsState extends State<SavedCards> {
-  List<String> cardList = ["1234", "5678"];
+  List<PaymentCardDetails> cardList = [];
+
+  getSavedCards() async {
+    GlobalStoreHandler.userStore.getSavedCards((PaymentCardMaster master) {
+      if (master != null) {
+        setState(() {
+          cardList = master.list ?? [];
+        });
+      }
+    }, (error) {
+      print(error.toString());
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      getSavedCards();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,21 +106,24 @@ class _SavedCardsState extends State<SavedCards> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      ListView.builder(
-                        padding: EdgeInsets.all(0),
-                        itemCount: cardList.length,
-                        shrinkWrap: true,
-                        physics: ClampingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return SavedCardItem(
-                            onEdit: (){
-                              Routes.navigateToScreen(
-                                  context, Routes.edit_cards);
-                            },
-                            onDelete: (){},
-                          );
-                        },
-                      ),
+                      cardList.isNotEmpty
+                          ? ListView.builder(
+                              padding: EdgeInsets.all(0),
+                              itemCount: cardList.length,
+                              shrinkWrap: true,
+                              physics: ClampingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return SavedCardItem(
+                                  cardDetails: cardList[index],
+                                  onEdit: () {
+                                    Routes.navigateToScreen(
+                                        context, Routes.edit_cards);
+                                  },
+                                  onDelete: () {},
+                                );
+                              },
+                            )
+                          : Container(),
                       SizedBox(
                         height: 16,
                       ),
@@ -110,10 +135,11 @@ class _SavedCardsState extends State<SavedCards> {
 }
 
 class SavedCardItem extends StatelessWidget {
+  PaymentCardDetails? cardDetails;
   Function? onEdit;
   Function? onDelete;
 
-  SavedCardItem({this.onEdit, this.onDelete});
+  SavedCardItem({this.cardDetails, this.onEdit, this.onDelete});
 
   @override
   Widget build(BuildContext context) {

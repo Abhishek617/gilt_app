@@ -66,6 +66,8 @@ class Endpoints {
   static const String searchByNameBusinessList = baseUrl + "api/business/getByName";
   // Request for Business by Business Owner to User
   static const String requestPaymentBusiness = baseUrl + "api/paymentRequest/add";
+  // Saved card list
+  static const String savedCardList = baseUrl + "api/payments/myCards";
   // Pay for Business by User to Business Owner
   static const String payForBusiness = baseUrl + "api/business";
 
