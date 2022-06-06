@@ -171,7 +171,7 @@ class SocketUtils {
             "businessInfo": {
               "name": businessData.name,
               "image": businessData.businessPhotos!.length > 0
-                  ? businessData.businessPhotos![0]
+                  ? businessData.businessPhotos![0].name
                   : '',
               "hostedUsername": (businessData.admin?.firstname ?? '') +
                   ' ' +

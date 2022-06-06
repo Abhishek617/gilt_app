@@ -62,7 +62,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
     G.socketUtils.onNewMessageListener(newMessageHandler);
     if(G.socketUtils.currentMessageList != null){
      setState((){
-       loadMessageData = G.socketUtils.currentMessageList;
+       loadMessageData = UserChatMessageListModel.fromJson(G.socketUtils.currentMessageList);
        currentMessageList = loadMessageData.messages ?? [];
      });
     }
