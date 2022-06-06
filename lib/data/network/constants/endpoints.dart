@@ -70,6 +70,8 @@ class Endpoints {
   static const String savedCardList = baseUrl + "api/payments/myCards";
   // Pay for Business by User to Business Owner
   static const String payForBusiness = baseUrl + "api/business";
+  //Add Card/Bank account
+  static const String addCardOrBank = baseUrl + "api/payments/add";
 
   //Get Business Places
   static const String getBusinessPlaces = baseUrl + "api/business-places";

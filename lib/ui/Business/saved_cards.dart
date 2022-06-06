@@ -167,7 +167,9 @@ class SavedCardItem extends StatelessWidget {
                 SizedBox(
                   width: 8,
                 ),
-                Flexible(child: Text("Visa ****2345")),
+                Flexible(
+                    child: Text(
+                        "${cardDetails!.type == "account" ? cardDetails!.bankName : cardDetails!.brand}")),
               ],
             ),
           ),

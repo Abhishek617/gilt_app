@@ -78,10 +78,11 @@ class TextFormFieldCustom extends StatelessWidget {
   final TextInputType? textInputType;
   final bool? obscureText;
   final bool? enabled;
-  final TextInputFormatter? inputFormatter;
+  final List<TextInputFormatter>? inputFormatters;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final Color? hintColor;
+  final FormFieldValidator<String>? validator;
 
   TextFormFieldCustom(
       {this.controller,
@@ -90,10 +91,10 @@ class TextFormFieldCustom extends StatelessWidget {
       this.textInputType,
       this.obscureText,
       this.enabled,
-      this.inputFormatter,
+      this.inputFormatters,
       this.prefixIcon,
       this.suffixIcon,
-      this.hintColor});
+      this.hintColor, this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +106,8 @@ class TextFormFieldCustom extends StatelessWidget {
         keyboardType: textInputType ?? TextInputType.text,
         obscureText: obscureText ?? false,
         enabled: enabled ?? true,
-        inputFormatters: inputFormatter != null ? [inputFormatter!] : [],
+        inputFormatters: inputFormatters != null ? inputFormatters : [],
+        validator: validator,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(left: 21, top: 15, bottom: 15),
             fillColor: Colors.white,
@@ -122,7 +124,11 @@ class TextFormFieldCustom extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0)),
             disabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                borderRadius: BorderRadius.circular(8.0))),
+                borderRadius: BorderRadius.circular(8.0)),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 1.0),
+                borderRadius: BorderRadius.circular(8.0)
+            )),
       ),
     );
   }
