@@ -262,6 +262,7 @@ class _BusinessDetailState extends State<BusinessDetail> {
                             borderRadius: BorderRadius.circular(90.0),
                           ))),
                     ),
+                    b.createdBy != GlobalStoreHandler.userStore.Profile_data?.user?.id?
                     ElevatedButton(
                       onPressed: () {
                         GlobalMethods.showLoader();
@@ -292,7 +293,7 @@ class _BusinessDetailState extends State<BusinessDetail> {
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(90.0),
                           ))),
-                    ),
+                    ) : Container(),
                     // Padding(
                     //     padding: EdgeInsets.only(left: 10, top:20, right: 00, bottom: 20),
                     //     child: Container(

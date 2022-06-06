@@ -183,6 +183,31 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.signUp(signUpData, successCallback, errorCallback));
   }
 
+  final _$requestUserForPaymentAsyncAction =
+      AsyncAction('_UserStore.requestUserForPayment');
+
+  @override
+  Future<dynamic> requestUserForPayment(
+      dynamic toUserId,
+      dynamic businessId,
+      dynamic amount,
+      dynamic remarks,
+      dynamic successCallback,
+      dynamic errorCallback) {
+    return _$requestUserForPaymentAsyncAction.run(() => super
+        .requestUserForPayment(toUserId, businessId, amount, remarks,
+            successCallback, errorCallback));
+  }
+
+  final _$getSavedCardsAsyncAction = AsyncAction('_UserStore.getSavedCards');
+
+  @override
+  Future<dynamic> getSavedCards(
+      dynamic successCallback, dynamic errorCallback) {
+    return _$getSavedCardsAsyncAction
+        .run(() => super.getSavedCards(successCallback, errorCallback));
+  }
+
   final _$_UserStoreActionController = ActionController(name: '_UserStore');
 
   @override

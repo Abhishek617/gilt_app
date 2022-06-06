@@ -218,10 +218,8 @@ class _MenuDrawerState extends State<MenuDrawer> {
                         ? getMenuTile(
                             'MY BUSINESS',
                             () => {
-                                  //Routes.navigateToScreen(
-                                  //    context, Routes.my_business)
                                   Routes.navigateToScreen(
-                                      context, Routes.saved_cards)
+                                     context, Routes.my_business)
                                 })
                         : Container(),
                     userRole == AppSettings.businessUserRole
@@ -247,6 +245,12 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             context, Routes.invite_contact)
                       },
                     ),
+                    getMenuTile(
+                        'SAVED CARDS',
+                            () => {
+                          Routes.navigateToScreen(
+                              context, Routes.saved_cards)
+                        }),
                     getMenuTile(
                       'EXPENSE HISTORY',
                       () => {
