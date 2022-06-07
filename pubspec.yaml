@@ -93,7 +93,7 @@ dependencies:
   #full_screen_image: ^1.0.2
   #date and time picker
   date_time_picker: ^2.1.0
-
+  flutter_google_places: ^0.3.0
   #Loader
   flutter_easyloading: ^3.0.3
 
