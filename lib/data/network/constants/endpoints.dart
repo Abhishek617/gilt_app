@@ -72,6 +72,8 @@ class Endpoints {
   static const String payForBusiness = baseUrl + "api/business";
   //Add Card/Bank account
   static const String addCardOrBank = baseUrl + "api/payments/add";
+  //Payment history
+  static const String paymentHistory = baseUrl + "api/payments/history";
 
   //Get Business Places
   static const String getBusinessPlaces = baseUrl + "api/business-places";
@@ -127,4 +129,7 @@ class Endpoints {
 
 //CreateEvent
   static const String addEvent = baseUrl + 'api/event/add';
+
+  // Accept or Reject Event
+  static const String acceptRejectEvent = baseUrl + 'api/event/acceptReject';
 }

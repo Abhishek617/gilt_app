@@ -421,6 +421,17 @@ class Repository {
         .catchError((error) => throw error);
   }
 
+  //accept reject event
+  Future acceptRejectEvent(
+      id, status, successCB, errorCB
+      ) async {
+    var token = await authToken;
+    return await _postApi
+        .acceptRejectEvent(id, status, token, successCB, errorCB)
+        .then((addeventData) => addeventData)
+        .catchError((error) => throw error);
+  }
+
   //add business
   Future addBusiness(
       AddBusinessRequestModel businessData, successCB, errorCB) async {
@@ -464,6 +475,15 @@ class Repository {
     return await _postApi
         .addCardOrBankAccount(data, token, successCB, errorCB)
         .then((paymentCardData) => paymentCardData)
+        .catchError((error) => throw error);
+  }
+
+  //Add payment request
+  Future getPaymentHistory(int page, int size, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .getPaymentHistory(page, size, token, successCB, errorCB)
+        .then((savedCardsData) => savedCardsData)
         .catchError((error) => throw error);
   }
 }

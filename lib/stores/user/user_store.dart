@@ -471,6 +471,15 @@ abstract class _UserStore with Store {
   }
 
   @action
+  Future acceptRejectEvent(
+      id, status, successCallback, errorCallback) async {
+    _repository.acceptRejectEvent(id, status, successCallback, errorCallback)
+        .then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
   Future addBusiness(AddBusinessRequestModel businessData, successCallback,
       errorCallback) async {
     _repository
@@ -562,6 +571,16 @@ abstract class _UserStore with Store {
       errorCallback) async {
     _repository
         .addCardOrBankAccount(data, successCallback, errorCallback)
+        .then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future getPaymentHistory(int page, int size, successCallback,
+      errorCallback) async {
+    _repository
+        .getPaymentHistory(page, size, successCallback, errorCallback)
         .then((val) {
       print(val.toString());
     }, onError: errorCallback);

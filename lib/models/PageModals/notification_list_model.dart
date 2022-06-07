@@ -77,7 +77,7 @@ class User {
   String? email;
   String? password;
   String? phone;
-  Null? profile;
+  String? profile;
   String? aboutme;
   String? address;
   String? city;
@@ -85,11 +85,11 @@ class User {
   String? country;
   int? zip;
   int? roleId;
-  Null? deletedAt;
+  String? deletedAt;
   bool? isEmailVerified;
   bool? isPhoneVerified;
   String? authToken;
-  Null? customerProfileId;
+  String? customerProfileId;
 
   User(
       {this.id,
