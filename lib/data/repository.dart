@@ -445,7 +445,7 @@ class Repository {
     var token = await authToken;
     return await _postApi
         .requestUserForPayment(toUserId, businessId, amount, remarks, token, successCB, errorCB)
-        .then((addedBusinessData) => addedBusinessData)
+        .then((requestUserData) => requestUserData)
         .catchError((error) => throw error);
   }
 
@@ -454,7 +454,16 @@ class Repository {
     var token = await authToken;
     return await _postApi
         .getSavedCards(token, successCB, errorCB)
-        .then((addedBusinessData) => addedBusinessData)
+        .then((savedCardsData) => savedCardsData)
+        .catchError((error) => throw error);
+  }
+
+  //Add card or bank account
+  Future addCardOrBankAccount(data, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .addCardOrBankAccount(data, token, successCB, errorCB)
+        .then((paymentCardData) => paymentCardData)
         .catchError((error) => throw error);
   }
 }

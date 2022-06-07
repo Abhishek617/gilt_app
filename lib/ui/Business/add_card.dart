@@ -1,7 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/payment/add_card_master.dart';
+import 'package:guilt_app/models/payment/payment_card_master.dart';
 import 'package:guilt_app/models/payment_method/payment_method_master.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/card_utils/card_utils.dart';
 
 import '../../constants/colors.dart';
+import '../../utils/Global_methods/global.dart';
 import '../../utils/routes/routes.dart';
 import '../../widgets/custom_body_wrapper.dart';
 import '../../widgets/rounded_button_widget.dart';
@@ -15,6 +25,8 @@ class AddCard extends StatefulWidget {
 }
 
 class _AddCardState extends State<AddCard> {
+  GlobalKey<FormState> bankFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> cardFormKey = GlobalKey<FormState>();
   final edCardNameController = TextEditingController();
   final edCardNumberController = TextEditingController();
   final edCardExpiryController = TextEditingController();
@@ -22,11 +34,14 @@ class _AddCardState extends State<AddCard> {
 
   final edAccountNameController = TextEditingController();
   final edAccountNumberController = TextEditingController();
+  final edBankNameController = TextEditingController();
+  final edRoutingNumberController = TextEditingController();
   List<PaymentMethod> methodList = [
     PaymentMethod(methodName: "Bank Account", method: "bankAccount"),
     PaymentMethod(
         methodName: "Credit/Debit card", method: "card", isSelected: true),
   ];
+  final UserStore _userStore = UserStore(getIt<Repository>());
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +62,8 @@ class _AddCardState extends State<AddCard> {
       );
     }
 
-    final bankAccountForm = Container(
+    final bankAccountForm = Form(
+      key: bankFormKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -56,9 +72,35 @@ class _AddCardState extends State<AddCard> {
             height: 5,
           ),
           TextFormFieldCustom(
-            controller: edCardNameController,
+            controller: edAccountNameController,
             hintText: "",
             textInputType: TextInputType.text,
+            validator: (val) {
+              if (val!.isEmpty) {
+                return "Enter account name";
+              } else {
+                return null;
+              }
+            },
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          getTextfieldTitle(title: "Bank name"),
+          SizedBox(
+            height: 5,
+          ),
+          TextFormFieldCustom(
+            controller: edBankNameController,
+            hintText: "",
+            textInputType: TextInputType.text,
+            validator: (val) {
+              if (val!.isEmpty) {
+                return "Enter bank name";
+              } else {
+                return null;
+              }
+            },
           ),
           SizedBox(
             height: 20,
@@ -68,13 +110,43 @@ class _AddCardState extends State<AddCard> {
             height: 5,
           ),
           TextFormFieldCustom(
-            controller: edCardNumberController,
+            controller: edAccountNumberController,
             hintText: "",
             textInputType: TextInputType.number,
             suffixIcon: Icon(
               Icons.credit_card,
               color: Colors.black87.withOpacity(0.7),
             ),
+            validator: (val) {
+              if (val!.isEmpty) {
+                return "Enter account number";
+              } else {
+                return null;
+              }
+            },
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          getTextfieldTitle(title: "Routing number"),
+          SizedBox(
+            height: 5,
+          ),
+          TextFormFieldCustom(
+            controller: edRoutingNumberController,
+            hintText: "",
+            textInputType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            validator: (val) {
+              if (val!.isEmpty) {
+                return "Enter routing number";
+              } else {
+                return null;
+              }
+            },
+          ),
+          SizedBox(
+            height: 20,
           ),
           SizedBox(
             height: 24,
@@ -84,14 +156,21 @@ class _AddCardState extends State<AddCard> {
               buttonText: "Add",
               buttonColor: AppColors.primaryColor,
               textColor: Colors.white,
-              onPressed: () {},
+              onPressed: () {
+                if (bankFormKey.currentState!.validate()) {
+                  addCardOrBankAccount(data: getBankParams());
+                } else {
+                  print('Error');
+                }
+              },
             ),
           )
         ],
       ),
     );
 
-    final creditCardForm = Container(
+    final creditCardForm = Form(
+      key: cardFormKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -103,6 +182,13 @@ class _AddCardState extends State<AddCard> {
             controller: edCardNameController,
             hintText: "",
             textInputType: TextInputType.text,
+            validator: (val) {
+              if (val!.isEmpty) {
+                return "Enter name on the card.";
+              } else {
+                return null;
+              }
+            },
           ),
           SizedBox(
             height: 20,
@@ -119,6 +205,17 @@ class _AddCardState extends State<AddCard> {
               Icons.credit_card,
               color: Colors.black87.withOpacity(0.7),
             ),
+            validator: (val) {
+              if (val!.isEmpty) {
+                return "Enter card number";
+              } else if (CardUtils.validateCardNumWithLuhnAlgorithm(
+                      edCardNumberController.text.toString()) !=
+                  null) {
+                return "Invalid card.";
+              } else {
+                return null;
+              }
+            },
           ),
           SizedBox(
             height: 20,
@@ -138,6 +235,22 @@ class _AddCardState extends State<AddCard> {
                       controller: edCardExpiryController,
                       hintText: "",
                       textInputType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(4),
+                        CardMonthInputFormatter()
+                      ],
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return "Enter expiry.";
+                        } else if (CardUtils.validateDate(
+                                edCardExpiryController.text.toString()) !=
+                            null) {
+                          return "Invalid expiry date.";
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -158,6 +271,14 @@ class _AddCardState extends State<AddCard> {
                       controller: edCardCvvController,
                       hintText: "",
                       textInputType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return "Enter Cvv";
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -172,7 +293,13 @@ class _AddCardState extends State<AddCard> {
               buttonText: "Add",
               buttonColor: AppColors.primaryColor,
               textColor: Colors.white,
-              onPressed: () {},
+              onPressed: () {
+                if (cardFormKey.currentState!.validate()) {
+                  addCardOrBankAccount(data: getCardParams());
+                } else {
+                  print('Error');
+                }
+              },
             ),
           )
         ],
@@ -219,7 +346,9 @@ class _AddCardState extends State<AddCard> {
                           PaymentMethod method = methodList[index];
                           return Column(
                             children: [
-                              SizedBox(height: 8,),
+                              SizedBox(
+                                height: 8,
+                              ),
                               PaymentMethodItem(
                                 paymentMethod: methodList[index],
                                 onClick: () {
@@ -244,6 +373,54 @@ class _AddCardState extends State<AddCard> {
                     ],
                   ),
                 ))));
+  }
+
+  String getCardParams() {
+    List<int> expiryDate = CardUtils.getExpiryDate(edCardExpiryController.text);
+    String expiry = "${expiryDate[0]}/${expiryDate[1]}";
+    var map = new Map<String, dynamic>();
+    map['type'] = "card";
+    map['brand'] =
+        CardUtils.getCardTypeFrmNumber(edCardNumberController.text) ==
+                CardType.MasterCard
+            ? "master"
+            : CardUtils.getCardTypeFrmNumber(edCardNumberController.text) ==
+                    CardType.Visa
+                ? "visa"
+                : "card";
+    map['cardNumber'] = edCardNumberController.text;
+    map['expiry'] = expiry;
+    map['nameOnAccount'] = edCardNameController.text;
+    return json.encode(map);
+  }
+
+  String getBankParams() {
+    var map = new Map<String, dynamic>();
+    map['type'] = "account";
+    map['bankAccountNum'] = edAccountNumberController.text;
+    map['routingNumber'] = edRoutingNumberController.text;
+    map['bankName'] = edBankNameController.text;
+    map['nameOnAccount'] = edAccountNameController.text;
+    return json.encode(map);
+  }
+
+  addCardOrBankAccount({required String data}) async {
+    GlobalMethods.showLoader();
+    _userStore.addCardOrBankAccount(data, (AddPaymentMaster paymentMaster) {
+      GlobalMethods.hideLoader();
+      if (paymentMaster != null) {
+        if (paymentMaster.success!) {
+          GlobalMethods.showSuccessMessage(
+              context, paymentMaster.message!, "Add Payment Method");
+        } else {
+          GlobalMethods.showErrorMessage(
+              context, paymentMaster.message!, "Add Payment Method");
+        }
+      }
+    }, (error) {
+      GlobalMethods.hideLoader();
+      print(error.toString());
+    });
   }
 }
 

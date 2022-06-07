@@ -557,6 +557,16 @@ abstract class _UserStore with Store {
     }, onError: errorCallback);
   }
 
+  @action
+  Future addCardOrBankAccount(data, successCallback,
+      errorCallback) async {
+    _repository
+        .addCardOrBankAccount(data, successCallback, errorCallback)
+        .then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
   // general methods:-----------------------------------------------------------
   void dispose() {
     for (final d in _disposers!) {

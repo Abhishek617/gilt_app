@@ -24,6 +24,7 @@ import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
+import 'package:guilt_app/models/payment/add_card_master.dart';
 import 'package:guilt_app/models/payment/payment_request.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
@@ -667,6 +668,30 @@ class PostApi {
       )
           .then((value) {
         value = PaymentCardMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Add Card or Bank account
+  Future addCardOrBankAccount(data,
+      token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.addCardOrBank,
+        data: data,
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = AddPaymentMaster.fromJson(value);
         successCB(value);
       });
     } catch (e) {

@@ -117,6 +117,9 @@ dependencies:
   #Get address/place list from google map api
   geocoding: ^2.0.4
 
+  #For AES encryption and decryption
+  encrypt: ^5.0.1
+
 
 dev_dependencies:
   flutter_test:
