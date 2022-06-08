@@ -10,8 +10,9 @@ import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
+import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:provider/provider.dart';
-import '../../widgets/rounded_button_widget.dart';
+
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     _passwordFocusNode = FocusNode();
-    _userEmailController.text = 'nadeem@phpdots.com';
+    _userEmailController.text = 'nadeem123@yopmail.com';
     _passwordController.text = 'Nadeem@321';
   }
 

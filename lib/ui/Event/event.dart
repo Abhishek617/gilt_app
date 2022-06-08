@@ -4,19 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/constants/dimens.dart';
-import 'package:guilt_app/data/repository.dart';
-import 'package:guilt_app/di/components/service_locator.dart';
-import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
-import 'package:guilt_app/ui/Event/event_detail.dart';
+import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/Event/upcoming_past_event_modal.dart';
-import '../../stores/user/user_store.dart';
-import '../../utils/Global_methods/global.dart';
-import '../../utils/routes/routes.dart';
 
 class Event extends StatefulWidget {
   const Event({Key? key}) : super(key: key);
@@ -45,7 +41,6 @@ class _EventState extends State<Event> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(Duration(milliseconds: 3000), () {
       print("Wait for 3000 milliseconds");
@@ -99,10 +94,11 @@ class _EventState extends State<Event> {
         return  Column(
           children: event_list_data!.events.listData
               .map(
-                (item) => event(item, Colors.white,
+                (item) =>
+                event(item, Colors.white,
                     Image.network(
                         'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0'))
-          )
+               )
               .toList(),
         );
 

@@ -70,13 +70,13 @@ dependencies:
 
   flutter_otp_text_field: ^1.0.0
   introduction_screen: ^3.0.0
-  google_sign_in: ^5.2.4
-  firebase_auth: ^3.3.10
+  firebase_core: ^1.0.1
+  firebase_auth: ^1.0.1
+  google_sign_in: ^5.0.0
   image_picker: ^0.8.4+11
   get: ^4.6.1
   file: ^6.1.2
   material_floating_search_bar: ^0.3.7
-  firebase_core: ^1.15.0
   firebase_messaging: ^11.2.15
   flutter_local_notifications: ^9.4.1
 
@@ -91,7 +91,7 @@ dependencies:
   geolocator: ^8.2.0
   permission_handler: ^9.2.0
   fluttertoast: ^8.0.9
-
+  http_parser: ^4.0.0
   #date and time picker
   date_time_picker: ^2.1.0
 
@@ -101,7 +101,16 @@ dependencies:
   #get contacts
   contacts_service: ^0.6.3
   getwidget: ^2.0.5
+
+  # Face Authentication
   local_auth: ^2.0.0
+
+  #Socket Chat Integration
+  socket_io_client: ^1.0.2
+
+  #Date formate
+  jiffy: ^5.0.0
+
   curved_navigation_bar: ^1.0.3
   flutter_multi_formatter: ^2.5.1
 

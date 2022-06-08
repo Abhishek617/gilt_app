@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:guilt_app/constants/app_settings.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
+import 'package:guilt_app/utils/Global_methods/SocketService.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
@@ -26,24 +29,33 @@ class HomeExploreScreen extends StatefulWidget {
 }
 
 class _HomeExploreScreenState extends State<HomeExploreScreen> {
+  late SocketUtils socketUtils;
   late UserStore _userStore = UserStore(getIt<Repository>());
   List<UpcomingAndPastEventListDetail> upcomingEventList = [];
   List<UpcomingAndPastEventListDetail> pastEventList = [];
 
+  @observable
+  GetProfileResponseModal? ProfileData = GetProfileResponseModal();
+
   @override
   void initState() {
-    initSetup();
+    //initSetup();
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
     initSetup();
+    G.initSocket();
+    G.socketUtils.initSocket();
     super.didChangeDependencies();
   }
 
   void initSetup() async {
     await _userStore.getProfile();
+    setState(() {
+      ProfileData = _userStore.Profile_data;
+    });
     getEventsList('upcoming');
     getEventsList('past');
   }
@@ -70,77 +82,92 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
   Widget getFixSizedBox({double size = 12}) {
     return SizedBox(height: size);
   }
+
   Widget getNoEventsWidget() {
-    return  Image.network(
+    return Image.network(
       'https://sathyaeducare.com/assets/img/recent.jpg',
       width: DeviceUtils.getScaledWidth(context, 0.60),
     );
   }
 
-  Widget upcomingOrPastEventCard(UpcomingAndPastEventListDetail eventItem,type) {
-    return Card(
-      margin: EdgeInsets.only(right: 12, bottom: 5),
-      child: Container(
-        color: Colors.white,
-        alignment: Alignment.center,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.network(
-              // eventItem['imageURL'] ?? 'https://zillifurniture.com/images/product/1601279977-pro-placeholder.png',
-              type == 'upcoming' ? 'https://vanguardian.org/wp-content/uploads/2021/02/UpcomingEvents.jpg' : 'https://sathyaeducare.com/assets/img/recent.jpg',
-              width: DeviceUtils.getScaledWidth(context, 0.40),
-              height: DeviceUtils.getScaledHeight(context, 0.10),
-            ),
-            getFixSizedBox(size: 5),
-            Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(eventItem.name,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700)),
-                  getFixSizedBox(size: 3),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.supervised_user_circle,
-                        size: 20,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      Text(
-                        '20+ Attendees',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          decoration: TextDecoration.underline,
-                          color: Colors.blueAccent,
-                        ),
-                      ),
-                    ],
-                  ),
-                  getFixSizedBox(size: 3),
-                  Row(
-                    children: [
-                      Icon(Icons.location_on,
-                          size: 20,
-                          color: Theme.of(context).colorScheme.primary),
-                      Text(
-                        eventItem.location,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+  getEventDetails(context, eventItem) {
+    if (eventItem.id != null)
+      Routes.navigateToScreenWithArgs(
+          context, Routes.event_details, eventItem.id);
+  }
+
+  Widget upcomingOrPastEventCard(
+      UpcomingAndPastEventListDetail eventItem, type) {
+    return GestureDetector(
+      onTap: () {
+        getEventDetails(context, eventItem);
+      },
+      child: Card(
+        margin: EdgeInsets.only(right: 12, bottom: 5),
+        child: Container(
+          color: Colors.white,
+          alignment: Alignment.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.network(
+                // eventItem['imageURL'] ?? 'https://zillifurniture.com/images/product/1601279977-pro-placeholder.png',
+                type == 'upcoming'
+                    ? 'https://vanguardian.org/wp-content/uploads/2021/02/UpcomingEvents.jpg'
+                    : 'https://sathyaeducare.com/assets/img/recent.jpg',
+                width: DeviceUtils.getScaledWidth(context, 0.40),
+                height: DeviceUtils.getScaledHeight(context, 0.10),
               ),
-            ),
-          ],
+              getFixSizedBox(size: 5),
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(eventItem.name,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700)),
+                    getFixSizedBox(size: 3),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.supervised_user_circle,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        Text(
+                          '20+ Attendees',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            decoration: TextDecoration.underline,
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ],
+                    ),
+                    getFixSizedBox(size: 3),
+                    Row(
+                      children: [
+                        Icon(Icons.location_on,
+                            size: 20,
+                            color: Theme.of(context).colorScheme.primary),
+                        Text(
+                          eventItem.location,
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -186,10 +213,9 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
         centerTitle: true,
         title: Observer(
             builder: (_) => Text(
-                (_userStore.Profile_data?.user?.firstname.toString() ?? '') +
+                (ProfileData?.user?.firstname.toString() ?? '') +
                     '  ' +
-                    (_userStore.Profile_data?.user?.lastname.toString() ??
-                        ''))),
+                    (ProfileData?.user?.lastname.toString() ?? ''))),
         actions: [
           IconButton(
             padding: EdgeInsets.only(
@@ -213,7 +239,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                     borderRadius: BorderRadius.circular(100.0),
                     child: Observer(
                         builder: (_) => Image.network(
-                              _userStore.Profile_data?.user?.profile?.toString() ??
+                              ProfileData?.user?.profile?.toString() ??
                                   'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
                               width: DeviceUtils.getScaledWidth(context, 0.30),
                               height: DeviceUtils.getScaledWidth(context, 0.30),
@@ -224,8 +250,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                 getFixSizedBox(),
                 Observer(
                     builder: (_) => Text(
-                          _userStore.Profile_data?.user?.email.toString() ??
-                              'User Email',
+                          ProfileData?.user?.email.toString() ?? 'User Email',
                           style: TextStyle(
                               color: AppColors.primaryColor,
                               fontSize: 18,
@@ -233,15 +258,27 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                         )),
                 getFixSizedBox(size: 5),
                 Text(
-                  'Description Here',
+                  ProfileData?.user?.roleId.toString() ==
+                          AppSettings.businessUserRole
+                      ? 'Business Account'
+                      : 'Individual Account',
                 ),
-                ElevatedButtonWidget(
-                  buttonColor: AppColors.primaryColor,
-                  onPressed: () {
-                    Routes.navigateToScreen(context, Routes.add_business);
-                  },
-                  buttonText: ('Add Business'),
-                ),
+                ProfileData?.user?.roleId.toString() ==
+                        AppSettings.businessUserRole
+                    ? ElevatedButtonWidget(
+                        buttonColor: AppColors.primaryColor,
+                        onPressed: () {
+                          Routes.navigateToScreen(context, Routes.create_event);
+                        },
+                        buttonText: ('Create Event'),
+                      )
+                    : ElevatedButtonWidget(
+                        buttonColor: AppColors.primaryColor,
+                        onPressed: () {
+                          Routes.navigateToScreen(context, Routes.add_business);
+                        },
+                        buttonText: ('Add Business'),
+                      ),
                 getFixSizedBox(),
                 Card(
                   color: Colors.white60,
@@ -273,7 +310,8 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                             ElevatedButton(
                               child: Text('Invite'),
                               onPressed: () {
-                                GlobalMethods.askPermissions(context, Routes.add_contacts);
+                                GlobalMethods.askPermissions(
+                                    context, Routes.add_contacts);
                               },
                             ),
                           ],
@@ -331,7 +369,8 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                                 itemCount: upcomingEventList.length,
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (context, index) {
-                                  return upcomingOrPastEventCard(upcomingEventList[index],'upcoming');
+                                  return upcomingOrPastEventCard(
+                                      upcomingEventList[index], 'upcoming');
                                 },
                               )),
                         ],
@@ -372,7 +411,8 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                                 itemCount: pastEventList.length,
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (context, index) {
-                                  return upcomingOrPastEventCard(pastEventList[index],'past');
+                                  return upcomingOrPastEventCard(
+                                      pastEventList[index], 'past');
                                 },
                               )),
                         ],

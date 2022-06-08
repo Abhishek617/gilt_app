@@ -4,19 +4,22 @@ import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Global/CheckContactResponseModal.dart';
 import 'package:guilt_app/stores/post/post_store.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 import '../../constants/colors.dart';
 import 'package:flutter/rendering.dart';
 import '../../widgets/rounded_button_widget.dart';
 
-class AddContacts extends StatefulWidget {
-  const AddContacts({Key? key}) : super(key: key);
+class AddChatContacts extends StatefulWidget {
+  const AddChatContacts({Key? key}) : super(key: key);
 
   @override
-  State<AddContacts> createState() => _AddContactsState();
+  State<AddChatContacts> createState() => _AddChatContactsState();
 }
 
-class _AddContactsState extends State<AddContacts> {
+class _AddChatContactsState extends State<AddChatContacts> {
   final PostStore _postStore = PostStore(getIt<Repository>());
   int selectedRadio = -1;
   late List<Contact> _contacts = [];
@@ -39,13 +42,14 @@ class _AddContactsState extends State<AddContacts> {
   Future<void> getContacts() async {
     //We already have permissions for contact when we get to this page, so we
     // are now just retrieving it
+    GlobalMethods.showLoader();
     final Iterable<Contact> contacts =
         await ContactsService.getContacts(withThumbnails: false);
     if (contacts.length > 0) {
       setState(() {
         _contacts = contacts.toList();
         _contactStrings = _contacts
-            .map((e) => e.phones?.map((i) => i.value).toList())
+            .map((e) => e.phones?.map((i) => i.value?.replaceAll(' ','')).toList())
             .toList()
             .reduce((p, el) {
           p?.addAll(el!);
@@ -58,19 +62,25 @@ class _AddContactsState extends State<AddContacts> {
             setState(() {
               appContacts = value.contact;
               if (appContacts.length > 0) {
-                appContacts.removeWhere((item) => item.isExists == '0');
+                appContacts.removeWhere((item) => item.isExist == 0);
                 filteredContactList = appContacts;
+                print(appContacts);
               } else {
                 appContacts = [];
                 filteredContactList = [];
               }
+              GlobalMethods.hideLoader();
             });
           } else {
-            appContacts = [];
-            filteredContactList = [];
+            setState(() {
+              appContacts = [];
+              filteredContactList = [];
+            });
+            GlobalMethods.hideLoader();
           }
         }).catchError((err) {
           print(err.toString());
+          GlobalMethods.hideLoader();
         });
       });
     } else {
@@ -78,55 +88,45 @@ class _AddContactsState extends State<AddContacts> {
         appContacts = [];
         filteredContactList = appContacts;
       });
+      GlobalMethods.hideLoader();
     }
   }
 
   Widget getContactListTile(AppContact contactData) {
     return ListTile(
-        leading: Container(
-          height: 40,
-          width: 40,
-          // margin: EdgeInsets.all(100.0),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(
-                    'https://img.icons8.com/color/344/person-male.png'),
-                fit: BoxFit.fill,
-              ),
-              color: Colors.orange,
-              shape: BoxShape.circle),
-        ),
-        trailing:
-            //Icon(Icons.radio_button_unchecked, size: 15,),
-            Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.black, width: 2.3),
-          ),
-          height: 20,
-          width: 20,
-          child: Checkbox(
-            activeColor: Colors.white,
-            checkColor: Colors.black,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.00))),
-            onChanged: (changeValue) {
-              setState(() {
-                // if (changeValue == true) {
-                //   //checked[index] = true;
-                //   checked = true;
-                //   isChecked[index] = checked;
-                // } else {
-                //   isChecked[index] = false;
-                // }
-                //isChecked[index] = checked;
-                //_title = _getTitle();
-              });
+      leading: Container(
+        height: 40,
+        width: 40,
+        // margin: EdgeInsets.all(100.0),
+        decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(contactData.profile ??
+                  'https://img.icons8.com/color/344/person-male.png'),
+              fit: BoxFit.fill,
+            ),
+            color: Colors.orange,
+            shape: BoxShape.circle),
+      ),
+      trailing:
+          //Icon(Icons.radio_button_unchecked, size: 15,),
+          Container(
+        child: ElevatedButton(
+            onPressed: () {
+              G.socketUtils.joinNewPrivateUser(contactData);
+              // TODO : get newly created room data
+              // if (contactData.messageType == 'private') {
+              Routes.navigateToScreen(context, Routes.chat);
+              // } else if (msgData.lastMessage.messageType == 'event') {
+              // Routes.navigateToScreen(context, Routes.event_chat);
+              // } else {
+              // Routes.navigateToScreen(context, Routes.business_chat);
             },
-            value: true,
-          ),
-        ),
-        title: Text(contactData.phone!));
+            child: Text('Message')),
+      ),
+      title: Text(
+        (contactData.firstname ?? '') + ' ' + (contactData.lastname ?? ''),
+      ),
+    );
   }
 
   @override
@@ -135,7 +135,7 @@ class _AddContactsState extends State<AddContacts> {
       appBar: AppBar(
         shadowColor: Colors.transparent,
         centerTitle: true,
-        title: const Text('Contacts'),
+        title: const Text('New Message'),
       ),
       child: Container(
         padding: EdgeInsets.all(25.0),
@@ -154,7 +154,7 @@ class _AddContactsState extends State<AddContacts> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Contact List",
+                  "Contacts",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -174,16 +174,6 @@ class _AddContactsState extends State<AddContacts> {
                                 return getContactListTile(
                                     filteredContactList[index]);
                               }),
-                        ),
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 20),
-                            child: ElevatedButtonWidget(
-                              buttonText: 'Confirm',
-                              buttonColor: AppColors.primaryColor,
-                              onPressed: () {},
-                            ),
-                          ),
                         ),
                       ],
                     )

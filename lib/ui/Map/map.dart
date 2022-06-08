@@ -16,7 +16,6 @@ class _MapState extends State<Map> {
   late int prevPage;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     hospitalInfo.forEach((element) {
       allMarkers.add(Marker(

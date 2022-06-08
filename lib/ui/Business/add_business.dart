@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Business/BusinessPlaceLostModal.dart';
@@ -11,12 +12,9 @@ import 'package:guilt_app/models/Business/BusinessSpaceListModal.dart';
 import 'package:guilt_app/stores/post/post_store.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
-import '../../constants/colors.dart';
-import '../../utils/routes/routes.dart';
 import 'package:flutter/rendering.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../widgets/rounded_button_widget.dart';
 
 // ignore: camel_case_types
 
@@ -34,6 +32,8 @@ class _Add_businessState extends State<Add_business> {
   BusinessPlaces? selectedPlace;
   Map<String, double> businessLocation = {"Latitude": 0, "Longitude": 0};
   TextEditingController _businessNameController = TextEditingController();
+  TextEditingController _businessContactController = TextEditingController();
+  TextEditingController _businessEmailController = TextEditingController();
   TextEditingController _businessPriceController = TextEditingController();
   TextEditingController _businessLocationController = TextEditingController();
   TextEditingController _businessDescriptionController =
@@ -41,10 +41,9 @@ class _Add_businessState extends State<Add_business> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _businessPriceController.text = '0';
-    getPlacesAndSpaces();
+    //getPlacesAndSpaces();
   }
 
   void imagePickerOption() {
@@ -127,7 +126,7 @@ class _Add_businessState extends State<Add_business> {
       if (BusinessSpaceListModal.fromJson(placeData).businessSpaces != null) {
         setState(() {
           spaceList =
-          BusinessSpaceListModal.fromJson(placeData).businessSpaces!;
+              BusinessSpaceListModal.fromJson(placeData).businessSpaces!;
           selectedSpace = spaceList[0];
         });
       }
@@ -152,6 +151,19 @@ class _Add_businessState extends State<Add_business> {
           title: Text('Add Business'),
           centerTitle: true,
           shadowColor: Colors.transparent,
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back_ios_outlined),
+          //   onPressed: () {
+          //     Routes.goBack(context);
+          //   },
+          // ),
+          actions: [
+            ElevatedButton(
+              style: ButtonStyle(shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),),
+              child: Text('SAVE'),
+              onPressed: addNewBusiness,
+            )
+          ],
         ),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -178,121 +190,6 @@ class _Add_businessState extends State<Add_business> {
                       borderSide: BorderSide(color: Colors.grey),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Text(
-                  "Choose your place will you host?",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                DropdownButton(
-                  // Initial Value
-                  value: selectedPlace ?? 'Select Option',
-                  isExpanded: true,
-                  hint: Text('Select option'),
-                  style: TextStyle(fontSize: 13),
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
-                  // Array list of items
-                  items: placeList.map((BusinessPlaces item) {
-                    return DropdownMenuItem(
-                      value: item,
-                      child: Text(item.name ?? item.id.toString(),style: TextStyle(color: Colors.black),),
-                    );
-                  }).toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (newData) {
-                    setState(() {
-                      selectedPlace = newData as BusinessPlaces?;
-                    });
-                  },
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Text(
-                  "What kind of space will guests have?",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                DropdownButton(
-                  // Initial Value
-                  value: selectedSpace ?? 'Select Option',
-                  isExpanded: true,
-                  hint: Text('Select option'),
-                  style: TextStyle(fontSize: 13),
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
-                  // Array list of items
-                  items: spaceList.map((BusinessSpaces item) {
-                    return DropdownMenuItem(
-                      value: item,
-                      child: Text(item.name ?? item.id.toString(),style: TextStyle(color: Colors.black),),
-                    );
-                  }).toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (newData) {
-                    setState(() {
-                      selectedSpace = newData as BusinessSpaces?;
-                    });
-                  },
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                        child: Text("Add Price",
-                            style: TextStyle(fontWeight: FontWeight.bold))),
-                    IconButton(
-                      onPressed: () {
-                        var price = int.parse(_businessPriceController.text);
-                        if (price > 0) {
-                          setState(() {
-                            _businessPriceController.text =
-                                (price - 1).toString();
-                          });
-                        }
-                      },
-                      icon: Icon(
-                        Icons.remove,
-                      ),
-                    ),
-                    Container(
-                      width: DeviceUtils.getScaledWidth(context, 0.30),
-                      child: TextFormField(
-                        textAlign: TextAlign.center,
-                        textAlignVertical: TextAlignVertical.center,
-                        controller: _businessPriceController,
-                        keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(5),
-                          isDense: true,
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        var price = int.parse(_businessPriceController.text);
-                        setState(() {
-                          _businessPriceController.text =
-                              (price + 1).toString();
-                        });
-                      },
-                      icon: Icon(
-                        Icons.add,
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(
-                  // color: Colors.teal.shade100,
-                  thickness: 1.0,
                 ),
                 SizedBox(
                   height: 15,
@@ -341,6 +238,47 @@ class _Add_businessState extends State<Add_business> {
                   // color: Colors.teal.shade100,
                   thickness: 1.0,
                 ),
+                SizedBox(
+                  height: 25,
+                ),
+                Text(
+                  "Entre your business contact",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextFormField(
+                  controller: _businessContactController,
+                  autocorrect: true,
+                  decoration: InputDecoration(
+                    hintText: 'Business Contact',
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Text(
+                  "Entre your business Email",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextFormField(
+                  controller: _businessEmailController,
+                  autocorrect: true,
+                  decoration: InputDecoration(
+                    hintText: 'Business Email',
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                  ),
+                ),
+
                 SizedBox(
                   height: 10,
                 ),
@@ -434,16 +372,6 @@ class _Add_businessState extends State<Add_business> {
                       ),
                     ),
                   ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Center(
-                  child: ElevatedButtonWidget(
-                    buttonText: 'Add Now',
-                    buttonColor: AppColors.primaryColor,
-                    onPressed: addNewBusiness,
-                  ),
                 ),
               ],
             ),

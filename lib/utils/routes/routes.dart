@@ -6,7 +6,10 @@ import 'package:guilt_app/ui/Event/book_event_details.dart';
 import 'package:guilt_app/ui/Event/event_detail.dart';
 import 'package:guilt_app/ui/Event/expense_screen.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
+import 'package:guilt_app/ui/Messages/BusinessChatScreen.dart';
 import 'package:guilt_app/ui/Messages/ChatScreen.dart';
+import 'package:guilt_app/ui/Messages/EventChatScreen.dart';
+import 'package:guilt_app/ui/Messages/add_chat_contacts.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
 import 'package:guilt_app/ui/home/home_explore_screen.dart';
 import 'package:guilt_app/ui/Profile/organizer_profile.dart';
@@ -51,9 +54,10 @@ import '../../ui/Business/business_list.dart';
 import '../../ui/payment/expense.dart';
 import '../../ui/payment/wallet.dart';
 
+
+
 class Routes {
   Routes._();
-
   //static variables
   //after login-signup otp
   static const String otpvalidate = '/otpvalidate';
@@ -64,6 +68,9 @@ class Routes {
   static const String paymenthistory = '/paymenthistory';
   static const String organizerprof = '/organizerprof';
   static const String chat = '/chat';
+  static const String add_new_chat_contact = '/add_new_chat_contact';
+  static const String business_chat = '/business_chat';
+  static const String event_chat = '/event_chat';
   static const String message = '/message';
   static const String setting = '/setting';
   static const String splash = '/splash';
@@ -123,6 +130,9 @@ class Routes {
     paymenthistory: (BuildContext context) => PaymentHistory(),
     organizerprof: (BuildContext context) => OrganizerProfile(),
     chat: (BuildContext context) => ChatScreen(),
+    add_new_chat_contact: (BuildContext context) => AddChatContacts(),
+    business_chat: (BuildContext context) => BusinessChatScreen(),
+    event_chat: (BuildContext context) => EventChatScreen(),
     message: (BuildContext context) => Messages(),
     setting: (BuildContext context) => Setting(),
     splash: (BuildContext context) => SplashScreen(),
@@ -161,7 +171,7 @@ class Routes {
     create_event: (BuildContext context) => Create_event(),
     expense_screen: (BuildContext context) => Expense_Screen(),
     attendees_profile: (BuildContext context) => Attendees_profile(),
-    add_contacts: (BuildContext context) => Add_contacts(),
+    add_contacts: (BuildContext context) => AddContacts(),
     bank_lists: (BuildContext context) => Bank_lists(),
     card_details: (BuildContext context) => Card_details(),
     add_feedback: (BuildContext context) => Add_feedback(),

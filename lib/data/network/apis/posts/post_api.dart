@@ -16,6 +16,7 @@ import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Auth/valid_otp_model.dart';
+import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
@@ -23,6 +24,7 @@ import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 
 import '../../../../models/Event/upcoming_past_event_modal.dart';
+import 'package:http_parser/http_parser.dart';
 
 class PostApi {
   // dio instance
@@ -83,16 +85,18 @@ class PostApi {
   }
 
   //post setting
-  Future<SettingGetModal> settingpost(SettingPostModal UpdateSettingData) async {
+  Future<SettingGetModal> settingpost(
+      SettingPostModal UpdateSettingData) async {
     try {
       final res = await _dioClient.post(Endpoints.setting, data: {
         "is_push_notification": UpdateSettingData.isPushNotification,
         "is_email_notification": UpdateSettingData.isEmailNotification,
         "is_show_app_icon": UpdateSettingData.isShowAppIcon,
         "is_floating_notification": UpdateSettingData.isFloatingNotification,
-        "is_lock_screen_notification": UpdateSettingData.isLockScreenNotification,
+        "is_lock_screen_notification":
+            UpdateSettingData.isLockScreenNotification,
         "is_allow_sound": UpdateSettingData.isAllowSound,
-        "is_allow_vibration":UpdateSettingData.isAllowVibration,
+        "is_allow_vibration": UpdateSettingData.isAllowVibration,
       });
       return SettingGetModal.fromJson(res);
     } catch (e) {
@@ -142,6 +146,30 @@ class PostApi {
         Endpoints.getBusinessPlaces,
         queryParameters: {"page": 0, "size": 20},
         options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Get Business Places
+  Future uploadChatImage(image, token) async {
+    try {
+      String fileName = image.path.split('/').last;
+      String type = fileName.split('.').last;
+      var imageData = await MultipartFile.fromFile(image.path,
+          contentType: new MediaType('image', type));
+      // MultipartFile.fromBytes(image.bytes!, filename: fileName);
+      FormData formData = FormData();
+      formData.files.add(MapEntry('files', imageData));
+      return await _dioClient.post(
+        Endpoints.uploadChatImage,
+        data: formData,
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'multipart/form-data'
+        }),
       );
     } catch (e) {
       print(e.toString());
@@ -253,18 +281,13 @@ class PostApi {
     }
   }
 
-//eventview
-  Future<EventViewModal> Event_Detail(eventId, token) async {
+//get event details
+  Future getEventDetail(eventId, token) async {
     try {
-      final res = await _dioClient.get(
-        Endpoints.eventview,
-        queryParameters: {
-          "id": eventId,
-        },
+      return await _dioClient.get(
+        Endpoints.eventDetail + '/${eventId}',
         options: Options(headers: {'Authorization': 'Bearer ' + token!}),
       );
-
-      return EventViewModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
@@ -351,8 +374,10 @@ class PostApi {
       throw e;
     }
   }
+
 //create event
-  Future<CommonResponseModal> createEvent(CreateEventRequestModal eventData,token) async {
+  Future<CommonResponseModal> createEvent(
+      CreateEventRequestModal eventData, token) async {
     try {
       FormData formData = FormData();
       var form = FormData.fromMap({
