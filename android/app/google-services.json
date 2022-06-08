@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "1006363267835-9nh28ijmr4ip2nmn3tkp5c96thp836pq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.guilt.trip",
+            "certificate_hash": "98a73c1e14d2d3a9abd8b010865cb4cfa8d91ad3"
+          }
+        },
+        {
+          "client_id": "1006363267835-td7mf04a79a3bn803a5ag76vnapde1jg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.guilt.trip",
+            "certificate_hash": "88ede03cb3d22b74904923b7c2e8b6e3eed1d552"
+          }
+        },
+        {
           "client_id": "1006363267835-vkfns0qtalflle13nd61jqa1l6mb0h8g.apps.googleusercontent.com",
           "client_type": 3
         }
