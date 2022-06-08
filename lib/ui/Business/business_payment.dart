@@ -31,6 +31,7 @@ class _BusinessPaymentState extends State<BusinessPayment> {
   final amountController = TextEditingController();
   var businessNameController = TextEditingController();
   final descriptionController = TextEditingController();
+  final locationController = TextEditingController();
   String? type;
   SearchUserData? userData;
   Business? selectedBusiness;
@@ -197,7 +198,10 @@ class _BusinessPaymentState extends State<BusinessPayment> {
                       );
                     },
                     onSelected: (Business business) {
-                      selectedBusiness = business;
+                      setState(() {
+                        selectedBusiness = business;
+                        locationController.text = business.location ?? '';
+                      });
                     },
                     optionsViewBuilder: (BuildContext context,
                         AutocompleteOnSelected<Business> onSelected,
@@ -260,17 +264,14 @@ class _BusinessPaymentState extends State<BusinessPayment> {
                       Row(
                         children: [
                           Container(
-                              width: DeviceUtils.getScaledWidth(context, 0.60),
-                              height:
-                                  DeviceUtils.getScaledHeight(context, 0.06),
+                              width: DeviceUtils.getScaledWidth(context, 0.90),
                               child: TextFormField(
+                                enabled: false,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                controller: locationController,
                                 cursorColor: Colors.black,
                                 decoration: new InputDecoration(
-                                    // label: Text(
-                                    //   "Location",
-                                    //   style: TextStyle(
-                                    //       fontWeight: FontWeight.bold, color: Colors.black),
-                                    // ),
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.grey),
@@ -285,33 +286,6 @@ class _BusinessPaymentState extends State<BusinessPayment> {
                                     ),
                                     hintText: 'Enter Location'),
                               )),
-                          Container(
-                            width: DeviceUtils.getScaledWidth(context, 0.30),
-                            height: DeviceUtils.getScaledHeight(context, 0.05),
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(32.0),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.location_on_outlined,
-                                      size: 13,
-                                    ),
-                                    SizedBox(
-                                      width: 2,
-                                    ),
-                                    Text(
-                                      'Set on Map',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 12),
-                                    ),
-                                  ],
-                                ),
-                                onPressed: () => {}),
-                          ),
                         ],
                       ),
                     ],
