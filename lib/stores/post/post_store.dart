@@ -44,6 +44,7 @@ abstract class _PostStore with Store {
         .then((placeData) => placeData)
         .catchError((error) => throw error);
   }
+
   @action
   Future uploadChatImage(image) async {
     return await _repository
