@@ -32,7 +32,6 @@ abstract class _PostStore with Store {
 
   @observable
   bool success = false;
-
   @computed
   bool get loading => fetchPostsFuture.status == FutureStatus.pending;
 
