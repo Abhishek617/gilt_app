@@ -45,35 +45,53 @@ class Endpoints {
   //change password
   static const String changePassword = baseUrl + "api/admin/changepassword";
 
-
   // Search User List
   static const String searchUser = baseUrl + "api/admin/search";
 
   //---------Business
   // Add Business
   static const String addBusiness = baseUrl + "api/business/add";
+
   // delete Business
   static const String deleteBusiness = baseUrl + "api/business";
+
   // My Business List
   static const String myBusinessList = baseUrl + "api/business/search";
+
   // All Business List
   static const String allBusinessList = baseUrl + "api/business";
+
   // Business Details
   static const String businessDetail = baseUrl + "api/business";
+
   // Update Business Details
   static const String updateBusiness = baseUrl + "api/business";
+
   // Search Business List of User
-  static const String searchByNameBusinessList = baseUrl + "api/business/getByName";
+  static const String searchByNameBusinessList =
+      baseUrl + "api/business/getByName";
+
   // Request for Business by Business Owner to User
-  static const String requestPaymentBusiness = baseUrl + "api/paymentRequest/add";
+  static const String requestPaymentBusiness =
+      baseUrl + "api/paymentRequest/add";
+
   // Saved card list
   static const String savedCardList = baseUrl + "api/payments/myCards";
+
   // Pay for Business by User to Business Owner
   static const String payForBusiness = baseUrl + "api/business";
+
   //Add Card/Bank account
   static const String addCardOrBank = baseUrl + "api/payments/add";
+
+  //Edit Card/Bank account
+  static const String editCardOrBank = baseUrl + "api/payments/update";
+
   //Payment history
   static const String paymentHistory = baseUrl + "api/payments/history";
+
+  //Remove Payment method
+  static const String removePaymentMethod = baseUrl + "api/payments";
 
   //Get Business Places
   static const String getBusinessPlaces = baseUrl + "api/business-places";
@@ -130,6 +148,12 @@ class Endpoints {
 //CreateEvent
   static const String addEvent = baseUrl + 'api/event/add';
 
+  //CreateEvent
+  static const String cancelEvent = baseUrl + 'api/event/cancel';
+
   // Accept or Reject Event
   static const String acceptRejectEvent = baseUrl + 'api/event/acceptReject';
+
+  // Help and support
+  static const String helpAndSupport = baseUrl + '/support/';
 }

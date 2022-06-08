@@ -25,6 +25,7 @@ import 'package:guilt_app/models/Event/accept_reject_event.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
+import 'package:guilt_app/models/help_support/help_support_master.dart';
 import 'package:guilt_app/models/payment/add_card_master.dart';
 import 'package:guilt_app/models/payment/payment_history_master.dart';
 import 'package:guilt_app/models/payment/payment_request.dart';
@@ -610,6 +611,28 @@ class PostApi {
     }
   }
 
+  //Cancel Event
+  Future cancelEvent(id, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .put(
+        "${Endpoints.cancelEvent}/$id",
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = AcceptRejectEvent.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
 //Add Business
   Future addBusiness(
       AddBusinessRequestModel businessData, token, successCB, errorCB) async {
@@ -733,6 +756,29 @@ class PostApi {
     }
   }
 
+  //Edit Card or Bank account
+  Future editCardOrBankAccount(id, data, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .put(
+        "${Endpoints.editCardOrBank}/$id",
+        data: data,
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = AddPaymentMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
   //Payment History
   Future getPaymentHistory(
       int page, int size, token, successCB, errorCB) async {
@@ -747,6 +793,60 @@ class PostApi {
       )
           .then((value) {
         value = PaymentHistoryMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Payment History
+  Future removePaymentMethod(
+      id, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .delete(
+        "${Endpoints.removePaymentMethod}/$id",
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = AddPaymentMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Payment History
+  Future helpAndSupport(
+      name, email, message, token, successCB, errorCB) async {
+    String getParams() {
+      var map = new Map<String, dynamic>();
+      map['name'] = name;
+      map['email'] = email;
+      map['message'] = message;
+      return json.encode(map);
+    }
+    try {
+      await _dioClient
+          .post(
+        "${Endpoints.helpAndSupport}",
+        data: getParams(),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = HelpSupportMaster.fromJson(value);
         successCB(value);
       });
     } catch (e) {

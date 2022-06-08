@@ -480,6 +480,15 @@ abstract class _UserStore with Store {
   }
 
   @action
+  Future cancelEvent(
+      id, successCallback, errorCallback) async {
+    _repository.cancelEvent(id, successCallback, errorCallback)
+        .then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
   Future addBusiness(AddBusinessRequestModel businessData, successCallback,
       errorCallback) async {
     _repository
@@ -577,10 +586,40 @@ abstract class _UserStore with Store {
   }
 
   @action
+  Future editCardOrBankAccount(id, data, successCallback,
+      errorCallback) async {
+    _repository
+        .editCardOrBankAccount(id, data, successCallback, errorCallback)
+        .then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
   Future getPaymentHistory(int page, int size, successCallback,
       errorCallback) async {
     _repository
         .getPaymentHistory(page, size, successCallback, errorCallback)
+        .then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future removePaymentMethod(id, successCallback,
+      errorCallback) async {
+    _repository
+        .removePaymentMethod(id, successCallback, errorCallback)
+        .then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future helpAndSupport(name, email, message, successCallback,
+      errorCallback) async {
+    _repository
+        .helpAndSupport(name, email, message, successCallback, errorCallback)
         .then((val) {
       print(val.toString());
     }, onError: errorCallback);
