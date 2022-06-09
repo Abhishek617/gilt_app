@@ -6,6 +6,7 @@ import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:intl/intl.dart';
 
 class Notifications extends StatefulWidget {
@@ -65,10 +66,17 @@ class _NotificationsState extends State<Notifications> {
                         itemBuilder: (context, index) => NotificationListItem(
                               notificationData: contentData[index],
                               onAccept: () {
-                                acceptRejectEvent(contentData[index].id, "accepted");
+                                acceptRejectEvent(
+                                    contentData[index].eventId, "accepted");
+                                Routes.navigateToScreenWithArgs(context,
+                                    Routes.pay_request_business_payment, {
+                                  "type": 'Pay',
+                                  "userData": contentData[index].user
+                                });
                               },
                               onReject: () {
-                                acceptRejectEvent(contentData[index].id, "rejected");
+                                acceptRejectEvent(
+                                    contentData[index].eventId, "rejected");
                               },
                             )),
                   )
@@ -115,113 +123,111 @@ class NotificationListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(width: 1.0, color: Colors.grey),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(width: 1.0, color: Colors.grey),
+        ),
+        color: Colors.white,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          SizedBox(width: 15),
+          Container(
+            child: Image.network(
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+            ),
           ),
-          color: Colors.white,
-        ),
-        child: Row(
-          children: [
-            SizedBox(width: 15),
-            Align(
-              alignment: Alignment.center,
-              child: Stack(
-                children: [
-                  Container(
-                    child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                    notificationData?.message ?? "",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    notificationData?.username ?? "",
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  notificationData!.isButton!
-                      ? Row(
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                onAccept!();
-                              },
-                              child: Text('Accept'),
-                              style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                              ))),
-                            ),
-                            SizedBox(width: 15),
-                            ElevatedButton(
-                              onPressed: () {
-                                onReject!();
-                              },
-                              child: Text(
-                                'Reject',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateColor.resolveWith(
-                                          (states) => Colors.white),
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50.0),
-                                  ))),
-                            ),
-                          ],
-                        )
-                      : Container(),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: DeviceUtils.getScaledWidth(context, 0.02),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 45),
-              child: Text(
-                DateFormat('dd MMMM yyyy')
-                    .format(DateTime.parse(notificationData?.createdAt ?? "")),
-                style: TextStyle(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w500,
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 15,
                 ),
+                Text(
+                  notificationData?.message ?? "",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  notificationData?.username ?? "",
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                //'chat','event','business','payment','payRequest'
+                notificationData!.type == 'event' ||
+                        notificationData!.type == 'payRequest'
+                    ? Row(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              onAccept!();
+                            },
+                            child: Text(notificationData!.type == 'payRequest'
+                                ? 'Pay'
+                                : 'Accept'),
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50.0),
+                            ))),
+                          ),
+                          SizedBox(width: 15),
+                          ElevatedButton(
+                            onPressed: () {
+                              onReject!();
+                            },
+                            child: Text(
+                              notificationData!.type == 'payRequest'
+                                  ? 'Cancel'
+                                  : 'Reject',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateColor.resolveWith(
+                                    (states) => Colors.white),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ))),
+                          ),
+                        ],
+                      )
+                    : Container(),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: DeviceUtils.getScaledWidth(context, 0.02),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 0),
+            child: Text(
+              DateFormat('dd MMMM yyyy')
+                  .format(DateTime.parse(notificationData?.createdAt ?? "")),
+              style: TextStyle(
+                fontSize: 8,
+                fontWeight: FontWeight.w500,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

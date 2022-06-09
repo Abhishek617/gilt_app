@@ -33,7 +33,7 @@ class _BusinessPaymentState extends State<BusinessPayment> {
   final descriptionController = TextEditingController();
   final locationController = TextEditingController();
   String? type;
-  SearchUserData? userData;
+  dynamic? userData;
   Business? selectedBusiness;
   final UserStore _userStore = UserStore(getIt<Repository>());
 
