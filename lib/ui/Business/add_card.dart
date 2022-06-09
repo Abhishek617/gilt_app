@@ -42,12 +42,14 @@ class _AddCardState extends State<AddCard> {
         methodName: "Credit/Debit card", method: "card", isSelected: true),
   ];
   final UserStore _userStore = UserStore(getIt<Repository>());
+
   @override
-  initState(){
+  initState() {
     edAccountNumberController.text = "204578441124512";
     edRoutingNumberController.text = "121042882";
-   super.initState();
+    super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final imgLogo = Center(
@@ -422,10 +424,11 @@ class _AddCardState extends State<AddCard> {
       if (paymentMaster != null) {
         if (paymentMaster.success!) {
           GlobalMethods.showSuccessMessage(
-              context, paymentMaster.message!, "Add Payment Method");
+              context, paymentMaster.message!, "Add Payment");
+          Routes.goBack(context);
         } else {
           GlobalMethods.showErrorMessage(
-              context, paymentMaster.message!, "Add Payment Method");
+              context, paymentMaster.message!, "Add Payment");
         }
       }
     }, (error) {

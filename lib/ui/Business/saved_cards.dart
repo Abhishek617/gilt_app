@@ -4,9 +4,8 @@ import 'package:guilt_app/models/payment/add_card_master.dart';
 import 'package:guilt_app/models/payment/payment_card_master.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
-
-import '../../utils/routes/routes.dart';
-import '../../widgets/custom_body_wrapper.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 
 class SavedCards extends StatefulWidget {
   const SavedCards({Key? key}) : super(key: key);
@@ -39,12 +38,20 @@ class _SavedCardsState extends State<SavedCards> {
   }
 
   @override
+  void didChangeDependencies() {
+    getSavedCards();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final layoutAddNewCard = Container(
       padding: EdgeInsets.symmetric(horizontal: 8),
       child: InkWell(
         onTap: () {
-          Routes.navigateToScreen(context, Routes.add_card);
+          Routes.navigateToScreenWithCB(context, Routes.add_card, (val) {
+            getSavedCards();
+          });
         },
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -183,6 +190,7 @@ class _SavedCardsState extends State<SavedCards> {
               context, master.message ?? 'Removed', 'Remove payment method');
           setState(() {
             cardList.removeAt(index);
+            getSavedCards();
           });
         } else {
           GlobalMethods.showErrorMessage(

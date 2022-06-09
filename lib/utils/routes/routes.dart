@@ -196,6 +196,11 @@ class Routes {
   static navigateToScreen(BuildContext context, route) {
     Navigator.of(context).pushNamed(route);
   }
+  static navigateToScreenWithCB(BuildContext context, route,callback) {
+    Navigator.of(context).pushNamed(route).then((value){
+      callback(value);
+    });
+  }
 
   static navigateRootToScreen(BuildContext context, route) {
     Navigator.of(context)
