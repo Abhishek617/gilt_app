@@ -147,6 +147,37 @@ mixin _$UserStore on _UserStore, Store {
         super.settingpost(UpdateSettingData, successCallback, errorCallback));
   }
 
+<<<<<<< HEAD
+=======
+  final _$createEventAsyncAction = AsyncAction('_UserStore.createEvent');
+
+  @override
+  Future<dynamic> createEvent(CreateEventRequestModal eventData,
+      dynamic successCallback, dynamic errorCallback) {
+    return _$createEventAsyncAction.run(
+        () => super.createEvent(eventData, successCallback, errorCallback));
+  }
+
+  final _$acceptRejectEventAsyncAction =
+      AsyncAction('_UserStore.acceptRejectEvent');
+
+  @override
+  Future<dynamic> acceptRejectEvent(dynamic id, dynamic status,
+      dynamic successCallback, dynamic errorCallback) {
+    return _$acceptRejectEventAsyncAction.run(() =>
+        super.acceptRejectEvent(id, status, successCallback, errorCallback));
+  }
+
+  final _$addBusinessAsyncAction = AsyncAction('_UserStore.addBusiness');
+
+  @override
+  Future<dynamic> addBusiness(AddBusinessRequestModel businessData,
+      dynamic successCallback, dynamic errorCallback) {
+    return _$addBusinessAsyncAction.run(
+        () => super.addBusiness(businessData, successCallback, errorCallback));
+  }
+
+>>>>>>> origin/Development
   final _$updateprofileAsyncAction = AsyncAction('_UserStore.updateprofile');
 
   @override
@@ -165,14 +196,70 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.signUp(signUpData, successCallback, errorCallback));
   }
 
+  final _$requestUserForPaymentAsyncAction =
+      AsyncAction('_UserStore.requestUserForPayment');
+
+  @override
+  Future<dynamic> requestUserForPayment(
+      dynamic toUserId,
+      dynamic businessId,
+      dynamic amount,
+      dynamic remarks,
+      dynamic successCallback,
+      dynamic errorCallback) {
+    return _$requestUserForPaymentAsyncAction.run(() => super
+        .requestUserForPayment(toUserId, businessId, amount, remarks,
+            successCallback, errorCallback));
+  }
+
+  final _$getSavedCardsAsyncAction = AsyncAction('_UserStore.getSavedCards');
+
+  @override
+  Future<dynamic> getSavedCards(
+      dynamic successCallback, dynamic errorCallback) {
+    return _$getSavedCardsAsyncAction
+        .run(() => super.getSavedCards(successCallback, errorCallback));
+  }
+
+  final _$addCardOrBankAccountAsyncAction =
+      AsyncAction('_UserStore.addCardOrBankAccount');
+
+  @override
+  Future<dynamic> addCardOrBankAccount(
+      dynamic data, dynamic successCallback, dynamic errorCallback) {
+    return _$addCardOrBankAccountAsyncAction.run(
+        () => super.addCardOrBankAccount(data, successCallback, errorCallback));
+  }
+
+  final _$getPaymentHistoryAsyncAction =
+      AsyncAction('_UserStore.getPaymentHistory');
+
+  @override
+  Future<dynamic> getPaymentHistory(
+      int page, int size, dynamic successCallback, dynamic errorCallback) {
+    return _$getPaymentHistoryAsyncAction.run(() =>
+        super.getPaymentHistory(page, size, successCallback, errorCallback));
+  }
+
   final _$_UserStoreActionController = ActionController(name: '_UserStore');
 
   @override
-  Future<dynamic> getProfile() {
+  Future<dynamic> getProfile({dynamic userId = 0}) {
     final _$actionInfo =
         _$_UserStoreActionController.startAction(name: '_UserStore.getProfile');
     try {
-      return super.getProfile();
+      return super.getProfile(userId: userId);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Future<dynamic> getUserProfile(dynamic userId) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.getUserProfile');
+    try {
+      return super.getUserProfile(userId);
     } finally {
       _$_UserStoreActionController.endAction(_$actionInfo);
     }
