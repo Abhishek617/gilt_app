@@ -10,6 +10,7 @@ import 'package:mobx/mobx.dart';
 import '../../data/repository.dart';
 import '../../models/Auth/profile_modal.dart';
 import '../../models/PageModals/setting_model.dart';
+import '../../models/payment/pay_to_user_request.dart';
 import '../form/form_store.dart';
 
 part 'user_store.g.dart';
@@ -125,6 +126,14 @@ abstract class _UserStore with Store {
   Future changePassword(oldPassword, newPassword) async {
     return await _repository
         .changePassword(oldPassword, newPassword)
+        .then((contentData) => contentData)
+        .catchError((error) => throw error);
+  }
+
+  @action
+  Future<GetProfileResponseModal?> getProfileData() async {
+    return await _repository
+        .getProfileData()
         .then((contentData) => contentData)
         .catchError((error) => throw error);
   }
@@ -464,26 +473,24 @@ abstract class _UserStore with Store {
   @action
   Future createEvent(
       CreateEventRequestModal eventData, successCallback, errorCallback) async {
-    _repository.createEvent(eventData, successCallback, errorCallback)
+    _repository.createEvent(eventData, successCallback, errorCallback).then(
+        (val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future acceptRejectEvent(id, status, successCallback, errorCallback) async {
+    _repository
+        .acceptRejectEvent(id, status, successCallback, errorCallback)
         .then((val) {
       print(val.toString());
     }, onError: errorCallback);
   }
 
   @action
-  Future acceptRejectEvent(
-      id, status, successCallback, errorCallback) async {
-    _repository.acceptRejectEvent(id, status, successCallback, errorCallback)
-        .then((val) {
-      print(val.toString());
-    }, onError: errorCallback);
-  }
-
-  @action
-  Future cancelEvent(
-      id, successCallback, errorCallback) async {
-    _repository.cancelEvent(id, successCallback, errorCallback)
-        .then((val) {
+  Future cancelEvent(id, successCallback, errorCallback) async {
+    _repository.cancelEvent(id, successCallback, errorCallback).then((val) {
       print(val.toString());
     }, onError: errorCallback);
   }
@@ -491,9 +498,8 @@ abstract class _UserStore with Store {
   @action
   Future addBusiness(AddBusinessRequestModel businessData, successCallback,
       errorCallback) async {
-    _repository
-        .addBusiness(businessData, successCallback, errorCallback)
-        .then((val) {
+    _repository.addBusiness(businessData, successCallback, errorCallback).then(
+        (val) {
       print(val.toString());
     }, onError: errorCallback);
   }
@@ -556,38 +562,41 @@ abstract class _UserStore with Store {
   }
 
   @action
-  Future requestUserForPayment(toUserId, businessId, amount, remarks, successCallback,
-      errorCallback) async {
+  Future requestUserForPayment(toUserId, businessId, amount, remarks,
+      successCallback, errorCallback) async {
     _repository
-        .requestUserForPayment(toUserId, businessId, amount, remarks, successCallback, errorCallback)
+        .requestUserForPayment(toUserId, businessId, amount, remarks,
+            successCallback, errorCallback)
         .then((val) {
       print(val.toString());
     }, onError: errorCallback);
   }
 
   @action
-  Future getSavedCards(successCallback,
-      errorCallback) async {
-    _repository
-        .getSavedCards(successCallback, errorCallback)
-        .then((val) {
+  Future payToUser(
+      PayToUserRequest payModel, successCallback, errorCallback) async {
+    _repository.payToUser(payModel, successCallback, errorCallback).then((val) {
       print(val.toString());
     }, onError: errorCallback);
   }
 
   @action
-  Future addCardOrBankAccount(data, successCallback,
-      errorCallback) async {
-    _repository
-        .addCardOrBankAccount(data, successCallback, errorCallback)
-        .then((val) {
+  Future getSavedCards(successCallback, errorCallback) async {
+    _repository.getSavedCards(successCallback, errorCallback).then((val) {
       print(val.toString());
     }, onError: errorCallback);
   }
 
   @action
-  Future editCardOrBankAccount(id, data, successCallback,
-      errorCallback) async {
+  Future addCardOrBankAccount(data, successCallback, errorCallback) async {
+    _repository.addCardOrBankAccount(data, successCallback, errorCallback).then(
+        (val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future editCardOrBankAccount(id, data, successCallback, errorCallback) async {
     _repository
         .editCardOrBankAccount(id, data, successCallback, errorCallback)
         .then((val) {
@@ -596,8 +605,8 @@ abstract class _UserStore with Store {
   }
 
   @action
-  Future getPaymentHistory(int page, int size, successCallback,
-      errorCallback) async {
+  Future getPaymentHistory(
+      int page, int size, successCallback, errorCallback) async {
     _repository
         .getPaymentHistory(page, size, successCallback, errorCallback)
         .then((val) {
@@ -606,18 +615,16 @@ abstract class _UserStore with Store {
   }
 
   @action
-  Future removePaymentMethod(id, successCallback,
-      errorCallback) async {
-    _repository
-        .removePaymentMethod(id, successCallback, errorCallback)
-        .then((val) {
+  Future removePaymentMethod(id, successCallback, errorCallback) async {
+    _repository.removePaymentMethod(id, successCallback, errorCallback).then(
+        (val) {
       print(val.toString());
     }, onError: errorCallback);
   }
 
   @action
-  Future helpAndSupport(name, email, message, successCallback,
-      errorCallback) async {
+  Future helpAndSupport(
+      name, email, message, successCallback, errorCallback) async {
     _repository
         .helpAndSupport(name, email, message, successCallback, errorCallback)
         .then((val) {

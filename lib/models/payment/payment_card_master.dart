@@ -39,6 +39,7 @@ class PaymentCardDetails {
   bool? isDefault;
   String? updatedAt;
   String? createdAt;
+  bool? isSelected;
 
   PaymentCardDetails(
       {this.id,
@@ -51,7 +52,8 @@ class PaymentCardDetails {
       this.customerPaymentProfileId,
       this.isDefault,
       this.updatedAt,
-      this.createdAt});
+      this.createdAt,
+      this.isSelected = false});
 
   PaymentCardDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -65,6 +67,7 @@ class PaymentCardDetails {
     isDefault = json['isDefault'];
     updatedAt = json['updatedAt'];
     createdAt = json['createdAt'];
+    isSelected = false;
   }
 
   Map<String, dynamic> toJson() {

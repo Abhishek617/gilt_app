@@ -27,6 +27,7 @@ import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/models/help_support/help_support_master.dart';
 import 'package:guilt_app/models/payment/add_card_master.dart';
+import 'package:guilt_app/models/payment/pay_to_user_request.dart';
 import 'package:guilt_app/models/payment/payment_history_master.dart';
 import 'package:guilt_app/models/payment/payment_request.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
@@ -37,6 +38,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
 
 import '../../../../models/payment/payment_card_master.dart';
+import '../../../../models/success_master.dart';
 
 class PostApi {
   // dio instance
@@ -702,6 +704,30 @@ class PostApi {
       )
           .then((value) {
         value = PaymentMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Pay to user
+  Future payToUser(
+      PayToUserRequest payModel, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.payToUser,
+        data: json.encode(payModel.toJson()),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = SuccessMaster.fromJson(value);
         successCB(value);
       });
     } catch (e) {

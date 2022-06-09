@@ -68,16 +68,20 @@ class _NotificationsState extends State<Notifications> {
                               onAccept: () {
                                 acceptRejectEvent(
                                     contentData[index].eventId, "accepted");
-                                Routes.navigateToScreenWithArgs(context,
-                                    Routes.pay_request_business_payment, {
-                                  "type": 'Pay',
-                                  "userData": contentData[index].user
-                                });
                               },
                               onReject: () {
                                 acceptRejectEvent(
                                     contentData[index].eventId, "rejected");
                               },
+                              onPay: () {
+                                Routes.navigateToScreenWithArgs(context,
+                                    Routes.pay_request_business_payment, {
+                                  "type": 'Pay',
+                                  "userData": contentData[index].user,
+                                  "fromScreen": "notification"
+                                });
+                              },
+                              onCancel: () {},
                             )),
                   )
                 : Center(
@@ -116,9 +120,16 @@ class NotificationListItem extends StatelessWidget {
   final NotificationItem notificationData;
   Function? onAccept;
   Function? onReject;
+  Function? onPay;
+  Function? onCancel;
 
   NotificationListItem(
-      {required this.notificationData, this.onAccept, this.onReject, Key? key})
+      {required this.notificationData,
+      this.onAccept,
+      this.onReject,
+      this.onPay,
+      this.onCancel,
+      Key? key})
       : super(key: key);
 
   @override
@@ -175,7 +186,10 @@ class NotificationListItem extends StatelessWidget {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              onAccept!();
+                              if (notificationData!.type == 'payRequest')
+                                onPay!();
+                              else
+                                onAccept!();
                             },
                             child: Text(notificationData!.type == 'payRequest'
                                 ? 'Pay'
@@ -190,7 +204,10 @@ class NotificationListItem extends StatelessWidget {
                           SizedBox(width: 15),
                           ElevatedButton(
                             onPressed: () {
-                              onReject!();
+                              if (notificationData!.type == 'payRequest')
+                                onCancel!();
+                              else
+                                onReject!();
                             },
                             child: Text(
                               notificationData!.type == 'payRequest'
