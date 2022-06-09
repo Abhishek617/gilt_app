@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/models/payment/add_card_master.dart';
 import 'package:guilt_app/models/payment/payment_card_master.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 
 import '../../utils/routes/routes.dart';
 import '../../widgets/custom_body_wrapper.dart';
@@ -116,10 +118,16 @@ class _SavedCardsState extends State<SavedCards> {
                                 return SavedCardItem(
                                   cardDetails: cardList[index],
                                   onEdit: () {
-                                    Routes.navigateToScreen(
-                                        context, Routes.edit_cards);
+                                    Routes.navigateToScreenWithArgs(context,
+                                        Routes.edit_cards, cardList[index]);
                                   },
-                                  onDelete: () {},
+                                  onDelete: () {
+                                    deleteCardConfirmationDialog(
+                                        context,
+                                        cardList[index].type!,
+                                        cardList[index].id!,
+                                        index);
+                                  },
                                 );
                               },
                             )
@@ -131,6 +139,61 @@ class _SavedCardsState extends State<SavedCards> {
                     ],
                   ),
                 ))));
+  }
+
+  deleteCardConfirmationDialog(BuildContext context, String type, id, index) {
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
+        removePaymentMethod(id, index);
+      },
+    );
+
+    Widget cancelButton = TextButton(
+      child: Text("CANCEL"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Remove $type"),
+      content: Text("Are you sure want to remove $type"),
+      actions: [okButton, cancelButton],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  removePaymentMethod(id, index) async {
+    GlobalStoreHandler.userStore.removePaymentMethod(id,
+        (AddPaymentMaster master) {
+      if (master != null) {
+        if (master.success == true) {
+          GlobalMethods.showSuccessMessage(
+              context, master.message ?? 'Removed', 'Remove payment method');
+          setState(() {
+            cardList.removeAt(index);
+          });
+        } else {
+          GlobalMethods.showErrorMessage(
+              context, master.message ?? 'failed', 'Remove payment method');
+        }
+      }
+    }, (error) {
+      print(error.toString());
+      GlobalMethods.showErrorMessage(
+          context, 'Something went wrong!', 'Remove payment method');
+    });
   }
 }
 

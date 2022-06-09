@@ -432,6 +432,17 @@ class Repository {
         .catchError((error) => throw error);
   }
 
+  //cancel event
+  Future cancelEvent(
+      id, successCB, errorCB
+      ) async {
+    var token = await authToken;
+    return await _postApi
+        .cancelEvent(id, token, successCB, errorCB)
+        .then((addeventData) => addeventData)
+        .catchError((error) => throw error);
+  }
+
   //add business
   Future addBusiness(
       AddBusinessRequestModel businessData, successCB, errorCB) async {
@@ -478,11 +489,38 @@ class Repository {
         .catchError((error) => throw error);
   }
 
+  //Edit card or bank account
+  Future editCardOrBankAccount(id, data, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .editCardOrBankAccount(id, data, token, successCB, errorCB)
+        .then((paymentCardData) => paymentCardData)
+        .catchError((error) => throw error);
+  }
+
   //Add payment request
   Future getPaymentHistory(int page, int size, successCB, errorCB) async {
     var token = await authToken;
     return await _postApi
         .getPaymentHistory(page, size, token, successCB, errorCB)
+        .then((savedCardsData) => savedCardsData)
+        .catchError((error) => throw error);
+  }
+
+  //Remove payment method
+  Future removePaymentMethod(id, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .removePaymentMethod(id, token, successCB, errorCB)
+        .then((savedCardsData) => savedCardsData)
+        .catchError((error) => throw error);
+  }
+
+  //Help and Support
+  Future helpAndSupport(name, email, message, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .helpAndSupport(name, email, message, token, successCB, errorCB)
         .then((savedCardsData) => savedCardsData)
         .catchError((error) => throw error);
   }
