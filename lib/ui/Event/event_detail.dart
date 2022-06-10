@@ -17,6 +17,7 @@ import 'package:guilt_app/widgets/rounded_button_with_icon.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/Event/accept_reject_event.dart';
 import '../../stores/user/user_store.dart';
 import '../../utils/Global_methods/global.dart';
 import '../../utils/routes/routes.dart';
@@ -346,11 +347,69 @@ class _EventDetailsState extends State<EventDetails> {
                       // ),
                     ],
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          //Accept
+                          acceptRejectEvent(
+                              contentData?.event?.id ?? 0, "accepted");
+                        },
+                        child: Text('Accept'),
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        ))),
+                      ),
+                      SizedBox(width: 15),
+                      ElevatedButton(
+                        onPressed: () {
+                          //Reject event
+                          acceptRejectEvent(
+                              contentData?.event?.id ?? 0, "rejected");
+                        },
+                        child: Text(
+                          'Reject',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateColor.resolveWith(
+                                (states) => Colors.white),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50.0),
+                            ))),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
           )
         : Center(child: Text('No Details found.'));
+  }
+
+  acceptRejectEvent(id, status) async {
+    print('createEvent RequestData :');
+    //print(eData);
+    GlobalMethods.showLoader();
+    _userStore.acceptRejectEvent(id, status, (AcceptRejectEvent val) {
+      GlobalMethods.hideLoader();
+      if (val.success == true) {
+        GlobalMethods.showSuccessMessage(
+            context, val.message ?? 'Success', 'Event');
+      } else {
+        GlobalMethods.showErrorMessage(
+            context, val.message ?? 'Failed', 'Event');
+      }
+    }, (error) {
+      GlobalMethods.hideLoader();
+    });
   }
 
   Widget setupAlertDialogContainer() {

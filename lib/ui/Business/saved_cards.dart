@@ -38,12 +38,6 @@ class _SavedCardsState extends State<SavedCards> {
   }
 
   @override
-  void didChangeDependencies() {
-    getSavedCards();
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final layoutAddNewCard = Container(
       padding: EdgeInsets.symmetric(horizontal: 8),
@@ -182,8 +176,10 @@ class _SavedCardsState extends State<SavedCards> {
   }
 
   removePaymentMethod(id, index) async {
+    GlobalMethods.showLoader();
     GlobalStoreHandler.userStore.removePaymentMethod(id,
         (AddPaymentMaster master) {
+      GlobalMethods.hideLoader();
       if (master != null) {
         if (master.success == true) {
           GlobalMethods.showSuccessMessage(
@@ -198,6 +194,7 @@ class _SavedCardsState extends State<SavedCards> {
         }
       }
     }, (error) {
+      GlobalMethods.hideLoader();
       print(error.toString());
       GlobalMethods.showErrorMessage(
           context, 'Something went wrong!', 'Remove payment method');

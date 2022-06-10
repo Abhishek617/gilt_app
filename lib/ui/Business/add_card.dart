@@ -164,6 +164,7 @@ class _AddCardState extends State<AddCard> {
               buttonColor: AppColors.primaryColor,
               textColor: Colors.white,
               onPressed: () {
+                GlobalMethods.hideKeyboard(context);
                 if (bankFormKey.currentState!.validate()) {
                   addCardOrBankAccount(data: getBankParams());
                 } else {
@@ -301,6 +302,7 @@ class _AddCardState extends State<AddCard> {
               buttonColor: AppColors.primaryColor,
               textColor: Colors.white,
               onPressed: () {
+                GlobalMethods.hideKeyboard(context);
                 if (cardFormKey.currentState!.validate()) {
                   addCardOrBankAccount(data: getCardParams());
                 } else {
@@ -383,24 +385,25 @@ class _AddCardState extends State<AddCard> {
   }
 
   String getCardParams() {
-    List<int> expiryDate = CardUtils.getExpiryDate(edCardExpiryController.text);
-    String expiry = "${expiryDate[0]}/${expiryDate[1]}";
+    List<String> expiryDate =
+        CardUtils.getExpiryDate(edCardExpiryController.text);
+    String expiry = "${expiryDate[0]}${expiryDate[1]}";
     var map = new Map<String, dynamic>();
     map['type'] = "card";
     map['brand'] =
         CardUtils.getCardTypeFrmNumber(edCardNumberController.text) ==
                 CardType.MasterCard
-            ? "MASTER"
+            ? "MasterCard"
             : CardUtils.getCardTypeFrmNumber(edCardNumberController.text) ==
                     CardType.Visa
-                ? "VISA"
+                ? "Visa"
                 : "Card";
     map['cardNumber'] = edCardNumberController.text;
     map['expiry'] = expiry;
     map['nameOnAccount'] = edCardNameController.text;
-    map['bankAccountNum'] = "";
-    map['routingNumber'] = "";
-    map['bankName'] = "";
+    // map['bankAccountNum'] = "";
+    // map['routingNumber'] = "";
+    // map['bankName'] = "";
     return json.encode(map);
   }
 

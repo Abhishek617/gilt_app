@@ -129,7 +129,7 @@ class Routes {
   static const String saved_cards = '/saved_cards';
   static const String edit_cards = '/edit_cards';
   static const String add_card = '/add_card';
-  static const String select_card = '/add_card';
+  static const String select_card = '/select_card';
 
   static final routes = <String, WidgetBuilder>{
     otpvalidate: (BuildContext context) => Otp_Validate_Screen(),
