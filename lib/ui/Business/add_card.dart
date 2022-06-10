@@ -42,7 +42,12 @@ class _AddCardState extends State<AddCard> {
         methodName: "Credit/Debit card", method: "card", isSelected: true),
   ];
   final UserStore _userStore = UserStore(getIt<Repository>());
-
+  @override
+  initState(){
+    edAccountNumberController.text = "204578441124512";
+    edRoutingNumberController.text = "121042882";
+   super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final imgLogo = Center(
@@ -383,14 +388,17 @@ class _AddCardState extends State<AddCard> {
     map['brand'] =
         CardUtils.getCardTypeFrmNumber(edCardNumberController.text) ==
                 CardType.MasterCard
-            ? "master"
+            ? "MASTER"
             : CardUtils.getCardTypeFrmNumber(edCardNumberController.text) ==
                     CardType.Visa
-                ? "visa"
-                : "card";
+                ? "VISA"
+                : "Card";
     map['cardNumber'] = edCardNumberController.text;
     map['expiry'] = expiry;
     map['nameOnAccount'] = edCardNameController.text;
+    map['bankAccountNum'] = "";
+    map['routingNumber'] = "";
+    map['bankName'] = "";
     return json.encode(map);
   }
 
@@ -401,6 +409,9 @@ class _AddCardState extends State<AddCard> {
     map['routingNumber'] = edRoutingNumberController.text;
     map['bankName'] = edBankNameController.text;
     map['nameOnAccount'] = edAccountNameController.text;
+    map['expiry'] = "";
+    map['brand'] = "";
+    map['cardNumber'] = "";
     return json.encode(map);
   }
 
