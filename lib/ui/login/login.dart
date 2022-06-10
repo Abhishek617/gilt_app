@@ -55,7 +55,8 @@ class _LoginState extends State<Login> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            Routes.goBack(context);
+            Routes.navigateToScreen(context, Routes.welcome_login);
+            //Routes.goBack(context);
           },
           child: Icon(
             Icons.arrow_back_ios_outlined,

@@ -288,7 +288,6 @@ class _Add_feedbackState extends State<Add_feedback> {
 
                          //Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
                         }
-
                        Routes.navigateToScreen(context, Routes.feedback_list);
                       },
                     ),
@@ -305,7 +304,6 @@ class Item {
   String name;
   String title;
   String url;
-
   Item({required this.url, required this.name, required this.title});
 }
 
