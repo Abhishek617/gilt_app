@@ -400,7 +400,7 @@ class _BusinessPaymentState extends State<BusinessPayment> {
     PayToUserRequest payModel = PayToUserRequest(
       customerProfileId: currentUserId,
       paymentProfile: int.parse(data.customerPaymentProfileId!),
-      amount: int.parse(amountController.text),
+      amount: double.parse(amountController.text),
       walletAmount: 0,
       toUserId: userData?.id,
       paymentMethod: data.type,

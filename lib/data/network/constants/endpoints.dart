@@ -79,6 +79,18 @@ class Endpoints {
   static const String payToUser =
       baseUrl + "api/payments/chargeProfile";
 
+  // Pay to event
+  static const String padToEvent =
+      baseUrl + "api/payments/paidToEvent";
+
+  // Add money to wallet
+  static const String addMoneyToWallet =
+      baseUrl + "api/payments/addMoneyToWallet";
+
+  // My wallet balance
+  static const String myWalletBalance =
+      baseUrl + "api/payments/myBalance";
+
   // Saved card list
   static const String savedCardList = baseUrl + "api/payments/myCards";
 

@@ -1,21 +1,24 @@
 class PayToUserRequest {
   int? customerProfileId;
   int? paymentProfile;
-  int? amount;
+  double? amount;
   int? walletAmount;
   int? toUserId;
   String? paymentMethod;
   int? paymentReqId;
   int? businessId;
+  int? eventId;
 
   PayToUserRequest(
       {this.customerProfileId,
-        this.paymentProfile,
-        this.amount,
-        this.walletAmount,
-        this.toUserId,
-        this.paymentMethod,
-        this.paymentReqId, this.businessId});
+      this.paymentProfile,
+      this.amount,
+      this.walletAmount,
+      this.toUserId,
+      this.paymentMethod,
+      this.paymentReqId,
+      this.businessId,
+      this.eventId});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -27,6 +30,7 @@ class PayToUserRequest {
     data['paymentMethod'] = this.paymentMethod;
     data['paymentReqId'] = this.paymentReqId;
     data['businessId'] = this.businessId;
+    data['eventId'] = this.eventId;
     return data;
   }
 }

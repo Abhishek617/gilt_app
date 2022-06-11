@@ -3,6 +3,7 @@ import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Business/AddBusinessRequestModel.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
+import 'package:guilt_app/models/payment/add_money_wallet_request.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
 import 'package:guilt_app/ui/notification/notification.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
@@ -576,6 +577,30 @@ abstract class _UserStore with Store {
   Future payToUser(
       PayToUserRequest payModel, successCallback, errorCallback) async {
     _repository.payToUser(payModel, successCallback, errorCallback).then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future payToEvent(
+      PayToUserRequest payModel, successCallback, errorCallback) async {
+    _repository.payToEvent(payModel, successCallback, errorCallback).then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future addMoneyToWallet(
+      AddMoneyToWalletRequest payModel, successCallback, errorCallback) async {
+    _repository.addMoneyToWallet(payModel, successCallback, errorCallback).then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future myWalletBalance(
+      successCallback, errorCallback) async {
+    _repository.myWaletBalance(successCallback, errorCallback).then((val) {
       print(val.toString());
     }, onError: errorCallback);
   }

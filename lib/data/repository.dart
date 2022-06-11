@@ -18,6 +18,7 @@ import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
+import 'package:guilt_app/models/payment/add_money_wallet_request.dart';
 import 'package:guilt_app/models/post/post.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:sembast/sembast.dart';
@@ -483,6 +484,33 @@ class Repository {
     var token = await authToken;
     return await _postApi
         .payToUser(payModel, token, successCB, errorCB)
+        .then((requestUserData) => requestUserData)
+        .catchError((error) => throw error);
+  }
+
+  //Pay to event
+  Future payToEvent(PayToUserRequest payModel, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .payToEvent(payModel, token, successCB, errorCB)
+        .then((requestUserData) => requestUserData)
+        .catchError((error) => throw error);
+  }
+
+  //Add money to wallet
+  Future addMoneyToWallet(AddMoneyToWalletRequest payModel, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .addMoneyToWallet(payModel, token, successCB, errorCB)
+        .then((requestUserData) => requestUserData)
+        .catchError((error) => throw error);
+  }
+
+  //My wallet balance
+  Future myWaletBalance(successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .myWalletBalance(token, successCB, errorCB)
         .then((requestUserData) => requestUserData)
         .catchError((error) => throw error);
   }

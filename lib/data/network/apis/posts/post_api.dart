@@ -27,9 +27,11 @@ import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/models/help_support/help_support_master.dart';
 import 'package:guilt_app/models/payment/add_card_master.dart';
+import 'package:guilt_app/models/payment/add_money_wallet_request.dart';
 import 'package:guilt_app/models/payment/pay_to_user_request.dart';
 import 'package:guilt_app/models/payment/payment_history_master.dart';
 import 'package:guilt_app/models/payment/payment_request.dart';
+import 'package:guilt_app/models/payment/wallet_balance_master.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 
@@ -728,6 +730,76 @@ class PostApi {
       )
           .then((value) {
         value = SuccessMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Pay to event
+  Future payToEvent(
+      PayToUserRequest payModel, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.padToEvent,
+        data: json.encode(payModel.toJson()),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = SuccessMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Add money to wallet
+  Future addMoneyToWallet(
+      AddMoneyToWalletRequest payModel, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.addMoneyToWallet,
+        data: json.encode(payModel.toJson()),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = SuccessMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //My wallet balance
+  Future myWalletBalance(token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .get(
+        Endpoints.myWalletBalance,
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = WalletBalanceMaster.fromJson(value);
         successCB(value);
       });
     } catch (e) {

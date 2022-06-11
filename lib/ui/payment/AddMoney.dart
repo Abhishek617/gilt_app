@@ -2,7 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/models/payment/add_money_wallet_request.dart';
+import 'package:guilt_app/models/payment/payment_card_master.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 
+import '../../data/repository.dart';
+import '../../di/components/service_locator.dart';
+import '../../models/Auth/profile_modal.dart';
+import '../../models/success_master.dart';
+import '../../stores/user/user_store.dart';
+import '../../utils/Global_methods/global.dart';
 import '../../utils/device/device_utils.dart';
 import '../../widgets/custom_scaffold.dart';
 
@@ -14,6 +23,8 @@ class AddMoney extends StatefulWidget {
 }
 
 class _AddMoneyState extends State<AddMoney> {
+  final UserStore _userStore = UserStore(getIt<Repository>());
+
   moneylist() => Row(
         children: [
           SizedBox(
@@ -201,14 +212,23 @@ class _AddMoneyState extends State<AddMoney> {
               children: [
                 TextButton(
                     onPressed: () {
-                      _sink.add(--initValue);
+                      if (initValue > 0) _sink.add(--initValue);
                     },
                     child: Icon(Icons.remove)),
                 Container(
                   width: 130,
                   height: 40,
-                  child: TextField(
-                    controller: _controller,
+                  child: Center(
+                    child: TextField(
+                      controller: _controller,
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(bottom: 3)),
+                      onChanged: (value) {
+                        initValue = int.parse(value);
+                      },
+                    ),
                   ),
                 ),
                 TextButton(
@@ -225,18 +245,27 @@ class _AddMoneyState extends State<AddMoney> {
               width: DeviceUtils.getScaledWidth(context, 0.80),
               height: DeviceUtils.getScaledHeight(context, 0.070),
               child: RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  choosePaymentMethod();
+                },
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 color: AppColors.primaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Row(
+                  mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    Text("                     Add Money",
-                        style: TextStyle(color: Colors.white)),
                     SizedBox(
-                      width: DeviceUtils.getScaledWidth(context, 0.2),
+                      width: DeviceUtils.getScaledWidth(context, 0.05),
+                      height: DeviceUtils.getScaledHeight(context, 0.07),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text("Add Money",
+                            style: TextStyle(color: Colors.white)),
+                      ),
                     ),
                     SizedBox(
                       width: DeviceUtils.getScaledWidth(context, 0.08),
@@ -254,6 +283,45 @@ class _AddMoneyState extends State<AddMoney> {
         ),
       ),
     );
+  }
+
+  void choosePaymentMethod() {
+    Routes.navigateToScreenWithCB(context, Routes.select_card,
+        (PaymentCardDetails data) {
+      if (data != null) {
+        addMontyToWallet(data);
+      }
+    });
+  }
+
+  addMontyToWallet(PaymentCardDetails data) async {
+    GlobalMethods.showLoader();
+    GetProfileResponseModal? profileData = await _userStore.getProfileData();
+    int currentUserId = int.parse(profileData?.user?.customerProfileId ?? "0");
+
+    AddMoneyToWalletRequest payModel = AddMoneyToWalletRequest(
+      customerProfileId: currentUserId,
+      paymentProfile: int.parse(data.customerPaymentProfileId!),
+      amount: int.parse(_controller.text),
+      paymentMethod: data.type,
+    );
+
+    _userStore.addMoneyToWallet(payModel, (SuccessMaster successMaster) {
+      GlobalMethods.hideLoader();
+      if (successMaster != null) {
+        if (successMaster.success != null && successMaster.success!) {
+          GlobalMethods.showSuccessMessage(
+              context, successMaster.message!, "Add Money");
+          Routes.goBack(context);
+        } else {
+          GlobalMethods.showErrorMessage(
+              context, successMaster.message!, "Add Money");
+        }
+      }
+    }, (error) {
+      GlobalMethods.hideLoader();
+      print(error.toString());
+    });
   }
 
   @override
