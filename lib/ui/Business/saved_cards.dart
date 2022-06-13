@@ -266,28 +266,6 @@ class SavedCardItem extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 10,
-              ),
-              InkWell(
-                onTap: () {
-                  onEdit!();
-                },
-                child: Container(
-                  height: 26,
-                  width: 26,
-                  decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.all(Radius.circular(13))),
-                  child: Center(
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                      size: 12,
-                    ),
-                  ),
-                ),
-              ),
             ],
           )
         ],
