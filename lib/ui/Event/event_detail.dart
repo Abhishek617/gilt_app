@@ -38,6 +38,7 @@ class _EventDetailsState extends State<EventDetails> {
   final UserStore _userStore = UserStore(getIt<Repository>());
   EventDetailsResponseModel? contentData;
   var args;
+  bool isPayButton = false;
 
   @override
   void initState() {
@@ -59,13 +60,14 @@ class _EventDetailsState extends State<EventDetails> {
   }
 
   getDetails(args) {
+    isPayButton = false;
     GlobalMethods.showLoader();
     _userStore.Event_Detail(args, (value) {
       print(value);
       setState(() {
         contentData = EventDetailsResponseModel.fromJson(value);
-        print('eventview');
       });
+      validatePayButton();
       GlobalMethods.hideLoader();
     }, (error) {
       GlobalMethods.hideLoader();
@@ -355,11 +357,11 @@ class _EventDetailsState extends State<EventDetails> {
                   SizedBox(
                     height: 20,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      contentData!.event!.isUserAtendee!
-                          ? Container(
+                  isPayButton
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
                               margin: EdgeInsets.only(right: 15),
                               child: ElevatedButton(
                                 onPressed: () {
@@ -374,47 +376,47 @@ class _EventDetailsState extends State<EventDetails> {
                                   borderRadius: BorderRadius.circular(50.0),
                                 ))),
                               ),
-                            )
-                          : Container(),
-                      ElevatedButton(
-                        onPressed: () {
-                          //Accept
-                          acceptRejectEvent(
-                              contentData?.event?.id ?? 0, "accepted");
-                        },
-                        child: Text('Accept'),
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                        ))),
-                      ),
-                      SizedBox(width: 15),
-                      ElevatedButton(
-                        onPressed: () {
-                          //Reject event
-                          acceptRejectEvent(
-                              contentData?.event?.id ?? 0, "rejected");
-                        },
-                        child: Text(
-                          'Reject',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.white),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ))),
-                      ),
-                    ],
-                  )
+                            ),
+                            SizedBox(width: 15),
+                            ElevatedButton(
+                              onPressed: () {
+                                //Reject event
+                                acceptRejectEvent(
+                                    contentData?.event?.id ?? 0, "rejected");
+                              },
+                              child: Text(
+                                'Reject',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateColor.resolveWith(
+                                          (states) => Colors.white),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50.0),
+                                  ))),
+                            ),
+                          ],
+                        )
+                      : Container()
                 ],
               ),
             ),
           )
         : Center(child: Text('No Details found.'));
+  }
+
+  validatePayButton() async {
+    GetProfileResponseModal? profileData = await _userStore.getProfileData();
+    int userId = profileData?.user?.id ?? 0;
+    if (contentData!.event!.isUserAtendee! &&
+        contentData!.event!.createdBy! != userId) {
+      setState(() {
+        isPayButton = true;
+      });
+    }
   }
 
   void choosePaymentMethod() {

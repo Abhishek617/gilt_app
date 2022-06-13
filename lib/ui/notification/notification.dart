@@ -66,8 +66,12 @@ class _NotificationsState extends State<Notifications> {
                         itemBuilder: (context, index) => NotificationListItem(
                               notificationData: contentData[index],
                               onAccept: () {
-                                acceptRejectEvent(
-                                    contentData[index].eventId, "accepted");
+                                // acceptRejectEvent(
+                                //     contentData[index].eventId, "accepted");
+                                Routes.navigateToScreenWithArgs(
+                                    context,
+                                    Routes.event_details,
+                                    contentData[index].eventId);
                               },
                               onReject: () {
                                 acceptRejectEvent(

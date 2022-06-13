@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/network/dio_client.dart';
 import 'package:guilt_app/data/network/rest_client.dart';
@@ -41,6 +43,7 @@ import 'package:mime_type/mime_type.dart';
 
 import '../../../../models/payment/payment_card_master.dart';
 import '../../../../models/success_master.dart';
+import 'dart:developer' as de;
 
 class PostApi {
   // dio instance
@@ -516,15 +519,17 @@ class PostApi {
   Future<UpdateProfileResponseModal> updateprofile(
       UpdateProfileRequestModal UpdateProfileData, token) async {
     try {
-      String fileName = UpdateProfileData.profile.path.split('/').last;
-      String? mimeType = mime(fileName);
-      String mimee = mimeType!.split('/')[0];
-      String type = mimeType!.split('/')[1];
-      UpdateProfileData.profile = (await MultipartFile.fromFile(
-          UpdateProfileData.profile.path,
-          filename: fileName,
-          contentType: MediaType(mimee, type)));
-      //FormData forData = new FormData.fromMap(UpdateProfileData.toJson());
+      if (UpdateProfileData.profile != null) {
+        String fileName = UpdateProfileData.profile.path.split('/').last;
+        String? mimeType = mime(fileName);
+        String mimee = mimeType!.split('/')[0];
+        String type = mimeType!.split('/')[1];
+        UpdateProfileData.profile = (await MultipartFile.fromFile(
+            UpdateProfileData.profile.path,
+            filename: fileName,
+            contentType: MediaType(mimee, type)));
+        //FormData forData = new FormData.fromMap(UpdateProfileData.toJson());
+      }
 
       var form = FormData.fromMap(UpdateProfileData.toJson());
       final res = await _dioClient.put(
@@ -535,9 +540,10 @@ class PostApi {
           'Content-Type': 'multipart/form-data'
         }),
       );
+      de.log("Full response: ${jsonEncode(res)}");
       return UpdateProfileResponseModal.fromJson(res);
     } catch (e) {
-      print(e.toString());
+      print("Error of update profile: ${e.toString()}");
       throw e;
     }
   }
@@ -716,8 +722,7 @@ class PostApi {
   }
 
   //Pay to user
-  Future payToUser(
-      PayToUserRequest payModel, token, successCB, errorCB) async {
+  Future payToUser(PayToUserRequest payModel, token, successCB, errorCB) async {
     try {
       await _dioClient
           .post(
@@ -901,8 +906,7 @@ class PostApi {
   }
 
   //Payment History
-  Future removePaymentMethod(
-      id, token, successCB, errorCB) async {
+  Future removePaymentMethod(id, token, successCB, errorCB) async {
     try {
       await _dioClient
           .delete(
@@ -924,8 +928,7 @@ class PostApi {
   }
 
   //Payment History
-  Future helpAndSupport(
-      name, email, message, token, successCB, errorCB) async {
+  Future helpAndSupport(name, email, message, token, successCB, errorCB) async {
     String getParams() {
       var map = new Map<String, dynamic>();
       map['name'] = name;
@@ -933,6 +936,7 @@ class PostApi {
       map['message'] = message;
       return json.encode(map);
     }
+
     try {
       await _dioClient
           .post(

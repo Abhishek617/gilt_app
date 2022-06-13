@@ -17,17 +17,24 @@ class SelectCardView extends StatefulWidget {
 
 class _SelectCardViewState extends State<SelectCardView> {
   List<PaymentCardDetails> cardList = [];
+  bool isApiLoading = false;
 
   getSavedCards() async {
+    setState(() {
+      isApiLoading = true;
+    });
     GlobalStoreHandler.userStore.getSavedCards((PaymentCardMaster master) {
+      isApiLoading = false;
       if (master != null) {
-        setState(() {
-          cardList = master.list ?? [];
-          if (cardList.isNotEmpty) cardList[0].isSelected = true;
-        });
+        cardList = master.list ?? [];
+        if (cardList.isNotEmpty) cardList[0].isSelected = true;
       }
+      setState(() {});
     }, (error) {
       print(error.toString());
+      setState(() {
+        isApiLoading = false;
+      });
     });
   }
 
@@ -41,6 +48,50 @@ class _SelectCardViewState extends State<SelectCardView> {
 
   @override
   Widget build(BuildContext context) {
+    final layoutAddNewCard = Container(
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      child: InkWell(
+        onTap: () {
+          Routes.navigateToScreenWithCB(context, Routes.add_card, (val) {
+            getSavedCards();
+          });
+        },
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Row(
+                children: [
+                  Container(
+                    height: 26,
+                    width: 26,
+                    decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        borderRadius: BorderRadius.all(Radius.circular(13))),
+                    child: Center(
+                      child: Icon(
+                        Icons.image_outlined,
+                        color: Colors.white,
+                        size: 12,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text("Add new"),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.radio_button_off_outlined,
+              color: AppColors.primaryColor,
+            )
+          ],
+        ),
+      ),
+    );
     return Scaffold(
         appBar: AppBar(
           shadowColor: Colors.transparent,
@@ -92,19 +143,26 @@ class _SelectCardViewState extends State<SelectCardView> {
                       ),
                       Center(
                         child: ElevatedButtonWidget(
-                          buttonText: "Confirm",
+                          buttonText: cardList.isEmpty ? "Add" : "Confirm",
                           buttonColor: AppColors.primaryColor,
                           textColor: Colors.white,
                           onPressed: () {
-                            PaymentCardDetails paymentDetails =
-                                getSelectedCard()!;
-                            if (paymentDetails != null) {
-                              Routes.goBackWithData(context, paymentDetails);
+                            if (cardList.isNotEmpty) {
+                              PaymentCardDetails paymentDetails =
+                                  getSelectedCard()!;
+                              if (paymentDetails != null) {
+                                Routes.goBackWithData(context, paymentDetails);
+                              } else {
+                                GlobalMethods.showErrorMessage(
+                                    context,
+                                    "Please select the card or account",
+                                    "Select payment method");
+                              }
                             } else {
-                              GlobalMethods.showErrorMessage(
-                                  context,
-                                  "Please select the card or account",
-                                  "Select payment method");
+                              Routes.navigateToScreenWithCB(
+                                  context, Routes.add_card, (val) {
+                                getSavedCards();
+                              });
                             }
                           },
                         ),
