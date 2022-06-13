@@ -24,15 +24,15 @@ class WalletBalanceMaster {
 
 class WalletData {
   int? id;
-  int? walletBalance;
-  int? walletBlockBalance;
+  double? walletBalance;
+  double? walletBlockBalance;
 
   WalletData({this.id, this.walletBalance, this.walletBlockBalance});
 
   WalletData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    walletBalance = json['walletBalance'];
-    walletBlockBalance = json['walletBlockBalance'];
+    walletBalance = json['walletBalance'].toDouble();
+    walletBlockBalance = json['walletBlockBalance'].toDouble();
   }
 
   Map<String, dynamic> toJson() {
