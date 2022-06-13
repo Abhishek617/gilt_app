@@ -1,16 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/models/payment/payment_history_master.dart';
 import 'package:guilt_app/models/payment/wallet_balance_master.dart';
 import 'package:guilt_app/ui/common/menu_drawer.dart';
+import 'package:guilt_app/ui/payment/Payment_history.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
-
-import '../../utils/device/device_utils.dart';
-import '../../utils/routes/routes.dart';
-import '../../widgets/custom_scaffold.dart';
-import '../../widgets/rounded_button_widget.dart';
+import 'package:guilt_app/widgets/rounded_button_widget.dart';
 
 class Wallet extends StatefulWidget {
   const Wallet({Key? key}) : super(key: key);
@@ -21,16 +19,31 @@ class Wallet extends StatefulWidget {
 
 class _WalletState extends State<Wallet> {
   int mWalletBalance = 0;
-
+  List<HistoryItem> cardList = [];
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       getMyWalletBalance();
+      getPaymentHistory();
     });
   }
 
-  Widget Payment_paid_list() => Column(
+
+  getPaymentHistory() async {
+    GlobalStoreHandler.userStore.getPaymentHistory(0, 10,
+            (PaymentHistoryResponseModel master) {
+          if (master != null) {
+            setState(() {
+              cardList = master.history?.listData ?? [];
+            });
+          }
+        }, (error) {
+          print(error.toString());
+        });
+  }
+
+  Widget paymentPaidList() => Column(
         children: [
           Container(
             padding: EdgeInsets.only(top: 5, bottom: 5),
@@ -107,7 +120,7 @@ class _WalletState extends State<Wallet> {
             height: 20,
             //height spacing of divider
             thickness: 1,
-            //thickness of divier line
+            //thickness of divider line
             indent: 20,
             //spacing at the start of divider
             endIndent: 20, //spacing at the end of divider
@@ -115,7 +128,7 @@ class _WalletState extends State<Wallet> {
         ],
       );
 
-  Payment_recived_list() => Column(
+  paymentReceivedList() => Column(
         children: [
           Container(
             padding: EdgeInsets.only(top: 5, bottom: 5),
@@ -146,7 +159,7 @@ class _WalletState extends State<Wallet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Money Recived to Jo Malone',
+                      'Money Received to Jo Malone',
                       style: TextStyle(
                         color: AppColors.primaryColor,
                         fontSize: 14,
@@ -192,7 +205,7 @@ class _WalletState extends State<Wallet> {
             height: 20,
             //height spacing of divider
             thickness: 1,
-            //thickness of divier line
+            //thickness of divider line
             indent: 20,
             //spacing at the start of divider
             endIndent: 20, //spacing at the end of divider
@@ -263,7 +276,7 @@ class _WalletState extends State<Wallet> {
                         width: 70,
                       ),
                       Text(
-                        '\$${mWalletBalance}',
+                        '\$$mWalletBalance',
                         style: TextStyle(
                           color: AppColors.primaryColor,
                           fontSize: 24,
@@ -332,7 +345,7 @@ class _WalletState extends State<Wallet> {
                 height: 20,
                 //height spacing of divider
                 thickness: 1,
-                //thickness of divier line
+                //thickness of divider line
                 indent: 20,
                 //spacing at the start of divider
                 endIndent: 20, //spacing at the end of divider
@@ -422,110 +435,48 @@ class _WalletState extends State<Wallet> {
                 height: 20,
                 //height spacing of divider
                 thickness: 1,
-                //thickness of divier line
+                //thickness of divider line
                 indent: 20,
                 //spacing at the start of divider
                 endIndent: 20, //spacing at the end of divider
               ),
+
               Row(
                 children: [
                   SizedBox(
                     height: 20,
                     width: 20,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Payment History',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Resent Transaction',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                        width: 20,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.settings,
-                            color: AppColors.primaryColor,
-                            size: 17,
-                          ),
-                          Text(
-                            '  Payment History',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 170,
-                          ),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            color: AppColors.primaryColor,
-                            size: 14,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.black12,
-                //color of divider
-                height: 20,
-                //height spacing of divider
-                thickness: 1,
-                //thickness of divier line
-                indent: 20,
-                //spacing at the start of divider
-                endIndent: 20, //spacing at the end of divider
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    height: 20,
-                    width: 20,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Resent Transaction',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                    width: 10,
-                  ),
-                  Container(
-                    height: DeviceUtils.getScaledHeight(context, 0.50),
-                    child: ListView.builder(
-                      itemCount: item.length,
-                      itemBuilder: (context, index) => index.isOdd
-                          ? Payment_paid_list()
-                          : Payment_recived_list(),
+                      ],
                     ),
                   ),
+                  TextButton(onPressed: (){
+                    Routes.navigateToScreen(context, Routes.paymenthistory);
+                  }, child: Text('See More'))
                 ],
               ),
+              cardList.length > 0 ?
+              Container(
+                height: DeviceUtils.getScaledHeight(context, 0.30),
+                child: ListView.builder(
+                    itemCount: cardList.length,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      return PaymentHistoryItem(cardItem: cardList[index], );
+                    }),
+              ) : Center(child: Text('No Transactions found'),),
             ],
           ),
         ),
@@ -535,15 +486,13 @@ class _WalletState extends State<Wallet> {
 
   getMyWalletBalance() {
     GlobalStoreHandler.userStore.myWalletBalance((WalletBalanceMaster master) {
-      if (master != null) {
-        if (master.data != null) {
-          setState(() {
-            mWalletBalance = master.data?.walletBalance ?? 0;
-          });
-        }
-        if (master.success != null && master.success!) {
-        } else {}
+      if (master.data != null) {
+        setState(() {
+          mWalletBalance = master.data?.walletBalance ?? 0;
+        });
       }
+      if (master.success != null && master.success!) {
+      } else {}
     }, (error) {
       print(error.toString());
     });
