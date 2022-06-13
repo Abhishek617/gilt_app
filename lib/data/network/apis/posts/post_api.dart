@@ -890,7 +890,7 @@ class PostApi {
         }),
       )
           .then((value) {
-        value = PaymentHistoryMaster.fromJson(value);
+        value = PaymentHistoryResponseModel.fromJson(value);
         successCB(value);
       });
     } catch (e) {
