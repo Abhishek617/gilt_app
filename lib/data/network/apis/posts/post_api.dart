@@ -814,6 +814,29 @@ class PostApi {
     }
   }
 
+  //Credit bank account
+  Future creditBankAccount(data, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.creditBankAccount,
+        data: data,
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = SuccessMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
   //Add Payment Request
   Future getSavedCards(token, successCB, errorCB) async {
     try {

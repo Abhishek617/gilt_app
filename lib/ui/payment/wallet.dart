@@ -21,6 +21,7 @@ class Wallet extends StatefulWidget {
 class _WalletState extends State<Wallet> {
   double mWalletBalance = 0;
   List<HistoryItem> cardList = [];
+
   @override
   void initState() {
     super.initState();
@@ -32,15 +33,15 @@ class _WalletState extends State<Wallet> {
 
   getPaymentHistory() async {
     GlobalStoreHandler.userStore.getPaymentHistory(0, 10,
-            (PaymentHistoryResponseModel master) {
-          if (master != null) {
-            setState(() {
-              cardList = master.history?.listData ?? [];
-            });
-          }
-        }, (error) {
-          print(error.toString());
+        (PaymentHistoryResponseModel master) {
+      if (master != null) {
+        setState(() {
+          cardList = master.history?.listData ?? [];
         });
+      }
+    }, (error) {
+      print(error.toString());
+    });
   }
 
   @override
@@ -126,7 +127,7 @@ class _WalletState extends State<Wallet> {
                     ),
                   ),
                   IconButton(
-                    onPressed: (){
+                    onPressed: () {
                       getMyWalletBalance();
                     },
                     icon: Icon(
@@ -187,11 +188,11 @@ class _WalletState extends State<Wallet> {
                         width: 20,
                       ),
                       InkWell(
-                        onTap: (){
-                          Routes.navigateToScreenWithCB(context, Routes.addmoney,
-                                  (value) {
-                                getMyWalletBalance();
-                              });
+                        onTap: () {
+                          Routes.navigateToScreenWithCB(
+                              context, Routes.addmoney, (value) {
+                            getMyWalletBalance();
+                          });
                         },
                         child: Row(
                           children: [
@@ -227,8 +228,13 @@ class _WalletState extends State<Wallet> {
                         width: 20,
                       ),
                       InkWell(
-                        onTap: (){
-                          // TODO: Credit to Bank API call
+                        onTap: () {
+                          Routes.navigateToScreenWithArgsAndCB(
+                              context,
+                              Routes.send_money_to_bank,
+                              mWalletBalance, (value) {
+                            getMyWalletBalance();
+                          });
                         },
                         child: Row(
                           children: [
@@ -274,7 +280,6 @@ class _WalletState extends State<Wallet> {
                 //spacing at the start of divider
                 endIndent: 20, //spacing at the end of divider
               ),
-
               Row(
                 children: [
                   SizedBox(
@@ -296,21 +301,28 @@ class _WalletState extends State<Wallet> {
                       ],
                     ),
                   ),
-                  TextButton(onPressed: (){
-                    Routes.navigateToScreen(context, Routes.paymenthistory);
-                  }, child: Text('See More'))
+                  TextButton(
+                      onPressed: () {
+                        Routes.navigateToScreen(context, Routes.paymenthistory);
+                      },
+                      child: Text('See More'))
                 ],
               ),
-              cardList.length > 0 ?
-              Container(
-                height: DeviceUtils.getScaledHeight(context, 0.30),
-                child: ListView.builder(
-                    itemCount: cardList.length,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) {
-                      return PaymentHistoryItem(cardItem: cardList[index], );
-                    }),
-              ) : Center(child: Text('No Transactions found'),),
+              cardList.length > 0
+                  ? Container(
+                      height: DeviceUtils.getScaledHeight(context, 0.30),
+                      child: ListView.builder(
+                          itemCount: cardList.length,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            return PaymentHistoryItem(
+                              cardItem: cardList[index],
+                            );
+                          }),
+                    )
+                  : Center(
+                      child: Text('No Transactions found'),
+                    ),
             ],
           ),
         ),
@@ -327,10 +339,7 @@ class _WalletState extends State<Wallet> {
         });
       }
       if (master.success != null && master.success!) {
-
-      } else {
-
-      }
+      } else {}
       GlobalMethods.hideLoader();
     }, (error) {
       GlobalMethods.hideLoader();
