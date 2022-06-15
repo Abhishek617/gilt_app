@@ -27,12 +27,12 @@ class _AddMoneyState extends State<AddMoney> {
   final UserStore _userStore = UserStore(getIt<Repository>());
 
   final _controller = TextEditingController();
-  final _streamController = StreamController<int>();
+  final _streamController = StreamController<double>();
 
-  Stream<int> get _stream => _streamController.stream;
+  Stream<double> get _stream => _streamController.stream;
 
-  Sink<int> get _sink => _streamController.sink;
-  int initValue = 1;
+  Sink<double> get _sink => _streamController.sink;
+  double initValue = 500;
 
   @override
   void initState() {
@@ -111,7 +111,7 @@ class _AddMoneyState extends State<AddMoney> {
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(bottom: 3)),
                       onChanged: (value) {
-                        initValue = int.parse(value);
+                        initValue = double.parse(value);
                       },
                     ),
                   ),
@@ -158,7 +158,7 @@ class _AddMoneyState extends State<AddMoney> {
     AddMoneyToWalletRequest payModel = AddMoneyToWalletRequest(
       customerProfileId: currentUserId,
       paymentProfile: int.parse(data.customerPaymentProfileId!),
-      amount: int.parse(_controller.text),
+      amount: double.parse(_controller.text),
       paymentMethod: data.type,
     );
 

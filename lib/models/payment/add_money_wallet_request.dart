@@ -1,7 +1,7 @@
 class AddMoneyToWalletRequest {
   int? customerProfileId;
   int? paymentProfile;
-  int? amount;
+  double? amount;
   String? paymentMethod;
 
   AddMoneyToWalletRequest(
