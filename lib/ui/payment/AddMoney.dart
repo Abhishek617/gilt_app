@@ -5,6 +5,7 @@ import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/models/payment/add_money_wallet_request.dart';
 import 'package:guilt_app/models/payment/payment_card_master.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/rounded_button_widget.dart';
 
 import '../../data/repository.dart';
 import '../../di/components/service_locator.dart';
@@ -128,39 +129,12 @@ class _AddMoneyState extends State<AddMoney> {
             SizedBox(
               width: DeviceUtils.getScaledWidth(context, 0.80),
               height: DeviceUtils.getScaledHeight(context, 0.070),
-              child: RaisedButton(
+              child: ElevatedButtonWidget(
                 onPressed: () {
                   choosePaymentMethod();
                 },
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                color: AppColors.primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    SizedBox(
-                      width: DeviceUtils.getScaledWidth(context, 0.05),
-                      height: DeviceUtils.getScaledHeight(context, 0.07),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Center(
-                        child: Text("Add Money",
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                    SizedBox(
-                      width: DeviceUtils.getScaledWidth(context, 0.08),
-                      height: DeviceUtils.getScaledHeight(context, 0.07),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white38,
-                        child: Icon(Icons.arrow_forward, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
+                buttonColor: AppColors.primaryColor,
+                buttonText: 'Add Money',
               ),
             ),
           ],
@@ -172,9 +146,7 @@ class _AddMoneyState extends State<AddMoney> {
   void choosePaymentMethod() {
     Routes.navigateToScreenWithCB(context, Routes.select_card,
         (PaymentCardDetails data) {
-      if (data != null) {
-        addMontyToWallet(data);
-      }
+      addMontyToWallet(data);
     });
   }
 
@@ -192,15 +164,13 @@ class _AddMoneyState extends State<AddMoney> {
 
     _userStore.addMoneyToWallet(payModel, (SuccessMaster successMaster) {
       GlobalMethods.hideLoader();
-      if (successMaster != null) {
-        if (successMaster.success != null && successMaster.success!) {
-          GlobalMethods.showSuccessMessage(
-              context, successMaster.message!, "Add Money");
-          Routes.goBack(context);
-        } else {
-          GlobalMethods.showErrorMessage(
-              context, successMaster.message!, "Add Money");
-        }
+      if (successMaster.success != null && successMaster.success!) {
+        GlobalMethods.showSuccessMessage(
+            context, successMaster.message!, "Add Money");
+        Routes.goBack(context);
+      } else {
+        GlobalMethods.showErrorMessage(
+            context, successMaster.message!, "Add Money");
       }
     }, (error) {
       GlobalMethods.hideLoader();
