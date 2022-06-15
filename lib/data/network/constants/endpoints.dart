@@ -172,5 +172,5 @@ class Endpoints {
   static const String acceptRejectEvent = baseUrl + 'api/event/acceptReject';
 
   // Help and support
-  static const String helpAndSupport = baseUrl + '/support/';
+  static const String helpAndSupport = baseUrl + 'api/support/';
 }

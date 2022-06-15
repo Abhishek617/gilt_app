@@ -160,6 +160,7 @@ class _MessagesState extends State<Messages> {
           ],
         ),
         onTap: () {
+          print(msgData.type);
           G.socketUtils.currentChatRoom = msgData;
           if (msgData.type == 'private') {
             // G.socketUtils.joinPrivateUser(msgData);

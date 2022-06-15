@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
@@ -8,6 +10,7 @@ import 'package:guilt_app/constants/dimens.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
+import 'package:guilt_app/models/about/about_master.dart';
 import 'package:guilt_app/stores/form/form_store.dart';
 import 'package:guilt_app/stores/theme/theme_store.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
@@ -28,8 +31,37 @@ class About_screen extends StatefulWidget {
 }
 
 class _About_screenState extends State<About_screen> {
+  late UserStore _postStore;
+  AboutMaster? aboutAppData;
+  AppDetails? appDetails;
+
+  @override
+  void initState() {
+    _postStore = Provider.of<UserStore>(context, listen: false);
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      _postStore.getAppContent('app_version').then((value) {
+        setState(() {
+          aboutAppData = AboutMaster.fromJson(value);
+          if (aboutAppData != null && aboutAppData!.data != null && aboutAppData!.data!.about != null) {
+            if (Platform.isIOS) {
+              appDetails = aboutAppData!.data!.about!.ios;
+            } else {
+              appDetails = aboutAppData!.data!.about!.android;
+            }
+          }
+        });
+        GlobalMethods.hideLoader();
+      }).catchError((error) {
+        print(error.toString());
+        GlobalMethods.hideLoader();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    _postStore = Provider.of<UserStore>(context);
     return ScaffoldWrapper(
       isMenu: false,
       appBar: AppBar(
@@ -47,10 +79,11 @@ class _About_screenState extends State<About_screen> {
         centerTitle: true,
         shadowColor: Colors.transparent,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(25),
-        child: Center(
-            child: Column(
+      child: appDetails != null
+          ? Padding(
+              padding: const EdgeInsets.all(25),
+              child: Center(
+                  child: Column(
                 children: [
                   AppLogoWidget(
                     width: 140.0,
@@ -59,26 +92,23 @@ class _About_screenState extends State<About_screen> {
                   Text(
                     'Gult Trip',
                     style: TextStyle(
-                        fontSize: 16.0,fontWeight: FontWeight.bold, color: Colors.pinkAccent
-                    ),
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.pinkAccent),
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing.',
-                    style: TextStyle(
-                        fontSize: 13.0,color: Colors.black
-                    ),
+                    '${appDetails!.feature}',
+                    style: TextStyle(fontSize: 13.0, color: Colors.black),
                   ),
                   SizedBox(
                     height: 8,
                   ),
                   Text(
-                    'Lorem ipsum dolor sit amet, consectetur.',
-                    style: TextStyle(
-                        fontSize: 13.0,color: Colors.black
-                    ),
+                    '${appDetails!.msg}',
+                    style: TextStyle(fontSize: 13.0, color: Colors.black),
                   ),
                   SizedBox(
                     height: 15,
@@ -86,37 +116,33 @@ class _About_screenState extends State<About_screen> {
                   Text(
                     'Developed By',
                     style: TextStyle(
-                        fontSize: 14.0,fontWeight: FontWeight.bold, color: Colors.black
-                    ),
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
-
-          SizedBox(
-            height: 8,
-          ),
-          Text(
-            'Abc.',
-            style: TextStyle(
-                fontSize: 12.0,color: Colors.black
-            ),
-          ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    '${appDetails!.developedBy}',
+                    style: TextStyle(fontSize: 12.0, color: Colors.black),
+                  ),
                   SizedBox(
                     height: 15,
                   ),
                   Text(
                     'Version Info',
                     style: TextStyle(
-                        fontSize: 14.0,fontWeight: FontWeight.bold, color: Colors.black
-                    ),
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
-
                   SizedBox(
                     height: 8,
                   ),
                   Text(
-                    'Android version 5.0 to 5.1.1: Lollipop',
-                    style: TextStyle(
-                        fontSize: 12.0,color: Colors.black
-                    ),
+                    '${appDetails!.version}',
+                    style: TextStyle(fontSize: 12.0, color: Colors.black),
                   ),
                   SizedBox(
                     height: 15,
@@ -124,24 +150,20 @@ class _About_screenState extends State<About_screen> {
                   Text(
                     'Follow Us On',
                     style: TextStyle(
-                        fontSize: 14.0,fontWeight: FontWeight.bold, color: Colors.black
-                    ),
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
-
                   SizedBox(
-
                     height: 30,
                   ),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-
                         height: 30,
                       ),
                       SizedBox(
-
                         height: 30,
                       ),
                       Container(
@@ -151,7 +173,8 @@ class _About_screenState extends State<About_screen> {
                         decoration: BoxDecoration(
                           //color: Colors.green,
                           image: DecorationImage(
-                            image: NetworkImage('https://img.icons8.com/ios/344/facebook-new.png'),
+                            image: NetworkImage(
+                                'https://img.icons8.com/ios/344/facebook-new.png'),
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -166,7 +189,8 @@ class _About_screenState extends State<About_screen> {
                         decoration: BoxDecoration(
                           //color: Colors.green,
                           image: DecorationImage(
-                            image: NetworkImage('https://img.icons8.com/ios/344/twitter-circled--v1.png'),
+                            image: NetworkImage(
+                                'https://img.icons8.com/ios/344/twitter-circled--v1.png'),
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -181,7 +205,8 @@ class _About_screenState extends State<About_screen> {
                         decoration: BoxDecoration(
                           //color: Colors.green,
                           image: DecorationImage(
-                            image: NetworkImage('https://cdn-icons-png.flaticon.com/128/1362/1362857.png'),
+                            image: NetworkImage(
+                                'https://cdn-icons-png.flaticon.com/128/1362/1362857.png'),
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -196,23 +221,18 @@ class _About_screenState extends State<About_screen> {
                         decoration: BoxDecoration(
                           //color: Colors.green,
                           image: DecorationImage(
-                            image: NetworkImage('https://img.icons8.com/ios/344/youtube-play--v1.png'),
+                            image: NetworkImage(
+                                'https://img.icons8.com/ios/344/youtube-play--v1.png'),
                             fit: BoxFit.fill,
                           ),
                         ),
                       ),
-
-
                     ],
                   ),
-
-
-
                 ],
+              )),
             )
-
-        ),
-      ),
+          : Container(),
     );
   }
 }

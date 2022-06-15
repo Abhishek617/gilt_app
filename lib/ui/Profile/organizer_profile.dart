@@ -14,27 +14,31 @@ import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 
 class OrganizerProfile extends StatefulWidget {
-  final userId;
 
-  const OrganizerProfile({Key? key, this.userId}) : super(key: key);
+  const OrganizerProfile({Key? key}) : super(key: key);
 
   @override
-  State<OrganizerProfile> createState() => _OrganizerProfileState(userId);
+  State<OrganizerProfile> createState() => _OrganizerProfileState();
 }
 
 class _OrganizerProfileState extends State<OrganizerProfile> {
   int segmentedControlValue = 0;
-  late int uID;
   List<EventItem> eventList = [];
 
-  _OrganizerProfileState(this.uID);
-
   OrganizerUser? user;
+  int? uID;
 
   @override
   initState() {
     getUserDetails();
     super.initState();
+    Future.delayed(Duration.zero,(){
+      var args = ModalRoute.of(context)!.settings.arguments as int;
+      setState(() {
+        uID = args;
+        getUserDetails();
+      });
+    });
   }
 
   getUserDetails() {
@@ -61,17 +65,6 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
         });
       }
     }).catchError((err) {});
-  }
-
-  @override
-  void didChangeDependencies() {
-    var args = ModalRoute.of(context)!.settings.arguments as int;
-    setState(() {
-      uID = args;
-      getUserDetails();
-    });
-
-    super.didChangeDependencies();
   }
 
   Widget segmentedControl() {
