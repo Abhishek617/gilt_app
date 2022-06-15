@@ -25,54 +25,6 @@ class AddMoney extends StatefulWidget {
 class _AddMoneyState extends State<AddMoney> {
   final UserStore _userStore = UserStore(getIt<Repository>());
 
-  moneylist() => Row(
-        children: [
-          SizedBox(
-            width: 15,
-          ),
-          Column(
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Stack(
-                  children: [
-                    Container(
-                      child: Image.network(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                        width: 55,
-                        height: 55,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text(
-                'Pamela',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ],
-      );
-
-  List<String> item = [
-    ' b',
-    'c ',
-    ' d',
-    ' b',
-    'c ',
-    ' d',
-    ' r',
-    'n ',
-  ];
   final _controller = TextEditingController();
   final _streamController = StreamController<int>();
 
@@ -127,85 +79,17 @@ class _AddMoneyState extends State<AddMoney> {
                 ),
               ],
             ),
+
             SizedBox(
-              height: 20,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 20,
-                ),
-                Column(
-                  children: [
-                    FloatingActionButton(
-                      onPressed: null,
-                      disabledElevation: 0,
-                      backgroundColor: Colors.green,
-                      child: Icon(Icons.add),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'New',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: DeviceUtils.getScaledWidth(context, 0.761),
-                      height: DeviceUtils.getScaledHeight(context, 0.12),
-                      child: ListView.builder(
-                        itemCount: item.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) => moneylist(),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 70,
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Stack(
-                children: [
-                  Container(
-                    child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 5,
+              height: 30,
             ),
             Text(
-              'Paying Michael Scott',
+              'Add Amount',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
-            ),
-            SizedBox(
-              height: 30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
