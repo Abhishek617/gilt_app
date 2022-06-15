@@ -421,21 +421,13 @@ abstract class _UserStore with Store {
     // final future = _repository.login(email, password);
     //
     // loginFuture = ObservableFuture(future);
+    this.isLoggedIn = false;
+    this.isFirst = true;
+    _repository.saveIsFirst(true);
+    _repository.saveIsLoggedIn(false);
+    successCallback();
+    _repository.saveIsLoggedIn(false);
     _repository.logout().then((value) async {
-      if (value != null) {
-        print('isFirst : false');
-        this.isLoggedIn = false;
-        this.isFirst = true;
-        _repository.saveIsFirst(true);
-        _repository.saveIsLoggedIn(false);
-        successCallback(value);
-      } else {
-        this.isLoggedIn = false;
-        this.isFirst = true;
-        _repository.saveIsFirst(true);
-        _repository.saveIsLoggedIn(false);
-        print('failed to login');
-      }
     }, onError: (error) {
       print(error.toString());
       this.isLoggedIn = false;

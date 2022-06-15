@@ -356,8 +356,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             Icons.logout,
                             'Log Out',
                             () => {
-                              _userStore.logout((response) {
-                                print(response);
+                              _userStore.logout(() {
                                 Routes.navigateRootToScreen(
                                     context, Routes.login);
                               }, (error) {

@@ -3,6 +3,7 @@ import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/sharedpref/constants/preferences.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
 import 'package:guilt_app/models/Auth/refresh_token_modal.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class NetworkModule {
@@ -11,6 +12,7 @@ abstract class NetworkModule {
   /// Calling it multiple times will return the same instance.
   static Dio provideDio(SharedPreferenceHelper sharedPrefHelper) {
     final dio = Dio();
+    final globalStore = GlobalStoreHandler();
     String? newToken = '';
     var aToken = sharedPrefHelper.authToken.then((value) => value);
 
@@ -79,6 +81,9 @@ abstract class NetworkModule {
               return await _retry(error.requestOptions);
               print('Unauthenticated, Need to refresh token');
             }
+    if (error.response?.statusCode == 400) {
+
+    }
             return errorInterceptorHandler.next(error);
           },
         ),
