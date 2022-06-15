@@ -44,7 +44,7 @@ class _Add_feedbackState extends State<Add_feedback> {
 
   String? rate;
 
-  void selectRate(value){
+  void selectRate(value) {
     setState(() {
       rate = value;
     });
@@ -60,12 +60,12 @@ class _Add_feedbackState extends State<Add_feedback> {
   }
 
   //bool isSelected = true;
-  bool good = false;
+  bool good = true;
   bool verygood = false;
   bool excellent = false;
 
   //bool _value = false;
- // int val = -1;
+  // int val = -1;
   //Color _iconColor = Colors.red;
 
   //BestTutorSite _site = BestTutorSite.javatpoint;
@@ -88,73 +88,40 @@ class _Add_feedbackState extends State<Add_feedback> {
           title: Text('Add Feedback'),
           shadowColor: Colors.transparent,
         ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(25),
-            child: Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        '1. How would you rate your check in experience today?',
-                        maxLines: 4,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    //  height: DeviceUtils.getScaledHeight(context, 0.10),
-                    //width: 90,
-                    child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
+        child: Form(
+          key: formkey,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(25),
+              child: Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Column(
                       children: [
-                        SizedBox(
-                          width: 25,
+                        Text(
+                          '1. How would you rate your check in experience today?',
+                          maxLines: 4,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
-                        GestureDetector(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Stack(
-                              children: [
-                                Container(
-                                  child: Image.network(
-                                    good
-                                        ? 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/apple/48/slightly-smiling-face_1f642.png'
-                                        : 'https://spng.subpng.com/20180802/vcc/kisspng-black-white-emoticon-smiley-computer-icons-clip-smile-svg-png-icon-free-download-505342-onlin-5b62bb3990c076.4970999815331971135929.jpg',
-                                    width: 25,
-                                    height: 25,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ],
-                            ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      //  height: DeviceUtils.getScaledHeight(context, 0.10),
+                      //width: 90,
+                      child: Row(
+                        //mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          SizedBox(
+                            width: 25,
                           ),
-                          onTap: () {
-                            setState(() {
-                              selectRate(rate);
-                              good = true;
-                              excellent = false;
-                              verygood = false;
-                            });
-                          },
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text("Good"),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Row(children: [
                           GestureDetector(
                             child: Align(
                               alignment: Alignment.center,
@@ -162,9 +129,9 @@ class _Add_feedbackState extends State<Add_feedback> {
                                 children: [
                                   Container(
                                     child: Image.network(
-                                      excellent
-                                          ? 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/facebook/158/slightly-smiling-face_1f642.png'
-                                          : 'https://www.pinclipart.com/picdir/middle/1-13209_banner-download-black-and-white-emoji-clipart-smile.png',
+                                      good
+                                          ? 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/apple/48/slightly-smiling-face_1f642.png'
+                                          : 'https://spng.subpng.com/20180802/vcc/kisspng-black-white-emoticon-smiley-computer-icons-clip-smile-svg-png-icon-free-download-505342-onlin-5b62bb3990c076.4970999815331971135929.jpg',
                                       width: 25,
                                       height: 25,
                                       fit: BoxFit.cover,
@@ -176,8 +143,8 @@ class _Add_feedbackState extends State<Add_feedback> {
                             onTap: () {
                               setState(() {
                                 selectRate(rate);
-                                good = false;
-                                excellent = true;
+                                good = true;
+                                excellent = false;
                                 verygood = false;
                               });
                             },
@@ -185,122 +152,161 @@ class _Add_feedbackState extends State<Add_feedback> {
                           SizedBox(
                             width: 5,
                           ),
-                          Text("Very Good"),
-                        ]),
-
-                        SizedBox(
-                          width: 20,
-                        ),
-
-                        Row(children: [
-                          GestureDetector(
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    child: Image.network(
-                                      verygood
-                                          ? 'https://cdn.pixabay.com/photo/2020/12/27/20/24/smile-5865208_1280.png'
-                                          : 'https://www.seekpng.com/png/detail/156-1565014_squinty-smiling-face-emoji-rubber-stamp-black-and.png',
-                                      width: 25,
-                                      height: 25,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            onTap: () {
-                              setState(() {
-                                selectRate(rate);
-                                good = false;
-                                excellent = false;
-                                verygood = true;
-                              });
-                            },
-                          ),
+                          Text("Good"),
                           SizedBox(
-                            width: 5,
+                            width: 20,
                           ),
-                          Text('Excellent'),
-                        ]),
-
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                    width: 25,
-                  ),
-                  TextFormField(
-                    controller: _DescripationController,
-                    minLines: 2,
-                    maxLines: 10,
-                    keyboardType: TextInputType.multiline,
-
-                    decoration: InputDecoration(
-                      hintText: 'description...',
-                      hintStyle: TextStyle(
-                          color: Colors.grey
+                          Row(children: [
+                            GestureDetector(
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      child: Image.network(
+                                        excellent
+                                            ? 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/facebook/158/slightly-smiling-face_1f642.png'
+                                            : 'https://www.pinclipart.com/picdir/middle/1-13209_banner-download-black-and-white-emoji-clipart-smile.png',
+                                        width: 25,
+                                        height: 25,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  selectRate(rate);
+                                  good = false;
+                                  excellent = true;
+                                  verygood = false;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text("Very Good"),
+                          ]),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Row(children: [
+                            GestureDetector(
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      child: Image.network(
+                                        verygood
+                                            ? 'https://cdn.pixabay.com/photo/2020/12/27/20/24/smile-5865208_1280.png'
+                                            : 'https://www.seekpng.com/png/detail/156-1565014_squinty-smiling-face-emoji-rubber-stamp-black-and.png',
+                                        width: 25,
+                                        height: 25,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  selectRate(rate);
+                                  good = false;
+                                  excellent = false;
+                                  verygood = true;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text('Excellent'),
+                          ]),
+                        ],
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      ),
                     ),
-                  ),
-
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 20),
-                    child: ElevatedButtonWidget(
-                      buttonText: 'Submit',
-                      buttonColor: AppColors.primaryColor,
-                      onPressed: () {
-                        {
-
-                            _feedbackStore.Feedback_add(
-                                _DescripationController.value.text, 27, rate!,(value) {
-
-                              Routes.navigateRootToScreen(
-                                  context, Routes.feedback_list);
-                              // Routes.navigateToScreenWithArgs(
-                              //     context,
-                              //     Routes.success_error_validate,
-                              //     SuccessErrorValidationPageArgs(
-                              //         isSuccess: true,
-                              //         description: 'Logged in successfully',
-                              //         title: 'Success',
-                              //         isPreviousLogin: false));
-                            },
-
-                                    (error) {
-                                  print(error);
-                                  final data = json.decode(
-                                      json.encode(error.data));
-                                  // Map<String, dynamic> map = json.decode(error.data);
-                                  GlobalMethods.showErrorMessage(
-                                      context, data['error'],
-                                      'Enter Discripation');
-                                }).then((value) {
-                              print(value);
-                            });
-
-                         //Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
-                        }
-
-                       Routes.navigateToScreen(context, Routes.feedback_list);
+                    SizedBox(
+                      height: 15,
+                      width: 25,
+                    ),
+                    TextFormField(
+                      controller: _DescripationController,
+                      minLines: 2,
+                      maxLines: 10,
+                      keyboardType: TextInputType.multiline,
+                      decoration: InputDecoration(
+                        hintText: 'description...',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        ),
+                      ),
+                      validator: (val) {
+                        if (val!.isEmpty) return "Enter description.";
+                        return null;
                       },
                     ),
-                  ),
-               
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, top: 20),
+                      child: ElevatedButtonWidget(
+                        buttonText: 'Submit',
+                        buttonColor: AppColors.primaryColor,
+                        onPressed: () {
+                          {
+                            if (formkey.currentState!.validate()) {
+                              _userStore.Feedback_add(
+                                  _DescripationController.value.text,
+                                  27,
+                                  getRating(), (value) {
+                                Routes.navigateRootToScreen(
+                                    context, Routes.feedback_list);
+                                // Routes.navigateToScreenWithArgs(
+                                //     context,
+                                //     Routes.success_error_validate,
+                                //     SuccessErrorValidationPageArgs(
+                                //         isSuccess: true,
+                                //         description: 'Logged in successfully',
+                                //         title: 'Success',
+                                //         isPreviousLogin: false));
+                              }, (error) {
+                                print(error);
+                                final data =
+                                    json.decode(json.encode(error.data));
+                                // Map<String, dynamic> map = json.decode(error.data);
+                                GlobalMethods.showErrorMessage(context,
+                                    data['error'], 'Enter Discripation');
+                              }).then((value) {
+                                print(value);
+                              });
+                            }
+
+                            //Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ));
   }
+
+  String getRating() {
+    String rating = "";
+    if (good)
+      rating = "good";
+    else if (verygood)
+      rating = "verygood";
+    else if (excellent) rating = "excellent";
+    return rating;
+  }
 }
+
 class Item {
   String name;
   String title;
@@ -308,6 +314,3 @@ class Item {
 
   Item({required this.url, required this.name, required this.title});
 }
-
-
-

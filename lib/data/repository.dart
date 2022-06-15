@@ -515,6 +515,15 @@ class Repository {
         .catchError((error) => throw error);
   }
 
+  //Credit bank account
+  Future creditBankAccount(data, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .creditBankAccount(data, token, successCB, errorCB)
+        .then((requestUserData) => requestUserData)
+        .catchError((error) => throw error);
+  }
+
   //Add payment request
   Future getSavedCards(successCB, errorCB) async {
     var token = await authToken;

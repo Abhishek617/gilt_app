@@ -76,20 +76,21 @@ class Endpoints {
       baseUrl + "api/paymentRequest/add";
 
   // Pay by Business Owner to User
-  static const String payToUser =
-      baseUrl + "api/payments/chargeProfile";
+  static const String payToUser = baseUrl + "api/payments/chargeProfile";
 
   // Pay to event
-  static const String padToEvent =
-      baseUrl + "api/payments/paidToEvent";
+  static const String padToEvent = baseUrl + "api/payments/paidToEvent";
 
   // Add money to wallet
   static const String addMoneyToWallet =
       baseUrl + "api/payments/addMoneyToWallet";
 
   // My wallet balance
-  static const String myWalletBalance =
-      baseUrl + "api/payments/myBalance";
+  static const String myWalletBalance = baseUrl + "api/payments/myBalance";
+
+  // Send money to bank/Credit bank account
+  static const String creditBankAccount =
+      baseUrl + "api/payments/creditBankAccount";
 
   // Saved card list
   static const String savedCardList = baseUrl + "api/payments/myCards";
