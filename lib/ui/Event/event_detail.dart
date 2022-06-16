@@ -532,7 +532,7 @@ class _EventDetailsState extends State<EventDetails> {
                 '\n' +
                 user?.admin?.phone!,
             style: TextStyle(
-              fontSize: 22,
+              fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
           ),

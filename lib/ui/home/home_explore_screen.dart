@@ -43,6 +43,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
 
   @override
   void initState() {
+    print("Explore: initState");
     GlobalStoreHandler.initStores();
     initSetup();
     super.initState();
@@ -66,6 +67,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
   }
 
   void initSetup() async {
+    print("Explore: initSetup");
     await GlobalStoreHandler.userStore.getProfile();
     setState(() {
       ProfileData = GlobalStoreHandler.userStore.Profile_data;
@@ -83,6 +85,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
   }
 
   getEventsList(type) {
+    print("Explore: getEventsList");
     GlobalStoreHandler.userStore.getUpcomingPastEventList(type, 0, 5,
         (UpcomingPastEventModal eventListResponse) {
       if (eventListResponse.success == true) {
