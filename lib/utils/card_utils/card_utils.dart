@@ -64,9 +64,15 @@ class CardUtils {
     return num;
   }
 
-  static List<int> getExpiryDate(String value) {
+  static List<String> getExpiryDate(String value) {
     var split = value.split(new RegExp(r'(\/)'));
-    return [int.parse(split[0]), int.parse(split[1])];
+    return [split[0], split[1]];
+  }
+
+  static String getFormattedExpiryDate(String value) {
+    if (value == null || value.length == 0) return "";
+    if (value.length != 4) return value;
+    return "${value[0]}${value[1]}/${value[2]}${value[3]}";
   }
 
   static String? validateDate(String value) {

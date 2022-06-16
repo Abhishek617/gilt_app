@@ -3,6 +3,7 @@ import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Business/AddBusinessRequestModel.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
+import 'package:guilt_app/models/payment/add_money_wallet_request.dart';
 import 'package:guilt_app/stores/error/error_store.dart';
 import 'package:guilt_app/ui/notification/notification.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
@@ -10,6 +11,7 @@ import 'package:mobx/mobx.dart';
 import '../../data/repository.dart';
 import '../../models/Auth/profile_modal.dart';
 import '../../models/PageModals/setting_model.dart';
+import '../../models/payment/pay_to_user_request.dart';
 import '../form/form_store.dart';
 
 part 'user_store.g.dart';
@@ -32,6 +34,14 @@ abstract class _UserStore with Store {
 
   @observable
   bool isFirst = true;
+
+  @observable
+  bool isNotificationBadge = false;
+
+  @observable
+  bool isChatBadge = false;
+  @observable
+  String chatBadgeCount = '10';
 
   @observable
   String? authToken;
@@ -125,6 +135,14 @@ abstract class _UserStore with Store {
   Future changePassword(oldPassword, newPassword) async {
     return await _repository
         .changePassword(oldPassword, newPassword)
+        .then((contentData) => contentData)
+        .catchError((error) => throw error);
+  }
+
+  @action
+  Future<GetProfileResponseModal?> getProfileData() async {
+    return await _repository
+        .getProfileData()
         .then((contentData) => contentData)
         .catchError((error) => throw error);
   }
@@ -411,21 +429,13 @@ abstract class _UserStore with Store {
     // final future = _repository.login(email, password);
     //
     // loginFuture = ObservableFuture(future);
+    this.isLoggedIn = false;
+    this.isFirst = true;
+    _repository.saveIsFirst(true);
+    _repository.saveIsLoggedIn(false);
+    successCallback();
+    _repository.saveIsLoggedIn(false);
     _repository.logout().then((value) async {
-      if (value != null) {
-        print('isFirst : false');
-        this.isLoggedIn = false;
-        this.isFirst = true;
-        _repository.saveIsFirst(true);
-        _repository.saveIsLoggedIn(false);
-        successCallback(value);
-      } else {
-        this.isLoggedIn = false;
-        this.isFirst = true;
-        _repository.saveIsFirst(true);
-        _repository.saveIsLoggedIn(false);
-        print('failed to login');
-      }
     }, onError: (error) {
       print(error.toString());
       this.isLoggedIn = false;
@@ -464,26 +474,24 @@ abstract class _UserStore with Store {
   @action
   Future createEvent(
       CreateEventRequestModal eventData, successCallback, errorCallback) async {
-    _repository.createEvent(eventData, successCallback, errorCallback)
+    _repository.createEvent(eventData, successCallback, errorCallback).then(
+        (val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future acceptRejectEvent(id, status, successCallback, errorCallback) async {
+    _repository
+        .acceptRejectEvent(id, status, successCallback, errorCallback)
         .then((val) {
       print(val.toString());
     }, onError: errorCallback);
   }
 
   @action
-  Future acceptRejectEvent(
-      id, status, successCallback, errorCallback) async {
-    _repository.acceptRejectEvent(id, status, successCallback, errorCallback)
-        .then((val) {
-      print(val.toString());
-    }, onError: errorCallback);
-  }
-
-  @action
-  Future cancelEvent(
-      id, successCallback, errorCallback) async {
-    _repository.cancelEvent(id, successCallback, errorCallback)
-        .then((val) {
+  Future cancelEvent(id, successCallback, errorCallback) async {
+    _repository.cancelEvent(id, successCallback, errorCallback).then((val) {
       print(val.toString());
     }, onError: errorCallback);
   }
@@ -491,9 +499,8 @@ abstract class _UserStore with Store {
   @action
   Future addBusiness(AddBusinessRequestModel businessData, successCallback,
       errorCallback) async {
-    _repository
-        .addBusiness(businessData, successCallback, errorCallback)
-        .then((val) {
+    _repository.addBusiness(businessData, successCallback, errorCallback).then(
+        (val) {
       print(val.toString());
     }, onError: errorCallback);
   }
@@ -556,38 +563,74 @@ abstract class _UserStore with Store {
   }
 
   @action
-  Future requestUserForPayment(toUserId, businessId, amount, remarks, successCallback,
-      errorCallback) async {
+  Future requestUserForPayment(toUserId, businessId, amount, remarks,
+      successCallback, errorCallback) async {
     _repository
-        .requestUserForPayment(toUserId, businessId, amount, remarks, successCallback, errorCallback)
+        .requestUserForPayment(toUserId, businessId, amount, remarks,
+            successCallback, errorCallback)
         .then((val) {
       print(val.toString());
     }, onError: errorCallback);
   }
 
   @action
-  Future getSavedCards(successCallback,
-      errorCallback) async {
-    _repository
-        .getSavedCards(successCallback, errorCallback)
-        .then((val) {
+  Future payToUser(
+      PayToUserRequest payModel, successCallback, errorCallback) async {
+    _repository.payToUser(payModel, successCallback, errorCallback).then((val) {
       print(val.toString());
     }, onError: errorCallback);
   }
 
   @action
-  Future addCardOrBankAccount(data, successCallback,
-      errorCallback) async {
-    _repository
-        .addCardOrBankAccount(data, successCallback, errorCallback)
-        .then((val) {
+  Future payToEvent(
+      PayToUserRequest payModel, successCallback, errorCallback) async {
+    _repository.payToEvent(payModel, successCallback, errorCallback).then((val) {
       print(val.toString());
     }, onError: errorCallback);
   }
 
   @action
-  Future editCardOrBankAccount(id, data, successCallback,
-      errorCallback) async {
+  Future addMoneyToWallet(
+      AddMoneyToWalletRequest payModel, successCallback, errorCallback) async {
+    _repository.addMoneyToWallet(payModel, successCallback, errorCallback).then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future myWalletBalance(
+      successCallback, errorCallback) async {
+    _repository.myWaletBalance(successCallback, errorCallback).then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future creditBankAccount(
+      data,
+      successCallback, errorCallback) async {
+    _repository.creditBankAccount(data, successCallback, errorCallback).then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future getSavedCards(successCallback, errorCallback) async {
+    _repository.getSavedCards(successCallback, errorCallback).then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future addCardOrBankAccount(data, successCallback, errorCallback) async {
+    _repository.addCardOrBankAccount(data, successCallback, errorCallback).then(
+        (val) {
+      print(val.toString());
+    }, onError: errorCallback);
+  }
+
+  @action
+  Future editCardOrBankAccount(id, data, successCallback, errorCallback) async {
     _repository
         .editCardOrBankAccount(id, data, successCallback, errorCallback)
         .then((val) {
@@ -596,8 +639,8 @@ abstract class _UserStore with Store {
   }
 
   @action
-  Future getPaymentHistory(int page, int size, successCallback,
-      errorCallback) async {
+  Future getPaymentHistory(
+      int page, int size, successCallback, errorCallback) async {
     _repository
         .getPaymentHistory(page, size, successCallback, errorCallback)
         .then((val) {
@@ -606,18 +649,16 @@ abstract class _UserStore with Store {
   }
 
   @action
-  Future removePaymentMethod(id, successCallback,
-      errorCallback) async {
-    _repository
-        .removePaymentMethod(id, successCallback, errorCallback)
-        .then((val) {
+  Future removePaymentMethod(id, successCallback, errorCallback) async {
+    _repository.removePaymentMethod(id, successCallback, errorCallback).then(
+        (val) {
       print(val.toString());
     }, onError: errorCallback);
   }
 
   @action
-  Future helpAndSupport(name, email, message, successCallback,
-      errorCallback) async {
+  Future helpAndSupport(
+      name, email, message, successCallback, errorCallback) async {
     _repository
         .helpAndSupport(name, email, message, successCallback, errorCallback)
         .then((val) {

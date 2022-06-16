@@ -18,12 +18,14 @@ import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
+import 'package:guilt_app/models/payment/add_money_wallet_request.dart';
 import 'package:guilt_app/models/post/post.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:sembast/sembast.dart';
 import '../models/Auth/otp_send.dart';
 import '../models/Auth/valid_otp_model.dart';
 import '../models/Event/create_event_modal.dart';
+import '../models/payment/pay_to_user_request.dart';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
 
@@ -125,8 +127,16 @@ class Repository {
   Future<void> saveProfileData(GetProfileResponseModal value) =>
       _sharedPrefsHelper.saveProfileData(value);
 
-  Future<GetProfileResponseModal> profileData() {
-    return _sharedPrefsHelper.profileData.then((value) => jsonDecode(value));
+  Future<GetProfileResponseModal?> getProfileData() async {
+    try {
+      String profileData = await _sharedPrefsHelper.profileData;
+      if (profileData != null && profileData.isNotEmpty)
+        return GetProfileResponseModal.fromJson(jsonDecode(profileData));
+    } catch (e) {
+      print("Error getting profile data${e.toString()}");
+    }
+    // return _sharedPrefsHelper.profileData.then((value) => jsonDecode(value));
+    return null;
   }
 
   // Login:---------------------------------------------------------------------
@@ -267,11 +277,12 @@ class Repository {
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
+
   //My Business List
   Future getMyBusinessList(searchQuery) async {
     var token = await authToken;
     return await _postApi
-        .getMyBusinessList(searchQuery,token)
+        .getMyBusinessList(searchQuery, token)
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
@@ -280,15 +291,16 @@ class Repository {
   Future deleteBusiness(bID) async {
     var token = await authToken;
     return await _postApi
-        .deleteBusiness(bID,token)
+        .deleteBusiness(bID, token)
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
+
 //get all Business
   Future getAllBusinessList(searchQuery) async {
     var token = await authToken;
     return await _postApi
-        .getAllBusinessList(searchQuery,token)
+        .getAllBusinessList(searchQuery, token)
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
@@ -297,27 +309,27 @@ class Repository {
   Future getBusinessByNameList(searchQuery) async {
     var token = await authToken;
     return await _postApi
-        .getBusinessByNameList(searchQuery,token)
+        .getBusinessByNameList(searchQuery, token)
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
-  
+
   Future getAllUserList(searchQuery) async {
     var token = await authToken;
     return await _postApi
-        .getAllUserList(searchQuery,token)
+        .getAllUserList(searchQuery, token)
         .then((placeData) => placeData)
         .catchError((error) => throw error);
   }
-  
+
   Future getBusinessDetail(businessId) async {
     var token = await authToken;
     return await _postApi
-        .getBusinessDetail(businessId,token)
+        .getBusinessDetail(businessId, token)
         .then((placeData) => placeData)
         .catchError((error) => throw error);
   }
-  
+
   Future updateBusinessDetails(searchQuery, userID) async {
     var token = await authToken;
     // return await _postApi
@@ -325,7 +337,7 @@ class Repository {
     //     .then((placeData) => placeData)
     //     .catchError((error) => throw error);
   }
-  
+
   Future getAllBusinessByUserList(searchQuery, userID) async {
     var token = await authToken;
     // return await _postApi
@@ -333,7 +345,7 @@ class Repository {
     //     .then((placeData) => placeData)
     //     .catchError((error) => throw error);
   }
-  
+
   Future payForBusiness(searchQuery) async {
     var token = await authToken;
     // return await _postApi
@@ -341,7 +353,7 @@ class Repository {
     //     .then((placeData) => placeData)
     //     .catchError((error) => throw error);
   }
-  
+
   Future requestForBusiness(searchQuery) async {
     var token = await authToken;
     // return await _postApi
@@ -349,7 +361,7 @@ class Repository {
     //     .then((placeData) => placeData)
     //     .catchError((error) => throw error);
   }
-  
+
   Future getUserEvent(userID) async {
     var token = await authToken;
     return await _postApi
@@ -412,8 +424,7 @@ class Repository {
 
 //addevent
   Future createEvent(
-    CreateEventRequestModal eventData, successCB, errorCB
-  ) async {
+      CreateEventRequestModal eventData, successCB, errorCB) async {
     var token = await authToken;
     return await _postApi
         .createEvent(eventData, token, successCB, errorCB)
@@ -422,9 +433,7 @@ class Repository {
   }
 
   //accept reject event
-  Future acceptRejectEvent(
-      id, status, successCB, errorCB
-      ) async {
+  Future acceptRejectEvent(id, status, successCB, errorCB) async {
     var token = await authToken;
     return await _postApi
         .acceptRejectEvent(id, status, token, successCB, errorCB)
@@ -433,9 +442,7 @@ class Repository {
   }
 
   //cancel event
-  Future cancelEvent(
-      id, successCB, errorCB
-      ) async {
+  Future cancelEvent(id, successCB, errorCB) async {
     var token = await authToken;
     return await _postApi
         .cancelEvent(id, token, successCB, errorCB)
@@ -466,7 +473,53 @@ class Repository {
       toUserId, businessId, amount, remarks, successCB, errorCB) async {
     var token = await authToken;
     return await _postApi
-        .requestUserForPayment(toUserId, businessId, amount, remarks, token, successCB, errorCB)
+        .requestUserForPayment(
+            toUserId, businessId, amount, remarks, token, successCB, errorCB)
+        .then((requestUserData) => requestUserData)
+        .catchError((error) => throw error);
+  }
+
+  //Pay to user
+  Future payToUser(PayToUserRequest payModel, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .payToUser(payModel, token, successCB, errorCB)
+        .then((requestUserData) => requestUserData)
+        .catchError((error) => throw error);
+  }
+
+  //Pay to event
+  Future payToEvent(PayToUserRequest payModel, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .payToEvent(payModel, token, successCB, errorCB)
+        .then((requestUserData) => requestUserData)
+        .catchError((error) => throw error);
+  }
+
+  //Add money to wallet
+  Future addMoneyToWallet(AddMoneyToWalletRequest payModel, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .addMoneyToWallet(payModel, token, successCB, errorCB)
+        .then((requestUserData) => requestUserData)
+        .catchError((error) => throw error);
+  }
+
+  //My wallet balance
+  Future myWaletBalance(successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .myWalletBalance(token, successCB, errorCB)
+        .then((requestUserData) => requestUserData)
+        .catchError((error) => throw error);
+  }
+
+  //Credit bank account
+  Future creditBankAccount(data, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .creditBankAccount(data, token, successCB, errorCB)
         .then((requestUserData) => requestUserData)
         .catchError((error) => throw error);
   }

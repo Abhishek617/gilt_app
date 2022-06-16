@@ -252,12 +252,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
                               context, Routes.saved_cards)
                         }),
                     getMenuTile(
-                      'EXPENSE HISTORY',
-                      () => {
-                        Routes.navigateToScreen(context, Routes.expensehistory)
-                      },
-                    ),
-                    getMenuTile(
                       'MY EVENT',
                       () => {
                         Routes.navigateToScreen(context, Routes.my_book_event)
@@ -362,8 +356,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             Icons.logout,
                             'Log Out',
                             () => {
-                              _userStore.logout((response) {
-                                print(response);
+                              _userStore.logout(() {
                                 Routes.navigateRootToScreen(
                                     context, Routes.login);
                               }, (error) {

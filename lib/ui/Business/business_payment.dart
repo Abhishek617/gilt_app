@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/models/Auth/AllUserResponseModel.dart';
+import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Business/BusinessDetailResponseModel.dart';
 import 'package:guilt_app/models/Business/search_business_master.dart';
+import 'package:guilt_app/models/payment/pay_to_user_request.dart';
+import 'package:guilt_app/models/payment/payment_card_master.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
@@ -13,6 +16,7 @@ import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import '../../data/repository.dart';
 import '../../di/components/service_locator.dart';
 import '../../models/payment/payment_request.dart';
+import '../../models/success_master.dart';
 import '../../stores/user/user_store.dart';
 import '../../utils/Global_methods/global.dart';
 import '../../widgets/textfield_widget.dart';
@@ -34,6 +38,7 @@ class _BusinessPaymentState extends State<BusinessPayment> {
   final locationController = TextEditingController();
   String? type;
   dynamic? userData;
+  String? fromScreen;
   Business? selectedBusiness;
   final UserStore _userStore = UserStore(getIt<Repository>());
 
@@ -56,6 +61,7 @@ class _BusinessPaymentState extends State<BusinessPayment> {
     setState(() {
       type = args['type'];
       userData = args['userData'];
+      fromScreen = args['fromScreen'] ?? "";
     });
 
     super.didChangeDependencies();
@@ -345,6 +351,9 @@ class _BusinessPaymentState extends State<BusinessPayment> {
                           buttonColor: AppColors.primaryColor,
                           onPressed: () {
                             if (type == "Pay") {
+                              if (formkey.currentState!.validate()) {
+                                choosePaymentMethod();
+                              }
                             } else if (type == "Request") {
                               if (formkey.currentState!.validate()) {
                                 requestUserForPayment(
@@ -369,6 +378,54 @@ class _BusinessPaymentState extends State<BusinessPayment> {
         ),
       ),
     );
+  }
+
+  void choosePaymentMethod() {
+    Routes.navigateToScreenWithCB(context, Routes.select_card,
+        (PaymentCardDetails data) {
+      if (data != null) {
+        payTouser(data);
+      }
+    });
+  }
+
+  payTouser(PaymentCardDetails data) async {
+    GlobalMethods.showLoader();
+    GetProfileResponseModal? profileData = await _userStore.getProfileData();
+    int currentUserId = int.parse(profileData?.user?.customerProfileId ?? "0");
+    // int currentUserId = int.parse(
+    //     GlobalStoreHandler.userStore.Profile_data?.user?.customerProfileId ??
+    //         "0");
+
+    PayToUserRequest payModel = PayToUserRequest(
+      customerProfileId: currentUserId,
+      paymentProfile: int.parse(data.customerPaymentProfileId!),
+      amount: double.parse(amountController.text),
+      walletAmount: 0,
+      toUserId: userData?.id,
+      paymentMethod: data.type,
+      paymentReqId: data.id,
+    );
+    if (fromScreen == "notification") {
+      payModel.businessId = selectedBusiness?.id ?? 0;
+    }
+
+    _userStore.payToUser(payModel, (SuccessMaster successMaster) {
+      GlobalMethods.hideLoader();
+      if (successMaster != null) {
+        if (successMaster.success != null && successMaster.success!) {
+          GlobalMethods.showSuccessMessage(
+              context, successMaster.message!, type ?? "");
+          Routes.goBack(context);
+        } else {
+          GlobalMethods.showErrorMessage(
+              context, successMaster.message!, type ?? "");
+        }
+      }
+    }, (error) {
+      GlobalMethods.hideLoader();
+      print(error.toString());
+    });
   }
 
   requestUserForPayment({toUserId, businessId, amount, remarks}) async {

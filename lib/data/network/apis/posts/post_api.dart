@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/network/dio_client.dart';
 import 'package:guilt_app/data/network/rest_client.dart';
@@ -27,8 +29,11 @@ import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/models/help_support/help_support_master.dart';
 import 'package:guilt_app/models/payment/add_card_master.dart';
+import 'package:guilt_app/models/payment/add_money_wallet_request.dart';
+import 'package:guilt_app/models/payment/pay_to_user_request.dart';
 import 'package:guilt_app/models/payment/payment_history_master.dart';
 import 'package:guilt_app/models/payment/payment_request.dart';
+import 'package:guilt_app/models/payment/wallet_balance_master.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 
@@ -37,6 +42,8 @@ import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
 
 import '../../../../models/payment/payment_card_master.dart';
+import '../../../../models/success_master.dart';
+import 'dart:developer' as de;
 
 class PostApi {
   // dio instance
@@ -495,6 +502,7 @@ class PostApi {
   //UpcomingPastEvent
   Future<UpcomingPastEventModal> getUpcomingPastEventList(
       filterby, page, size, token) async {
+    print("Explore: getUpcomingPastEventList");
     try {
       final res = await _dioClient.post(Endpoints.upcomingPast,
           options: Options(headers: {
@@ -512,15 +520,17 @@ class PostApi {
   Future<UpdateProfileResponseModal> updateprofile(
       UpdateProfileRequestModal UpdateProfileData, token) async {
     try {
-      String fileName = UpdateProfileData.profile.path.split('/').last;
-      String? mimeType = mime(fileName);
-      String mimee = mimeType!.split('/')[0];
-      String type = mimeType!.split('/')[1];
-      UpdateProfileData.profile = (await MultipartFile.fromFile(
-          UpdateProfileData.profile.path,
-          filename: fileName,
-          contentType: MediaType(mimee, type)));
-      //FormData forData = new FormData.fromMap(UpdateProfileData.toJson());
+      if (UpdateProfileData.profile != null) {
+        String fileName = UpdateProfileData.profile.path.split('/').last;
+        String? mimeType = mime(fileName);
+        String mimee = mimeType!.split('/')[0];
+        String type = mimeType!.split('/')[1];
+        UpdateProfileData.profile = (await MultipartFile.fromFile(
+            UpdateProfileData.profile.path,
+            filename: fileName,
+            contentType: MediaType(mimee, type)));
+        //FormData forData = new FormData.fromMap(UpdateProfileData.toJson());
+      }
 
       var form = FormData.fromMap(UpdateProfileData.toJson());
       final res = await _dioClient.put(
@@ -531,9 +541,10 @@ class PostApi {
           'Content-Type': 'multipart/form-data'
         }),
       );
+      de.log("Full response: ${jsonEncode(res)}");
       return UpdateProfileResponseModal.fromJson(res);
     } catch (e) {
-      print(e.toString());
+      print("Error of update profile: ${e.toString()}");
       throw e;
     }
   }
@@ -711,6 +722,122 @@ class PostApi {
     }
   }
 
+  //Pay to user
+  Future payToUser(PayToUserRequest payModel, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.payToUser,
+        data: json.encode(payModel.toJson()),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = SuccessMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Pay to event
+  Future payToEvent(
+      PayToUserRequest payModel, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.padToEvent,
+        data: json.encode(payModel.toJson()),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = SuccessMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Add money to wallet
+  Future addMoneyToWallet(
+      AddMoneyToWalletRequest payModel, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.addMoneyToWallet,
+        data: json.encode(payModel.toJson()),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = SuccessMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //My wallet balance
+  Future myWalletBalance(token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .get(
+        Endpoints.myWalletBalance,
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = WalletBalanceMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Credit bank account
+  Future creditBankAccount(data, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.creditBankAccount,
+        data: data,
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = SuccessMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
   //Add Payment Request
   Future getSavedCards(token, successCB, errorCB) async {
     try {
@@ -792,7 +919,7 @@ class PostApi {
         }),
       )
           .then((value) {
-        value = PaymentHistoryMaster.fromJson(value);
+        value = PaymentHistoryResponseModel.fromJson(value);
         successCB(value);
       });
     } catch (e) {
@@ -803,8 +930,7 @@ class PostApi {
   }
 
   //Payment History
-  Future removePaymentMethod(
-      id, token, successCB, errorCB) async {
+  Future removePaymentMethod(id, token, successCB, errorCB) async {
     try {
       await _dioClient
           .delete(
@@ -826,8 +952,7 @@ class PostApi {
   }
 
   //Payment History
-  Future helpAndSupport(
-      name, email, message, token, successCB, errorCB) async {
+  Future helpAndSupport(name, email, message, token, successCB, errorCB) async {
     String getParams() {
       var map = new Map<String, dynamic>();
       map['name'] = name;
@@ -835,6 +960,7 @@ class PostApi {
       map['message'] = message;
       return json.encode(map);
     }
+
     try {
       await _dioClient
           .post(

@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/utils/locale/app_localization.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GlobalMethods {
   static showErrorMessage(context, String message, String title) {
@@ -36,7 +37,6 @@ class GlobalMethods {
     return SizedBox.shrink();
   }
 
-
   static Future<void> askPermissions(context, String routeName) async {
     PermissionStatus permission = await Permission.contacts.status;
     PermissionStatus permissionStatus = await getPermission(permission);
@@ -48,20 +48,22 @@ class GlobalMethods {
       handleInvalidPermissions(context, permissionStatus);
     }
   }
+
   static Future<void> askPermissionsOnly(context, callback) async {
     PermissionStatus permission = await Permission.contacts.status;
     PermissionStatus permissionStatus = await getPermission(permission);
     if (permissionStatus == PermissionStatus.granted) {
-     callback();
+      callback();
     } else {
       handleInvalidPermissions(context, permissionStatus);
     }
   }
+
   static Future<void> askLocationPermissionsOnly(context, callback) async {
     PermissionStatus permission = await Permission.location.status;
     PermissionStatus permissionStatus = await getPermission(permission);
     if (permissionStatus == PermissionStatus.granted) {
-     callback();
+      callback();
     } else {
       handleInvalidPermissions(context, permissionStatus);
     }
@@ -88,6 +90,7 @@ class GlobalMethods {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
+
   static configLoading() {
     EasyLoading.instance
       ..displayDuration = const Duration(milliseconds: 2000)
@@ -104,17 +107,40 @@ class GlobalMethods {
       ..dismissOnTap = false;
   }
 
-  static showLoader() async{
+  static showLoader() async {
     await configLoading();
     await EasyLoading.show(
-      status: 'Loading',
-      maskType: EasyLoadingMaskType.custom,
-      dismissOnTap: false
-    );
+        status: 'Loading',
+        maskType: EasyLoadingMaskType.custom,
+        dismissOnTap: false);
 
     Future.delayed(Duration(milliseconds: 3000)).then((value) => hideLoader());
   }
-  static hideLoader() async{
+
+  static hideLoader() async {
     await EasyLoading.dismiss();
+  }
+
+  static hideKeyboard(context) {
+    FocusScope.of(context).unfocus();
+  }
+
+  static launchCaller(String mobileNumber) async {
+    Uri uri = Uri.parse("tel:$mobileNumber");
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Could not launch $uri';
+    }
+  }
+
+  static Future<void> openMap(double latitude, double longitude) async {
+    Uri googleUrl = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
+    if (await canLaunchUrl(googleUrl)) {
+      await launchUrl(googleUrl);
+    } else {
+      throw 'Could not open the map.';
+    }
   }
 }

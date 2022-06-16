@@ -4,9 +4,8 @@ import 'package:guilt_app/models/payment/add_card_master.dart';
 import 'package:guilt_app/models/payment/payment_card_master.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
-
-import '../../utils/routes/routes.dart';
-import '../../widgets/custom_body_wrapper.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 
 class SavedCards extends StatefulWidget {
   const SavedCards({Key? key}) : super(key: key);
@@ -44,7 +43,9 @@ class _SavedCardsState extends State<SavedCards> {
       padding: EdgeInsets.symmetric(horizontal: 8),
       child: InkWell(
         onTap: () {
-          Routes.navigateToScreen(context, Routes.add_card);
+          Routes.navigateToScreenWithCB(context, Routes.add_card, (val) {
+            getSavedCards();
+          });
         },
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -175,14 +176,17 @@ class _SavedCardsState extends State<SavedCards> {
   }
 
   removePaymentMethod(id, index) async {
+    GlobalMethods.showLoader();
     GlobalStoreHandler.userStore.removePaymentMethod(id,
         (AddPaymentMaster master) {
+      GlobalMethods.hideLoader();
       if (master != null) {
         if (master.success == true) {
           GlobalMethods.showSuccessMessage(
               context, master.message ?? 'Removed', 'Remove payment method');
           setState(() {
             cardList.removeAt(index);
+            getSavedCards();
           });
         } else {
           GlobalMethods.showErrorMessage(
@@ -190,6 +194,7 @@ class _SavedCardsState extends State<SavedCards> {
         }
       }
     }, (error) {
+      GlobalMethods.hideLoader();
       print(error.toString());
       GlobalMethods.showErrorMessage(
           context, 'Something went wrong!', 'Remove payment method');
@@ -255,28 +260,6 @@ class SavedCardItem extends StatelessWidget {
                   child: Center(
                     child: Icon(
                       Icons.delete,
-                      color: Colors.white,
-                      size: 12,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              InkWell(
-                onTap: () {
-                  onEdit!();
-                },
-                child: Container(
-                  height: 26,
-                  width: 26,
-                  decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.all(Radius.circular(13))),
-                  child: Center(
-                    child: Icon(
-                      Icons.edit,
                       color: Colors.white,
                       size: 12,
                     ),

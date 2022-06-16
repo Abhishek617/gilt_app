@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/models/payment/payment_history_master.dart';
-import '../../constants/colors.dart';
-import '../../utils/Global_methods/GlobalStoreHandler.dart';
-import '../../utils/device/device_utils.dart';
-import '../../widgets/custom_scaffold.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/widgets/custom_scaffold.dart';
 
 class PaymentHistory extends StatefulWidget {
   const PaymentHistory({Key? key}) : super(key: key);
@@ -13,11 +14,11 @@ class PaymentHistory extends StatefulWidget {
 }
 
 class _PaymentHistoryState extends State<PaymentHistory> {
-  List<PaymentHistoryModel> cardList = [];
+  List<HistoryItem> cardList = [];
 
   getPaymentHistory() async {
     GlobalStoreHandler.userStore.getPaymentHistory(0, 10,
-        (PaymentHistoryMaster master) {
+        (PaymentHistoryResponseModel master) {
       if (master != null) {
         setState(() {
           cardList = master.history?.listData ?? [];
@@ -148,10 +149,10 @@ class _PaymentHistoryState extends State<PaymentHistory> {
           Container(
             height: DeviceUtils.getScaledHeight(context, 0.85),
             child: ListView.builder(
-                itemCount: 10,
+                itemCount: cardList.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
-                  return PaymentHistoryItem();
+                  return PaymentHistoryItem(cardItem: cardList[index], );
                 }),
           ),
         ],
@@ -161,77 +162,72 @@ class _PaymentHistoryState extends State<PaymentHistory> {
 }
 
 class PaymentHistoryItem extends StatelessWidget {
-  const PaymentHistoryItem({Key? key}) : super(key: key);
+  final  HistoryItem cardItem;
+  const PaymentHistoryItem({Key? key, required this.cardItem, }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.only(top: 5, bottom: 5),
+          padding: EdgeInsets.only(top: 25, bottom: 5 ,left: 10,right: 10),
           child: Row(
             children: [
-              Align(
-                alignment: Alignment.center,
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(
-                          left: 25.0, top: 00.0, bottom: 00.0, right: 0.0),
-                      child: Image.network(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               SizedBox(
                 height: 10,
                 width: 10,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Paid to Jo Malone',
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                    width: 10,
-                  ),
-                  Text(
-                    'Today, 03:40 PM',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding:
-                    EdgeInsets.only(top: 00, left: 98, right: 25, bottom: 15),
+              Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '- \$170.0',
+                      cardItem?.message ?? 'No Message',
                       style: TextStyle(
-                        color: Colors.red,
+                        color: AppColors.primaryColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                      width: 10,
+                    ),
+                    Text(
+                     // DateTime.parse(cardItem!.updatedAt!).toLocal().toString(),
+                     G.convertToAgo(DateTime.parse(cardItem!.updatedAt!)),
+                      style: TextStyle(
+                        color: Colors.grey,
                         fontSize: 10,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
                 ),
+              ),
+              Column(
+                children: [
+                  Text(
+                    (cardItem!.type == 'debit' ? '- \$' : '+ \$') + cardItem!.amount!.toString(),
+                    style: TextStyle(
+                      color: (cardItem!.type == 'debit' ? Colors.red : Colors.green),
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    cardItem!.status!.toString(),
+                    style: TextStyle(
+                      color: (cardItem!.type == 'debit' ? Colors.red : Colors.green),
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+                width: 10,
               ),
             ],
           ),

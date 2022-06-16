@@ -195,7 +195,7 @@ class _Create_eventState extends State<Create_event> {
         body: CustomBodyWrapper(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(25),
+              padding: const EdgeInsets.only(left: 25,right: 25,top: 25 ,bottom:100),
               child: Column(
                 children: [
                   SizedBox(
@@ -368,6 +368,7 @@ class _Create_eventState extends State<Create_event> {
                                 margin: EdgeInsets.only(right: 10),
                                 child: DateTimePicker(
                                   controller: _eventStartDateAndTimeController,
+
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       focusedBorder: InputBorder.none,
@@ -380,10 +381,10 @@ class _Create_eventState extends State<Create_event> {
                                   icon: Icon(Icons.event),
                                   selectableDayPredicate: (date) {
                                     // Disable weekend days to select from the calendar
-                                    if (date.weekday == 6 ||
+                                    /*if (date.weekday == 6 ||
                                         date.weekday == 7) {
                                       return false;
-                                    }
+                                    }*/
 
                                     return true;
                                   },
@@ -764,6 +765,7 @@ class _Create_eventState extends State<Create_event> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 50,)
                 ],
               ),
             ),

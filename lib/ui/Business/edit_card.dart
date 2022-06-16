@@ -38,6 +38,9 @@ class _EditCardState extends State<EditCard> {
 
   final UserStore _userStore = UserStore(getIt<Repository>());
   PaymentCardDetails? paymentData;
+  String? accountNumberHint;
+  String? cardNumberHint;
+  String? cardExpiryHint;
 
   @override
   void initState() {
@@ -47,11 +50,18 @@ class _EditCardState extends State<EditCard> {
           ModalRoute.of(context)!.settings.arguments as PaymentCardDetails;
       if (paymentData != null) {
         if (paymentData!.type == "card") {
-          // edCardNameController.text = paymentData?.bankName?? "";
-          // edCardExpiryController.text = paymentData?.expiry?? "";
+          edCardNameController.text = paymentData?.nameOnAccount ?? "";
+          cardExpiryHint =
+              CardUtils.getFormattedExpiryDate(paymentData?.expiry ?? "");
+          cardNumberHint =
+              "************${paymentData?.cardLastFourDigit ?? ""}";
         } else {
-          // edAccountNameController.text = paymentData?.bankName?? "";
-          // edCardExpiryController.text = paymentData?.expiry?? "";
+          edAccountNameController.text = paymentData?.nameOnAccount ?? "";
+          edBankNameController.text = paymentData?.bankName ?? "";
+          accountNumberHint =
+              "************${paymentData?.bankAccountNumLastSixDigit ?? ""}";
+          edRoutingNumberController.text =
+              "${paymentData?.routingNumberLastFourDigit ?? ""}";
         }
       }
       setState(() {});
@@ -116,19 +126,19 @@ class _EditCardState extends State<EditCard> {
           ),
           TextFormFieldCustom(
             controller: edAccountNumberController,
-            hintText: "",
+            hintText: accountNumberHint ?? "",
             textInputType: TextInputType.number,
             suffixIcon: Icon(
               Icons.credit_card,
               color: Colors.black87.withOpacity(0.7),
             ),
-            validator: (val) {
+            /*validator: (val) {
               if (val!.isEmpty) {
                 return "Enter account number";
               } else {
                 return null;
               }
-            },
+            },*/
           ),
           SizedBox(
             height: 20,
@@ -162,6 +172,7 @@ class _EditCardState extends State<EditCard> {
               buttonColor: AppColors.primaryColor,
               textColor: Colors.white,
               onPressed: () {
+                GlobalMethods.hideKeyboard(context);
                 if (bankFormKey.currentState!.validate()) {
                   editCardOrBankAccount(
                       id: paymentData!.id, data: getBankParams());
@@ -205,7 +216,7 @@ class _EditCardState extends State<EditCard> {
           ),
           TextFormFieldCustom(
             controller: edCardNumberController,
-            hintText: "",
+            hintText: cardNumberHint ?? "",
             textInputType: TextInputType.number,
             suffixIcon: Icon(
               Icons.credit_card,
@@ -213,7 +224,7 @@ class _EditCardState extends State<EditCard> {
             ),
             validator: (val) {
               if (val!.isEmpty) {
-                return "Enter card number";
+                return null;
               } else if (CardUtils.validateCardNumWithLuhnAlgorithm(
                       edCardNumberController.text.toString()) !=
                   null) {
@@ -239,7 +250,7 @@ class _EditCardState extends State<EditCard> {
                     ),
                     TextFormFieldCustom(
                       controller: edCardExpiryController,
-                      hintText: "",
+                      hintText: cardExpiryHint ?? "",
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
@@ -248,7 +259,7 @@ class _EditCardState extends State<EditCard> {
                       ],
                       validator: (val) {
                         if (val!.isEmpty) {
-                          return "Enter expiry.";
+                          return null;
                         } else if (CardUtils.validateDate(
                                 edCardExpiryController.text.toString()) !=
                             null) {
@@ -278,13 +289,6 @@ class _EditCardState extends State<EditCard> {
                       hintText: "",
                       textInputType: TextInputType.number,
                       textInputAction: TextInputAction.done,
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Enter Cvv";
-                        } else {
-                          return null;
-                        }
-                      },
                     ),
                   ],
                 ),
@@ -300,6 +304,7 @@ class _EditCardState extends State<EditCard> {
               buttonColor: AppColors.primaryColor,
               textColor: Colors.white,
               onPressed: () {
+                GlobalMethods.hideKeyboard(context);
                 if (cardFormKey.currentState!.validate()) {
                   editCardOrBankAccount(
                       id: paymentData!.id, data: getCardParams());
@@ -354,8 +359,12 @@ class _EditCardState extends State<EditCard> {
   }
 
   String getCardParams() {
-    List<int> expiryDate = CardUtils.getExpiryDate(edCardExpiryController.text);
-    String expiry = "${expiryDate[0]}/${expiryDate[1]}";
+    String expiry = "";
+    if (edCardExpiryController.text.isNotEmpty) {
+      List<String> expiryDate =
+          CardUtils.getExpiryDate(edCardExpiryController.text);
+      expiry = "${expiryDate[0]}${expiryDate[1]}";
+    }
     var map = new Map<String, dynamic>();
     map['type'] = "card";
     map['brand'] =
@@ -366,8 +375,10 @@ class _EditCardState extends State<EditCard> {
                     CardType.Visa
                 ? "visa"
                 : "card";
-    map['cardNumber'] = edCardNumberController.text;
-    map['expiry'] = expiry;
+    map['cardNumber'] = edCardNumberController.text.isNotEmpty
+        ? edCardNumberController.text
+        : paymentData!.cardLastFourDigit!;
+    map['expiry'] = expiry.isNotEmpty ? expiry : paymentData!.expiry!;
     map['nameOnAccount'] = edCardNameController.text;
     return json.encode(map);
   }
@@ -375,7 +386,8 @@ class _EditCardState extends State<EditCard> {
   String getBankParams() {
     var map = new Map<String, dynamic>();
     map['type'] = "account";
-    map['bankAccountNum'] = edAccountNumberController.text;
+    if (edAccountNumberController.text.isNotEmpty)
+      map['bankAccountNum'] = edAccountNumberController.text;
     map['routingNumber'] = edRoutingNumberController.text;
     map['bankName'] = edBankNameController.text;
     map['nameOnAccount'] = edAccountNameController.text;
@@ -391,6 +403,7 @@ class _EditCardState extends State<EditCard> {
         if (paymentMaster.success!) {
           GlobalMethods.showSuccessMessage(
               context, paymentMaster.message!, "Edit Payment Method");
+          Routes.goBack(context);
         } else {
           GlobalMethods.showErrorMessage(
               context, paymentMaster.message!, "Edit Payment Method");

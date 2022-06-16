@@ -2,7 +2,17 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/models/payment/add_money_wallet_request.dart';
+import 'package:guilt_app/models/payment/payment_card_master.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/rounded_button_widget.dart';
 
+import '../../data/repository.dart';
+import '../../di/components/service_locator.dart';
+import '../../models/Auth/profile_modal.dart';
+import '../../models/success_master.dart';
+import '../../stores/user/user_store.dart';
+import '../../utils/Global_methods/global.dart';
 import '../../utils/device/device_utils.dart';
 import '../../widgets/custom_scaffold.dart';
 
@@ -14,61 +24,15 @@ class AddMoney extends StatefulWidget {
 }
 
 class _AddMoneyState extends State<AddMoney> {
-  moneylist() => Row(
-        children: [
-          SizedBox(
-            width: 15,
-          ),
-          Column(
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Stack(
-                  children: [
-                    Container(
-                      child: Image.network(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                        width: 55,
-                        height: 55,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text(
-                'Pamela',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ],
-      );
+  final UserStore _userStore = UserStore(getIt<Repository>());
 
-  List<String> item = [
-    ' b',
-    'c ',
-    ' d',
-    ' b',
-    'c ',
-    ' d',
-    ' r',
-    'n ',
-  ];
   final _controller = TextEditingController();
-  final _streamController = StreamController<int>();
+  final _streamController = StreamController<double>();
 
-  Stream<int> get _stream => _streamController.stream;
+  Stream<double> get _stream => _streamController.stream;
 
-  Sink<int> get _sink => _streamController.sink;
-  int initValue = 1;
+  Sink<double> get _sink => _streamController.sink;
+  double initValue = 500;
 
   @override
   void initState() {
@@ -116,99 +80,40 @@ class _AddMoneyState extends State<AddMoney> {
                 ),
               ],
             ),
+
             SizedBox(
-              height: 20,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 20,
-                ),
-                Column(
-                  children: [
-                    FloatingActionButton(
-                      onPressed: null,
-                      disabledElevation: 0,
-                      backgroundColor: Colors.green,
-                      child: Icon(Icons.add),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'New',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: DeviceUtils.getScaledWidth(context, 0.761),
-                      height: DeviceUtils.getScaledHeight(context, 0.12),
-                      child: ListView.builder(
-                        itemCount: item.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) => moneylist(),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 70,
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Stack(
-                children: [
-                  Container(
-                    child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 5,
+              height: 30,
             ),
             Text(
-              'Paying Michael Scott',
+              'Add Amount',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SizedBox(
-              height: 30,
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
                     onPressed: () {
-                      _sink.add(--initValue);
+                      if (initValue > 0) _sink.add(--initValue);
                     },
                     child: Icon(Icons.remove)),
                 Container(
                   width: 130,
                   height: 40,
-                  child: TextField(
-                    controller: _controller,
+                  child: Center(
+                    child: TextField(
+                      controller: _controller,
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(bottom: 3)),
+                      onChanged: (value) {
+                        initValue = double.parse(value);
+                      },
+                    ),
                   ),
                 ),
                 TextButton(
@@ -224,36 +129,53 @@ class _AddMoneyState extends State<AddMoney> {
             SizedBox(
               width: DeviceUtils.getScaledWidth(context, 0.80),
               height: DeviceUtils.getScaledHeight(context, 0.070),
-              child: RaisedButton(
-                onPressed: () {},
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                color: AppColors.primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Row(
-                  children: <Widget>[
-                    Text("                     Add Money",
-                        style: TextStyle(color: Colors.white)),
-                    SizedBox(
-                      width: DeviceUtils.getScaledWidth(context, 0.2),
-                    ),
-                    SizedBox(
-                      width: DeviceUtils.getScaledWidth(context, 0.08),
-                      height: DeviceUtils.getScaledHeight(context, 0.07),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white38,
-                        child: Icon(Icons.arrow_forward, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
+              child: ElevatedButtonWidget(
+                onPressed: () {
+                  choosePaymentMethod();
+                },
+                buttonColor: AppColors.primaryColor,
+                buttonText: 'Add Money',
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void choosePaymentMethod() {
+    Routes.navigateToScreenWithCB(context, Routes.select_card,
+        (PaymentCardDetails data) {
+      addMontyToWallet(data);
+    });
+  }
+
+  addMontyToWallet(PaymentCardDetails data) async {
+    GlobalMethods.showLoader();
+    GetProfileResponseModal? profileData = await _userStore.getProfileData();
+    int currentUserId = int.parse(profileData?.user?.customerProfileId ?? "0");
+
+    AddMoneyToWalletRequest payModel = AddMoneyToWalletRequest(
+      customerProfileId: currentUserId,
+      paymentProfile: int.parse(data.customerPaymentProfileId!),
+      amount: double.parse(_controller.text),
+      paymentMethod: data.type,
+    );
+
+    _userStore.addMoneyToWallet(payModel, (SuccessMaster successMaster) {
+      GlobalMethods.hideLoader();
+      if (successMaster.success != null && successMaster.success!) {
+        GlobalMethods.showSuccessMessage(
+            context, successMaster.message!, "Add Money");
+        Routes.goBack(context);
+      } else {
+        GlobalMethods.showErrorMessage(
+            context, successMaster.message!, "Add Money");
+      }
+    }, (error) {
+      GlobalMethods.hideLoader();
+      print(error.toString());
+    });
   }
 
   @override
