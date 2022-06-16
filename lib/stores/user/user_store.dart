@@ -36,6 +36,14 @@ abstract class _UserStore with Store {
   bool isFirst = true;
 
   @observable
+  bool isNotificationBadge = false;
+
+  @observable
+  bool isChatBadge = false;
+  @observable
+  String chatBadgeCount = '10';
+
+  @observable
   String? authToken;
 
   @observable

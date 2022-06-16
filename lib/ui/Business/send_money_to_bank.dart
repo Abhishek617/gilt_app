@@ -29,7 +29,6 @@ class _SendMoneyToBankState extends State<SendMoneyToBank> {
   final edAmountController = TextEditingController();
   final edAccountNumberController = TextEditingController();
   final edRoutingNumberController = TextEditingController();
-  final UserStore _userStore = UserStore(getIt<Repository>());
   double? mWalletBalance;
 
   @override

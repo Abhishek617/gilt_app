@@ -502,6 +502,7 @@ class PostApi {
   //UpcomingPastEvent
   Future<UpcomingPastEventModal> getUpcomingPastEventList(
       filterby, page, size, token) async {
+    print("Explore: getUpcomingPastEventList");
     try {
       final res = await _dioClient.post(Endpoints.upcomingPast,
           options: Options(headers: {
