@@ -195,7 +195,7 @@ class _Create_eventState extends State<Create_event> {
         body: CustomBodyWrapper(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(25),
+              padding: const EdgeInsets.only(left: 25,right: 25,top: 25 ,bottom:100),
               child: Column(
                 children: [
                   SizedBox(

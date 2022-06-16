@@ -376,11 +376,14 @@ class _EventDetailsState extends State<EventDetails> {
       child: Row(
         children: [
           Container(
+            height: 45,
+            width: 45,
             child: CircleAvatar(
               backgroundColor: AppColors.primaryColor,
               child: Icon(
                 Icons.person,
                 color: Colors.white,
+                size: 30,
               ),
             ),
           ),
@@ -397,8 +400,8 @@ class _EventDetailsState extends State<EventDetails> {
                 '\n' +
                 user?.admin?.phone!,
             style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w500,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ],
