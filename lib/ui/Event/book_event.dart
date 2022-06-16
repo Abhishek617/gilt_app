@@ -33,12 +33,15 @@ class _SearchEventState extends State<SearchEvent> {
   Widget eventItemContainer(EventItem eventItem) {
     print('eventItem');
     print(eventItem);
-    if(eventItem != null) {
-
-      var startDate =eventItem.startDate != null ? DateFormat('dd MMMM yyyy  HH:mma')
-          .format(DateTime.parse(eventItem.startDate!)) : 'Start Date Not found';
-      var endDate = eventItem.endDate != null ? DateFormat('dd MMMM yyyy  HH:mma')
-          .format(DateTime.parse(eventItem.endDate!)) : 'End Date not found';
+    if (eventItem != null) {
+      var startDate = eventItem.startDate != null
+          ? DateFormat('dd MMMM yyyy  HH:mma')
+              .format(DateTime.parse(eventItem.startDate!))
+          : 'Start Date Not found';
+      var endDate = eventItem.endDate != null
+          ? DateFormat('dd MMMM yyyy  HH:mma')
+              .format(DateTime.parse(eventItem.endDate!))
+          : 'End Date not found';
       return GestureDetector(
         child: Container(
           width: DeviceUtils.getScaledWidth(context, 1.00),
@@ -53,17 +56,22 @@ class _SearchEventState extends State<SearchEvent> {
                 children: [
                   Column(
                     children: [
-                      Image.network(
-                        eventItem.eventImages!.length > 0
-                            ? eventItem.eventImages![0].file ??
-                            'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg'
-                            : 'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
-                        width: 80,
-                        height: 80,
+                      Container(
+                        width: 60,
+                        height: 60,
+                        child: Image.network(
+                          eventItem.eventImages!.length > 0
+                              ? eventItem.eventImages![0].file ??
+                                  'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg'
+                              : 'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(width: 8,),
+                  SizedBox(
+                    width: 8,
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -72,8 +80,9 @@ class _SearchEventState extends State<SearchEvent> {
                               color: Colors.black,
                               fontSize: 18,
                               fontWeight: FontWeight.w700)),
-
-                      SizedBox(height: 5,),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Text(startDate + ' to ' + endDate,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
@@ -85,26 +94,20 @@ class _SearchEventState extends State<SearchEvent> {
                         children: [
                           Padding(
                               padding: EdgeInsets.only(
-                                  top: 5.0,),
-                              child: Icon(
-                                  Icons.supervised_user_circle_rounded,
+                                top: 5.0,
+                              ),
+                              child: Icon(Icons.supervised_user_circle_rounded,
                                   size: 20,
                                   color:
-                                  Theme
-                                      .of(context)
-                                      .colorScheme
-                                      .primary)),
+                                      Theme.of(context).colorScheme.primary)),
                           Padding(
                             padding: EdgeInsets.only(
-                                left: 0.0,
-                                top: 5.0,
-                                bottom: 00.0,
-                                right: 00.0),
+                                left: 0.0, top: 5.0, bottom: 00.0, right: 00.0),
                             child: Text(
                               (eventItem.eventAttendees!.length < 20
-                                  ? eventItem.eventAttendees!.length
-                                  .toString()
-                                  : '+20') +
+                                      ? eventItem.eventAttendees!.length
+                                          .toString()
+                                      : '+20') +
                                   ' Attendee(s)',
                               style: TextStyle(
                                 fontSize: 10,
@@ -113,12 +116,13 @@ class _SearchEventState extends State<SearchEvent> {
                             ),
                           ),
                           Padding(
-                              padding: EdgeInsets.only(top:5,left: 100, right: 00),
+                              padding:
+                                  EdgeInsets.only(top: 5, left: 100, right: 00),
                               child: Container(
                                 padding: EdgeInsets.all(5.0),
                                 decoration: BoxDecoration(
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
+                                      BorderRadius.all(Radius.circular(50)),
                                   color: AppColors.primaryColor,
                                   shape: BoxShape.rectangle,
                                 ),
@@ -144,7 +148,7 @@ class _SearchEventState extends State<SearchEvent> {
           //     context, Routes.book_event_details, eventItem.id);
         },
       );
-    }else{
+    } else {
       return Container();
     }
   }
@@ -219,16 +223,17 @@ class _SearchEventState extends State<SearchEvent> {
                     })
               ],
       ),
-
       child: eventList.length > 0
           ? SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(height: 15 ,),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Column(
-                    children:
-                        eventList.map((evt) => eventItemContainer(evt)).toList(),
-
+                    children: eventList
+                        .map((evt) => eventItemContainer(evt))
+                        .toList(),
                   ),
                 ],
               ),
