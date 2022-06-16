@@ -511,11 +511,14 @@ class _EventDetailsState extends State<EventDetails> {
       child: Row(
         children: [
           Container(
+            height: 45,
+            width: 45,
             child: CircleAvatar(
               backgroundColor: AppColors.primaryColor,
               child: Icon(
                 Icons.person,
                 color: Colors.white,
+                size: 30,
               ),
             ),
           ),

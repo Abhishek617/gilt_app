@@ -41,7 +41,9 @@ class _SearchEventState extends State<SearchEvent> {
           .format(DateTime.parse(eventItem.endDate!)) : 'End Date not found';
       return GestureDetector(
         child: Container(
-          padding: EdgeInsets.only(left: 5, top: 10, right: 00, bottom: 0),
+          width: DeviceUtils.getScaledWidth(context, 1.00),
+          height: DeviceUtils.getScaledHeight(context, 0.139),
+          padding: EdgeInsets.only(left: 10, top: 7, right: 10, bottom: 0),
           child: Card(
             child: Container(
               margin: EdgeInsets.all(5),
@@ -77,16 +79,13 @@ class _SearchEventState extends State<SearchEvent> {
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               color: Colors.grey,
-                              fontSize: 12,
+                              fontSize: 10,
                               fontWeight: FontWeight.w400)),
                       Row(
                         children: [
                           Padding(
                               padding: EdgeInsets.only(
-                                  left: 00.0,
-                                  top: 0.0,
-                                  bottom: 00.0,
-                                  right: 0.0),
+                                  top: 5.0,),
                               child: Icon(
                                   Icons.supervised_user_circle_rounded,
                                   size: 20,
@@ -98,7 +97,7 @@ class _SearchEventState extends State<SearchEvent> {
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 0.0,
-                                top: 0.0,
+                                top: 5.0,
                                 bottom: 00.0,
                                 right: 00.0),
                             child: Text(
@@ -114,7 +113,7 @@ class _SearchEventState extends State<SearchEvent> {
                             ),
                           ),
                           Padding(
-                              padding: EdgeInsets.only(left: 56, right: 00),
+                              padding: EdgeInsets.only(top:5,left: 100, right: 00),
                               child: Container(
                                 padding: EdgeInsets.all(5.0),
                                 decoration: BoxDecoration(
@@ -220,11 +219,18 @@ class _SearchEventState extends State<SearchEvent> {
                     })
               ],
       ),
+
       child: eventList.length > 0
           ? SingleChildScrollView(
               child: Column(
-                children:
-                    eventList.map((evt) => eventItemContainer(evt)).toList(),
+                children: [
+                  SizedBox(height: 15 ,),
+                  Column(
+                    children:
+                        eventList.map((evt) => eventItemContainer(evt)).toList(),
+
+                  ),
+                ],
               ),
             )
           : Center(
