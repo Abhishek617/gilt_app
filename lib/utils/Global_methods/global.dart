@@ -117,4 +117,8 @@ class GlobalMethods {
   static hideLoader() async{
     await EasyLoading.dismiss();
   }
+
+  static hideKeyboard(context) {
+    FocusScope.of(context).unfocus();
+  }
 }

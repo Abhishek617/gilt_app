@@ -44,6 +44,13 @@ class _AddCardState extends State<AddCard> {
   final UserStore _userStore = UserStore(getIt<Repository>());
 
   @override
+  initState() {
+    edAccountNumberController.text = "204578441124512";
+    edRoutingNumberController.text = "121042882";
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final imgLogo = Center(
       child: Container(
@@ -157,6 +164,7 @@ class _AddCardState extends State<AddCard> {
               buttonColor: AppColors.primaryColor,
               textColor: Colors.white,
               onPressed: () {
+                GlobalMethods.hideKeyboard(context);
                 if (bankFormKey.currentState!.validate()) {
                   addCardOrBankAccount(data: getBankParams());
                 } else {
@@ -294,6 +302,7 @@ class _AddCardState extends State<AddCard> {
               buttonColor: AppColors.primaryColor,
               textColor: Colors.white,
               onPressed: () {
+                GlobalMethods.hideKeyboard(context);
                 if (cardFormKey.currentState!.validate()) {
                   addCardOrBankAccount(data: getCardParams());
                 } else {
@@ -376,21 +385,25 @@ class _AddCardState extends State<AddCard> {
   }
 
   String getCardParams() {
-    List<int> expiryDate = CardUtils.getExpiryDate(edCardExpiryController.text);
-    String expiry = "${expiryDate[0]}/${expiryDate[1]}";
+    List<String> expiryDate =
+        CardUtils.getExpiryDate(edCardExpiryController.text);
+    String expiry = "${expiryDate[0]}${expiryDate[1]}";
     var map = new Map<String, dynamic>();
     map['type'] = "card";
     map['brand'] =
         CardUtils.getCardTypeFrmNumber(edCardNumberController.text) ==
                 CardType.MasterCard
-            ? "master"
+            ? "MasterCard"
             : CardUtils.getCardTypeFrmNumber(edCardNumberController.text) ==
                     CardType.Visa
-                ? "visa"
-                : "card";
+                ? "Visa"
+                : "Card";
     map['cardNumber'] = edCardNumberController.text;
     map['expiry'] = expiry;
     map['nameOnAccount'] = edCardNameController.text;
+    // map['bankAccountNum'] = "";
+    // map['routingNumber'] = "";
+    // map['bankName'] = "";
     return json.encode(map);
   }
 
@@ -401,6 +414,9 @@ class _AddCardState extends State<AddCard> {
     map['routingNumber'] = edRoutingNumberController.text;
     map['bankName'] = edBankNameController.text;
     map['nameOnAccount'] = edAccountNameController.text;
+    map['expiry'] = "";
+    map['brand'] = "";
+    map['cardNumber'] = "";
     return json.encode(map);
   }
 
@@ -411,10 +427,11 @@ class _AddCardState extends State<AddCard> {
       if (paymentMaster != null) {
         if (paymentMaster.success!) {
           GlobalMethods.showSuccessMessage(
-              context, paymentMaster.message!, "Add Payment Method");
+              context, paymentMaster.message!, "Add Payment");
+          Routes.goBack(context);
         } else {
           GlobalMethods.showErrorMessage(
-              context, paymentMaster.message!, "Add Payment Method");
+              context, paymentMaster.message!, "Add Payment");
         }
       }
     }, (error) {

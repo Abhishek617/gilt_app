@@ -138,7 +138,7 @@ class User {
     country = json['country'];
     zip = json['zip'];
     roleId = json['role_id'];
-    deletedAt = json['deleted_at'];
+    deletedAt = json['deleted_at'] ?? '';
     isEmailVerified = json['isEmailVerified'];
     isPhoneVerified = json['isPhoneVerified'];
     authToken = json['auth_token'];

@@ -7,6 +7,8 @@ import 'package:guilt_app/ui/Business/business_payment.dart';
 import 'package:guilt_app/ui/Business/edit_card.dart';
 import 'package:guilt_app/ui/Business/mybusiness.dart';
 import 'package:guilt_app/ui/Business/saved_cards.dart';
+import 'package:guilt_app/ui/Business/select_card.dart';
+import 'package:guilt_app/ui/Business/send_money_to_bank.dart';
 import 'package:guilt_app/ui/Event/create_event.dart';
 import 'package:guilt_app/ui/Event/book_event.dart';
 import 'package:guilt_app/ui/Business/business_details.dart';
@@ -128,6 +130,8 @@ class Routes {
   static const String saved_cards = '/saved_cards';
   static const String edit_cards = '/edit_cards';
   static const String add_card = '/add_card';
+  static const String select_card = '/select_card';
+  static const String send_money_to_bank = '/send_money_to_bank';
 
   static final routes = <String, WidgetBuilder>{
     otpvalidate: (BuildContext context) => Otp_Validate_Screen(),
@@ -191,10 +195,18 @@ class Routes {
     saved_cards: (BuildContext context) => SavedCards(),
     edit_cards: (BuildContext context) => EditCard(),
     add_card: (BuildContext context) => AddCard(),
+    select_card: (BuildContext context) => SelectCardView(),
+    send_money_to_bank: (BuildContext context) => SendMoneyToBank(),
   };
 
   static navigateToScreen(BuildContext context, route) {
     Navigator.of(context).pushNamed(route);
+  }
+
+  static navigateToScreenWithCB(BuildContext context, route, callback) {
+    Navigator.of(context).pushNamed(route).then((value) {
+      callback(value);
+    });
   }
 
   static navigateRootToScreen(BuildContext context, route) {
@@ -208,5 +220,16 @@ class Routes {
 
   static goBack(BuildContext context) {
     Navigator.of(context).pop();
+  }
+
+  static goBackWithData(BuildContext context, data) {
+    Navigator.of(context).pop(data);
+  }
+
+  static navigateToScreenWithArgsAndCB(
+      BuildContext context, route, pageArgs, callback) {
+    Navigator.of(context).pushNamed(route, arguments: pageArgs).then((value) {
+      callback(value);
+    });
   }
 }

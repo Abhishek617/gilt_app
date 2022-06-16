@@ -29,8 +29,10 @@ class NotificationListModal {
 
 class NotificationItem {
   int? id;
+  int? eventId;
   int? fromUser;
   String? message;
+  String? type;
   bool? isButton;
   String? username;
   String? createdAt;
@@ -38,8 +40,10 @@ class NotificationItem {
 
   NotificationItem(
       {this.id,
+        this.eventId,
         this.fromUser,
         this.message,
+        this.type,
         this.isButton,
         this.username,
         this.createdAt,
@@ -47,8 +51,10 @@ class NotificationItem {
 
   NotificationItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    eventId = json['eventId'];
     fromUser = json['fromUser'];
     message = json['message'];
+    type = json['type'];
     isButton = json['is_button'];
     username = json['username'];
     createdAt = json['createdAt'];
@@ -58,8 +64,10 @@ class NotificationItem {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['eventId'] = this.eventId;
     data['fromUser'] = this.fromUser;
     data['message'] = this.message;
+    data['type'] = this.type;
     data['is_button'] = this.isButton;
     data['username'] = this.username;
     data['createdAt'] = this.createdAt;
@@ -77,7 +85,7 @@ class User {
   String? email;
   String? password;
   String? phone;
-  Null? profile;
+  String? profile;
   String? aboutme;
   String? address;
   String? city;
@@ -85,11 +93,11 @@ class User {
   String? country;
   int? zip;
   int? roleId;
-  Null? deletedAt;
+  String? deletedAt;
   bool? isEmailVerified;
   bool? isPhoneVerified;
   String? authToken;
-  Null? customerProfileId;
+  String? customerProfileId;
 
   User(
       {this.id,

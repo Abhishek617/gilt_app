@@ -29,57 +29,81 @@ class PaymentCardMaster {
 
 class PaymentCardDetails {
   int? id;
-  String? type;
   String? brand;
-  String? expiry;
+  String? cardLastFourDigit;
   String? bankName;
   int? userId;
   String? customerId;
   String? customerPaymentProfileId;
+  String? type;
+  String? expiry;
   bool? isDefault;
-  String? updatedAt;
+  int? bankAccountNumLastSixDigit;
+  int? routingNumberLastFourDigit;
+  String? nameOnAccount;
+  String? cardHolderName;
   String? createdAt;
+  String? updatedAt;
+  bool? isSelected;
 
   PaymentCardDetails(
       {this.id,
-      this.type,
       this.brand,
-      this.expiry,
+      this.cardLastFourDigit,
       this.bankName,
       this.userId,
       this.customerId,
       this.customerPaymentProfileId,
+      this.type,
+      this.expiry,
       this.isDefault,
+      this.bankAccountNumLastSixDigit,
+      this.routingNumberLastFourDigit,
+      this.nameOnAccount,
+      this.cardHolderName,
+      this.createdAt,
       this.updatedAt,
-      this.createdAt});
+      this.isSelected});
 
   PaymentCardDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    type = json['type'];
     brand = json['brand'];
-    expiry = json['expiry'];
+    cardLastFourDigit = json['cardLastFourDigit'];
     bankName = json['bankName'];
     userId = json['userId'];
     customerId = json['customerId'];
     customerPaymentProfileId = json['customerPaymentProfileId'];
+    type = json['type'];
+    expiry = json['expiry'];
     isDefault = json['isDefault'];
-    updatedAt = json['updatedAt'];
+    bankAccountNumLastSixDigit = json['bankAccountNumLastSixDigit'];
+    routingNumberLastFourDigit = json['routingNumberLastFourDigit'];
+    nameOnAccount = json['nameOnAccount'];
+    cardHolderName = json['cardHolderName'];
     createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    isSelected = json['isSelected'] = false;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['type'] = this.type;
     data['brand'] = this.brand;
-    data['expiry'] = this.expiry;
+    data['cardLastFourDigit'] = this.cardLastFourDigit;
     data['bankName'] = this.bankName;
     data['userId'] = this.userId;
     data['customerId'] = this.customerId;
     data['customerPaymentProfileId'] = this.customerPaymentProfileId;
+    data['type'] = this.type;
+    data['expiry'] = this.expiry;
     data['isDefault'] = this.isDefault;
-    data['updatedAt'] = this.updatedAt;
+    data['bankAccountNumLastSixDigit'] = this.bankAccountNumLastSixDigit;
+    data['routingNumberLastFourDigit'] = this.routingNumberLastFourDigit;
+    data['nameOnAccount'] = this.nameOnAccount;
+    data['cardHolderName'] = this.cardHolderName;
     data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['isSelected'] = this.isSelected;
     return data;
   }
 }

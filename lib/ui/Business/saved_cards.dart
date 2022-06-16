@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/models/payment/add_card_master.dart';
 import 'package:guilt_app/models/payment/payment_card_master.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
-
-import '../../utils/routes/routes.dart';
-import '../../widgets/custom_body_wrapper.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 
 class SavedCards extends StatefulWidget {
   const SavedCards({Key? key}) : super(key: key);
@@ -42,7 +43,9 @@ class _SavedCardsState extends State<SavedCards> {
       padding: EdgeInsets.symmetric(horizontal: 8),
       child: InkWell(
         onTap: () {
-          Routes.navigateToScreen(context, Routes.add_card);
+          Routes.navigateToScreenWithCB(context, Routes.add_card, (val) {
+            getSavedCards();
+          });
         },
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -116,10 +119,16 @@ class _SavedCardsState extends State<SavedCards> {
                                 return SavedCardItem(
                                   cardDetails: cardList[index],
                                   onEdit: () {
-                                    Routes.navigateToScreen(
-                                        context, Routes.edit_cards);
+                                    Routes.navigateToScreenWithArgs(context,
+                                        Routes.edit_cards, cardList[index]);
                                   },
-                                  onDelete: () {},
+                                  onDelete: () {
+                                    deleteCardConfirmationDialog(
+                                        context,
+                                        cardList[index].type!,
+                                        cardList[index].id!,
+                                        index);
+                                  },
                                 );
                               },
                             )
@@ -131,6 +140,65 @@ class _SavedCardsState extends State<SavedCards> {
                     ],
                   ),
                 ))));
+  }
+
+  deleteCardConfirmationDialog(BuildContext context, String type, id, index) {
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
+        removePaymentMethod(id, index);
+      },
+    );
+
+    Widget cancelButton = TextButton(
+      child: Text("CANCEL"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Remove $type"),
+      content: Text("Are you sure want to remove $type"),
+      actions: [okButton, cancelButton],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  removePaymentMethod(id, index) async {
+    GlobalMethods.showLoader();
+    GlobalStoreHandler.userStore.removePaymentMethod(id,
+        (AddPaymentMaster master) {
+      GlobalMethods.hideLoader();
+      if (master != null) {
+        if (master.success == true) {
+          GlobalMethods.showSuccessMessage(
+              context, master.message ?? 'Removed', 'Remove payment method');
+          setState(() {
+            cardList.removeAt(index);
+            getSavedCards();
+          });
+        } else {
+          GlobalMethods.showErrorMessage(
+              context, master.message ?? 'failed', 'Remove payment method');
+        }
+      }
+    }, (error) {
+      GlobalMethods.hideLoader();
+      print(error.toString());
+      GlobalMethods.showErrorMessage(
+          context, 'Something went wrong!', 'Remove payment method');
+    });
   }
 }
 
@@ -192,28 +260,6 @@ class SavedCardItem extends StatelessWidget {
                   child: Center(
                     child: Icon(
                       Icons.delete,
-                      color: Colors.white,
-                      size: 12,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              InkWell(
-                onTap: () {
-                  onEdit!();
-                },
-                child: Container(
-                  height: 26,
-                  width: 26,
-                  decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.all(Radius.circular(13))),
-                  child: Center(
-                    child: Icon(
-                      Icons.edit,
                       color: Colors.white,
                       size: 12,
                     ),

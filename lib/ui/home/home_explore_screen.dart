@@ -39,17 +39,24 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
 
   @override
   void initState() {
-    initSetup();
     GlobalStoreHandler.initStores();
+    initSetup();
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
     if (this.mounted) {
-      initSetup();
-      G.initSocket();
-      G.socketUtils.initSocket();
+      var route = ModalRoute.of(context);
+      if(route!=null){
+        var mRoute = route.settings.name;
+        if(mRoute == Routes.explore_home){
+          initSetup();
+          G.initSocket();
+          G.socketUtils.initSocket();
+        }
+      }
+
       super.didChangeDependencies();
     }
   }

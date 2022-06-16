@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/network/dio_client.dart';
 import 'package:guilt_app/data/network/rest_client.dart';
@@ -21,11 +23,17 @@ import 'package:guilt_app/models/Business/AddBusinessRequestModel.dart';
 import 'package:guilt_app/models/Business/AddBusinessResponseModel.dart';
 import 'package:guilt_app/models/Event/CreateEventResponseModel.dart';
 import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
+import 'package:guilt_app/models/Event/accept_reject_event.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
+import 'package:guilt_app/models/help_support/help_support_master.dart';
 import 'package:guilt_app/models/payment/add_card_master.dart';
+import 'package:guilt_app/models/payment/add_money_wallet_request.dart';
+import 'package:guilt_app/models/payment/pay_to_user_request.dart';
+import 'package:guilt_app/models/payment/payment_history_master.dart';
 import 'package:guilt_app/models/payment/payment_request.dart';
+import 'package:guilt_app/models/payment/wallet_balance_master.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 
@@ -34,6 +42,8 @@ import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
 
 import '../../../../models/payment/payment_card_master.dart';
+import '../../../../models/success_master.dart';
+import 'dart:developer' as de;
 
 class PostApi {
   // dio instance
@@ -174,11 +184,11 @@ class PostApi {
   }
 
   // Get My Business List
-  Future getMyBusinessList(searchQuery,token) async {
+  Future getMyBusinessList(searchQuery, token) async {
     try {
       return await _dioClient.get(
         Endpoints.myBusinessList,
-        queryParameters: {"search":searchQuery ?? '',"page": 0, "size": 20},
+        queryParameters: {"search": searchQuery ?? '', "page": 0, "size": 20},
         options: Options(headers: {'Authorization': 'Bearer ' + token}),
       );
     } catch (e) {
@@ -188,11 +198,11 @@ class PostApi {
   }
 
   // Get All Business List
-  Future getAllBusinessList(searchQuery,token) async {
+  Future getAllBusinessList(searchQuery, token) async {
     try {
       return await _dioClient.get(
         Endpoints.allBusinessList,
-        queryParameters: {"search":searchQuery ?? '',"page": 0, "size": 20},
+        queryParameters: {"search": searchQuery ?? '', "page": 0, "size": 20},
         options: Options(headers: {'Authorization': 'Bearer ' + token}),
       );
     } catch (e) {
@@ -203,12 +213,14 @@ class PostApi {
 
   // Get Business List By Name
   // Get All Business List
-  Future getBusinessByNameList(searchQuery,token) async {
+  Future getBusinessByNameList(searchQuery, token) async {
     try {
       print("Search query: $searchQuery");
       return await _dioClient.get(
         Endpoints.searchByNameBusinessList,
-        queryParameters: {"search":searchQuery ?? '',},
+        queryParameters: {
+          "search": searchQuery ?? '',
+        },
         options: Options(headers: {'Authorization': 'Bearer ' + token}),
       );
     } catch (e) {
@@ -218,11 +230,11 @@ class PostApi {
   }
 
   // Get All User List
-  Future getAllUserList(searchQuery,token) async {
+  Future getAllUserList(searchQuery, token) async {
     try {
       return await _dioClient.get(
         Endpoints.searchUser,
-        queryParameters: {"search":searchQuery ?? ''},
+        queryParameters: {"search": searchQuery ?? ''},
         options: Options(headers: {'Authorization': 'Bearer ' + token}),
       );
     } catch (e) {
@@ -245,7 +257,7 @@ class PostApi {
   }
 
   // Delete Business
-  Future deleteBusiness(bID,token) async {
+  Future deleteBusiness(bID, token) async {
     try {
       return await _dioClient.delete(
         Endpoints.deleteBusiness + '/${bID}',
@@ -507,15 +519,17 @@ class PostApi {
   Future<UpdateProfileResponseModal> updateprofile(
       UpdateProfileRequestModal UpdateProfileData, token) async {
     try {
-      String fileName = UpdateProfileData.profile.path.split('/').last;
-      String? mimeType = mime(fileName);
-      String mimee = mimeType!.split('/')[0];
-      String type = mimeType!.split('/')[1];
-      UpdateProfileData.profile = (await MultipartFile.fromFile(
-          UpdateProfileData.profile.path,
-          filename: fileName,
-          contentType: MediaType(mimee, type)));
-      //FormData forData = new FormData.fromMap(UpdateProfileData.toJson());
+      if (UpdateProfileData.profile != null) {
+        String fileName = UpdateProfileData.profile.path.split('/').last;
+        String? mimeType = mime(fileName);
+        String mimee = mimeType!.split('/')[0];
+        String type = mimeType!.split('/')[1];
+        UpdateProfileData.profile = (await MultipartFile.fromFile(
+            UpdateProfileData.profile.path,
+            filename: fileName,
+            contentType: MediaType(mimee, type)));
+        //FormData forData = new FormData.fromMap(UpdateProfileData.toJson());
+      }
 
       var form = FormData.fromMap(UpdateProfileData.toJson());
       final res = await _dioClient.put(
@@ -526,9 +540,10 @@ class PostApi {
           'Content-Type': 'multipart/form-data'
         }),
       );
+      de.log("Full response: ${jsonEncode(res)}");
       return UpdateProfileResponseModal.fromJson(res);
     } catch (e) {
-      print(e.toString());
+      print("Error of update profile: ${e.toString()}");
       throw e;
     }
   }
@@ -550,12 +565,14 @@ class PostApi {
   }
 
 //create event
-  Future createEvent(CreateEventRequestModal eventData, token, successCB, errorCB) async {
+  Future createEvent(
+      CreateEventRequestModal eventData, token, successCB, errorCB) async {
     try {
       await getEventImages(eventData.files, (newFilesArray) async {
         eventData.files = newFilesArray;
         FormData formData = await new FormData.fromMap(eventData.toJson());
-        await _dioClient.post(
+        await _dioClient
+            .post(
           Endpoints.addEvent,
           data: formData,
           options: Options(headers: {
@@ -567,6 +584,57 @@ class PostApi {
           value = CreateEventResponseModel.fromJson(value);
           successCB(value);
         });
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Accept Reject Event
+  Future acceptRejectEvent(id, status, token, successCB, errorCB) async {
+    String getParams() {
+      var map = new Map<String, dynamic>();
+      map['status'] = status;
+      return json.encode(map);
+    }
+
+    try {
+      await _dioClient
+          .put(
+        "${Endpoints.acceptRejectEvent}/$id",
+        data: getParams(),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = AcceptRejectEvent.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Cancel Event
+  Future cancelEvent(id, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .put(
+        "${Endpoints.cancelEvent}/$id",
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = AcceptRejectEvent.fromJson(value);
+        successCB(value);
       });
     } catch (e) {
       errorCB(e);
@@ -592,7 +660,7 @@ class PostApi {
           }),
         )
             .then((value) {
-              value = AddBusinessResponseModel.fromJson(value);
+          value = AddBusinessResponseModel.fromJson(value);
           successCB(value);
         });
       });
@@ -623,7 +691,6 @@ class PostApi {
   //Add Payment Request
   Future requestUserForPayment(
       toUserId, businessId, amount, remarks, token, successCB, errorCB) async {
-
     String getParams() {
       var map = new Map<String, dynamic>();
       map['toUser'] = toUserId;
@@ -654,9 +721,124 @@ class PostApi {
     }
   }
 
+  //Pay to user
+  Future payToUser(PayToUserRequest payModel, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.payToUser,
+        data: json.encode(payModel.toJson()),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = SuccessMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Pay to event
+  Future payToEvent(
+      PayToUserRequest payModel, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.padToEvent,
+        data: json.encode(payModel.toJson()),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = SuccessMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Add money to wallet
+  Future addMoneyToWallet(
+      AddMoneyToWalletRequest payModel, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.addMoneyToWallet,
+        data: json.encode(payModel.toJson()),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = SuccessMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //My wallet balance
+  Future myWalletBalance(token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .get(
+        Endpoints.myWalletBalance,
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = WalletBalanceMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Credit bank account
+  Future creditBankAccount(data, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        Endpoints.creditBankAccount,
+        data: data,
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = SuccessMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
   //Add Payment Request
-  Future getSavedCards(
-      token, successCB, errorCB) async {
+  Future getSavedCards(token, successCB, errorCB) async {
     try {
       await _dioClient
           .post(
@@ -678,8 +860,7 @@ class PostApi {
   }
 
   //Add Card or Bank account
-  Future addCardOrBankAccount(data,
-      token, successCB, errorCB) async {
+  Future addCardOrBankAccount(data, token, successCB, errorCB) async {
     try {
       await _dioClient
           .post(
@@ -692,6 +873,105 @@ class PostApi {
       )
           .then((value) {
         value = AddPaymentMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Edit Card or Bank account
+  Future editCardOrBankAccount(id, data, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .put(
+        "${Endpoints.editCardOrBank}/$id",
+        data: data,
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = AddPaymentMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Payment History
+  Future getPaymentHistory(
+      int page, int size, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .post(
+        "${Endpoints.paymentHistory}?page=$page&size=$size",
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = PaymentHistoryResponseModel.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Payment History
+  Future removePaymentMethod(id, token, successCB, errorCB) async {
+    try {
+      await _dioClient
+          .delete(
+        "${Endpoints.removePaymentMethod}/$id",
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = AddPaymentMaster.fromJson(value);
+        successCB(value);
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //Payment History
+  Future helpAndSupport(name, email, message, token, successCB, errorCB) async {
+    String getParams() {
+      var map = new Map<String, dynamic>();
+      map['name'] = name;
+      map['email'] = email;
+      map['message'] = message;
+      return json.encode(map);
+    }
+
+    try {
+      await _dioClient
+          .post(
+        "${Endpoints.helpAndSupport}",
+        data: getParams(),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        value = HelpSupportMaster.fromJson(value);
         successCB(value);
       });
     } catch (e) {

@@ -156,6 +156,16 @@ mixin _$UserStore on _UserStore, Store {
         () => super.createEvent(eventData, successCallback, errorCallback));
   }
 
+  final _$acceptRejectEventAsyncAction =
+      AsyncAction('_UserStore.acceptRejectEvent');
+
+  @override
+  Future<dynamic> acceptRejectEvent(dynamic id, dynamic status,
+      dynamic successCallback, dynamic errorCallback) {
+    return _$acceptRejectEventAsyncAction.run(() =>
+        super.acceptRejectEvent(id, status, successCallback, errorCallback));
+  }
+
   final _$addBusinessAsyncAction = AsyncAction('_UserStore.addBusiness');
 
   @override
@@ -206,6 +216,26 @@ mixin _$UserStore on _UserStore, Store {
       dynamic successCallback, dynamic errorCallback) {
     return _$getSavedCardsAsyncAction
         .run(() => super.getSavedCards(successCallback, errorCallback));
+  }
+
+  final _$addCardOrBankAccountAsyncAction =
+      AsyncAction('_UserStore.addCardOrBankAccount');
+
+  @override
+  Future<dynamic> addCardOrBankAccount(
+      dynamic data, dynamic successCallback, dynamic errorCallback) {
+    return _$addCardOrBankAccountAsyncAction.run(
+        () => super.addCardOrBankAccount(data, successCallback, errorCallback));
+  }
+
+  final _$getPaymentHistoryAsyncAction =
+      AsyncAction('_UserStore.getPaymentHistory');
+
+  @override
+  Future<dynamic> getPaymentHistory(
+      int page, int size, dynamic successCallback, dynamic errorCallback) {
+    return _$getPaymentHistoryAsyncAction.run(() =>
+        super.getPaymentHistory(page, size, successCallback, errorCallback));
   }
 
   final _$_UserStoreActionController = ActionController(name: '_UserStore');

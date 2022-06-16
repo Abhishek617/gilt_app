@@ -10,6 +10,7 @@ import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
+import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
@@ -17,6 +18,11 @@ import 'package:guilt_app/widgets/rounded_button_with_icon.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/Auth/profile_modal.dart';
+import '../../models/Event/accept_reject_event.dart';
+import '../../models/payment/pay_to_user_request.dart';
+import '../../models/payment/payment_card_master.dart';
+import '../../models/success_master.dart';
 import '../../stores/user/user_store.dart';
 import '../../utils/Global_methods/global.dart';
 import '../../utils/routes/routes.dart';
@@ -32,6 +38,7 @@ class _EventDetailsState extends State<EventDetails> {
   final UserStore _userStore = UserStore(getIt<Repository>());
   EventDetailsResponseModel? contentData;
   var args;
+  bool isPayButton = false;
 
   @override
   void initState() {
@@ -53,13 +60,14 @@ class _EventDetailsState extends State<EventDetails> {
   }
 
   getDetails(args) {
+    isPayButton = false;
     GlobalMethods.showLoader();
     _userStore.Event_Detail(args, (value) {
       print(value);
       setState(() {
         contentData = EventDetailsResponseModel.fromJson(value);
-        print('eventview');
       });
+      validatePayButton();
       GlobalMethods.hideLoader();
     }, (error) {
       GlobalMethods.hideLoader();
@@ -346,11 +354,138 @@ class _EventDetailsState extends State<EventDetails> {
                       // ),
                     ],
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  isPayButton
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(right: 15),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  //Pay
+                                  choosePaymentMethod();
+                                },
+                                child: Text('Pay'),
+                                style: ButtonStyle(
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ))),
+                              ),
+                            ),
+                            SizedBox(width: 15),
+                            ElevatedButton(
+                              onPressed: () {
+                                //Reject event
+                                acceptRejectEvent(
+                                    contentData?.event?.id ?? 0, "rejected");
+                              },
+                              child: Text(
+                                'Reject',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateColor.resolveWith(
+                                          (states) => Colors.white),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50.0),
+                                  ))),
+                            ),
+                          ],
+                        )
+                      : Container()
                 ],
               ),
             ),
           )
         : Center(child: Text('No Details found.'));
+  }
+
+  validatePayButton() async {
+    GetProfileResponseModal? profileData = await _userStore.getProfileData();
+    int userId = profileData?.user?.id ?? 0;
+    if (contentData!.event!.isUserAtendee! &&
+        contentData!.event!.createdBy! != userId) {
+      setState(() {
+        isPayButton = true;
+      });
+    }
+  }
+
+  void choosePaymentMethod() {
+    Routes.navigateToScreenWithCB(context, Routes.select_card,
+        (PaymentCardDetails data) {
+      if (data != null) {
+        payToEvent(data);
+      }
+    });
+  }
+
+  payToEvent(PaymentCardDetails data) async {
+    GlobalMethods.showLoader();
+    GetProfileResponseModal? profileData = await _userStore.getProfileData();
+    int currentUserId = int.parse(profileData?.user?.customerProfileId ?? "0");
+
+    int userId = profileData?.user?.id ?? 0;
+    double amount = 0;
+    List<EventAttendees> attendees = contentData?.event?.eventAttendees ?? [];
+    if (attendees.isNotEmpty) {
+      List<EventAttendees> payableAttendees =
+          attendees.where((element) => element.userId == userId).toList();
+      if (payableAttendees.isNotEmpty) {
+        amount = payableAttendees![0].expense ?? 0;
+      }
+    }
+    PayToUserRequest payModel = PayToUserRequest(
+        customerProfileId: currentUserId,
+        paymentProfile: int.parse(data.customerPaymentProfileId!),
+        amount: amount,
+        walletAmount: 0,
+        toUserId: contentData?.event?.organizer?.id,
+        paymentMethod: data.type,
+        paymentReqId: data.id,
+        eventId: contentData?.event?.id);
+
+    _userStore.payToEvent(payModel, (SuccessMaster successMaster) {
+      GlobalMethods.hideLoader();
+      if (successMaster != null) {
+        if (successMaster.success != null && successMaster.success!) {
+          GlobalMethods.showSuccessMessage(
+              context, successMaster.message!, "Pay" ?? "");
+        } else {
+          GlobalMethods.showErrorMessage(
+              context, successMaster.message!, "Pay" ?? "");
+        }
+      }
+    }, (error) {
+      GlobalMethods.hideLoader();
+      print(error.toString());
+    });
+  }
+
+  acceptRejectEvent(id, status) async {
+    print('createEvent RequestData :');
+    //print(eData);
+    GlobalMethods.showLoader();
+    _userStore.acceptRejectEvent(id, status, (AcceptRejectEvent val) {
+      GlobalMethods.hideLoader();
+      if (val.success == true) {
+        GlobalMethods.showSuccessMessage(
+            context, val.message ?? 'Success', 'Event');
+      } else {
+        GlobalMethods.showErrorMessage(
+            context, val.message ?? 'Failed', 'Event');
+      }
+    }, (error) {
+      GlobalMethods.hideLoader();
+    });
   }
 
   Widget setupAlertDialogContainer() {
