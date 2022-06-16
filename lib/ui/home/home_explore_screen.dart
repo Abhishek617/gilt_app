@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:guilt_app/constants/app_settings.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/repository.dart';
@@ -9,6 +10,7 @@ import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/ui/Tab/home_tab.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
 import 'package:guilt_app/utils/Global_methods/SocketService.dart';
@@ -26,7 +28,7 @@ class HomeExploreScreen extends StatefulWidget {
   const HomeExploreScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeExploreScreen> createState() => _HomeExploreScreenState();
+  State<HomeExploreScreen> createState() => _HomeExploreScreenState(key);
 }
 
 class _HomeExploreScreenState extends State<HomeExploreScreen> {
@@ -36,6 +38,8 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
 
   @observable
   GetProfileResponseModal? ProfileData = GetProfileResponseModal();
+
+  _HomeExploreScreenState(Key? key);
 
   @override
   void initState() {
@@ -70,6 +74,12 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
     getEventsList('past');
     G.initSocket();
     G.socketUtils.initSocket();
+    changeBadge("1");
+  }
+  @action
+  changeBadge(count){
+    GlobalStoreHandler.userStore.isChatBadge = true;
+    GlobalStoreHandler.userStore.chatBadgeCount = count;
   }
 
   getEventsList(type) {
@@ -325,6 +335,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                                 textAlign: TextAlign.center,
                               ),
                               onPressed: () {
+                                changeBadge("9");
                                 Routes.navigateToScreen(context, Routes.event);
                               }),
                         ],
@@ -367,6 +378,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                                 textAlign: TextAlign.center,
                               ),
                               onPressed: () {
+                                changeBadge("+5");
                                 Routes.navigateToScreen(context, Routes.event);
                               }),
                         ],
