@@ -400,7 +400,12 @@ class _EventDetailsState extends State<EventDetails> {
                             ),
                           ],
                         )
-                      : Container()
+                      : contentData!.event!.status != 'pending'
+                          ? Container(
+                              child: Text('You have ' +
+                                  contentData!.event!.status.toString() +
+                                  ' the invitation of an event.'))
+                          : Container(),
                 ],
               ),
             ),
@@ -412,7 +417,8 @@ class _EventDetailsState extends State<EventDetails> {
     GetProfileResponseModal? profileData = await _userStore.getProfileData();
     int userId = profileData?.user?.id ?? 0;
     if (contentData!.event!.isUserAtendee! &&
-        contentData!.event!.createdBy! != userId) {
+        contentData!.event!.createdBy! != userId &&
+        contentData!.event!.status == 'pending') {
       setState(() {
         isPayButton = true;
       });
