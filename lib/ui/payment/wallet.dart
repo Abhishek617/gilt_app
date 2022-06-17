@@ -189,9 +189,11 @@ class _WalletState extends State<Wallet> {
                       ),
                       InkWell(
                         onTap: () {
-                          Routes.navigateToScreenWithCB(
-                              context, Routes.addmoney, (value) {
-                            getMyWalletBalance();
+                          Routes.navigateToScreenWithArgsAndCB(
+                              context,
+                              Routes.pay_request_business,
+                              {"fromScreen": "wallet"}, (value){
+                                getMyWalletBalance();
                           });
                         },
                         child: Row(

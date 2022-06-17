@@ -10,7 +10,8 @@ class SearchEventResponseModal {
     message = json['message'];
     eventsList = json['eventsList'] != null
         ? new EventsList.fromJson(json['eventsList'])
-        : null;
+        : json['events'] != null
+        ? new EventsList.fromJson(json['events']) : null;
   }
 
   Map<String, dynamic> toJson() {

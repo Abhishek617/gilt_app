@@ -36,6 +36,7 @@ import 'package:guilt_app/models/payment/payment_request.dart';
 import 'package:guilt_app/models/payment/wallet_balance_master.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
+import 'package:guilt_app/utils/encryption/card_encryption.dart';
 
 import '../../../../models/Event/upcoming_past_event_modal.dart';
 import 'package:http_parser/http_parser.dart';
@@ -862,11 +863,21 @@ class PostApi {
 
   //Add Card or Bank account
   Future addCardOrBankAccount(data, token, successCB, errorCB) async {
+    String getParams() {
+      var map = new Map<String, dynamic>();
+      var paymentToken = Map<String, dynamic>();
+      paymentToken['iv'] = EncryptionUtils.iv.base16;
+      paymentToken['encryptedData'] = EncryptionUtils.encryptData(data);
+      map['paymentToken'] = paymentToken;
+      // print("Decrypted: ${EncryptionUtils.decryptData(paymentToken['encryptedData'])}");
+      return json.encode(map);
+    }
+
     try {
       await _dioClient
           .post(
         Endpoints.addCardOrBank,
-        data: data,
+        data: getParams(),
         options: Options(headers: {
           'Authorization': 'Bearer ' + token!,
           'Content-Type': 'application/json'

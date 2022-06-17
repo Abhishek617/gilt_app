@@ -18,7 +18,6 @@ class SelectCardView extends StatefulWidget {
 
 class _SelectCardViewState extends State<SelectCardView> {
   List<PaymentCardDetails> cardList = [];
-  bool isApiLoading = false;
   double payableAmount = 0;
   double walletBalance = 0;
   double walletDeduction = 0;
@@ -34,14 +33,11 @@ class _SelectCardViewState extends State<SelectCardView> {
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       fromScreen = args["fromScreen"];
       payableAmount = args["amount"];
-      getSavedCards();
+      getWalletBalance();
     });
   }
 
-  getSavedCards() async {
-    setState(() {
-      isApiLoading = true;
-    });
+  getWalletBalance() async {
     if (fromScreen != Routes.addmoney) {
       await GlobalStoreHandler.userStore.myWalletBalance(
           (WalletBalanceMaster master) {
@@ -52,13 +48,18 @@ class _SelectCardViewState extends State<SelectCardView> {
             checkWalletBalance();
           });
         }
+        getSavedCards();
       }, (error) {
-        GlobalMethods.hideLoader();
         print(error.toString());
+        getSavedCards();
       });
+    } else {
+      getSavedCards();
     }
+  }
+
+  getSavedCards() {
     GlobalStoreHandler.userStore.getSavedCards((PaymentCardMaster master) {
-      isApiLoading = false;
       if (master != null) {
         cardList = master.list ?? [];
         if (walletBalance == 0 && cardList.isNotEmpty) {
@@ -71,9 +72,6 @@ class _SelectCardViewState extends State<SelectCardView> {
       });
     }, (error) {
       print(error.toString());
-      setState(() {
-        isApiLoading = false;
-      });
     });
   }
 
