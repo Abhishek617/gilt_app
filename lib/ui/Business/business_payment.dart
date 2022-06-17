@@ -381,7 +381,11 @@ class _BusinessPaymentState extends State<BusinessPayment> {
   }
 
   void choosePaymentMethod() {
-    Routes.navigateToScreenWithCB(context, Routes.select_card,
+    var args = {
+      "amount": double.parse(amountController.text),
+      "fromScreen": Routes.pay_request_business_payment
+    };
+    Routes.navigateToScreenWithArgsAndCB(context, Routes.select_card, args,
         (PaymentCardDetails data) {
       if (data != null) {
         payTouser(data);
@@ -399,9 +403,11 @@ class _BusinessPaymentState extends State<BusinessPayment> {
 
     PayToUserRequest payModel = PayToUserRequest(
       customerProfileId: currentUserId,
-      paymentProfile: int.parse(data.customerPaymentProfileId!),
-      amount: double.parse(amountController.text),
-      walletAmount: 0,
+      paymentProfile: data.customerPaymentProfileId != null
+          ? int.parse(data.customerPaymentProfileId!)
+          : null,
+      amount: data.bankDeduction,
+      walletAmount: data.walletDeduction,
       toUserId: userData?.id,
       paymentMethod: data.type,
       paymentReqId: data.id,

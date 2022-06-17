@@ -80,7 +80,6 @@ class _AddMoneyState extends State<AddMoney> {
                 ),
               ],
             ),
-
             SizedBox(
               height: 30,
             ),
@@ -144,7 +143,11 @@ class _AddMoneyState extends State<AddMoney> {
   }
 
   void choosePaymentMethod() {
-    Routes.navigateToScreenWithCB(context, Routes.select_card,
+    var args = {
+      "amount": double.parse(_controller.text),
+      "fromScreen": Routes.addmoney
+    };
+    Routes.navigateToScreenWithArgsAndCB(context, Routes.select_card, args,
         (PaymentCardDetails data) {
       addMontyToWallet(data);
     });

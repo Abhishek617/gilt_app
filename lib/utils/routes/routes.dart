@@ -229,7 +229,7 @@ class Routes {
   static navigateToScreenWithArgsAndCB(
       BuildContext context, route, pageArgs, callback) {
     Navigator.of(context).pushNamed(route, arguments: pageArgs).then((value) {
-      callback(value);
+      if (value != null) callback(value);
     });
   }
 }

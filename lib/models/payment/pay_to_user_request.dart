@@ -2,7 +2,7 @@ class PayToUserRequest {
   int? customerProfileId;
   int? paymentProfile;
   double? amount;
-  int? walletAmount;
+  double? walletAmount;
   int? toUserId;
   String? paymentMethod;
   int? paymentReqId;

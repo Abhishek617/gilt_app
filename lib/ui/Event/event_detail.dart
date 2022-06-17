@@ -425,8 +425,20 @@ class _EventDetailsState extends State<EventDetails> {
     }
   }
 
-  void choosePaymentMethod() {
-    Routes.navigateToScreenWithCB(context, Routes.select_card,
+  void choosePaymentMethod() async {
+    GetProfileResponseModal? profileData = await _userStore.getProfileData();
+    int userId = profileData?.user?.id ?? 0;
+    double amount = 0;
+    List<EventAttendees> attendees = contentData?.event?.eventAttendees ?? [];
+    if (attendees.isNotEmpty) {
+      List<EventAttendees> payableAttendees =
+          attendees.where((element) => element.userId == userId).toList();
+      if (payableAttendees.isNotEmpty) {
+        amount = payableAttendees![0].expense ?? 0;
+      }
+    }
+    var args = {"amount": amount, "fromScreen": Routes.event_details};
+    Routes.navigateToScreenWithArgsAndCB(context, Routes.select_card, args,
         (PaymentCardDetails data) {
       if (data != null) {
         payToEvent(data);
@@ -439,21 +451,13 @@ class _EventDetailsState extends State<EventDetails> {
     GetProfileResponseModal? profileData = await _userStore.getProfileData();
     int currentUserId = int.parse(profileData?.user?.customerProfileId ?? "0");
 
-    int userId = profileData?.user?.id ?? 0;
-    double amount = 0;
-    List<EventAttendees> attendees = contentData?.event?.eventAttendees ?? [];
-    if (attendees.isNotEmpty) {
-      List<EventAttendees> payableAttendees =
-          attendees.where((element) => element.userId == userId).toList();
-      if (payableAttendees.isNotEmpty) {
-        amount = payableAttendees![0].expense ?? 0;
-      }
-    }
     PayToUserRequest payModel = PayToUserRequest(
         customerProfileId: currentUserId,
-        paymentProfile: int.parse(data.customerPaymentProfileId!),
-        amount: amount,
-        walletAmount: 0,
+        paymentProfile: data.customerPaymentProfileId != null
+            ? int.parse(data.customerPaymentProfileId!)
+            : null,
+        amount: data.bankDeduction,
+        walletAmount: data.walletDeduction,
         toUserId: contentData?.event?.organizer?.id,
         paymentMethod: data.type,
         paymentReqId: data.id,
