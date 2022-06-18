@@ -182,9 +182,7 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
         if (master.success == true) {
           GlobalMethods.showSuccessMessage(
               context, master.message ?? 'Message sent', 'Help And Support');
-          Future.delayed(Duration(seconds: 3), () {
-            Routes.goBack(context);
-          });
+          Routes.goBack(context);
         } else {
           GlobalMethods.showErrorMessage(context,
               master.message ?? 'Message sent failed', 'Help And Support');

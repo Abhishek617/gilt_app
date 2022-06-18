@@ -243,18 +243,13 @@ class _SelectCardViewState extends State<SelectCardView> {
   }
 
   void redirectToPayment() {
-    PaymentCardDetails paymentDetails =
-        walletSelected ? PaymentCardDetails() : getSelectedCard()!;
-    if (paymentDetails != null) {
-      paymentDetails.walletDeduction = walletDeduction;
-      paymentDetails.bankDeduction = bankDeduction;
-      if (walletSelected) paymentDetails.type = "wallet";
-      print(paymentDetails.toJson().toString());
-      Routes.goBackWithData(context, paymentDetails);
-    } else {
-      GlobalMethods.showErrorMessage(context,
-          "Please select the card or account", "Select payment method");
-    }
+    PaymentCardDetails paymentDetails = getSelectedCard()!;
+    if (paymentDetails == null) paymentDetails = PaymentCardDetails();
+    paymentDetails.walletDeduction = walletDeduction;
+    paymentDetails.bankDeduction = bankDeduction;
+    if (walletSelected) paymentDetails.type = "wallet";
+    print(paymentDetails.toJson().toString());
+    Routes.goBackWithData(context, paymentDetails);
   }
 
   void redirectToAddCard() {
@@ -295,14 +290,18 @@ class _SelectCardViewState extends State<SelectCardView> {
 
   String getWarningText() {
     if (walletDeduction > 0 && bankDeduction > 0) {
-      return "\$$walletDeduction will be deducted from wallet and \$$bankDeduction will be deducted from bank";
+      return "\$$walletDeduction will be deducted from wallet and \$$bankDeduction will be deducted from selected payment method.";
     }
     return "";
   }
 
   PaymentCardDetails? getSelectedCard() {
     try {
-      return cardList.where((element) => element.isSelected!).toList()[0];
+      if (cardList.isNotEmpty) {
+        List<PaymentCardDetails> selectedList =
+            cardList.where((element) => element.isSelected!).toList();
+        if (selectedList.isNotEmpty) return selectedList[0];
+      }
     } catch (e) {
       print(e.toString());
     }

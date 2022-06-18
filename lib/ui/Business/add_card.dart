@@ -46,11 +46,11 @@ class _AddCardState extends State<AddCard> {
 
   @override
   initState() {
-    edAccountNumberController.text = "204578441124512";
-    edRoutingNumberController.text = "121042882";
+    // edAccountNumberController.text = "204578441124512";
+    // edRoutingNumberController.text = "121042882";
 
-    // edAccountNumberController.text = "304578441124541";
-    // edRoutingNumberController.text = "011401533";
+    edAccountNumberController.text = "304578441124541";
+    edRoutingNumberController.text = "011401533";
     super.initState();
   }
 

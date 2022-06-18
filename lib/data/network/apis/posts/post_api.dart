@@ -635,12 +635,12 @@ class PostApi {
         }),
       )
           .then((value) {
+            print("Cancel event response: ${value.toString()}");
         value = AcceptRejectEvent.fromJson(value);
         successCB(value);
       });
     } catch (e) {
       errorCB(e);
-      print(e.toString());
       throw e;
     }
   }
