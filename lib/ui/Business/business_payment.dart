@@ -8,6 +8,7 @@ import 'package:guilt_app/models/Business/search_business_master.dart';
 import 'package:guilt_app/models/payment/pay_to_user_request.dart';
 import 'package:guilt_app/models/payment/payment_card_master.dart';
 import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
+import 'package:guilt_app/utils/card_utils/card_utils.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
@@ -32,6 +33,7 @@ class BusinessPayment extends StatefulWidget {
 
 class _BusinessPaymentState extends State<BusinessPayment> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  final FocusNode _amountFocusNode = FocusNode();
   final amountController = TextEditingController();
   var businessNameController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -124,44 +126,55 @@ class _BusinessPaymentState extends State<BusinessPayment> {
             ),
             Container(
               width: DeviceUtils.getScaledWidth(context, 0.65),
-              child: TextFormField(
-                textAlign: TextAlign.center,
-                keyboardType: TextInputType.number,
-                controller: amountController,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,0}')),
-                ],
-                decoration: new InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(30.0),
+              child: Center(
+                child: TextFormField(
+                  textAlign: TextAlign.start,
+                  keyboardType: TextInputType.number,
+                  controller: amountController,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+\.?\d{0,0}')),
+                  ],
+                  decoration: new InputDecoration(
+                      prefixIconConstraints: BoxConstraints(minWidth: 24),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.only(left: 30, bottom: 2),
+                        child: Text(
+                          "\$",
+                          style: TextStyle(fontSize: 17),
+                        ),
                       ),
-                      borderSide: BorderSide(
-                        width: 0,
-                        style: BorderStyle.none,
+                      border: new OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(
+                          const Radius.circular(30.0),
+                        ),
+                        borderSide: BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
                       ),
-                    ),
-                    errorBorder: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(30.0),
+                      errorBorder: new OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(
+                          const Radius.circular(30.0),
+                        ),
+                        borderSide: BorderSide(width: 1, color: Colors.red),
                       ),
-                      borderSide: BorderSide(width: 1, color: Colors.red),
-                    ),
-                    filled: true,
-                    hintStyle: new TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[800],
-                    ),
-                    hintText: "\$ 0",
-                    fillColor: Colors.black12),
-                validator: (val) {
-                  if (val!.isEmpty) {
-                    return "Enter Amount";
-                  } else {
-                    return null;
-                  }
-                },
+                      filled: true,
+                      hintStyle: new TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey[800],
+                      ),
+                      hintText: "0",
+                      fillColor: Colors.black12),
+                  validator: (val) {
+                    if (val!.isEmpty) {
+                      return "Enter Amount";
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
               ),
             ),
             SizedBox(

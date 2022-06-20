@@ -105,10 +105,15 @@ class _AddMoneyState extends State<AddMoney> {
                   child: Center(
                     child: TextField(
                       controller: _controller,
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.left,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(bottom: 3)),
+                        prefixIconConstraints: BoxConstraints(maxWidth: 20),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.only(left: 8, bottom: 3),
+                          child: Text("\$", style: TextStyle(fontSize: 17),),
+                        ),
+                          contentPadding: EdgeInsets.zero),
                       onChanged: (value) {
                         initValue = double.parse(value);
                       },

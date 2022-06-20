@@ -213,6 +213,10 @@ class _AddCardState extends State<AddCard> {
             controller: edCardNumberController,
             hintText: "",
             textInputType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              CardNumberInputFormatter()
+            ],
             suffixIcon: Icon(
               Icons.credit_card,
               color: Colors.black87.withOpacity(0.7),
@@ -224,7 +228,13 @@ class _AddCardState extends State<AddCard> {
                       edCardNumberController.text.toString()) !=
                   null) {
                 return "Invalid card.";
-              } else {
+              }
+              /* else if (!CreditCardValidator()
+                  .validateCCNum(edCardNumberController.text)
+                  .isPotentiallyValid) {
+                return "Invalid card.";
+              }*/
+              else {
                 return null;
               }
             },
@@ -284,6 +294,10 @@ class _AddCardState extends State<AddCard> {
                       hintText: "",
                       textInputType: TextInputType.number,
                       textInputAction: TextInputAction.done,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        new LengthLimitingTextInputFormatter(3),
+                      ],
                       validator: (val) {
                         if (val!.isEmpty) {
                           return "Enter Cvv";
@@ -402,7 +416,7 @@ class _AddCardState extends State<AddCard> {
                     CardType.Visa
                 ? "Visa"
                 : "Card";
-    map['cardNumber'] = edCardNumberController.text;
+    map['cardNumber'] = edCardNumberController.text.replaceAll(" ", "");
     map['expiry'] = expiry;
     map['nameOnAccount'] = edCardNameController.text;
     // map['bankAccountNum'] = "";

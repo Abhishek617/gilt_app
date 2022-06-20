@@ -145,7 +145,7 @@ class _SavedCardsState extends State<SavedCards> {
   deleteCardConfirmationDialog(BuildContext context, String type, id, index) {
     // set up the button
     Widget okButton = TextButton(
-      child: Text("OK"),
+      child: Text("YES"),
       onPressed: () {
         Navigator.pop(context);
         removePaymentMethod(id, index);
