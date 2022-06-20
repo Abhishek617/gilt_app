@@ -70,7 +70,7 @@ class UpdateProfileResponseModal {
   UpdateProfileResponseModal.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     user = User.fromJson(json['user']);
-    refreshToken = json['refreshToken'];
+    refreshToken = json['refreshToken']?? '';
   }
 
   Map<String, dynamic> toJson() {

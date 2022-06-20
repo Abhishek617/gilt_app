@@ -21,45 +21,28 @@ import '../../stores/user/user_store.dart';
 import '../../utils/Global_methods/global.dart';
 import '../../widgets/textfield_widget.dart';
 
-class BusinessPayment extends StatefulWidget {
-  const BusinessPayment({Key? key}) : super(key: key);
+class UserPayment extends StatefulWidget {
+  const UserPayment({Key? key}) : super(key: key);
 
   @override
-  State<BusinessPayment> createState() => _BusinessPaymentState();
+  State<UserPayment> createState() => _UserPaymentState();
 }
 
 // List of items in our dropdown menu
 
-class _BusinessPaymentState extends State<BusinessPayment> {
+class _UserPaymentState extends State<UserPayment> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final amountController = TextEditingController();
-  var businessNameController = TextEditingController();
   final descriptionController = TextEditingController();
-  final locationController = TextEditingController();
-  String? type;
   dynamic? userData;
   String? fromScreen;
-  Business? selectedBusiness;
   final UserStore _userStore = UserStore(getIt<Repository>());
-
-  Future<List<Business>> searchBusinessByName(String searchQuery) async {
-    dynamic master =
-        await GlobalStoreHandler.postStore.getBusinessByNameList(searchQuery);
-    debugPrint("$master");
-    if (master != null) {
-      SearchBusinessModel val = SearchBusinessModel.fromJson(master);
-      debugPrint("Search business results returning${val.data!.length}");
-      return val.data ?? [];
-    }
-    return [];
-  }
 
   @override
   void didChangeDependencies() {
     var args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     setState(() {
-      type = args['type'];
       userData = args['userData'];
       fromScreen = args['fromScreen'] ?? "";
     });
@@ -172,133 +155,6 @@ class _BusinessPaymentState extends State<BusinessPayment> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Enter Your Business",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                  Autocomplete<Business>(
-                    optionsBuilder: (TextEditingValue value) {
-                      return searchBusinessByName(value.text);
-                    },
-                    displayStringForOption: (Business option) => option.name!,
-                    fieldViewBuilder: (BuildContext context,
-                        TextEditingController fieldTextEditingController,
-                        FocusNode fieldFocusNode,
-                        VoidCallback onFieldSubmitted) {
-                      businessNameController = fieldTextEditingController;
-                      return TextFieldSearch(
-                        controller: businessNameController,
-                        hintText: "Select Your Business",
-                        textInputType: TextInputType.text,
-                        focusNode: fieldFocusNode,
-                        validator: (val) {
-                          if (val!.isEmpty || selectedBusiness == null) {
-                            return "Select Your Business";
-                          } else {
-                            return null;
-                          }
-                        },
-                      );
-                    },
-                    onSelected: (Business business) {
-                      setState(() {
-                        selectedBusiness = business;
-                        locationController.text = business.location ?? '';
-                      });
-                    },
-                    optionsViewBuilder: (BuildContext context,
-                        AutocompleteOnSelected<Business> onSelected,
-                        Iterable<Business> businessList) {
-                      return Container(
-                        margin: EdgeInsets.only(top: 8, right: 30),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  blurRadius: 6,
-                                  spreadRadius: 6)
-                            ]),
-                        padding: EdgeInsets.only(bottom: 12),
-                        child: ListView.builder(
-                          padding: EdgeInsets.all(0),
-                          itemCount: businessList.length,
-                          shrinkWrap: true,
-                          physics: ClampingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            Business business = businessList.elementAt(index);
-                            return InkWell(
-                                onTap: () {
-                                  onSelected(business);
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(top: 6),
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                      left: 12,
-                                      right: 12,
-                                      top: 8,
-                                    ),
-                                    child: Text(
-                                      business.name ?? "",
-                                    ),
-                                  ),
-                                ));
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Location",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                              width: DeviceUtils.getScaledWidth(context, 0.90),
-                              child: TextFormField(
-                                enabled: false,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null,
-                                controller: locationController,
-                                cursorColor: Colors.black,
-                                decoration: new InputDecoration(
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: AppColors.primaryColor),
-                                    ),
-                                    border: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                    hintText: 'Enter Location'),
-                              )),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
                   TextFormField(
                     minLines: 4,
                     maxLines: 10,
@@ -338,7 +194,9 @@ class _BusinessPaymentState extends State<BusinessPayment> {
                         child: ElevatedButtonWithBorderWidget(
                           buttonColor: Colors.white,
                           textColor: AppColors.primaryColor,
-                          onPressed: () {},
+                          onPressed: () {
+                            Routes.goBack(context);
+                          },
                           buttonText: ('Cancel'),
                         ),
                       ),
@@ -350,23 +208,11 @@ class _BusinessPaymentState extends State<BusinessPayment> {
                         child: ElevatedButtonWidget(
                           buttonColor: AppColors.primaryColor,
                           onPressed: () {
-                            if (type == "Pay") {
-                              if (formkey.currentState!.validate()) {
-                                choosePaymentMethod();
-                              }
-                            } else if (type == "Request") {
-                              if (formkey.currentState!.validate()) {
-                                requestUserForPayment(
-                                    toUserId: userData?.id,
-                                    businessId: selectedBusiness?.id,
-                                    amount: int.parse(amountController.text),
-                                    remarks: descriptionController.text);
-                              } else {
-                                print('Eroor');
-                              }
+                            if (formkey.currentState!.validate()) {
+                              choosePaymentMethod();
                             }
                           },
-                          buttonText: (type ?? ""),
+                          buttonText: ("Pay"),
                         ),
                       ),
                     ],
@@ -383,7 +229,7 @@ class _BusinessPaymentState extends State<BusinessPayment> {
   void choosePaymentMethod() {
     var args = {
       "amount": double.parse(amountController.text),
-      "fromScreen": Routes.pay_request_business_payment
+      "fromScreen": Routes.user_payment
     };
     Routes.navigateToScreenWithArgsAndCB(context, Routes.select_card, args,
         (PaymentCardDetails data) {
@@ -412,40 +258,17 @@ class _BusinessPaymentState extends State<BusinessPayment> {
       paymentMethod: data.type,
       paymentReqId: data.id,
     );
-    if (fromScreen == "notification") {
-      payModel.businessId = selectedBusiness?.id ?? 0;
-    }
 
     _userStore.payToUser(payModel, (SuccessMaster successMaster) {
       GlobalMethods.hideLoader();
       if (successMaster != null) {
         if (successMaster.success != null && successMaster.success!) {
           GlobalMethods.showSuccessMessage(
-              context, successMaster.message!, type ?? "");
+              context, successMaster.message!, "Pay" ?? "");
           Routes.goBack(context);
         } else {
           GlobalMethods.showErrorMessage(
-              context, successMaster.message!, type ?? "");
-        }
-      }
-    }, (error) {
-      GlobalMethods.hideLoader();
-      print(error.toString());
-    });
-  }
-
-  requestUserForPayment({toUserId, businessId, amount, remarks}) async {
-    GlobalMethods.showLoader();
-    _userStore.requestUserForPayment(toUserId, businessId, amount, remarks,
-        (PaymentMaster paymentMaster) {
-      GlobalMethods.hideLoader();
-      if (paymentMaster != null) {
-        if (paymentMaster.success != null && paymentMaster.success!) {
-          GlobalMethods.showSuccessMessage(
-              context, paymentMaster.message!, type ?? "");
-        } else {
-          GlobalMethods.showErrorMessage(
-              context, paymentMaster.message!, type ?? "");
+              context, successMaster.message!, "Pay" ?? "");
         }
       }
     }, (error) {

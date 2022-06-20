@@ -20,6 +20,16 @@ class _SearchUserForBusinessPaymentState
   bool _isSearchBar = false;
   String searchQuery = '';
   List<SearchUserData> userList = [];
+  String fromScreen = "";
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      Map<String, dynamic> args =
+      ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      fromScreen = args["fromScreen"];});
+  }
 
   Widget _searchTextField() {
     //add
@@ -79,39 +89,46 @@ class _SearchUserForBusinessPaymentState
                 if (!currentFocus.hasPrimaryFocus) {
                   currentFocus.unfocus();
                 }
-                Routes.navigateToScreenWithArgs(
-                    context,
-                    Routes.pay_request_business_payment,
-                    {"type": 'Pay', "userData": user});
-              },
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18), // <-- Radius
-                ),
-              ),
-              child: Text(
-                'REQUEST',
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              onPressed: () {
-                FocusScopeNode currentFocus = FocusScope.of(context);
-
-                if (!currentFocus.hasPrimaryFocus) {
-                  currentFocus.unfocus();
+                if (fromScreen == "menu") {
+                  Routes.navigateToScreenWithArgs(
+                      context,
+                      Routes.pay_request_business_payment,
+                      {"type": 'Pay', "userData": user});
+                } else if (fromScreen == "wallet") {
+                  Routes.navigateToScreenWithArgs(context, Routes.user_payment,
+                      {"fromScreen": fromScreen, "userData": user});
                 }
-                Routes.navigateToScreenWithArgs(
-                    context,
-                    Routes.pay_request_business_payment,
-                    {"type": 'Request', "userData": user});
               },
             ),
+            fromScreen == "menu"
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18), // <-- Radius
+                        ),
+                      ),
+                      child: Text(
+                        'REQUEST',
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                      onPressed: () {
+                        FocusScopeNode currentFocus = FocusScope.of(context);
+
+                        if (!currentFocus.hasPrimaryFocus) {
+                          currentFocus.unfocus();
+                        }
+                        Routes.navigateToScreenWithArgs(
+                            context,
+                            Routes.pay_request_business_payment,
+                            {"type": 'Request', "userData": user});
+                      },
+                    ),
+                  )
+                : Container(),
           ],
         ));
   }
@@ -134,7 +151,7 @@ class _SearchUserForBusinessPaymentState
         shadowColor: Colors.transparent,
         leading: GestureDetector(
           onTap: () {
-            Routes.goBack(context);
+            Routes.goBackWithData(context, true);
           },
           child: Icon(
             Icons.arrow_back_ios_outlined,

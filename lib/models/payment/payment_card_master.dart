@@ -45,6 +45,8 @@ class PaymentCardDetails {
   String? createdAt;
   String? updatedAt;
   bool? isSelected;
+  double? walletDeduction;
+  double? bankDeduction;
 
   PaymentCardDetails(
       {this.id,
@@ -63,7 +65,8 @@ class PaymentCardDetails {
       this.cardHolderName,
       this.createdAt,
       this.updatedAt,
-      this.isSelected});
+      this.isSelected,
+      this.walletDeduction, this.bankDeduction});
 
   PaymentCardDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -82,7 +85,9 @@ class PaymentCardDetails {
     cardHolderName = json['cardHolderName'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    isSelected = json['isSelected'] = false;
+    isSelected = false;
+    walletDeduction = 0;
+    bankDeduction = 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -104,6 +109,8 @@ class PaymentCardDetails {
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     data['isSelected'] = this.isSelected;
+    data['walletDeduction'] = this.walletDeduction;
+    data['bankDeduction'] = this.bankDeduction;
     return data;
   }
 }

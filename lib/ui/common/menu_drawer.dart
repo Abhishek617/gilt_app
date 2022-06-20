@@ -219,7 +219,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             'MY BUSINESS',
                             () => {
                                   Routes.navigateToScreen(
-                                     context, Routes.my_business)
+                                      context, Routes.my_business)
                                 })
                         : Container(),
                     userRole == AppSettings.businessUserRole
@@ -234,8 +234,10 @@ class _MenuDrawerState extends State<MenuDrawer> {
                         ? getMenuTile(
                             'PAY/REQUEST BUSINESS',
                             () => {
-                                  Routes.navigateToScreen(
-                                      context, Routes.pay_request_business)
+                                  Routes.navigateToScreenWithArgs(
+                                      context,
+                                      Routes.pay_request_business,
+                                      {"fromScreen": "menu"})
                                 })
                         : Container(),
                     getMenuTile(
@@ -247,10 +249,10 @@ class _MenuDrawerState extends State<MenuDrawer> {
                     ),
                     getMenuTile(
                         'SAVED CARDS',
-                            () => {
-                          Routes.navigateToScreen(
-                              context, Routes.saved_cards)
-                        }),
+                        () => {
+                              Routes.navigateToScreen(
+                                  context, Routes.saved_cards)
+                            }),
                     getMenuTile(
                       'MY EVENT',
                       () => {

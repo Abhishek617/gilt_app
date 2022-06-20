@@ -55,6 +55,7 @@ import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/ui/Event/event.dart';
+import 'package:guilt_app/ui/user/user_payment.dart';
 import '../../ui/Messages/message.dart';
 import '../../ui/attendees/attendees.dart';
 import '../../ui/notification/notification.dart';
@@ -132,6 +133,7 @@ class Routes {
   static const String add_card = '/add_card';
   static const String select_card = '/select_card';
   static const String send_money_to_bank = '/send_money_to_bank';
+  static const String user_payment = '/user_payment';
 
   static final routes = <String, WidgetBuilder>{
     otpvalidate: (BuildContext context) => Otp_Validate_Screen(),
@@ -197,6 +199,7 @@ class Routes {
     add_card: (BuildContext context) => AddCard(),
     select_card: (BuildContext context) => SelectCardView(),
     send_money_to_bank: (BuildContext context) => SendMoneyToBank(),
+    user_payment: (BuildContext context) => UserPayment(),
   };
 
   static navigateToScreen(BuildContext context, route) {
@@ -229,7 +232,7 @@ class Routes {
   static navigateToScreenWithArgsAndCB(
       BuildContext context, route, pageArgs, callback) {
     Navigator.of(context).pushNamed(route, arguments: pageArgs).then((value) {
-      callback(value);
+      if (value != null) callback(value);
     });
   }
 }

@@ -435,8 +435,7 @@ abstract class _UserStore with Store {
     _repository.saveIsLoggedIn(false);
     successCallback();
     _repository.saveIsLoggedIn(false);
-    _repository.logout().then((value) async {
-    }, onError: (error) {
+    _repository.logout().then((value) async {}, onError: (error) {
       print(error.toString());
       this.isLoggedIn = false;
       this.isFirst = true;
@@ -584,7 +583,8 @@ abstract class _UserStore with Store {
   @action
   Future payToEvent(
       PayToUserRequest payModel, successCallback, errorCallback) async {
-    _repository.payToEvent(payModel, successCallback, errorCallback).then((val) {
+    _repository.payToEvent(payModel, successCallback, errorCallback).then(
+        (val) {
       print(val.toString());
     }, onError: errorCallback);
   }
@@ -592,24 +592,23 @@ abstract class _UserStore with Store {
   @action
   Future addMoneyToWallet(
       AddMoneyToWalletRequest payModel, successCallback, errorCallback) async {
-    _repository.addMoneyToWallet(payModel, successCallback, errorCallback).then((val) {
+    _repository.addMoneyToWallet(payModel, successCallback, errorCallback).then(
+        (val) {
       print(val.toString());
     }, onError: errorCallback);
   }
 
   @action
-  Future myWalletBalance(
-      successCallback, errorCallback) async {
+  Future myWalletBalance(successCallback, errorCallback) async {
     _repository.myWaletBalance(successCallback, errorCallback).then((val) {
       print(val.toString());
     }, onError: errorCallback);
   }
 
   @action
-  Future creditBankAccount(
-      data,
-      successCallback, errorCallback) async {
-    _repository.creditBankAccount(data, successCallback, errorCallback).then((val) {
+  Future creditBankAccount(data, successCallback, errorCallback) async {
+    _repository.creditBankAccount(data, successCallback, errorCallback).then(
+        (val) {
       print(val.toString());
     }, onError: errorCallback);
   }

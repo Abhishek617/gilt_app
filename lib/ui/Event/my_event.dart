@@ -33,8 +33,8 @@ class _MyBookEventState extends State<MyBookEvent> {
   Widget eventItemContainer(EventItem eventItem) {
     var startDate = DateFormat('dd MMMM yyyy  HH:mma')
         .format(DateTime.parse(eventItem.startDate!));
-    var endDate = DateFormat('dd MMMM yyyy  HH:mma')
-        .format(DateTime.parse(eventItem.endDate!));
+    var endDate = eventItem.endDate != null ? DateFormat('dd MMMM yyyy  HH:mma')
+        .format(DateTime.parse(eventItem.endDate!)) : "";
     return GestureDetector(
       child: Container(
         padding: EdgeInsets.only(left: 5, top: 10, right: 00, bottom: 0),
@@ -57,72 +57,84 @@ class _MyBookEventState extends State<MyBookEvent> {
                     ),
                   ],
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(eventItem.name ?? 'No Name',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700)),
-                      Padding(
-                        padding:
-                            EdgeInsets.only(right: 25, bottom: 10, top: 10),
-                        child: Text(startDate + ' to ' + endDate,
-                            textAlign: TextAlign.left,
+                Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(eventItem.name ?? 'No Name',
                             style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400)),
-                      ),
-                      Row(
-                        children: [
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 00.0,
-                                  top: 0.0,
-                                  bottom: 00.0,
-                                  right: 0.0),
-                              child: Icon(Icons.supervised_user_circle_rounded,
-                                  size: 20,
-                                  color:
-                                      Theme.of(context).colorScheme.primary)),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 0.0, top: 0.0, bottom: 00.0, right: 00.0),
-                            child: Text(
-                              (eventItem.eventAttendees!.length < 20
-                                      ? eventItem.eventAttendees!.length
-                                          .toString()
-                                      : '+20') +
-                                  ' Attendee(s)',
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700)),
+                        Padding(
+                          padding:
+                              EdgeInsets.only(right: 25, top: 10),
+                          child: Text('From: ' + startDate,
+                              textAlign: TextAlign.left,
                               style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400)),
+                        ),
+                        Padding(
+                          padding:
+                          EdgeInsets.only(right: 25, bottom: 10, top: 2),
+                          child: Text('To: ' + endDate,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400)),
+                        ),
+                        Row(
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    left: 00.0,
+                                    top: 0.0,
+                                    bottom: 00.0,
+                                    right: 0.0),
+                                child: Icon(Icons.supervised_user_circle_rounded,
+                                    size: 20,
+                                    color:
+                                        Theme.of(context).colorScheme.primary)),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 0.0, top: 0.0, bottom: 00.0, right: 00.0),
+                              child: Text(
+                                (eventItem.eventAttendees!.length < 20
+                                        ? eventItem.eventAttendees!.length
+                                            .toString()
+                                        : '+20') +
+                                    ' Attendee(s)',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(left: 56, right: 00),
-                              child: Container(
-                                padding: EdgeInsets.all(5.0),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(50)),
-                                  color: AppColors.primaryColor,
-                                  shape: BoxShape.rectangle,
-                                ),
-                                child: Text(
-                                  eventItem.status!,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 12),
-                                ),
-                              )),
-                        ],
-                      ),
-                    ],
+                            Padding(
+                                padding: EdgeInsets.only(left: 56, right: 00),
+                                child: Container(
+                                  padding: EdgeInsets.all(5.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(50)),
+                                    color: AppColors.primaryColor,
+                                    shape: BoxShape.rectangle,
+                                  ),
+                                  child: Text(
+                                    eventItem.status!,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

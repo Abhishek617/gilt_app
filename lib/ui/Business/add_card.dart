@@ -9,6 +9,7 @@ import 'package:guilt_app/models/payment/payment_card_master.dart';
 import 'package:guilt_app/models/payment_method/payment_method_master.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/card_utils/card_utils.dart';
+import 'package:guilt_app/utils/encryption/card_encryption.dart';
 
 import '../../constants/colors.dart';
 import '../../utils/Global_methods/global.dart';
@@ -45,8 +46,11 @@ class _AddCardState extends State<AddCard> {
 
   @override
   initState() {
-    edAccountNumberController.text = "204578441124512";
-    edRoutingNumberController.text = "121042882";
+    // edAccountNumberController.text = "204578441124512";
+    // edRoutingNumberController.text = "121042882";
+
+    edAccountNumberController.text = "304578441124541";
+    edRoutingNumberController.text = "011401533";
     super.initState();
   }
 

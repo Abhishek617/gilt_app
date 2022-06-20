@@ -230,15 +230,18 @@ class _ChangeOldPasswordState extends State<ChangeOldPassword> {
                                 .changePassword(
                                     oldPassword.text, newPassword.text)
                                 .then((value) {
-                                  print(value);
-                                  GlobalMethods.showSuccessMessage(context, value.message, 'Success');
-                                  if(value.success == true){
-                                    Routes.navigateToScreen(context, Routes.view_profile);
-                                  }
-
-                            })
-                                .onError((error, stackTrace) {
-                                  print(error);
+                              print(value);
+                              if (value.success == true) {
+                                GlobalMethods.showSuccessMessage(
+                                    context, value.message, 'Success');
+                                Routes.navigateToScreen(
+                                    context, Routes.view_profile);
+                              } else {
+                                GlobalMethods.showErrorMessage(
+                                    context, value.message ?? "Something went wrong", 'Change password');
+                              }
+                            }).onError((error, stackTrace) {
+                              print(error);
                             });
                             // if(formkey.currentState!.validate()){
                             //   Routes.navigateToScreen(context, Routes.login);
