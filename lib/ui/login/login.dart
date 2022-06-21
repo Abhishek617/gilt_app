@@ -216,7 +216,7 @@ class _LoginState extends State<Login> {
                               Routes.otpvalidate,
                             _userEmailController.value.text
                             );
-
+                          getSharedPreference();
                         }, (error) {
                           print(error);
                           final data = json.decode(json.encode(error.data))

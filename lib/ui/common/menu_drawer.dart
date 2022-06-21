@@ -26,6 +26,10 @@ class MenuDrawer extends StatefulWidget {
 class _MenuDrawerState extends State<MenuDrawer> {
   // late Repository _repository;
   final UserStore _userStore = UserStore(getIt<Repository>());
+  String _email = '';
+  String _firstname = '';
+  String _lastname = '';
+
 
   @observable
   var userRole = '1';
@@ -33,6 +37,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
   @override
   void initState() {
     setUserRole();
+    getdata();
     super.initState();
   }
 
@@ -82,6 +87,16 @@ class _MenuDrawerState extends State<MenuDrawer> {
     await _userStore.getProfile();
     setState(() {
       userRole = role;
+    });
+  }
+
+  getdata() async
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _email = (prefs.getString('email') ?? '');
+      _firstname = (prefs.getString('firstname') ?? '');
+      _lastname = (prefs.getString('lastname') ?? '');
     });
   }
 
@@ -153,13 +168,14 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             children: [
                               Observer(
                                 builder: (_) => Text(
-                            (_userStore.Profile_data?.user?.firstname
-                                                .toString() ??
-                                            '' )+
-                                        '' +
-                                        (_userStore.Profile_data?.user?.lastname
-                                                .toString() ??
-                                            ''),
+                                  '$_firstname'+ '$_lastname',
+                            // (_userStore.Profile_data?.user?.firstname
+                            //                     .toString() ??
+                            //                 '' )+
+                            //             '' +
+                            //             (_userStore.Profile_data?.user?.lastname
+                            //                     .toString() ??
+                            //                 ''),
 
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -174,9 +190,10 @@ class _MenuDrawerState extends State<MenuDrawer> {
                               ),
                               Observer(
                                 builder: (_) => Text(
-                                  _userStore.Profile_data?.user?.email
-                                          .toString() ??
-                                      '',
+                                  '$_email',
+                                  // _userStore.Profile_data?.user?.email
+                                  //         .toString() ??
+                                  //     '',
 
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 16),
