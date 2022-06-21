@@ -120,6 +120,14 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.getBusinessByNameList(searchQuery));
   }
 
+  final _$getOwnBusinessListAsyncAction =
+  AsyncAction('_PostStore.getOwnBusinessList');
+
+  @override
+  Future<dynamic> getOwnBusinessList(dynamic searchQuery) {
+    return _$getOwnBusinessListAsyncAction
+        .run(() => super.getOwnBusinessList(searchQuery));
+  }
   final _$getAllUserListAsyncAction = AsyncAction('_PostStore.getAllUserList');
 
   @override

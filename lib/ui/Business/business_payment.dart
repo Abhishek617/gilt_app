@@ -56,6 +56,18 @@ class _BusinessPaymentState extends State<BusinessPayment> {
     return [];
   }
 
+  Future<List<Business>> searchOwnBusiness(String searchQuery) async {
+    dynamic master =
+    await GlobalStoreHandler.postStore.getOwnBusinessList(searchQuery);
+    debugPrint("$master");
+    if (master != null) {
+      SearchBusinessModel val = SearchBusinessModel.fromJson(master);
+      debugPrint("Search business results returning${val.data!.length}");
+      return val.data ?? [];
+    }
+    return [];
+  }
+
   @override
   void didChangeDependencies() {
     var args =
@@ -118,7 +130,7 @@ class _BusinessPaymentState extends State<BusinessPayment> {
               height: 15,
             ),
             Text(
-              '+91 ${userData?.phone ?? ""}',
+              '${userData?.phone ?? ""}',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(
@@ -194,7 +206,8 @@ class _BusinessPaymentState extends State<BusinessPayment> {
                   ),
                   Autocomplete<Business>(
                     optionsBuilder: (TextEditingValue value) {
-                      return searchBusinessByName(value.text);
+                      return type=="Pay"?
+                      searchBusinessByName(value.text): searchOwnBusiness(value.text);
                     },
                     displayStringForOption: (Business option) => option.name!,
                     fieldViewBuilder: (BuildContext context,

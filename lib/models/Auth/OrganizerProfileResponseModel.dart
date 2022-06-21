@@ -32,7 +32,7 @@ class OrganizerUser {
   String? city;
   String? state;
   String? country;
-  int? zip;
+  String? zip;
   int? roleId;
   String? deletedAt;
   bool? isEmailVerified;

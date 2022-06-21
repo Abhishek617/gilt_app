@@ -23,6 +23,8 @@ import 'package:flutter/rendering.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../constants/app_settings.dart';
+
 // ignore: camel_case_types
 
 class Add_business extends StatefulWidget {
@@ -398,9 +400,12 @@ class _Add_businessState extends State<Add_business> {
                   ),
                   Row(
                     children: [
-                      Text(
-                        "Upload Business Photo",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      Expanded(
+
+                        child: Text(
+                          "Upload Business Photo"+AppSettings.addUptoUploadSize,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),

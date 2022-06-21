@@ -18,6 +18,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../constants/app_settings.dart';
+
 class Create_event extends StatefulWidget {
   const Create_event({Key? key}) : super(key: key);
 
@@ -491,7 +493,7 @@ class _Create_eventState extends State<Create_event> {
                   Row(
                     children: [
                       Text(
-                        "Upload Event Photo",
+                        "Upload Event Photo"+AppSettings.addUptoUploadSize,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],

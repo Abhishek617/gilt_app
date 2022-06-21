@@ -1,13 +1,12 @@
-import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:guilt_app/models/PageModals/faqs_model.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
-
-import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/PageModals/faqs_model.dart';
-
 import '../../utils/routes/routes.dart';
 
 class FaqScreen extends StatefulWidget {
@@ -20,7 +19,8 @@ class FaqScreen extends StatefulWidget {
 class _FaqScreenState extends State<FaqScreen> {
   late UserStore _postStore;
   FaqModel? contentData;
-  
+  bool _customTileExpanded = false;
+  int selected = 0;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -28,7 +28,7 @@ class _FaqScreenState extends State<FaqScreen> {
     _postStore.getAppContent('faqs').then((value) {
       print(value);
       setState(() {
-       contentData = FaqModel.fromJson(value);
+        contentData = FaqModel.fromJson(value);
         print('faqs');
         print(contentData!.data?.title.toString());
       });
@@ -38,40 +38,87 @@ class _FaqScreenState extends State<FaqScreen> {
       GlobalMethods.hideLoader();
     });
   }
-  Widget getConditionsWidgets() {
-    if (contentData != null) {
-      return Column(
-        children: contentData!.data!.data!
-            .map(
-              (item) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                item.question as String,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                item.answer as String,
-                style: TextStyle(color: Colors.grey),
-              ),
-            ],
-          ),
-        )
-            .toList(),
+
+  List<Widget> _getChildren(int count, String name) => List<Widget>.generate(
+        count,
+        (i) => ListTile(title: Text('$name$i')),
       );
-    }
-    else {
+
+  Widget getConditionsWidgets() {
+
+    if (contentData != null) {
+
+      return ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: contentData!.data!.data!.length,
+        itemBuilder: (_, index) {
+          bool expansValue = index==selected?true:false;
+          print("expansValue: $expansValue");
+          return Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+                key: Key(index.toString()),
+
+              initiallyExpanded : index==selected,
+              //
+              leading: Icon(
+                index==selected? Icons.remove_circle_outline
+                    : Icons.add_circle_outline_sharp,
+              ),
+                trailing: SizedBox(),
+                // controlAffinity: ListTileControlAffinity.leading,
+                title: Text(contentData!.data!.data![index].question.toString(),
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                children: [
+                  Visibility(
+                    visible: _customTileExpanded,
+                    child: ListTile(
+                      title: Text(
+                          contentData!.data!.data![index].answer.toString(),
+                          style: TextStyle(color: Colors.grey)),
+                      leading: SizedBox(),
+                    ),
+                  ),
+                  Divider(color: Colors.black12,)
+                ],
+            onExpansionChanged: (expanded){
+              if (expanded)
+                setState(() {
+                  // Duration(seconds: 20000);
+                  _customTileExpanded = expanded;
+                  selected = index;
+
+                });
+              else
+                setState(() {
+                  selected = -1;
+                });
+              // setState(() => _customTileExpanded = expanded);
+            },
+            ),
+          );
+        },
+      );
+    } else {
       return Text('No Data found');
     }
   }
-
-
+  _Product_ExpandAble_List_Builder(int cat_id) {
+    List<Widget> columnContent = [];
+    [1, 2, 4, 5].forEach((product) => {
+      columnContent.add(
+        ListTile(
+          title: ExpansionTile(
+            title: Text(product.toString()),
+          ),
+          trailing: Text("$product (Kg)"),
+        ),
+      ),
+    });
+    return columnContent;
+  }
   @override
   void initState() {
     super.initState();
@@ -102,62 +149,6 @@ class _FaqScreenState extends State<FaqScreen> {
               child: getConditionsWidgets(),
             ),
           ),
-        )
-    );
-
-    // child: ListView.builder(
-    //     // itemCount: FaqsData.length,
-    //     // itemBuilder: (context, index) {
-    //     //   return Column(
-    //     //     children: [
-    //     //       ListTile(
-    //     //         leading: IconButton(
-    //     //           onPressed: () {
-    //     //             setState(() {
-    //     //               FaqsData[index].success = !FaqsData[index].success;
-    //     //             });
-    //     //           },
-    //     //           icon: Icon(
-    //     //             FaqsData[index].success
-    //     //                 ? Icons.remove_circle_outline
-    //     //                 : Icons.add_circle_outline,
-    //     //             color: FaqsData[index].success
-    //     //                 ? Theme.of(context).primaryColor
-    //     //                 : Colors.black,
-    //     //           ),
-    //     //         ),
-    //     //         title: Text(
-    //     //           FaqsData[index].message,
-    //     //           style: TextStyle(
-    //     //               fontSize: 18,
-    //     //               fontWeight: FontWeight.bold,
-    //     //               color: FaqsData[index].success
-    //     //                   ? Theme.of(context).primaryColor
-    //     //                   : Colors.black),
-    //     //         ),
-    //     //       ),
-    //     //       Padding(
-    //     //         padding: const EdgeInsets.only(
-    //     //             left: 80.0, right: 25.0, bottom: 10.0),
-    //     //         child: FaqsData[index].success
-    //     //             ? Column(
-    //     //                 children: [
-    //     //                   Text(
-    //     //                     FaqsData[index].data as String,
-    //     //                     style: TextStyle(fontSize: 14),
-    //     //                   ),
-    //     //                   const SizedBox(height: 5),
-    //     //                   const Divider()
-    //     //                 ],
-    //     //               )
-    //     //             : SizedBox.shrink(),
-    //     //       ),
-    //     //     ],
-    //     //   );
-    //     // }
-    //     ),
+        ));
   }
-  }
-
-
-
+}
