@@ -20,6 +20,7 @@ class Wallet extends StatefulWidget {
 
 class _WalletState extends State<Wallet> {
   double mWalletBalance = 0;
+  double mBlockBalance = 0;
   List<HistoryItem> cardList = [];
 
   @override
@@ -122,6 +123,27 @@ class _WalletState extends State<Wallet> {
                               ),
                             ),
                           ],
+                        ),
+                        SizedBox(height: 20,),
+                        Text(
+                          'Block Balance',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                          width: 70,
+                        ),
+                        Text(
+                          '\$$mBlockBalance',
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                       ],
                     ),
@@ -338,6 +360,7 @@ class _WalletState extends State<Wallet> {
       if (master.data != null) {
         setState(() {
           mWalletBalance = master.data?.walletBalance ?? 0;
+          mBlockBalance = master.data?.walletBlockBalance ?? 0;
         });
       }
       if (master.success != null && master.success!) {

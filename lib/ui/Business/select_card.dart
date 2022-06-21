@@ -244,7 +244,6 @@ class _SelectCardViewState extends State<SelectCardView> {
 
   void redirectToPayment() {
     PaymentCardDetails paymentDetails = getSelectedCard()!;
-    if (paymentDetails == null) paymentDetails = PaymentCardDetails();
     paymentDetails.walletDeduction = walletDeduction;
     paymentDetails.bankDeduction = bankDeduction;
     if (walletSelected) paymentDetails.type = "wallet";
@@ -305,7 +304,7 @@ class _SelectCardViewState extends State<SelectCardView> {
     } catch (e) {
       print(e.toString());
     }
-    return null;
+    return PaymentCardDetails();
   }
 }
 
