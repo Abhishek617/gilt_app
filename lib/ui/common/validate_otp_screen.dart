@@ -28,7 +28,7 @@ class _Otp_Validate_ScreenState extends State<Otp_Validate_Screen> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as String;
+    final args = ModalRoute.of(context)!.settings.arguments.toString();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,

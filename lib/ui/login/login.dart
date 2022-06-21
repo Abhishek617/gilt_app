@@ -4,6 +4,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/Auth/login_modal.dart';
+import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/stores/form/form_store.dart';
 import 'package:guilt_app/stores/theme/theme_store.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
@@ -12,6 +14,7 @@ import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Login extends StatefulWidget {
@@ -203,7 +206,7 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       if (formkey.currentState!.validate()) {
                         _userStore.login(_userEmailController.value.text,
-                            _passwordController.value.text, (value) {
+                            _passwordController.value.text, (value) async {
                           (value.success == true && value.user != null)
                               ? Routes.navigateRootToScreen(
                                   context, Routes.home_tab)
@@ -217,7 +220,12 @@ class _LoginState extends State<Login> {
                           //         description: 'Logged in successfully',
                           //         title: 'Success',
                           //         isPreviousLogin: false));
-                        }, (error) {
+
+
+
+                          getSharedPreference();
+
+                            }, (error) {
                           print(error);
                           final data = json.decode(json.encode(error.data))
                               as Map<String, dynamic>;
@@ -318,4 +326,13 @@ class _LoginState extends State<Login> {
     _passwordFocusNode?.dispose();
     super.dispose();
   }
+
+   getSharedPreference() async {
+     final prefs = await SharedPreferences.getInstance();
+     await prefs.setString('firstname', 'firstname');
+     await prefs.setString('lastname', 'lastname');
+     await prefs.setString('email', 'email');
+
+
+   }
 }

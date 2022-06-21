@@ -3,7 +3,7 @@ class LoginModal {
   User? user;
   String? refreshToken;
 
-  LoginModal({this.success, this.user, this.refreshToken});
+  LoginModal({this.success, required this.user, this.refreshToken});
 
   LoginModal.fromJson(Map<String, dynamic> json) {
     success = json['success'];

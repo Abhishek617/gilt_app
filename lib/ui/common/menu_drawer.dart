@@ -153,18 +153,21 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             children: [
                               Observer(
                                 builder: (_) => Text(
-                                  (_userStore.Profile_data?.user?.firstname
-                                              .toString() ??
-                                          '') +
-                                      '  ' +
-                                      (_userStore.Profile_data?.user?.lastname
-                                              .toString() ??
-                                          ''),
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                            (_userStore.Profile_data?.user?.firstname
+                                                .toString() ??
+                                            '' )+
+                                        '' +
+                                        (_userStore.Profile_data?.user?.lastname
+                                                .toString() ??
+                                            ''),
+
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+
                               ),
                               SizedBox(
                                 height: 5,
@@ -174,6 +177,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                   _userStore.Profile_data?.user?.email
                                           .toString() ??
                                       '',
+
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 16),
                                 ),

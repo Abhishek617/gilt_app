@@ -290,7 +290,7 @@ class _SignUpState extends State<SignUp> {
                         child: Center(
                       child: RichText(
                         text: TextSpan(
-                            text: 'Don\'t have an account?',
+                            text: 'Already have an account?',
                             style: TextStyle(color: Colors.black, fontSize: 14),
                             children: <TextSpan>[
                               TextSpan(
