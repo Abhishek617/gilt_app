@@ -39,8 +39,8 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     _passwordFocusNode = FocusNode();
-    _userEmailController.text = 'nadeem123@yopmail.com';
-    _passwordController.text = 'Nadeem@321';
+    _userEmailController.text = 'chitra@phpdots.com';
+    _passwordController.text = 'Jayshreeram@123';
   }
 
   @override
@@ -204,19 +204,18 @@ class _LoginState extends State<Login> {
                       if (formkey.currentState!.validate()) {
                         _userStore.login(_userEmailController.value.text,
                             _passwordController.value.text, (value) {
+
+                          print("loginData: $value");
                           (value.success == true && value.user != null)
                               ? Routes.navigateRootToScreen(
-                                  context, Routes.home_tab)
-                              : Routes.navigateRootToScreen(
-                                  context, Routes.otpvalidate);
-                          // Routes.navigateToScreenWithArgs(
-                          //     context,
-                          //     Routes.success_error_validate,
-                          //     SuccessErrorValidationPageArgs(
-                          //         isSuccess: true,
-                          //         description: 'Logged in successfully',
-                          //         title: 'Success',
-                          //         isPreviousLogin: false));
+                                  context, Routes.home_tab):
+
+                          Routes.navigateToScreenWithArgs(
+                              context,
+                              Routes.otpvalidate,
+                            _userEmailController.value.text
+                            );
+
                         }, (error) {
                           print(error);
                           final data = json.decode(json.encode(error.data))

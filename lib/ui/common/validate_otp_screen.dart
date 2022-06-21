@@ -2,16 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:get/get.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
-
 import 'package:guilt_app/stores/theme/theme_store.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
+
 import '../../constants/colors.dart';
 
 class Otp_Validate_Screen extends StatefulWidget {
@@ -24,11 +25,11 @@ class Otp_Validate_Screen extends StatefulWidget {
 class _Otp_Validate_ScreenState extends State<Otp_Validate_Screen> {
   ThemeStore _themeStore = ThemeStore(getIt<Repository>());
   final UserStore _userStore = UserStore(getIt<Repository>());
-  var otpCode;
+  String otpCode ="";
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as String;
+    final args = ModalRoute.of(context)!.settings.arguments.toString();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
@@ -83,11 +84,12 @@ class _Otp_Validate_ScreenState extends State<Otp_Validate_Screen> {
                     child: OtpTextField(
                       keyboardType: TextInputType.number,
                       numberOfFields: 4,
-                      //borderColor: Color(0xFF512DA8),
+                      focusedBorderColor:AppColors.mauve_app,
+                      enabledBorderColor:AppColors.mauve_app,
                       showFieldAsBox: false,
                       //set to true to show as box or false to show as dash
-
                       onCodeChanged: (String code) {
+                        otpCode = code;
                         //handle validation or checks here
                         //https://pub.dev/packages/flutter_otp_text_field
                       },
@@ -105,19 +107,30 @@ class _Otp_Validate_ScreenState extends State<Otp_Validate_Screen> {
                       buttonColor: AppColors.primaryColor,
                       buttonText: 'Continue',
                       onPressed: () {
+                        otpCode.isEmpty?  GlobalMethods.showErrorMessage(
+                            context,
+                            'Please enter Validation Code',
+                            ''):otpCode.length<3? GlobalMethods.showErrorMessage(
+                            context,
+                            'Please enter Valid Code',
+                            ''):
                         _userStore.OtpValidate(args, otpCode,
-                                (OtpValidateModel value) {
-                              Routes.navigateToScreenWithArgs(
-                                  context, Routes.reset_password, args);
-                              //Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
-                            }, (error) {
-                              print(error);
-                              final data = json.decode(json.encode(error.data));
-                              // Map<String, dynamic> map = json.decode(error.data);
-                              GlobalMethods.showErrorMessage(
-                                  context, data['error'], 'Forgot Password');
-                            }).then((value) {
+                            (OtpValidateModel value) {
+                              Routes.navigateRootToScreen(
+                                  context, Routes.home_tab);
+                          // Routes.navigateToScreenWithArgs(
+                          //     context, Routes.reset_password, args);
+                          //Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
+                        }, (error) {
+                          print(error);
+                          final data = json.decode(json.encode(error.data));
+                          // Map<String, dynamic> map = json.decode(error.data);
+                          GlobalMethods.showErrorMessage(
+                              context, data['error'], 'Forgot Password');
+                        }).then((value) {
                           print(value);
+                          GlobalMethods.showErrorMessage(
+                              context,"ERROR: OTP is Invalid/Expired", '');
                         });
                         // Routes.navigateToScreen(context, Routes.reset_password);
                       }),

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
@@ -347,7 +349,7 @@ abstract class _UserStore with Store {
 
     // loginFuture = ObservableFuture(future);
     _repository.OtpValidate(email, otp).then((value) async {
-      if (value.success == true && value.data.user != null) {
+      if (value.success == true && value.data!.user != null) {
         _repository.saveIsLoggedIn(true);
         this.isLoggedIn = true;
         _repository.saveIsFirst(false);
@@ -369,10 +371,13 @@ abstract class _UserStore with Store {
         print('failed to Reset Password');
       }
     }, onError: (error) {
+
+
       print(error.toString());
+
       errorCallback(error.response);
     }).catchError((e) {
-      print(e);
+      print(e); errorCallback(e);
       throw e;
     });
   }
@@ -540,8 +545,22 @@ abstract class _UserStore with Store {
           this.isFirst = false;
           this.success = true;
           successCallback(value);
-        } else {
+        } else if (value.success == true) {
+          print('isFirst : false');
+          // _repository.saveIsLoggedIn(true);
+          // this.isLoggedIn = true;
+          // _repository.saveIsFirst(false);
+          // if (value.data?.user?.authToken != null) {
+          //   _repository.saveAuthToken(value.data?.user?.authToken!);
+          // }
+
+          this.isFirst = false;
+          this.success = true;
+          successCallback(value);
+        }else {
           print('failed to login');
+          print(value.message);
+          errorCallback(value.message);
         }
       },
       onError: (exception) {
