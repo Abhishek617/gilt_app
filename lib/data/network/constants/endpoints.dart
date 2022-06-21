@@ -70,7 +70,9 @@ class Endpoints {
   // Search Business List of User
   static const String searchByNameBusinessList =
       baseUrl + "api/business/getByName";
-
+  // Search own Business List of User
+  static const String searchOwnBusinessList =
+      baseUrl + "api/business/getOwnBusinessByName";
   // Request for Business by Business Owner to User
   static const String requestPaymentBusiness =
       baseUrl + "api/paymentRequest/add";
