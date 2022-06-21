@@ -1,28 +1,23 @@
 import 'dart:convert';
-import 'dart:math';
-
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:guilt_app/constants/app_settings.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
 import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
-import 'package:guilt_app/models/Auth/profile_modal.dart';
-import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/ui/common/menu_drawer.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
-import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
-import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
-import 'package:provider/provider.dart';
 
 import '../../constants/colors.dart';
 import '../../widgets/rounded_button_with_icon.dart';
@@ -41,6 +36,7 @@ class _FullProfileState extends State<FullProfile> {
   bool isContactEdit = false;
   @observable
   var addData;
+  var zipValue;
   TextEditingController _userEmailController = TextEditingController();
   TextEditingController _userFirstNameController = TextEditingController();
   TextEditingController _userLastNameController = TextEditingController();
@@ -56,29 +52,10 @@ class _FullProfileState extends State<FullProfile> {
   @action
   setData() async {
     await _userStore.getProfile();
-    addData = _userStore.Profile_data;
     setState(() {
-      _userEmailController.text =
-          _userStore.Profile_data?.user?.email.toString() ?? '';
-      _userFirstNameController.text =
-          _userStore.Profile_data?.user?.firstname.toString() ?? '';
-      _userLastNameController.text =
-          _userStore.Profile_data?.user?.lastname.toString() ?? '';
-      _userAboutmeController.text =
-          _userStore.Profile_data?.user?.aboutme.toString() ?? '';
-      _userContactController.text =
-          _userStore.Profile_data?.user?.phone.toString() ?? '';
-      _userAddressController.text =
-          _userStore.Profile_data?.user?.address.toString() ?? '';
-      _userCityController.text =
-          _userStore.Profile_data?.user?.city.toString() ?? '';
-      _userStateController.text =
-          _userStore.Profile_data?.user?.state.toString() ?? '';
-      _userCountryController.text =
-          _userStore.Profile_data?.user?.country.toString() ?? '';
-      _userZipController.text =
-          _userStore.Profile_data?.user?.zip.toString() ?? '';
+
       addData = _userStore.Profile_data;
+       zipValue = addData?.user?.zip==0?"":addData?.user?.zip.toString();
       _userEmailController.text = addData?.user?.email.toString() ?? '';
       _userFirstNameController.text = addData?.user?.firstname.toString() ?? '';
       _userLastNameController.text = addData?.user?.lastname.toString() ?? '';
@@ -88,7 +65,7 @@ class _FullProfileState extends State<FullProfile> {
       _userCityController.text = addData?.user?.city.toString() ?? '';
       _userStateController.text = addData?.user?.state.toString() ?? '';
       _userCountryController.text = addData?.user?.country.toString() ?? '';
-      _userZipController.text = addData?.user?.zip.toString() ?? '';
+      _userZipController.text =zipValue! ;
       isEdit = false;
     });
   }
@@ -186,8 +163,8 @@ class _FullProfileState extends State<FullProfile> {
       "city": _userCityController.value.text,
       "state": _userStateController.value.text,
       "country": _userCountryController.value.text,
-      "zip": int.parse(_userZipController.value.text),
-      "profile": pickedImage?? null,
+      "zip": _userZipController.value.text,
+      "profile": pickedImage ?? null,
     });
     _userStore.updateprofile(UpdateProfileData, (val) {
       if (val.success == true) {
@@ -493,7 +470,7 @@ class _FullProfileState extends State<FullProfile> {
                 '\n' +
                 (addData?.user?.country.toString() ?? '') +
                 '\n' +
-                (addData?.user?.zip.toString() ?? ''),
+                (addData?.user?.zip!.toString() ?? ''),
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w400,
@@ -524,6 +501,11 @@ class _FullProfileState extends State<FullProfile> {
             children: [
               TextField(
                 controller: _userContactController,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                keyboardType: TextInputType.number,
+                maxLength: 10,
                 decoration: InputDecoration(
                   labelText: 'Contact Number',
                   prefixIcon:
@@ -598,7 +580,14 @@ class _FullProfileState extends State<FullProfile> {
               Expanded(
                 child: TextField(
                   controller: _userZipController,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  keyboardType: TextInputType.number,
+                  maxLength:4,
+
                   decoration: InputDecoration(
+
                     labelText: 'Zip Code',
                     prefixIcon: Icon(Icons.local_post_office,
                         size: 30, color: AppColors.primaryColor),
@@ -657,7 +646,7 @@ class _FullProfileState extends State<FullProfile> {
           padding: EdgeInsets.only(bottom: 80),
           child: Container(
             padding: EdgeInsets.all(16.0),
-            height: DeviceUtils.getScaledHeight(context, 1.20),
+            // height: DeviceUtils.getScaledHeight(context, 1.20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

@@ -36,7 +36,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    final pageArgs = ModalRoute.of(context)!.settings.arguments as String;
+    final pageArgs = ModalRoute.of(context)!.settings.arguments.toString();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
@@ -247,9 +247,12 @@ class _SignUpState extends State<SignUp> {
                           });
                           _userStore.signUp(signUpData, (val) {
                             print(val);
-                            (val.success == true && val.user != null)
-                                ? Routes.navigateRootToScreen(
-                                    context, Routes.otpvalidate)
+                            (val.success == true)
+                                ?    Routes.navigateToScreenWithArgs(
+                                context,
+                                Routes.otpvalidate,
+                                _userEmailController.value.text
+                            )
                                 : Routes.navigateToScreenWithArgs(
                                     context,
                                     Routes.success_error_validate,
@@ -259,8 +262,7 @@ class _SignUpState extends State<SignUp> {
                                         title: 'Success',
                                         isPreviousLogin: true));
 
-                            GlobalMethods.showErrorMessage(context,
-                                'Something went wrong', 'Sign Up Exception');
+
                           }, (error) {
                             print(error.data.toString());
                             final data = json.decode(json.encode(error.data))
@@ -290,7 +292,7 @@ class _SignUpState extends State<SignUp> {
                         child: Center(
                       child: RichText(
                         text: TextSpan(
-                            text: 'Don\'t have an account?',
+                            text: 'Already have an account?',
                             style: TextStyle(color: Colors.black, fontSize: 14),
                             children: <TextSpan>[
                               TextSpan(

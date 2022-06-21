@@ -51,6 +51,7 @@ class TextFieldWidget extends StatelessWidget {
     );
   }
 
+
   const TextFieldWidget({
     Key? key,
     required this.icon,
@@ -94,7 +95,8 @@ class TextFormFieldCustom extends StatelessWidget {
       this.inputFormatters,
       this.prefixIcon,
       this.suffixIcon,
-      this.hintColor, this.validator});
+      this.hintColor,
+      this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -109,12 +111,17 @@ class TextFormFieldCustom extends StatelessWidget {
         inputFormatters: inputFormatters != null ? inputFormatters : [],
         validator: validator,
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(left: 21, top: 15, bottom: 15),
+            contentPadding: EdgeInsets.only(top: 15, bottom: 15),
             fillColor: Colors.white,
             filled: true,
             hintText: hintText ?? "HintText",
-            prefixIcon: prefixIcon,
+            prefixIconConstraints: BoxConstraints(minWidth: 20, maxHeight: 20),
+            prefixIcon: prefixIcon ??
+                Container(
+                  width: 20,
+                ),
             suffixIcon: suffixIcon,
+            isDense: true,
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey, width: 1.0),
               borderRadius: BorderRadius.circular(8.0),
@@ -126,9 +133,8 @@ class TextFormFieldCustom extends StatelessWidget {
                 borderSide: BorderSide(color: Colors.grey, width: 1.0),
                 borderRadius: BorderRadius.circular(8.0)),
             errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.red, width: 1.0),
-                borderRadius: BorderRadius.circular(8.0)
-            )),
+                borderSide: BorderSide(color: Colors.red, width: 1.0),
+                borderRadius: BorderRadius.circular(8.0))),
       ),
     );
   }
@@ -212,10 +218,9 @@ class NumericalRangeFormatter extends TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue,
-      TextEditingValue newValue,
-      ) {
-
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     if (newValue.text == '') {
       return newValue;
     } else if (int.parse(newValue.text) < min) {

@@ -218,7 +218,7 @@ class _SendMoneyToBankState extends State<SendMoneyToBank> {
         if (master.success != null && master.success!) {
           GlobalMethods.showSuccessMessage(context,
               master.message ?? "Money sent to account.", "Send money to bank");
-          Routes.goBack(context);
+          Routes.goBackWithData(context, true);
         } else if (master.message != null) {
           GlobalMethods.showErrorMessage(
               context, master.message!, "Send money to bank");

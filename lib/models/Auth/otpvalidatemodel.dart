@@ -6,19 +6,22 @@ class OtpValidateModel {
   });
   late final bool success;
   late final String message;
-  late final Data data;
+  late final Data? data;
 
   OtpValidateModel.fromJson(Map<String, dynamic> json){
     success = json['success'];
     message = json['message'];
-    data = Data.fromJson(json['data']);
+    // data = Data.fromJson(json['data']);
+    data = json['data'] != null ? new Data.fromJson(json['Data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
     _data['success'] = success;
     _data['message'] = message;
-    _data['data'] = data.toJson();
+    if (this.data != null) {
+      _data['data'] = this.data!.toJson();
+    }
     return _data;
   }
 }
@@ -28,17 +31,18 @@ class Data {
     required this.user,
     required this.refreshToken,
   });
-  late final User user;
+  late final User? user;
   late final String refreshToken;
 
   Data.fromJson(Map<String, dynamic> json){
-    user = User.fromJson(json['user']);
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
+    // user = User.fromJson(json['user']);
     refreshToken = json['refreshToken'];
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['user'] = user.toJson();
+    _data['user'] = user!.toJson();
     _data['refreshToken'] = refreshToken;
     return _data;
   }
