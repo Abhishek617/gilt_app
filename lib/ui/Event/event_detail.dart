@@ -69,7 +69,7 @@ class _EventDetailsState extends State<EventDetails> {
         contentData = EventDetailsResponseModel.fromJson(value);
       });
       validateCancelButton();
-      validatePayButton();
+      // validatePayButton();
       GlobalMethods.hideLoader();
     }, (error) {
       GlobalMethods.hideLoader();
@@ -386,8 +386,9 @@ class _EventDetailsState extends State<EventDetails> {
                               ),
                             )
                           : Container(),
-                      isPayButton
-                          ? Row(
+                      isPayButton!
+                          ?
+                      Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(

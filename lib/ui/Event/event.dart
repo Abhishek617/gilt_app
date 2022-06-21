@@ -154,11 +154,13 @@ class _EventState extends State<Event> {
                                     color: AppColors.grayTextColor,
                                   ),
 
-                                  Text(eventData.location ?? 'No Location',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColors.grayTextColor),
+                                  Expanded(
+                                    child: Text(eventData.location ?? 'No Location',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.grayTextColor),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -290,7 +292,8 @@ class _EventState extends State<Event> {
             ),
             Container(
               height: DeviceUtils.getScaledHeight(context, 0.71),
-                child:getConditionsWidgets(),
+                child:SingleChildScrollView(child: getConditionsWidgets()),
+              
               ),
           ],
         ),

@@ -184,8 +184,8 @@ class NotificationListItem extends StatelessWidget {
                   ),
                 ),
                 //'chat','event','business','payment','payRequest'
-                notificationData!.type == 'event' ||
-                        notificationData!.type == 'payRequest'
+                notificationData!.type == 'event' && notificationData!.isButton==true||
+                        notificationData!.type == 'payRequest'&& notificationData!.isButton==true
                     ? Row(
                         children: [
                           ElevatedButton(

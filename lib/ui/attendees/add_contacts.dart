@@ -57,6 +57,7 @@ class _AddContactsState extends State<AddContacts> {
           p?.addAll(el!);
           return p;
         })!;
+        _contactStrings = _contactStrings.toSet().toList();
         print('_contacts');
         print(_contactStrings);
         _postStore.checkContacts(_contactStrings).then((value) {
@@ -66,9 +67,11 @@ class _AddContactsState extends State<AddContacts> {
               if (appContacts.length > 0) {
                 appContacts.removeWhere((item) => item.isExist == 0);
                 filteredContactList = appContacts;
+
                 _selectedContacts = List.filled(
                     filteredContactList.length, false,
                     growable: true);
+
               } else {
                 appContacts = [];
                 filteredContactList = [];

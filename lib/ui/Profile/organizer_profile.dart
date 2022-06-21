@@ -290,9 +290,10 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
                     child: segmentedControlValue == 0
                         ? about()
                         : Container(
-                            height: DeviceUtils.getScaledHeight(context, 0.35),
+                            // height: DeviceUtils.getScaledHeight(context, 0.35),
                             child: eventList.length > 0 ? ListView(
                               scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
                               children: eventList
                                   .map((item) => eventContainer(item))
                                   .toList(),

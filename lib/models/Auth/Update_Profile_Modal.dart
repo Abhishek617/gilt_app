@@ -116,7 +116,7 @@ class User {
   late String city;
   late String state;
   late String country;
-  late int zip;
+  late String zip;
   late int roleId;
   late String deletedAt;
   late bool isEmailVerified;

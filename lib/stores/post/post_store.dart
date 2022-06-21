@@ -85,6 +85,15 @@ abstract class _PostStore with Store {
         .getBusinessByNameList(searchQuery)
         .then((placeData) => placeData)
         .catchError((error) => throw error);
+
+  }
+  @action
+  Future getOwnBusinessList(searchQuery) async {
+    return await _repository
+        .getOwnBusinessList(searchQuery)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+
   }
   @action
   Future getAllUserList(searchQuery) async {

@@ -53,9 +53,8 @@ class _FullProfileState extends State<FullProfile> {
   setData() async {
     await _userStore.getProfile();
     setState(() {
-
       addData = _userStore.Profile_data;
-       zipValue = addData?.user?.zip==0?"":addData?.user?.zip.toString();
+      zipValue = addData?.user?.zip == 0 ? "" : addData?.user?.zip.toString();
       _userEmailController.text = addData?.user?.email.toString() ?? '';
       _userFirstNameController.text = addData?.user?.firstname.toString() ?? '';
       _userLastNameController.text = addData?.user?.lastname.toString() ?? '';
@@ -65,7 +64,7 @@ class _FullProfileState extends State<FullProfile> {
       _userCityController.text = addData?.user?.city.toString() ?? '';
       _userStateController.text = addData?.user?.state.toString() ?? '';
       _userCountryController.text = addData?.user?.country.toString() ?? '';
-      _userZipController.text =zipValue! ;
+      _userZipController.text = zipValue.toString()!;
       isEdit = false;
     });
   }
@@ -584,10 +583,9 @@ class _FullProfileState extends State<FullProfile> {
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   keyboardType: TextInputType.number,
-                  maxLength:4,
-
+                  maxLength: 6,
                   decoration: InputDecoration(
-
+                    counterText: "",
                     labelText: 'Zip Code',
                     prefixIcon: Icon(Icons.local_post_office,
                         size: 30, color: AppColors.primaryColor),

@@ -118,103 +118,103 @@ class _MenuDrawerState extends State<MenuDrawer> {
                   children: [
                     Row(
                       children: [
-                        Column(
-                          children: [
-                            Stack(
+                        Expanded(
+                          flex:1,
+                          child: Column(
+                            children: [
+                              Stack(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                        left: 2.0,
+                                        top: 20.0,
+                                        bottom: 00.0,
+                                        right: 00.0),
+                                    child: Observer(
+                                        builder: (_) => _userStore.Profile_data
+                                                    ?.user?.profile !=
+                                                null
+                                            ? Container(
+                                                child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100.0),
+                                                    child: Image.network(
+                                                      _userStore.Profile_data
+                                                              ?.user?.profile
+                                                              .toString() ??
+                                                          'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                                                      width: DeviceUtils
+                                                          .getScaledWidth(
+                                                              context, 0.15),
+                                                      height: DeviceUtils
+                                                          .getScaledWidth(
+                                                              context, 0.15),
+                                                      fit: BoxFit.cover,
+                                                    )))
+                                            : Icon(
+                                                Icons.account_circle,
+                                                size: 70,
+                                                color: Colors.white,
+                                              )),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                left: 15.0, top: 23.0, bottom: 00.0, right: 00.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      left: 2.0,
-                                      top: 20.0,
-                                      bottom: 00.0,
-                                      right: 00.0),
-                                  child: Observer(
-                                      builder: (_) => _userStore.Profile_data
-                                                  ?.user?.profile !=
-                                              null
-                                          ? Container(
-                                              child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100.0),
-                                                  child: Image.network(
-                                                    _userStore.Profile_data
-                                                            ?.user?.profile
-                                                            .toString() ??
-                                                        'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
-                                                    width: DeviceUtils
-                                                        .getScaledWidth(
-                                                            context, 0.15),
-                                                    height: DeviceUtils
-                                                        .getScaledWidth(
-                                                            context, 0.15),
-                                                    fit: BoxFit.cover,
-                                                  )))
-                                          : Icon(
-                                              Icons.account_circle,
-                                              size: 70,
-                                              color: Colors.white,
-                                            )),
+                                Observer(
+                                  builder: (_) => Text(
+                                    (_userStore.Profile_data?.user?.firstname
+                                                .toString() ??
+                                            '') +
+                                        '  ' +
+                                        (_userStore.Profile_data?.user?.lastname
+                                                .toString() ??
+                                            ''),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Observer(
+                                  builder: (_) => Text(
+                                    _userStore.Profile_data?.user?.email
+                                            .toString() ??
+                                        '',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Observer(
+                                  builder: (_) => Text(
+                                    _userStore.Profile_data?.user?.roleId
+                                                .toString() ==
+                                            AppSettings.businessUserRole
+                                        ? 'Business Account'
+                                        : 'Individual Account',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(
-                              left: 15.0, top: 23.0, bottom: 00.0, right: 00.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Observer(
-                                builder: (_) => Text(
-                                  '$_firstname'+ '$_lastname',
-                            // (_userStore.Profile_data?.user?.firstname
-                            //                     .toString() ??
-                            //                 '' )+
-                            //             '' +
-                            //             (_userStore.Profile_data?.user?.lastname
-                            //                     .toString() ??
-                            //                 ''),
-
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Observer(
-                                builder: (_) => Text(
-                                  '$_email',
-                                  // _userStore.Profile_data?.user?.email
-                                  //         .toString() ??
-                                  //     '',
-
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Observer(
-                                builder: (_) => Text(
-                                  _userStore.Profile_data?.user?.roleId
-                                              .toString() ==
-                                          AppSettings.businessUserRole
-                                      ? 'Business Account'
-                                      : 'Individual Account',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
                           ),
                         ),
                       ],
@@ -275,7 +275,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                   context, Routes.saved_cards)
                             }),
                     getMenuTile(
-                      'MY EVENT',
+                      'MY PAID EVENTS',
                       () => {
                         Routes.navigateToScreen(context, Routes.my_book_event)
                       },
