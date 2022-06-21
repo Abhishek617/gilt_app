@@ -4,8 +4,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
-import 'package:guilt_app/models/Auth/login_modal.dart';
-import 'package:guilt_app/models/Auth/login_modal.dart';
 import 'package:guilt_app/stores/form/form_store.dart';
 import 'package:guilt_app/stores/theme/theme_store.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
@@ -42,8 +40,8 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     _passwordFocusNode = FocusNode();
-    _userEmailController.text = 'nadeem123@yopmail.com';
-    _passwordController.text = 'Nadeem@321';
+    _userEmailController.text = 'chitra@phpdots.com';
+    _passwordController.text = 'Jayshreeram@123';
   }
 
   @override
@@ -206,26 +204,20 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       if (formkey.currentState!.validate()) {
                         _userStore.login(_userEmailController.value.text,
-                            _passwordController.value.text, (value) async {
+                            _passwordController.value.text, (value) {
+
+                          print("loginData: $value");
                           (value.success == true && value.user != null)
                               ? Routes.navigateRootToScreen(
-                                  context, Routes.home_tab)
-                              : Routes.navigateRootToScreen(
-                                  context, Routes.otpvalidate);
-                          // Routes.navigateToScreenWithArgs(
-                          //     context,
-                          //     Routes.success_error_validate,
-                          //     SuccessErrorValidationPageArgs(
-                          //         isSuccess: true,
-                          //         description: 'Logged in successfully',
-                          //         title: 'Success',
-                          //         isPreviousLogin: false));
+                                  context, Routes.home_tab):
 
+                          Routes.navigateToScreenWithArgs(
+                              context,
+                              Routes.otpvalidate,
+                            _userEmailController.value.text
+                            );
 
-
-                          getSharedPreference();
-
-                            }, (error) {
+                        }, (error) {
                           print(error);
                           final data = json.decode(json.encode(error.data))
                               as Map<String, dynamic>;

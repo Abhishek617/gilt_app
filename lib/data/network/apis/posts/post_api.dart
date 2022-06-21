@@ -504,13 +504,25 @@ class PostApi {
   Future<UpcomingPastEventModal> getUpcomingPastEventList(
       filterby, page, size, token) async {
     print("Explore: getUpcomingPastEventList");
+    print("filterby: $filterby");
+
+    var params =  {
+      "filterBy": filterby,
+      "page": "0",
+      "size": "5",
+    };
     try {
       final res = await _dioClient.post(Endpoints.upcomingPast,
+        data: params,
           options: Options(headers: {
             'Authorization': 'Bearer ' + token!,
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            'Content-Type': 'application/json; charset=UTF-8'
           }),
-          data: {"filterBy": filterby, "page": page, "size": size});
+
+          // data: {"filterBy": filterby, "page": page, "size": size}
+      );
+      print("Response $res");
+      print("params: $params");
       return UpcomingPastEventModal.fromJson(res);
     } catch (e) {
       print(e.toString());
