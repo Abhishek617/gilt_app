@@ -28,7 +28,7 @@ class PaymentRequestData {
   String? status;
   int? id;
   int? toUser;
-  int? amount;
+  double? amount;
   int? businessId;
   String? remarks;
   int? fromUser;
@@ -50,7 +50,7 @@ class PaymentRequestData {
     status = json['status'];
     id = json['id'];
     toUser = json['toUser'];
-    amount = json['amount'];
+    amount = json['amount'] != null ? json['amount'].toDouble() : 0;
     businessId = json['businessId'];
     remarks = json['remarks'];
     fromUser = json['fromUser'];

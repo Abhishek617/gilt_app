@@ -56,18 +56,6 @@ class _BusinessPaymentState extends State<BusinessPayment> {
     return [];
   }
 
-  Future<List<Business>> searchOwnBusiness(String searchQuery) async {
-    dynamic master =
-    await GlobalStoreHandler.postStore.getOwnBusinessList(searchQuery);
-    debugPrint("$master");
-    if (master != null) {
-      SearchBusinessModel val = SearchBusinessModel.fromJson(master);
-      debugPrint("Search business results returning${val.data!.length}");
-      return val.data ?? [];
-    }
-    return [];
-  }
-
   @override
   void didChangeDependencies() {
     var args =
@@ -130,7 +118,7 @@ class _BusinessPaymentState extends State<BusinessPayment> {
               height: 15,
             ),
             Text(
-              '${userData?.phone ?? ""}',
+              '+91 ${userData?.phone ?? ""}',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(
@@ -140,22 +128,14 @@ class _BusinessPaymentState extends State<BusinessPayment> {
               width: DeviceUtils.getScaledWidth(context, 0.65),
               child: Center(
                 child: TextFormField(
-                  textAlign: TextAlign.start,
+                  textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
                   controller: amountController,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+\.?\d{0,0}')),
+                    FilteringTextInputFormatter.digitsOnly,
+                    MoneyInputFormatter(),
                   ],
                   decoration: new InputDecoration(
-                      prefixIconConstraints: BoxConstraints(minWidth: 24),
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.only(left: 30, bottom: 2),
-                        child: Text(
-                          "\$",
-                          style: TextStyle(fontSize: 17),
-                        ),
-                      ),
                       border: new OutlineInputBorder(
                         borderRadius: const BorderRadius.all(
                           const Radius.circular(30.0),
@@ -177,7 +157,7 @@ class _BusinessPaymentState extends State<BusinessPayment> {
                         fontWeight: FontWeight.w400,
                         color: Colors.grey[800],
                       ),
-                      hintText: "0",
+                      hintText: "\$0",
                       fillColor: Colors.black12),
                   validator: (val) {
                     if (val!.isEmpty) {
@@ -206,8 +186,7 @@ class _BusinessPaymentState extends State<BusinessPayment> {
                   ),
                   Autocomplete<Business>(
                     optionsBuilder: (TextEditingValue value) {
-                      return type=="Pay"?
-                      searchBusinessByName(value.text): searchOwnBusiness(value.text);
+                      return searchBusinessByName(value.text);
                     },
                     displayStringForOption: (Business option) => option.name!,
                     fieldViewBuilder: (BuildContext context,
@@ -385,7 +364,8 @@ class _BusinessPaymentState extends State<BusinessPayment> {
                                 requestUserForPayment(
                                     toUserId: userData?.id,
                                     businessId: selectedBusiness?.id,
-                                    amount: int.parse(amountController.text),
+                                    amount: double.parse(amountController.text
+                                        .replaceAll("\$", "")),
                                     remarks: descriptionController.text);
                               } else {
                                 print('Eroor');
@@ -408,7 +388,7 @@ class _BusinessPaymentState extends State<BusinessPayment> {
 
   void choosePaymentMethod() {
     var args = {
-      "amount": double.parse(amountController.text),
+      "amount": double.parse(amountController.text.replaceAll("\$", "")),
       "fromScreen": Routes.pay_request_business_payment
     };
     Routes.navigateToScreenWithArgsAndCB(context, Routes.select_card, args,

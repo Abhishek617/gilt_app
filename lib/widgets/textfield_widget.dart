@@ -229,3 +229,21 @@ class NumericalRangeFormatter extends TextInputFormatter {
     }
   }
 }
+
+class MoneyInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue,
+      TextEditingValue newValue,
+      ) {
+    if (newValue.text == '') {
+      return newValue;
+    } else if (newValue.text.startsWith("\$")) {
+      return newValue;
+    } else {
+      return TextEditingValue().copyWith(
+          text: "\$${newValue.text}",
+          selection: TextSelection.collapsed(offset: newValue.text.length + 1));
+    }
+  }
+}
