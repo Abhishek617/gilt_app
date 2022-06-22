@@ -7,6 +7,8 @@ import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 
+import '../../utils/card_utils/card_utils.dart';
+
 class SavedCards extends StatefulWidget {
   const SavedCards({Key? key}) : super(key: key);
 
@@ -237,7 +239,7 @@ class SavedCardItem extends StatelessWidget {
                 ),
                 Flexible(
                     child: Text(
-                        "${cardDetails!.type == "account" ? cardDetails!.bankName : cardDetails!.brand}")),
+                        "${cardDetails!.type == "account" ? "${cardDetails!.bankName} xxxx${cardDetails!.bankAccountNumLastSixDigit}" : "${cardDetails!.nameOnAccount} xxxxxxxx${cardDetails!.cardLastFourDigit}"}")),
               ],
             ),
           ),
