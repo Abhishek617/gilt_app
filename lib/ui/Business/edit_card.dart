@@ -367,14 +367,8 @@ class _EditCardState extends State<EditCard> {
     }
     var map = new Map<String, dynamic>();
     map['type'] = "card";
-    map['brand'] =
-        CardUtils.getCardTypeFrmNumber(edCardNumberController.text) ==
-                CardType.MasterCard
-            ? "master"
-            : CardUtils.getCardTypeFrmNumber(edCardNumberController.text) ==
-                    CardType.Visa
-                ? "visa"
-                : "card";
+    map['brand'] = CardUtils.getBrandName(
+        CardUtils.detectCCType(edCardNumberController.text));
     map['cardNumber'] = edCardNumberController.text.isNotEmpty
         ? edCardNumberController.text
         : paymentData!.cardLastFourDigit!;
