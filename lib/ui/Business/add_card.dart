@@ -433,8 +433,7 @@ class _AddCardState extends State<AddCard> {
   }
 
   addCardOrBankAccount({required String data}) async {
-    print(data);
-    /*GlobalMethods.showLoader();
+    GlobalMethods.showLoader();
     _userStore.addCardOrBankAccount(data, (AddPaymentMaster paymentMaster) {
       GlobalMethods.hideLoader();
       if (paymentMaster != null) {
@@ -450,7 +449,7 @@ class _AddCardState extends State<AddCard> {
     }, (error) {
       GlobalMethods.hideLoader();
       print(error.toString());
-    });*/
+    });
   }
 }
 

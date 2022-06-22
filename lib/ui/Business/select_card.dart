@@ -344,7 +344,7 @@ class CardItem extends StatelessWidget {
                   ),
                   Flexible(
                       child: Text(
-                          "${cardDetails!.type == "account" ? cardDetails!.bankName : cardDetails!.brand}")),
+                          "${cardDetails!.type == "account" ? "${cardDetails!.bankName} xxxx${cardDetails!.bankAccountNumLastSixDigit}" : "${cardDetails!.nameOnAccount} xxxxxxxx${cardDetails!.cardLastFourDigit}"}")),
                 ],
               ),
             ),

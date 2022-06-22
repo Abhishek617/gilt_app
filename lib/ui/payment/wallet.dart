@@ -124,7 +124,9 @@ class _WalletState extends State<Wallet> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20,),
+                        SizedBox(
+                          height: 20,
+                        ),
                         Text(
                           'Block Balance',
                           style: TextStyle(
@@ -214,8 +216,8 @@ class _WalletState extends State<Wallet> {
                           Routes.navigateToScreenWithArgsAndCB(
                               context,
                               Routes.pay_request_business,
-                              {"fromScreen": "wallet"}, (value){
-                                getMyWalletBalance();
+                              {"fromScreen": "wallet"}, (value) {
+                            getMyWalletBalance();
                           });
                         },
                         child: Row(
