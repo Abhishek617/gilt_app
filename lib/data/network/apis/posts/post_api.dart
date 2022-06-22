@@ -229,7 +229,21 @@ class PostApi {
       throw e;
     }
   }
-
+  Future getOwnBusinessList(searchQuery, token) async {
+    try {
+      print("Search query: $searchQuery");
+      return await _dioClient.get(
+        Endpoints.searchOwnBusinessList,
+        queryParameters: {
+          "search": searchQuery ?? '',
+        },
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
   // Get All User List
   Future getAllUserList(searchQuery, token) async {
     try {

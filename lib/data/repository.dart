@@ -196,7 +196,8 @@ class Repository {
     var token = await authToken;
     return await _postApi
         .checkContacts(contacts, token)
-        .then((placeData) => placeData)
+        .then((placeData) =>
+    placeData)
         .catchError((error) => throw error);
   }
 
@@ -310,6 +311,14 @@ class Repository {
     var token = await authToken;
     return await _postApi
         .getBusinessByNameList(searchQuery, token)
+        .then((eventListData) => eventListData)
+        .catchError((error) => throw error);
+  }
+  // Get Own Businesses By Name
+  Future getOwnBusinessList(searchQuery) async {
+    var token = await authToken;
+    return await _postApi
+        .getOwnBusinessList(searchQuery, token)
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }

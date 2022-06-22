@@ -112,7 +112,8 @@ class _UserPaymentState extends State<UserPayment> {
                 keyboardType: TextInputType.number,
                 controller: amountController,
                 inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,0}')),
+                  FilteringTextInputFormatter.digitsOnly,
+                  MoneyInputFormatter(),
                 ],
                 decoration: new InputDecoration(
                     border: new OutlineInputBorder(
@@ -132,11 +133,11 @@ class _UserPaymentState extends State<UserPayment> {
                     ),
                     filled: true,
                     hintStyle: new TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
                       color: Colors.grey[800],
                     ),
-                    hintText: "\$ 0",
+                    hintText: "\$0",
                     fillColor: Colors.black12),
                 validator: (val) {
                   if (val!.isEmpty) {
@@ -228,7 +229,7 @@ class _UserPaymentState extends State<UserPayment> {
 
   void choosePaymentMethod() {
     var args = {
-      "amount": double.parse(amountController.text),
+      "amount": double.parse(amountController.text.replaceAll("\$", "")),
       "fromScreen": Routes.user_payment
     };
     Routes.navigateToScreenWithArgsAndCB(context, Routes.select_card, args,

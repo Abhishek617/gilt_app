@@ -26,6 +26,7 @@ class _InviteContactState extends State<InviteContact> {
   late List<String?> _contactStrings = [];
   late var appContacts = [];
   late var filteredContactList = [];
+  late var _searchResult = [];
 
   changeValue(int val) {
     setState(() {
@@ -136,6 +137,7 @@ class _InviteContactState extends State<InviteContact> {
           child: Column(
             children: [
               TextField(
+                onChanged: onSearchTextChanged,
                 decoration: InputDecoration(
                   hintText: "Search Contact",
                   suffixIcon: Icon(Icons.search),
@@ -154,7 +156,21 @@ class _InviteContactState extends State<InviteContact> {
               SizedBox(
                 height: 10,
               ),
-              (filteredContactList.length > 0)
+              _searchResult.length!=0? Column(
+                children: [
+                  Container(
+                    height: 500,
+                    // width: 460,
+                    width: MediaQuery.of(context).size.width / 0.0,
+                    child: ListView.builder(
+                        itemCount: _searchResult.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return getContactListTile(
+                              _searchResult[index]);
+                        }),
+                  ),
+                ],
+              ): (filteredContactList.length > 0)
                   ? Column(
                       children: [
                         Container(
@@ -177,4 +193,20 @@ class _InviteContactState extends State<InviteContact> {
       ),
     );
   }
+
+   onSearchTextChanged(String text) {
+     _searchResult.clear();
+     if (text.isEmpty) {
+       setState(() {});
+       return;
+     }
+
+     filteredContactList.forEach((userDetail) {
+       if (userDetail.phone.contains(text))
+         _searchResult.add(userDetail);
+     });
+
+     setState(() {});
+   }
+
 }

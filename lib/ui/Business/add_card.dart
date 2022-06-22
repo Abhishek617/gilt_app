@@ -408,14 +408,8 @@ class _AddCardState extends State<AddCard> {
     String expiry = "${expiryDate[0]}${expiryDate[1]}";
     var map = new Map<String, dynamic>();
     map['type'] = "card";
-    map['brand'] =
-        CardUtils.getCardTypeFrmNumber(edCardNumberController.text) ==
-                CardType.MasterCard
-            ? "MasterCard"
-            : CardUtils.getCardTypeFrmNumber(edCardNumberController.text) ==
-                    CardType.Visa
-                ? "Visa"
-                : "Card";
+    map['brand'] = CardUtils.getBrandName(
+        CardUtils.detectCCType(edCardNumberController.text));
     map['cardNumber'] = edCardNumberController.text.replaceAll(" ", "");
     map['expiry'] = expiry;
     map['nameOnAccount'] = edCardNameController.text;
@@ -439,7 +433,8 @@ class _AddCardState extends State<AddCard> {
   }
 
   addCardOrBankAccount({required String data}) async {
-    GlobalMethods.showLoader();
+    print(data);
+    /*GlobalMethods.showLoader();
     _userStore.addCardOrBankAccount(data, (AddPaymentMaster paymentMaster) {
       GlobalMethods.hideLoader();
       if (paymentMaster != null) {
@@ -455,7 +450,7 @@ class _AddCardState extends State<AddCard> {
     }, (error) {
       GlobalMethods.hideLoader();
       print(error.toString());
-    });
+    });*/
   }
 }
 
