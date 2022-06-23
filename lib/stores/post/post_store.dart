@@ -144,6 +144,13 @@ abstract class _PostStore with Store {
         .then((placeData) => placeData)
         .catchError((error) => throw error);
   }
+  @action
+  Future deleteEvent(businessId) async {
+    return await _repository
+        .deleteEvent(businessId)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
 
   @action
   Future getUserEvent(userID) async {

@@ -360,7 +360,6 @@ class _AddCardState extends State<AddCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      imgLogo,
                       SizedBox(
                         height: 20,
                       ),

@@ -296,7 +296,14 @@ class Repository {
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
-
+  //Delete Event
+  Future deleteEvent(bID) async {
+    var token = await authToken;
+    return await _postApi
+        .deleteEvent(bID, token)
+        .then((eventListData) => eventListData)
+        .catchError((error) => throw error);
+  }
 //get all Business
   Future getAllBusinessList(searchQuery) async {
     var token = await authToken;

@@ -189,6 +189,17 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.deleteBusiness(businessId));
   }
 
+
+  final _$deleteEventAsyncAction = AsyncAction('_PostStore.deleteBusiness');
+
+  @override
+  Future<dynamic> deleteEvent(dynamic businessId) {
+    return _$deleteEventAsyncAction
+        .run(() => super.deleteEvent(businessId));
+  }
+
+
+
   final _$getUserEventAsyncAction = AsyncAction('_PostStore.getUserEvent');
 
   @override

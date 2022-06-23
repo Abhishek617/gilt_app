@@ -283,6 +283,28 @@ class PostApi {
       throw e;
     }
   }
+  // Delete Business
+  Future deleteEvent(bID, token) async {
+    try {
+      return await _dioClient
+          .put(
+        "${Endpoints.cancelEvent}/$bID",
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        print("Cancel event response: ${value.toString()}");
+        value = AcceptRejectEvent.fromJson(value);
+
+      });
+    } catch (e) {
+
+      throw e;
+    }
+  }
+
 
   // Get Business Places
   Future uploadChatImage(file, token) async {

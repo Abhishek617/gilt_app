@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 
 import '../../data/repository.dart';
 import '../../di/components/service_locator.dart';
+import '../../models/Auth/commonModal.dart';
 import '../../stores/user/user_store.dart';
 
 class MyEvent extends StatefulWidget {
@@ -45,7 +46,63 @@ class _MyEventState extends State<MyEvent> {
     GlobalMethods.hideLoader();
     super.initState();
   }
+  deleteEvent(context, businessData, businessIndex) {
+    FocusScope.of(context).unfocus();
 
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Yes"),
+      onPressed: () {
+
+        deleteBusinessRequest(businessData, businessIndex);
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("No"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Delete Event"),
+      content: Text("Are you sure?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    Future.delayed(Duration(milliseconds: 300)).then((value) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    });
+  }
+  deleteBusinessRequest(EventItem businessData, businessIndex) {
+    GlobalStoreHandler.postStore.deleteEvent(businessData.id).then((value) {
+      CommonResponseModal res = CommonResponseModal.fromJson(value);
+      if (res.success == true) {
+        GlobalMethods.showSuccessMessage(
+            context, res.message ?? 'Delete successfully.', 'Delete Event');
+
+        getMyEvents(userId);
+      } else {
+        GlobalMethods.showErrorMessage(
+            context, res.message ?? 'Delete failed.', 'Delete Event');
+      }
+    }).catchError((err) {
+      GlobalMethods.showErrorMessage(
+          context, err.message ?? 'Delete failed.', 'Delete Event');
+      print(err);
+    });
+  }
 
   Widget eventItemContainer(EventItem eventItem) {
     print('eventItem');
@@ -177,7 +234,7 @@ class _MyEventState extends State<MyEvent> {
                       ),
                       PopupMenuItem(
                         onTap: () {
-                          // deleteBusiness(context, business, index);
+                          deleteEvent(context, eventItem, eventItem.id);
                         },
                         height: 10,
                         padding: EdgeInsets.only(left: 30, top: 15, bottom: 10),
