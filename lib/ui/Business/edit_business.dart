@@ -238,6 +238,7 @@ class _Edit_businessState extends State<Edit_business> {
 
                 // TODO : Call Add New Business
               } else {
+                
                 GlobalMethods.hideLoader();
                 GlobalMethods.showErrorMessage(context,
                     'Please upload business image', 'Business Image Required');
