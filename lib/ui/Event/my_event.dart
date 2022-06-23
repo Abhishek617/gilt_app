@@ -133,6 +133,7 @@ class _MyEventState extends State<MyEvent> {
                             ),
                           ),
                           Padding(
+
                               padding:
                               EdgeInsets.only(top: 5, left: 100, right: 00),
                               child: Container(
