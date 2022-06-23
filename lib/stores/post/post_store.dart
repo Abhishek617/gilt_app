@@ -160,9 +160,9 @@ abstract class _PostStore with Store {
         .catchError((error) => throw error);
   }
   @action
-  Future getMyEvents() async {
+  Future getMyEvents(int userId) async {
     return await _repository
-        .getMyEvents()
+        .getMyEvents(userId)
         .then((placeData) => placeData)
         .catchError((error) => throw error);
   }

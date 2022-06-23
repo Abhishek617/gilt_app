@@ -388,10 +388,10 @@ class Repository {
         .catchError((error) => throw error);
   }
   //my  event
-  Future getMyEvents() async {
+  Future getMyEvents(int userId) async {
     var token = await authToken;
     return await _postApi
-        .getMyEvents(token)
+        .getMyEvents(token,userId)
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
@@ -449,10 +449,10 @@ class Repository {
   }
 //updateevent
   Future updateEvent(
-      CreateEventRequestModal eventData,int id,  successCB, errorCB) async {
+      CreateEventRequestModal eventData,int id,int userId,  successCB, errorCB) async {
     var token = await authToken;
     return await _postApi
-        .updateEvent(eventData,  id, token, successCB, errorCB)
+        .updateEvent(eventData,  id, userId,token, successCB, errorCB)
         .then((addeventData) => addeventData)
         .catchError((error) => throw error);
   }

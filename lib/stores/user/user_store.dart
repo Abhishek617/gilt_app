@@ -485,8 +485,8 @@ abstract class _UserStore with Store {
   }
   @action
   Future updateEvent(
-      CreateEventRequestModal eventData,int id,  successCallback, errorCallback) async {
-    _repository.updateEvent(eventData,id, successCallback, errorCallback).then(
+      CreateEventRequestModal eventData,int id, int userId,  successCallback, errorCallback) async {
+    _repository.updateEvent(eventData,id, userId,successCallback, errorCallback).then(
             (val) {
           print(val.toString());
         }, onError: errorCallback);

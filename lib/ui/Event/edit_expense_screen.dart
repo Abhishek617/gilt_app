@@ -48,7 +48,8 @@ class _Edit_Expense_ScreenState extends State<EditExpense_Screen> {
   var createEventDetails;
   var expensedata;
   var addexpensedata;
-
+  var addData;
+  var userId;
   createControllers(elist) {
     print( elist.attendees.toString());
     for (var i = 0; i < elist.attendees.length; i++) {
@@ -130,11 +131,11 @@ class _Edit_Expense_ScreenState extends State<EditExpense_Screen> {
     setState(() {});
   }
 
-  updateEvent(CreateEventRequestModal eData, int id) async {
+  updateEvent(CreateEventRequestModal eData, int id,int userId) async {
     print('createEvent RequestData :');
     //print(eData);
     GlobalMethods.showLoader();
-    _userStore.updateEvent(eData,id, (CreateEventResponseModel val) {
+    _userStore.updateEvent(eData,id, userId,(CreateEventResponseModel val) {
       GlobalMethods.hideLoader();
       if (val.success == true) {
         GlobalMethods.showSuccessMessage(
@@ -257,6 +258,18 @@ class _Edit_Expense_ScreenState extends State<EditExpense_Screen> {
             }),
       ),
     );
+  }
+
+  @override
+  Future<void> initState() async {
+    // TODO: implement initState
+    super.initState();
+    await _userStore.getProfile();
+    setState(() {
+      addData = _userStore.Profile_data;
+      userId =  addData?.user?.id == 0 ? "" : addData?.user?.id.toString();
+
+    });
   }
 
   @override
@@ -405,7 +418,7 @@ class _Edit_Expense_ScreenState extends State<EditExpense_Screen> {
                                   long: args.long,
                                   files: args!.files,
                                 );
-                                updateEvent(expenseData,int.parse( AppSettings.EventID));
+                                updateEvent(expenseData,int.parse( AppSettings.EventID),userId);
                               } else {
                                 GlobalMethods.showErrorMessage(
                                     context,
@@ -507,7 +520,7 @@ class _Edit_Expense_ScreenState extends State<EditExpense_Screen> {
                                   long: '',
                                   files: args!.files,
                                 );
-                                updateEvent(expenseData,int.parse( AppSettings.EventID));
+                                updateEvent(expenseData,int.parse( AppSettings.EventID),userId);
                               },
                             )
                           : disableButton(),

@@ -209,8 +209,8 @@ mixin _$PostStore on _PostStore, Store {
   AsyncAction('_PostStore.getMyEvents');
 
   @override
-  Future<dynamic> getMyEvents() {
-    return _$getMyEventsAsyncAction.run(() => super.getMyEvents());
+  Future<dynamic> getMyEvents(int userId) {
+    return _$getMyEventsAsyncAction.run(() => super.getMyEvents(userId));
   }
 
 

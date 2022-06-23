@@ -189,13 +189,15 @@ class EventImages {
 class EventAttendees1 {
   int? userId;
   double? expense;
+  String? paymentStatus;
   Admin? admin;
 
-  EventAttendees1({this.userId, this.expense, this.admin});
+  EventAttendees1({this.userId, this.expense, this.paymentStatus,  this.admin});
 
   EventAttendees1.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
     expense = json['expense'] != null ? json['expense'].toDouble() : 0;
+    paymentStatus = json['paymentStatus'];
     admin = json['admin'] != null ? new Admin.fromJson(json['admin']) : null;
   }
 
@@ -203,6 +205,7 @@ class EventAttendees1 {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['expense'] = this.expense;
     data['userId'] = this.userId;
+    data['paymentStatus'] = this.paymentStatus;
     if (this.admin != null) {
       data['admin'] = this.admin!.toJson();
     }

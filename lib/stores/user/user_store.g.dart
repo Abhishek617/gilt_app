@@ -158,10 +158,10 @@ mixin _$UserStore on _UserStore, Store {
   final _$updateEventAsyncAction = AsyncAction('_UserStore.createEvent');
 
   @override
-  Future<dynamic> updateEvent(CreateEventRequestModal eventData,int id,
+  Future<dynamic> updateEvent(CreateEventRequestModal eventData,int id,int userId,
       dynamic successCallback, dynamic errorCallback) {
     return _$updateEventAsyncAction.run(
-            () => super.updateEvent(eventData, id,successCallback, errorCallback));
+            () => super.updateEvent(eventData, id,userId,successCallback, errorCallback));
   }
   final _$acceptRejectEventAsyncAction =
       AsyncAction('_UserStore.acceptRejectEvent');

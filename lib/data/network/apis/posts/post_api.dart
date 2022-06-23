@@ -363,11 +363,11 @@ class PostApi {
     }
   }
   // Get Search Event
-  Future getMyEvents(token, {page = 0, pageSize = 20}) async {
+  Future getMyEvents(token, userId,{page = 0, pageSize = 20}) async {
     try {
       return await _dioClient.get(
-        Endpoints.myEvent,
-        queryParameters: {"page": page, "size": pageSize},
+        Endpoints.userEvents,
+        queryParameters: {"id": userId, "page": page, "size": pageSize},
         options: Options(headers: {'Authorization': 'Bearer ' + token}),
       );
     } catch (e) {
@@ -633,7 +633,7 @@ class PostApi {
   }
 //update event
   Future updateEvent(
-      CreateEventRequestModal eventData, int id, token, successCB, errorCB) async {
+      CreateEventRequestModal eventData, int id, int userId, token, successCB, errorCB) async {
     try {
       await getEventImages(eventData.files, (newFilesArray) async {
         eventData.files = newFilesArray;

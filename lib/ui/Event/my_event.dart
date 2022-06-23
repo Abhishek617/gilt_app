@@ -12,6 +12,10 @@ import 'package:guilt_app/widgets/custom_scaffold.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:intl/intl.dart';
 
+import '../../data/repository.dart';
+import '../../di/components/service_locator.dart';
+import '../../stores/user/user_store.dart';
+
 class MyEvent extends StatefulWidget {
   const MyEvent({Key? key}) : super(key: key);
 
@@ -21,11 +25,23 @@ class MyEvent extends StatefulWidget {
 
 class _MyEventState extends State<MyEvent> {
   List<EventItem> eventList = [];
-
+  final UserStore _userStore = UserStore(getIt<Repository>());
+  var addData;
+  var userId;
   @override
   initState() {
     GlobalMethods.showLoader();
-    getMyEvents();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _userStore.getProfile();
+      setState(() {
+        addData = _userStore.Profile_data;
+        userId =  addData?.user?.id == 0 ? "" : addData?.user?.id.toString();
+        getMyEvents(int.parse(userId));
+      });
+
+      // setData(args);
+    });
+
     GlobalMethods.hideLoader();
     super.initState();
   }
@@ -191,9 +207,9 @@ class _MyEventState extends State<MyEvent> {
 
   bool _isSearchBar = false;
 
-  getMyEvents() {
+  getMyEvents(int userId) {
     GlobalStoreHandler.postStore
-        .getMyEvents()
+        .getMyEvents(userId)
         .then((searchEventList) {
       print('searchEvent Response :');
       print(searchEventList);

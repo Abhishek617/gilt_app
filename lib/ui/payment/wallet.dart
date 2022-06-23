@@ -34,15 +34,15 @@ class _WalletState extends State<Wallet> {
 
   getPaymentHistory() async {
     GlobalStoreHandler.userStore.getPaymentHistory(0, 10,
-        (PaymentHistoryResponseModel master) {
-      if (master != null) {
-        setState(() {
-          cardList = master.history?.listData ?? [];
+            (PaymentHistoryResponseModel master) {
+          if (master != null) {
+            setState(() {
+              cardList = master.history?.listData ?? [];
+            });
+          }
+        }, (error) {
+          print(error.toString());
         });
-      }
-    }, (error) {
-      print(error.toString());
-    });
   }
 
   @override
@@ -124,7 +124,9 @@ class _WalletState extends State<Wallet> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20,),
+                        SizedBox(
+                          height: 20,
+                        ),
                         Text(
                           'Block Balance',
                           style: TextStyle(
@@ -171,9 +173,9 @@ class _WalletState extends State<Wallet> {
                 buttonColor: AppColors.primaryColor,
                 onPressed: () => {
                   Routes.navigateToScreenWithCB(context, Routes.addmoney,
-                      (value) {
-                    getMyWalletBalance();
-                  })
+                          (value) {
+                        getMyWalletBalance();
+                      })
                 },
                 buttonText: ('Add Money'),
               ),
@@ -214,8 +216,8 @@ class _WalletState extends State<Wallet> {
                           Routes.navigateToScreenWithArgsAndCB(
                               context,
                               Routes.pay_request_business,
-                              {"fromScreen": "wallet"}, (value){
-                                getMyWalletBalance();
+                              {"fromScreen": "wallet"}, (value) {
+                            getMyWalletBalance();
                           });
                         },
                         child: Row(
@@ -334,19 +336,19 @@ class _WalletState extends State<Wallet> {
               ),
               cardList.length > 0
                   ? Container(
-                      height: DeviceUtils.getScaledHeight(context, 0.30),
-                      child: ListView.builder(
-                          itemCount: cardList.length,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) {
-                            return PaymentHistoryItem(
-                              cardItem: cardList[index],
-                            );
-                          }),
-                    )
+                height: DeviceUtils.getScaledHeight(context, 0.30),
+                child: ListView.builder(
+                    itemCount: cardList.length,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      return PaymentHistoryItem(
+                        cardItem: cardList[index],
+                      );
+                    }),
+              )
                   : Center(
-                      child: Text('No Transactions found'),
-                    ),
+                child: Text('No Transactions found'),
+              ),
             ],
           ),
         ),

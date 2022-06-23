@@ -57,7 +57,8 @@ class _Edit_eventState extends State<Edit_event> {
       TextEditingController();
   List<dynamic> addressList = [];
   late LatLng addressLatLng;
-
+  var addData;
+  var userId;
   @override
   void initState() {
     super.initState();
@@ -65,6 +66,12 @@ class _Edit_eventState extends State<Edit_event> {
       args = ModalRoute.of(context)!.settings.arguments;
 
       getDetails(args);
+      await _userStore.getProfile();
+      setState(() {
+        addData = _userStore.Profile_data;
+        userId =  addData?.user?.id == 0 ? "" : addData?.user?.id.toString();
+
+      });
       AppSettings.EventID = args.toString();
       // setData(args);
     });
