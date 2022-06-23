@@ -12,6 +12,7 @@ import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Login extends StatefulWidget {
@@ -215,7 +216,7 @@ class _LoginState extends State<Login> {
                               Routes.otpvalidate,
                             _userEmailController.value.text
                             );
-
+                          getSharedPreference();
                         }, (error) {
                           print(error);
                           final data = json.decode(json.encode(error.data))
@@ -317,4 +318,13 @@ class _LoginState extends State<Login> {
     _passwordFocusNode?.dispose();
     super.dispose();
   }
+
+   getSharedPreference() async {
+     final prefs = await SharedPreferences.getInstance();
+     await prefs.setString('firstname', 'firstname');
+     await prefs.setString('lastname', 'lastname');
+     await prefs.setString('email', 'email');
+
+
+   }
 }

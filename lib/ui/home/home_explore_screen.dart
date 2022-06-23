@@ -268,6 +268,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> {
                         (ProfileData?.user?.firstname.toString() ?? '') +
                         '  ' +
                         (ProfileData?.user?.lastname.toString() ?? ''),
+
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                 ),
