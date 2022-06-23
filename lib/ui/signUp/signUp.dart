@@ -14,6 +14,7 @@ import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 
 import '../../constants/colors.dart';
+import '../../models/PageModals/resend_otp_value.dart';
 import '../../models/PageModals/success_error_args.dart';
 import '../../widgets/rounded_button_widget.dart';
 
@@ -247,20 +248,27 @@ class _SignUpState extends State<SignUp> {
                           });
                           _userStore.signUp(signUpData, (val) {
                             print(val);
-                            (val.success == true)
+
+                            (val.success == true && val.user != null )
                                 ?    Routes.navigateToScreenWithArgs(
                                 context,
                                 Routes.otpvalidate,
-                                _userEmailController.value.text
+                                ResendOTPPageArgs(
+                                    email: _userEmailController.value.text,
+                                    phone: _phoneNumberController.value.text
+                                )
                             )
-                                : Routes.navigateToScreenWithArgs(
-                                    context,
-                                    Routes.success_error_validate,
-                                    SuccessErrorValidationPageArgs(
-                                        isSuccess: true,
-                                        description: 'SignUp Success',
-                                        title: 'Success',
-                                        isPreviousLogin: true));
+                                :
+                            GlobalMethods.showErrorMessage(
+                                context, val.message, 'Log In Exception');
+                            // Routes.navigateToScreenWithArgs(
+                            //         context,
+                            //         Routes.success_error_validate,
+                            //         SuccessErrorValidationPageArgs(
+                            //             isSuccess: true,
+                            //             description: 'SignUp Success',
+                            //             title: 'Success',
+                            //             isPreviousLogin: true));
 
 
                           }, (error) {

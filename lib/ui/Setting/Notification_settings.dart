@@ -132,17 +132,17 @@ class _NotifiSettingsState extends State<NotifiSettings> {
               height: 30,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment. spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Push Notification',
+                  'Event Update Notification',
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500),
                 ),
-                SizedBox(
-                  width: 173,
-                ),
+
                 FlutterSwitch(
                   activeToggleColor: AppColors.primaryColor,
                   inactiveToggleColor: Colors.grey,
@@ -169,17 +169,17 @@ class _NotifiSettingsState extends State<NotifiSettings> {
               height: 10,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment. spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Push Notification',
+                  'Event Cancel Notification',
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500),
                 ),
-                SizedBox(
-                  width: 173,
-                ),
+
                 FlutterSwitch(
                   activeToggleColor: AppColors.primaryColor,
                   inactiveToggleColor: Colors.grey,
@@ -206,17 +206,17 @@ class _NotifiSettingsState extends State<NotifiSettings> {
               height: 10,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment. spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Push Notification',
+                  'Event Invitation Notification',
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500),
                 ),
-                SizedBox(
-                  width: 173,
-                ),
+
                 FlutterSwitch(
                   activeToggleColor: AppColors.primaryColor,
                   inactiveToggleColor: Colors.grey,
@@ -243,17 +243,18 @@ class _NotifiSettingsState extends State<NotifiSettings> {
               height: 10,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment. spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Push Notification',
+
+                  'New Message Notification',
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500),
                 ),
-                SizedBox(
-                  width: 173,
-                ),
+
                 FlutterSwitch(
                   activeToggleColor: AppColors.primaryColor,
                   inactiveToggleColor: Colors.grey,
@@ -280,17 +281,18 @@ class _NotifiSettingsState extends State<NotifiSettings> {
               height: 10,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment. spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Push Notification',
+
+                  'Upcoming Event Notification',
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500),
                 ),
-                SizedBox(
-                  width: 173,
-                ),
+
                 FlutterSwitch(
                   activeToggleColor: AppColors.primaryColor,
                   inactiveToggleColor: Colors.grey,
@@ -317,17 +319,18 @@ class _NotifiSettingsState extends State<NotifiSettings> {
               height: 10,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment. spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Push Notification',
+
+                  'Event Payment Receiving notification',
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500),
                 ),
-                SizedBox(
-                  width: 173,
-                ),
+
                 FlutterSwitch(
                   activeToggleColor: AppColors.primaryColor,
                   inactiveToggleColor: Colors.grey,
@@ -354,17 +357,17 @@ class _NotifiSettingsState extends State<NotifiSettings> {
               height: 10,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment. spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Push Notification',
+                  'Business Payment Receiving notification',
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500),
                 ),
-                SizedBox(
-                  width: 173,
-                ),
+
                 FlutterSwitch(
                   activeToggleColor: AppColors.primaryColor,
                   inactiveToggleColor: Colors.grey,
@@ -391,17 +394,19 @@ class _NotifiSettingsState extends State<NotifiSettings> {
               height: 10,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment. spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  'Push Notification',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500),
+                Expanded(
+                  child: Text(
+                    'Payment Receiving from user notification',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                  ),
                 ),
-                SizedBox(
-                  width: 173,
-                ),
+
                 FlutterSwitch(
                   activeToggleColor: AppColors.primaryColor,
                   inactiveToggleColor: Colors.grey,
@@ -427,77 +432,7 @@ class _NotifiSettingsState extends State<NotifiSettings> {
             SizedBox(
               height: 10,
             ),
-            Row(
-              children: [
-                Text(
-                  'Push Notification',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  width: 173,
-                ),
-                FlutterSwitch(
-                  activeToggleColor: AppColors.primaryColor,
-                  inactiveToggleColor: Colors.grey,
-                  activeColor: Colors.white38,
-                  inactiveColor: Colors.white38,
-                  switchBorder: Border.all(
-                    color: Colors.black,
-                    width: 0.5,
-                  ),
-                  width: 40.0,
-                  height: 22.0,
-                  toggleSize: 14.0,
-                  value: notifi9,
-                  borderRadius: 25.0,
-                  onToggle: (val) {
-                    setState(() {
-                      notifi9 = val;
-                    });
-                  },
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Text(
-                  'Push Notification',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  width: 173,
-                ),
-                FlutterSwitch(
-                  activeToggleColor: AppColors.primaryColor,
-                  inactiveToggleColor: Colors.grey,
-                  activeColor: Colors.white38,
-                  inactiveColor: Colors.white38,
-                  switchBorder: Border.all(
-                    color: Colors.black,
-                    width: 0.5,
-                  ),
-                  width: 40.0,
-                  height: 22.0,
-                  toggleSize: 14.0,
-                  value: notifi10,
-                  borderRadius: 25.0,
-                  onToggle: (val) {
-                    setState(() {
-                      notifi10 = val;
-                    });
-                  },
-                ),
-              ],
-            ),
+        
             Divider(
               color: Colors.black12,
               //color of divider
@@ -921,7 +856,7 @@ class _NotifiSettingsState extends State<NotifiSettings> {
 
     showpushsublist() => _switch_isPushNotification == true ? subpushnotifi() : blankcont();
 
-    showemailsublist() => _switch_isEmailNotification == true ? subemailnotifi() : blankcont();
+    showemailsublist() => _switch_isEmailNotification == true ? subpushnotifi() : blankcont();
 
   @override
   Widget build(BuildContext context) {
@@ -1174,6 +1109,7 @@ class _NotifiSettingsState extends State<NotifiSettings> {
                   height: 15,
                 ),
                 Row(
+
                   children: [
                     Text(
                       'Allow Vibration',

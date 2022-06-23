@@ -22,6 +22,8 @@ class AuthApi {
     try {
       final res = await _dioClient
           .post(Endpoints.login, data: {"username": email, "password": pass});
+
+
       return LoginModal.fromJson(res);
     } catch (e) {
       print(e.toString());

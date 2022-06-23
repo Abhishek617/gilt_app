@@ -38,6 +38,7 @@ import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 import 'package:guilt_app/utils/encryption/card_encryption.dart';
 
+import '../../../../models/Auth/resend_otp_response.dart';
 import '../../../../models/Event/upcoming_past_event_modal.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
@@ -81,7 +82,8 @@ class PostApi {
       final res = await _dioClient.post(Endpoints.login,
           data: {"username": email, "password": pass, "fcmToken": fcmToken});
       return LoginModal.fromJson(res);
-    } catch (e) {
+    }
+    catch (e) {
       print(e.toString());
       throw e;
     }
@@ -462,7 +464,18 @@ class PostApi {
       throw e;
     }
   }
+  // Resend Otp
 
+  Future<GetResendOtpaResponse> ReSend_Otp(email,phone) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.resendOtp, data: {"email": email,"phone": phone});
+      return GetResendOtpaResponse.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
   // Valid Otp
 
   Future<ValidOtpModel> Valid_Otp(email, otp) async {
@@ -655,7 +668,7 @@ class PostApi {
   }
 //update event
   Future updateEvent(
-      CreateEventRequestModal eventData, int id, int userId, token, successCB, errorCB) async {
+      CreateEventRequestModal eventData, int id, token, successCB, errorCB) async {
     try {
       await getEventImages(eventData.files, (newFilesArray) async {
         eventData.files = newFilesArray;

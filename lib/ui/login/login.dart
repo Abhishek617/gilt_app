@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     _passwordFocusNode = FocusNode();
-    _userEmailController.text = 'chitra@phpdots.com';
+    _userEmailController.text = 'chitra+111@phpdots.com';
     _passwordController.text = 'Jayshreeram@123';
   }
 
@@ -211,11 +211,13 @@ class _LoginState extends State<Login> {
                               ? Routes.navigateRootToScreen(
                                   context, Routes.home_tab):
 
-                          Routes.navigateToScreenWithArgs(
-                              context,
-                              Routes.otpvalidate,
-                            _userEmailController.value.text
-                            );
+                          GlobalMethods.showErrorMessage(
+                              context, value.message, 'Log In Exception');
+                          // Routes.navigateToScreenWithArgs(
+                          //     context,
+                          //     Routes.otpvalidate,
+                          //   _userEmailController.value.text
+                          //   );
                           getSharedPreference();
                         }, (error) {
                           print(error);

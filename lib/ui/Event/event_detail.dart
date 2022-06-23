@@ -69,7 +69,7 @@ class _EventDetailsState extends State<EventDetails> {
         contentData = EventDetailsResponseModel.fromJson(value);
       });
       validateCancelButton();
-      // validatePayButton();
+      validatePayButton();
       GlobalMethods.hideLoader();
     }, (error) {
       GlobalMethods.hideLoader();
@@ -451,7 +451,7 @@ class _EventDetailsState extends State<EventDetails> {
     GetProfileResponseModal? profileData = await _userStore.getProfileData();
     int userId = profileData?.user?.id ?? 0;
     isCancelButton = false;
-    if (contentData!.event!.createdBy! != userId) {
+    if (contentData!.event!.createdBy! == userId) {
       isCancelButton = true;
     }
     setState(() {});

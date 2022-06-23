@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import '../../data/repository.dart';
 import '../../di/components/service_locator.dart';
 import '../../models/Auth/commonModal.dart';
+import '../../models/Event/accept_reject_event.dart';
 import '../../stores/user/user_store.dart';
 
 class MyEvent extends StatefulWidget {
@@ -67,7 +68,7 @@ class _MyEventState extends State<MyEvent> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Delete Event"),
+      title: Text("Cancel Event"),
       content: Text("Are you sure?"),
       actions: [
         cancelButton,
@@ -86,22 +87,48 @@ class _MyEventState extends State<MyEvent> {
     });
   }
   deleteBusinessRequest(EventItem businessData, businessIndex) {
-    GlobalStoreHandler.postStore.deleteEvent(businessData.id).then((value) {
-      CommonResponseModal res = CommonResponseModal.fromJson(value);
-      if (res.success == true) {
-        GlobalMethods.showSuccessMessage(
-            context, res.message ?? 'Delete successfully.', 'Delete Event');
+    _userStore.cancelEvent(businessData.id!,
+            (AcceptRejectEvent successMaster) {
+          GlobalMethods.hideLoader();
+          if (successMaster != null) {
+            if(successMaster==true){
+              getMyEvents(int.parse(userId));
+            }else{
+              getMyEvents(int.parse(userId));
+              GlobalMethods.showSuccessMessage(
+                        context, successMaster.message!, "Cancel Event" ?? "");
+            }
 
-        getMyEvents(userId);
-      } else {
-        GlobalMethods.showErrorMessage(
-            context, res.message ?? 'Delete failed.', 'Delete Event');
-      }
-    }).catchError((err) {
-      GlobalMethods.showErrorMessage(
-          context, err.message ?? 'Delete failed.', 'Delete Event');
-      print(err);
-    });
+            // if (successMaster.success != null && successMaster.success!) {
+            //   getMyEvents(userId);
+            //   GlobalMethods.showSuccessMessage(
+            //       context, successMaster.message!, "Cancel Event" ?? "");
+            // } else {
+            //   getMyEvents(userId);
+            //   GlobalMethods.showErrorMessage(
+            //       context, successMaster.message!, "Cancel Event" ?? "");
+            // }
+          }
+        }, (error) {
+          GlobalMethods.hideLoader();
+          print(error.toString());
+        });
+    // GlobalStoreHandler.postStore.deleteEvent(businessData.id).then((value) {
+    //   CommonResponseModal res = CommonResponseModal.fromJson(value);
+    //   if (res.success == true) {
+    //     GlobalMethods.showSuccessMessage(
+    //         context, res.message ?? 'Delete successfully.', 'Delete Event');
+    //
+    //     getMyEvents(userId);
+    //   } else {
+    //     GlobalMethods.showErrorMessage(
+    //         context, res.message ?? 'Delete failed.', 'Delete Event');
+    //   }
+    // }).catchError((err) {
+    //   GlobalMethods.showErrorMessage(
+    //       context, err.message ?? 'Delete failed.', 'Delete Event');
+    //   print(err);
+    // });
   }
 
   Widget eventItemContainer(EventItem eventItem) {
@@ -146,69 +173,77 @@ class _MyEventState extends State<MyEvent> {
                   SizedBox(
                     width: 8,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(eventItem.name ?? 'No Name',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700)),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(startDate + ' to ' + endDate,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w400)),
-                      Row(
-                        children: [
-                          Padding(
-                              padding: EdgeInsets.only(
-                                top: 5.0,
-                              ),
-                              child: Icon(Icons.supervised_user_circle_rounded,
-                                  size: 20,
-                                  color:
-                                  Theme.of(context).colorScheme.primary)),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 0.0, top: 5.0, bottom: 00.0, right: 00.0),
-                            child: Text(
-                              (eventItem.eventAttendees!.length < 20
-                                  ? eventItem.eventAttendees!.length
-                                  .toString()
-                                  : '+20') +
-                                  ' Attendee(s)',
-                              style: TextStyle(
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(eventItem.name ?? 'No Name',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700)),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(startDate + ' to ' + endDate,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.grey,
                                 fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                              padding:
-                              EdgeInsets.only(top: 5, left: 100, right: 00),
-                              child: Container(
-                                padding: EdgeInsets.all(5.0),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
-                                  color: AppColors.primaryColor,
-                                  shape: BoxShape.rectangle,
-                                ),
+                                fontWeight: FontWeight.w400)),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 5.0,
+                                  ),
+                                  child: Icon(Icons.supervised_user_circle_rounded,
+                                      size: 20,
+                                      color:
+                                      Theme.of(context).colorScheme.primary)),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: 0.0, top: 5.0, bottom: 00.0, right: 00.0),
                                 child: Text(
-                                  eventItem.status!,
+                                  (eventItem.eventAttendees!.length < 20
+                                      ? eventItem.eventAttendees!.length
+                                      .toString()
+                                      : '+20') +
+                                      ' Attendee(s)',
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 12),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              )),
-                        ],
-                      ),
-                    ],
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  
+                                    padding:
+                                    EdgeInsets.only(top: 5, left: 90, right: 00),
+                                    child: Container(
+                                      padding: EdgeInsets.all(5.0),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                        BorderRadius.all(Radius.circular(50)),
+                                        color: AppColors.primaryColor,
+                                        shape: BoxShape.rectangle,
+                                      ),
+                                      child: Text(
+                                        eventItem.status!,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 12),
+                                      ),
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   PopupMenuButton(
                     shape: RoundedRectangleBorder(
@@ -239,7 +274,7 @@ class _MyEventState extends State<MyEvent> {
                         height: 10,
                         padding: EdgeInsets.only(left: 30, top: 15, bottom: 10),
                         child: Text(
-                          'Delete',
+                          'Cancel',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),

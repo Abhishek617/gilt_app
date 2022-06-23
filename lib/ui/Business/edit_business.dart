@@ -216,10 +216,12 @@ class _Edit_businessState extends State<Edit_business> {
                     GlobalMethods.hideLoader();
                     GlobalMethods.showSuccessMessage(
                         context, response.message ?? 'Success', 'Update Business');
+                    Routes.navigateToScreen(
+                        context, Routes.my_business);
                     if (response.business != null) {
                       GlobalMethods.hideLoader();
-                      Routes.navigateToScreenWithArgs(
-                          context, Routes.business_details, response.business?.id);
+                      // Routes.navigateToScreenWithArgs(
+                      //     context, Routes.business_details, response.business?.id);
                     }
                     // Routes.navigateToScreenWithArgs(context, Routes.book_event_details, response.business?.id);
                   } else {

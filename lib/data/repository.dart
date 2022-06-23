@@ -11,6 +11,7 @@ import 'package:guilt_app/models/Auth/oauth_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
+import 'package:guilt_app/models/Auth/resend_otp_response.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Business/AddBusinessRequestModel.dart';
 import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
@@ -23,6 +24,9 @@ import 'package:guilt_app/models/post/post.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:sembast/sembast.dart';
 import '../models/Auth/otp_send.dart';
+import '../models/Auth/resend_otp_response.dart';
+import '../models/Auth/resend_otp_response.dart';
+import '../models/Auth/resend_otp_response.dart';
 import '../models/Auth/valid_otp_model.dart';
 import '../models/Event/create_event_modal.dart';
 import '../models/payment/pay_to_user_request.dart';
@@ -243,6 +247,15 @@ class Repository {
         .catchError((error) => throw error);
   }
 
+  // OtpSend:---------------------------------------------------------------------
+
+  Future<GetResendOtpaResponse> ResendOtpaResponse(String email,String phone) async {
+    return await _postApi.ReSend_Otp(email,phone)
+        .then((otpSendData) => otpSendData)
+        .catchError((error) => throw error);
+  }
+
+
   //notification list
   Future<NotificationListModal> Notification_list() async {
     var token = await authToken;
@@ -456,10 +469,10 @@ class Repository {
   }
 //updateevent
   Future updateEvent(
-      CreateEventRequestModal eventData,int id,int userId,  successCB, errorCB) async {
+      CreateEventRequestModal eventData,int id, successCB, errorCB) async {
     var token = await authToken;
     return await _postApi
-        .updateEvent(eventData,  id, userId,token, successCB, errorCB)
+        .updateEvent(eventData,  id,token, successCB, errorCB)
         .then((addeventData) => addeventData)
         .catchError((error) => throw error);
   }

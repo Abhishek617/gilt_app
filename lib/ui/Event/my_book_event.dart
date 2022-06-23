@@ -198,7 +198,7 @@ class _MyBookEventState extends State<MyBookEvent> {
       appBar: AppBar(
         shadowColor: Colors.transparent,
         //title: !_isSearchBar ? Text('Search Event') : _searchTextField(),
-        title: Text('My Events'),
+        title: Text('My Paid Events'),
         centerTitle: true,
 
       ),

@@ -130,6 +130,9 @@ class Endpoints {
   // update send otp
   static const String sendOtp = baseUrl + "admin/fp-send-otp";
 
+  // update send otp
+  static const String resendOtp = baseUrl + "admin/resendOtp";
+
   // Valid Otp
   static const String validOtp = baseUrl + "admin/fp-validate";
 

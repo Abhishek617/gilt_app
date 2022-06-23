@@ -131,15 +131,17 @@ class _Edit_Expense_ScreenState extends State<EditExpense_Screen> {
     setState(() {});
   }
 
-  updateEvent(CreateEventRequestModal eData, int id,int userId) async {
+  updateEvent(CreateEventRequestModal eData, int id) async {
     print('createEvent RequestData :');
     //print(eData);
     GlobalMethods.showLoader();
-    _userStore.updateEvent(eData,id, userId,(CreateEventResponseModel val) {
+    _userStore.updateEvent(eData,id,(CreateEventResponseModel val) {
       GlobalMethods.hideLoader();
       if (val.success == true) {
         GlobalMethods.showSuccessMessage(
             context, val.message ?? 'Success', 'Update Event');
+        Routes.navigateRootToScreen(
+            context, Routes.my_event);
         if (val.data != null) {
           Routes.navigateToScreenWithArgs(
               context, Routes.event_details, val.data?.id);
@@ -260,17 +262,6 @@ class _Edit_Expense_ScreenState extends State<EditExpense_Screen> {
     );
   }
 
-  @override
-  Future<void> initState() async {
-    // TODO: implement initState
-    super.initState();
-    await _userStore.getProfile();
-    setState(() {
-      addData = _userStore.Profile_data;
-      userId =  addData?.user?.id == 0 ? "" : addData?.user?.id.toString();
-
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -418,7 +409,7 @@ class _Edit_Expense_ScreenState extends State<EditExpense_Screen> {
                                   long: args.long,
                                   files: args!.files,
                                 );
-                                updateEvent(expenseData,int.parse( AppSettings.EventID),userId);
+                                updateEvent(expenseData,int.parse( AppSettings.EventID));
                               } else {
                                 GlobalMethods.showErrorMessage(
                                     context,
@@ -520,7 +511,7 @@ class _Edit_Expense_ScreenState extends State<EditExpense_Screen> {
                                   long: '',
                                   files: args!.files,
                                 );
-                                updateEvent(expenseData,int.parse( AppSettings.EventID),userId);
+                                updateEvent(expenseData,int.parse( AppSettings.EventID));
                               },
                             )
                           : disableButton(),

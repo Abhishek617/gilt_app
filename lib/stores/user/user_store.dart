@@ -282,6 +282,24 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
+  Future ReSend_Otp(String email,String phone, successCallback, errorCallback) async {
+    // final future = _repository.login(email, password);
+
+    // loginFuture = ObservableFuture(future);
+    _repository.ResendOtpaResponse(email,phone).then((value) async {
+      if (value != null) {
+        successCallback(value);
+      } else {
+        print('failed to Reset Password');
+      }
+    }, onError: (error) {
+      print(error.toString());
+      errorCallback(error.response);
+    }).catchError((e) {
+      print(e);
+      throw e;
+    });
+  }
 
   Future oauth(String email, String firstname, String lastname, successCallback,
       errorCallback) async {
@@ -485,8 +503,8 @@ abstract class _UserStore with Store {
   }
   @action
   Future updateEvent(
-      CreateEventRequestModal eventData,int id, int userId,  successCallback, errorCallback) async {
-    _repository.updateEvent(eventData,id, userId,successCallback, errorCallback).then(
+      CreateEventRequestModal eventData,int id,   successCallback, errorCallback) async {
+    _repository.updateEvent(eventData,id, successCallback, errorCallback).then(
             (val) {
           print(val.toString());
         }, onError: errorCallback);
