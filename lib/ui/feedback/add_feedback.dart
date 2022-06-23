@@ -64,12 +64,6 @@ class _Add_feedbackState extends State<Add_feedback> {
   bool verygood = false;
   bool excellent = false;
 
-  //bool _value = false;
-  // int val = -1;
-  //Color _iconColor = Colors.red;
-
-  //BestTutorSite _site = BestTutorSite.javatpoint;
-
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(

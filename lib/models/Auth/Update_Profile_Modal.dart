@@ -23,7 +23,7 @@ class UpdateProfileRequestModal {
   late String city;
   late String state;
   late String country;
-  late int zip;
+  late String zip;
 
   UpdateProfileRequestModal.fromJson(Map<String, dynamic> json) {
     email = json['email'];
@@ -36,7 +36,7 @@ class UpdateProfileRequestModal {
     city = json['city'];
     state = json['state'];
     country = json['country'];
-    zip = json['zip'];
+    zip = json['zip']??'';
   }
 
   Map<String, dynamic> toJson() {
@@ -116,7 +116,7 @@ class User {
   late String city;
   late String state;
   late String country;
-  late int zip;
+  late String zip;
   late int roleId;
   late String deletedAt;
   late bool isEmailVerified;

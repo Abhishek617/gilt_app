@@ -38,6 +38,7 @@ import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 import 'package:guilt_app/utils/encryption/card_encryption.dart';
 
+import '../../../../models/Auth/resend_otp_response.dart';
 import '../../../../models/Event/upcoming_past_event_modal.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
@@ -81,7 +82,8 @@ class PostApi {
       final res = await _dioClient.post(Endpoints.login,
           data: {"username": email, "password": pass, "fcmToken": fcmToken});
       return LoginModal.fromJson(res);
-    } catch (e) {
+    }
+    catch (e) {
       print(e.toString());
       throw e;
     }
@@ -229,7 +231,21 @@ class PostApi {
       throw e;
     }
   }
-
+  Future getOwnBusinessList(searchQuery, token) async {
+    try {
+      print("Search query: $searchQuery");
+      return await _dioClient.get(
+        Endpoints.searchOwnBusinessList,
+        queryParameters: {
+          "search": searchQuery ?? '',
+        },
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
   // Get All User List
   Future getAllUserList(searchQuery, token) async {
     try {
@@ -269,6 +285,28 @@ class PostApi {
       throw e;
     }
   }
+  // Delete Business
+  Future deleteEvent(bID, token) async {
+    try {
+      return await _dioClient
+          .put(
+        "${Endpoints.cancelEvent}/$bID",
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      )
+          .then((value) {
+        print("Cancel event response: ${value.toString()}");
+        value = AcceptRejectEvent.fromJson(value);
+
+      });
+    } catch (e) {
+
+      throw e;
+    }
+  }
+
 
   // Get Business Places
   Future uploadChatImage(file, token) async {
@@ -348,7 +386,19 @@ class PostApi {
       throw e;
     }
   }
-
+  // Get Search Event
+  Future getMyEvents(token, userId,{page = 0, pageSize = 20}) async {
+    try {
+      return await _dioClient.get(
+        Endpoints.userEvents,
+        queryParameters: {"id": userId, "page": page, "size": pageSize},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
   // Get Business Spaces
   Future getBusinessSpaces(token) async {
     try {
@@ -414,7 +464,18 @@ class PostApi {
       throw e;
     }
   }
+  // Resend Otp
 
+  Future<GetResendOtpaResponse> ReSend_Otp(email,phone) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.resendOtp, data: {"email": email,"phone": phone});
+      return GetResendOtpaResponse.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
   // Valid Otp
 
   Future<ValidOtpModel> Valid_Otp(email, otp) async {
@@ -504,13 +565,25 @@ class PostApi {
   Future<UpcomingPastEventModal> getUpcomingPastEventList(
       filterby, page, size, token) async {
     print("Explore: getUpcomingPastEventList");
+    print("filterby: $filterby");
+
+    var params =  {
+      "filterBy": filterby,
+      "page": "0",
+      "size": "5",
+    };
     try {
       final res = await _dioClient.post(Endpoints.upcomingPast,
+        data: params,
           options: Options(headers: {
             'Authorization': 'Bearer ' + token!,
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            'Content-Type': 'application/json; charset=UTF-8'
           }),
-          data: {"filterBy": filterby, "page": page, "size": size});
+
+          // data: {"filterBy": filterby, "page": page, "size": size}
+      );
+      print("Response $res");
+      print("params: $params");
       return UpcomingPastEventModal.fromJson(res);
     } catch (e) {
       print(e.toString());
@@ -593,6 +666,33 @@ class PostApi {
       throw e;
     }
   }
+//update event
+  Future updateEvent(
+      CreateEventRequestModal eventData, int id, token, successCB, errorCB) async {
+    try {
+      await getEventImages(eventData.files, (newFilesArray) async {
+        eventData.files = newFilesArray;
+        FormData formData = await new FormData.fromMap(eventData.toJson());
+        await _dioClient
+            .put(
+          "${Endpoints.updateEvent}/$id",
+          data: formData,
+          options: Options(headers: {
+            'Authorization': 'Bearer ' + token!,
+            'Content-Type': 'multipart/form-data'
+          }),
+        )
+            .then((value) {
+          value = CreateEventResponseModel.fromJson(value);
+          successCB(value);
+        });
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
 
   //Accept Reject Event
   Future acceptRejectEvent(id, status, token, successCB, errorCB) async {
@@ -655,6 +755,33 @@ class PostApi {
         await _dioClient
             .post(
           Endpoints.addBusiness,
+          data: formData,
+          options: Options(headers: {
+            'Authorization': 'Bearer ' + token!,
+            'Content-Type': 'multipart/form-data'
+          }),
+        )
+            .then((value) {
+          value = AddBusinessResponseModel.fromJson(value);
+          successCB(value);
+        });
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+//Add Business
+  Future updateBusiness(
+      AddBusinessRequestModel businessData,int id, token, successCB, errorCB) async {
+    try {
+      await getEventImages(businessData.files, (newFilesArray) async {
+        businessData.files = newFilesArray;
+        FormData formData = await new FormData.fromMap(businessData.toJson());
+        await _dioClient
+            .put(
+          "${Endpoints.updateBusiness}/$id",
           data: formData,
           options: Options(headers: {
             'Authorization': 'Bearer ' + token!,

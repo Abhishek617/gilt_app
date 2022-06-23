@@ -38,7 +38,7 @@ class _AddMoneyState extends State<AddMoney> {
   @override
   void initState() {
     _sink.add(initValue);
-    _stream.listen((event) => _controller.text = '\$' + event.toString());
+    _stream.listen((event) => _controller.text = event.toString());
     super.initState();
   }
 

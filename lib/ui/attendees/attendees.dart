@@ -15,7 +15,7 @@ class Attendees extends StatefulWidget {
 }
 
 class _AttendeesState extends State<Attendees> {
-  late List<EventAttendees> _contacts;
+  late List<EventAttendees1> _contacts;
   late var args;
   @override
   void initState() {

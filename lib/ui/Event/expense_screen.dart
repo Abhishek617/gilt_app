@@ -137,6 +137,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
       if (val.success == true) {
         GlobalMethods.showSuccessMessage(
             context, val.message ?? 'Success', 'Create Event');
+
         if (val.data != null) {
           Routes.navigateToScreenWithArgs(
               context, Routes.event_details, val.data?.id);

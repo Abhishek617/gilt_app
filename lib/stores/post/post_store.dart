@@ -85,6 +85,15 @@ abstract class _PostStore with Store {
         .getBusinessByNameList(searchQuery)
         .then((placeData) => placeData)
         .catchError((error) => throw error);
+
+  }
+  @action
+  Future getOwnBusinessList(searchQuery) async {
+    return await _repository
+        .getOwnBusinessList(searchQuery)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+
   }
   @action
   Future getAllUserList(searchQuery) async {
@@ -135,6 +144,13 @@ abstract class _PostStore with Store {
         .then((placeData) => placeData)
         .catchError((error) => throw error);
   }
+  @action
+  Future deleteEvent(businessId) async {
+    return await _repository
+        .deleteEvent(businessId)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
 
   @action
   Future getUserEvent(userID) async {
@@ -147,6 +163,13 @@ abstract class _PostStore with Store {
   Future getMyBookedEvents() async {
     return await _repository
         .getMyBookedEvents()
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+  @action
+  Future getMyEvents(int userId) async {
+    return await _repository
+        .getMyEvents(userId)
         .then((placeData) => placeData)
         .catchError((error) => throw error);
   }

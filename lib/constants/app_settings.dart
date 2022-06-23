@@ -10,4 +10,7 @@ class AppSettings{
   static const PaymentTypeAddToWallet = "add_to_wallet";
   static const PaymentTypeWalletToBank = "'wallet_to_bank";
   static const PaymentTypeRefundToWallet = "refund_to_wallet";
+
+  static const addUptoUploadSize = " (Max Size 5MB)";
+  static  String EventID = "";
 }

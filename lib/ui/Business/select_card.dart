@@ -30,7 +30,7 @@ class _SelectCardViewState extends State<SelectCardView> {
     super.initState();
     Future.delayed(Duration.zero, () {
       Map<String, dynamic> args =
-          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       fromScreen = args["fromScreen"];
       payableAmount = args["amount"];
       getWalletBalance();
@@ -40,16 +40,16 @@ class _SelectCardViewState extends State<SelectCardView> {
   getWalletBalance() async {
     if (fromScreen != Routes.addmoney) {
       await GlobalStoreHandler.userStore.myWalletBalance(
-          (WalletBalanceMaster master) {
-        if (master.data != null) {
-          walletBalance = master.data?.walletBalance ?? 0;
-          setState(() {
-            walletSelected = walletBalance > 0;
-            checkWalletBalance();
-          });
-        }
-        getSavedCards();
-      }, (error) {
+              (WalletBalanceMaster master) {
+            if (master.data != null) {
+              walletBalance = master.data?.walletBalance ?? 0;
+              setState(() {
+                walletSelected = walletBalance > 0;
+                checkWalletBalance();
+              });
+            }
+            getSavedCards();
+          }, (error) {
         print(error.toString());
         getSavedCards();
       });
@@ -84,43 +84,43 @@ class _SelectCardViewState extends State<SelectCardView> {
           walletBalance == 0
               ? Container()
               : Container(
-                  margin: EdgeInsets.only(bottom: 12),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: Checkbox(
-                            value: walletSelected,
-                            checkColor: Colors.white,
-                            activeColor: AppColors.primaryColor,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                walletSelected = value!;
-                                if (walletSelected) {
-                                  cardList.forEach((element) {
-                                    element.isSelected = false;
-                                  });
-                                } else if (cardList.isNotEmpty) {
-                                  cardList[0].isSelected = true;
-                                }
-                                checkWalletBalance();
-                              });
-                            }),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Wallet Balance: \$$walletBalance',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+            margin: EdgeInsets.only(bottom: 12),
+            child: Row(
+              children: [
+                SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Checkbox(
+                      value: walletSelected,
+                      checkColor: Colors.white,
+                      activeColor: AppColors.primaryColor,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          walletSelected = value!;
+                          if (walletSelected) {
+                            cardList.forEach((element) {
+                              element.isSelected = false;
+                            });
+                          } else if (cardList.isNotEmpty) {
+                            cardList[0].isSelected = true;
+                          }
+                          checkWalletBalance();
+                        });
+                      }),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Wallet Balance: \$$walletBalance',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
+              ],
+            ),
+          ),
           Text(
             'Payable amount: \$$payableAmount',
             style: TextStyle(
@@ -130,15 +130,15 @@ class _SelectCardViewState extends State<SelectCardView> {
           ),
           getWarningText().isNotEmpty
               ? Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    getWarningText(),
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                )
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              getWarningText(),
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          )
               : Container(),
         ],
       ),
@@ -176,28 +176,28 @@ class _SelectCardViewState extends State<SelectCardView> {
                       ),
                       cardList.isNotEmpty
                           ? ListView.builder(
-                              padding: EdgeInsets.all(0),
-                              itemCount: cardList.length,
-                              shrinkWrap: true,
-                              physics: ClampingScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return CardItem(
-                                  cardDetails: cardList[index],
-                                  onClick: () {
-                                    cardList.forEach((element) {
-                                      element.isSelected = false;
-                                    });
-                                    cardList[index].isSelected = true;
-                                    if (!(walletDeduction > 0 &&
-                                        bankDeduction > 0)) {
-                                      walletSelected = false;
-                                    }
-                                    checkWalletBalance();
-                                    setState(() {});
-                                  },
-                                );
-                              },
-                            )
+                        padding: EdgeInsets.all(0),
+                        itemCount: cardList.length,
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return CardItem(
+                            cardDetails: cardList[index],
+                            onClick: () {
+                              cardList.forEach((element) {
+                                element.isSelected = false;
+                              });
+                              cardList[index].isSelected = true;
+                              if (!(walletDeduction > 0 &&
+                                  bankDeduction > 0)) {
+                                walletSelected = false;
+                              }
+                              checkWalletBalance();
+                              setState(() {});
+                            },
+                          );
+                        },
+                      )
                           : Container(),
                       SizedBox(
                         height: 16,
@@ -298,7 +298,7 @@ class _SelectCardViewState extends State<SelectCardView> {
     try {
       if (cardList.isNotEmpty) {
         List<PaymentCardDetails> selectedList =
-            cardList.where((element) => element.isSelected!).toList();
+        cardList.where((element) => element.isSelected!).toList();
         if (selectedList.isNotEmpty) return selectedList[0];
       }
     } catch (e) {

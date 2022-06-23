@@ -12,6 +12,7 @@ import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Login extends StatefulWidget {
@@ -39,8 +40,8 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     _passwordFocusNode = FocusNode();
-    _userEmailController.text = 'nadeem123@yopmail.com';
-    _passwordController.text = 'Nadeem@321';
+    _userEmailController.text = 'chitra+111@phpdots.com';
+    _passwordController.text = 'Jayshreeram@123';
   }
 
   @override
@@ -204,19 +205,20 @@ class _LoginState extends State<Login> {
                       if (formkey.currentState!.validate()) {
                         _userStore.login(_userEmailController.value.text,
                             _passwordController.value.text, (value) {
+
+                          print("loginData: $value");
                           (value.success == true && value.user != null)
                               ? Routes.navigateRootToScreen(
-                                  context, Routes.home_tab)
-                              : Routes.navigateRootToScreen(
-                                  context, Routes.otpvalidate);
+                                  context, Routes.home_tab):
+
+                          GlobalMethods.showErrorMessage(
+                              context, value.message, 'Log In Exception');
                           // Routes.navigateToScreenWithArgs(
                           //     context,
-                          //     Routes.success_error_validate,
-                          //     SuccessErrorValidationPageArgs(
-                          //         isSuccess: true,
-                          //         description: 'Logged in successfully',
-                          //         title: 'Success',
-                          //         isPreviousLogin: false));
+                          //     Routes.otpvalidate,
+                          //   _userEmailController.value.text
+                          //   );
+                          getSharedPreference();
                         }, (error) {
                           print(error);
                           final data = json.decode(json.encode(error.data))
@@ -318,4 +320,13 @@ class _LoginState extends State<Login> {
     _passwordFocusNode?.dispose();
     super.dispose();
   }
+
+   getSharedPreference() async {
+     final prefs = await SharedPreferences.getInstance();
+     await prefs.setString('firstname', 'firstname');
+     await prefs.setString('lastname', 'lastname');
+     await prefs.setString('email', 'email');
+
+
+   }
 }

@@ -11,6 +11,7 @@ import 'package:guilt_app/models/Auth/oauth_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
+import 'package:guilt_app/models/Auth/resend_otp_response.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/models/Business/AddBusinessRequestModel.dart';
 import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
@@ -23,6 +24,9 @@ import 'package:guilt_app/models/post/post.dart';
 import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:sembast/sembast.dart';
 import '../models/Auth/otp_send.dart';
+import '../models/Auth/resend_otp_response.dart';
+import '../models/Auth/resend_otp_response.dart';
+import '../models/Auth/resend_otp_response.dart';
 import '../models/Auth/valid_otp_model.dart';
 import '../models/Event/create_event_modal.dart';
 import '../models/payment/pay_to_user_request.dart';
@@ -196,7 +200,8 @@ class Repository {
     var token = await authToken;
     return await _postApi
         .checkContacts(contacts, token)
-        .then((placeData) => placeData)
+        .then((placeData) =>
+    placeData)
         .catchError((error) => throw error);
   }
 
@@ -241,6 +246,15 @@ class Repository {
         .then((otpSendData) => otpSendData)
         .catchError((error) => throw error);
   }
+
+  // OtpSend:---------------------------------------------------------------------
+
+  Future<GetResendOtpaResponse> ResendOtpaResponse(String email,String phone) async {
+    return await _postApi.ReSend_Otp(email,phone)
+        .then((otpSendData) => otpSendData)
+        .catchError((error) => throw error);
+  }
+
 
   //notification list
   Future<NotificationListModal> Notification_list() async {
@@ -295,7 +309,14 @@ class Repository {
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
-
+  //Delete Event
+  Future deleteEvent(bID) async {
+    var token = await authToken;
+    return await _postApi
+        .deleteEvent(bID, token)
+        .then((eventListData) => eventListData)
+        .catchError((error) => throw error);
+  }
 //get all Business
   Future getAllBusinessList(searchQuery) async {
     var token = await authToken;
@@ -310,6 +331,14 @@ class Repository {
     var token = await authToken;
     return await _postApi
         .getBusinessByNameList(searchQuery, token)
+        .then((eventListData) => eventListData)
+        .catchError((error) => throw error);
+  }
+  // Get Own Businesses By Name
+  Future getOwnBusinessList(searchQuery) async {
+    var token = await authToken;
+    return await _postApi
+        .getOwnBusinessList(searchQuery, token)
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
@@ -378,7 +407,14 @@ class Repository {
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
-
+  //my  event
+  Future getMyEvents(int userId) async {
+    var token = await authToken;
+    return await _postApi
+        .getMyEvents(token,userId)
+        .then((eventListData) => eventListData)
+        .catchError((error) => throw error);
+  }
   // Feedback list
   Future<FeedbackListModel> Feedback_list(int eventId) async {
     var token = await authToken;
@@ -431,6 +467,15 @@ class Repository {
         .then((addeventData) => addeventData)
         .catchError((error) => throw error);
   }
+//updateevent
+  Future updateEvent(
+      CreateEventRequestModal eventData,int id, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .updateEvent(eventData,  id,token, successCB, errorCB)
+        .then((addeventData) => addeventData)
+        .catchError((error) => throw error);
+  }
 
   //accept reject event
   Future acceptRejectEvent(id, status, successCB, errorCB) async {
@@ -460,6 +505,15 @@ class Repository {
         .catchError((error) => throw error);
   }
 
+  //update business
+  Future updateBusiness(
+      AddBusinessRequestModel businessData,int id, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .updateBusiness(businessData,id, token, successCB, errorCB)
+        .then((addedBusinessData) => addedBusinessData)
+        .catchError((error) => throw error);
+  }
 // SignUp:---------------------------------------------------------------------
   Future<SignUpResponseModal> signUp(SignUpRequestModal signUpData) async {
     return await _postApi

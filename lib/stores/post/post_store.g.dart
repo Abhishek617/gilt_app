@@ -120,6 +120,14 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.getBusinessByNameList(searchQuery));
   }
 
+  final _$getOwnBusinessListAsyncAction =
+  AsyncAction('_PostStore.getOwnBusinessList');
+
+  @override
+  Future<dynamic> getOwnBusinessList(dynamic searchQuery) {
+    return _$getOwnBusinessListAsyncAction
+        .run(() => super.getOwnBusinessList(searchQuery));
+  }
   final _$getAllUserListAsyncAction = AsyncAction('_PostStore.getAllUserList');
 
   @override
@@ -181,6 +189,17 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.deleteBusiness(businessId));
   }
 
+
+  final _$deleteEventAsyncAction = AsyncAction('_PostStore.deleteBusiness');
+
+  @override
+  Future<dynamic> deleteEvent(dynamic businessId) {
+    return _$deleteEventAsyncAction
+        .run(() => super.deleteEvent(businessId));
+  }
+
+
+
   final _$getUserEventAsyncAction = AsyncAction('_PostStore.getUserEvent');
 
   @override
@@ -195,6 +214,16 @@ mixin _$PostStore on _PostStore, Store {
   Future<dynamic> getMyBookedEvents() {
     return _$getMyBookedEventsAsyncAction.run(() => super.getMyBookedEvents());
   }
+
+
+  final _$getMyEventsAsyncAction =
+  AsyncAction('_PostStore.getMyEvents');
+
+  @override
+  Future<dynamic> getMyEvents(int userId) {
+    return _$getMyEventsAsyncAction.run(() => super.getMyEvents(userId));
+  }
+
 
   final _$checkContactsAsyncAction = AsyncAction('_PostStore.checkContacts');
 

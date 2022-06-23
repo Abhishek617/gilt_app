@@ -38,7 +38,11 @@ class _MyBusinessState extends State<MyBusiness> {
     });
   }
 
-  editBusiness(businessData, businessIndex) {}
+  editBusiness(businessData, businessIndex) {
+    FocusScope.of(context).unfocus();
+    Routes.navigateToScreen(
+        context, Routes.add_business);
+  }
 
   deleteBusinessRequest(MyBusinessListData businessData, businessIndex) {
     GlobalStoreHandler.postStore.deleteBusiness(businessData.id).then((value) {
@@ -66,6 +70,7 @@ class _MyBusinessState extends State<MyBusiness> {
     Widget cancelButton = TextButton(
       child: Text("Yes"),
       onPressed: () {
+
         deleteBusinessRequest(businessData, businessIndex);
         Navigator.of(context).pop();
       },
@@ -116,7 +121,7 @@ class _MyBusinessState extends State<MyBusiness> {
                         topLeft: Radius.circular(2),
                         bottomLeft: Radius.circular(2)),
                     child: Image.network(
-                      business!.businessPhotos!.length > 0
+                      business.businessPhotos!.length > 0
                           ? business!.businessPhotos![0]!.name!
                           : 'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
                       width: 70,
@@ -153,6 +158,41 @@ class _MyBusinessState extends State<MyBusiness> {
                       ),
                     ],
                   ),
+                ),
+                PopupMenuButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  offset: Offset(-22.0, 40.0),
+                  icon: Icon(Icons.more_vert),
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                    PopupMenuItem(
+                      onTap: () {
+                        Future.delayed(
+                            Duration.zero,
+                                () =>  Routes.navigateToScreenWithArgs(context, Routes.edit_business,business)
+                        );
+
+                        // editBusiness(business, index);
+                      },
+                      height: 10,
+                      padding: EdgeInsets.only(left: 30, top: 10),
+                      child: Text(
+                        'Edit',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      onTap: () {
+                        deleteBusiness(context, business, index);
+                      },
+                      height: 10,
+                      padding: EdgeInsets.only(left: 30, top: 15, bottom: 10),
+                      child: Text(
+                        'Delete',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
