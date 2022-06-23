@@ -362,7 +362,19 @@ class PostApi {
       throw e;
     }
   }
-
+  // Get Search Event
+  Future getMyEvents(token, {page = 0, pageSize = 20}) async {
+    try {
+      return await _dioClient.get(
+        Endpoints.myEvent,
+        queryParameters: {"page": page, "size": pageSize},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
   // Get Business Spaces
   Future getBusinessSpaces(token) async {
     try {
@@ -619,6 +631,33 @@ class PostApi {
       throw e;
     }
   }
+//update event
+  Future updateEvent(
+      CreateEventRequestModal eventData, int id, token, successCB, errorCB) async {
+    try {
+      await getEventImages(eventData.files, (newFilesArray) async {
+        eventData.files = newFilesArray;
+        FormData formData = await new FormData.fromMap(eventData.toJson());
+        await _dioClient
+            .put(
+          "${Endpoints.updateEvent}/$id",
+          data: formData,
+          options: Options(headers: {
+            'Authorization': 'Bearer ' + token!,
+            'Content-Type': 'multipart/form-data'
+          }),
+        )
+            .then((value) {
+          value = CreateEventResponseModel.fromJson(value);
+          successCB(value);
+        });
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
 
   //Accept Reject Event
   Future acceptRejectEvent(id, status, token, successCB, errorCB) async {
@@ -681,6 +720,33 @@ class PostApi {
         await _dioClient
             .post(
           Endpoints.addBusiness,
+          data: formData,
+          options: Options(headers: {
+            'Authorization': 'Bearer ' + token!,
+            'Content-Type': 'multipart/form-data'
+          }),
+        )
+            .then((value) {
+          value = AddBusinessResponseModel.fromJson(value);
+          successCB(value);
+        });
+      });
+    } catch (e) {
+      errorCB(e);
+      print(e.toString());
+      throw e;
+    }
+  }
+//Add Business
+  Future updateBusiness(
+      AddBusinessRequestModel businessData,int id, token, successCB, errorCB) async {
+    try {
+      await getEventImages(businessData.files, (newFilesArray) async {
+        businessData.files = newFilesArray;
+        FormData formData = await new FormData.fromMap(businessData.toJson());
+        await _dioClient
+            .put(
+          "${Endpoints.updateBusiness}/$id",
           data: formData,
           options: Options(headers: {
             'Authorization': 'Bearer ' + token!,

@@ -12,4 +12,5 @@ class AppSettings{
   static const PaymentTypeRefundToWallet = "refund_to_wallet";
 
   static const addUptoUploadSize = " (Max Size 5MB)";
+  static  String EventID = "";
 }

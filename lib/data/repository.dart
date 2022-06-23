@@ -387,7 +387,14 @@ class Repository {
         .then((eventListData) => eventListData)
         .catchError((error) => throw error);
   }
-
+  //my  event
+  Future getMyEvents() async {
+    var token = await authToken;
+    return await _postApi
+        .getMyEvents(token)
+        .then((eventListData) => eventListData)
+        .catchError((error) => throw error);
+  }
   // Feedback list
   Future<FeedbackListModel> Feedback_list(int eventId) async {
     var token = await authToken;
@@ -440,6 +447,15 @@ class Repository {
         .then((addeventData) => addeventData)
         .catchError((error) => throw error);
   }
+//updateevent
+  Future updateEvent(
+      CreateEventRequestModal eventData,int id,  successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .updateEvent(eventData,  id, token, successCB, errorCB)
+        .then((addeventData) => addeventData)
+        .catchError((error) => throw error);
+  }
 
   //accept reject event
   Future acceptRejectEvent(id, status, successCB, errorCB) async {
@@ -469,6 +485,15 @@ class Repository {
         .catchError((error) => throw error);
   }
 
+  //update business
+  Future updateBusiness(
+      AddBusinessRequestModel businessData,int id, successCB, errorCB) async {
+    var token = await authToken;
+    return await _postApi
+        .updateBusiness(businessData,id, token, successCB, errorCB)
+        .then((addedBusinessData) => addedBusinessData)
+        .catchError((error) => throw error);
+  }
 // SignUp:---------------------------------------------------------------------
   Future<SignUpResponseModal> signUp(SignUpRequestModal signUpData) async {
     return await _postApi

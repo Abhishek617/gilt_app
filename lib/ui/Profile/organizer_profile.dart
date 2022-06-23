@@ -12,6 +12,7 @@ import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
+import 'package:intl/intl.dart';
 
 class OrganizerProfile extends StatefulWidget {
 
@@ -142,12 +143,15 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(event?.startDate ?? 'Upcoming Event',
+                      Text( (DateFormat.yMMMd().format(DateTime.parse(
+                          event.startDate
+                              .toString() ??
+                              ''))) ?? 'Upcoming Event',
                           style: TextStyle(
                               color: AppColors.primaryColor,
                               fontSize: 12,
                               fontWeight: FontWeight.w400)),
-                      Text(event?.name ?? 'No name',
+                      Text(event.name ?? 'No name',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w700)),
                       SizedBox(
@@ -289,16 +293,14 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
                   Container(
                     child: segmentedControlValue == 0
                         ? about()
-                        : Container(
-                            // height: DeviceUtils.getScaledHeight(context, 0.35),
-                            child: eventList.length > 0 ? ListView(
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              children: eventList
-                                  .map((item) => eventContainer(item))
-                                  .toList(),
-                            ) : Center(child: Text('No Events Added'),),
-                          ),
+                        : eventList.length > 0 ? ListView(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                          children: eventList
+                              .map((item) => eventContainer(item))
+                              .toList(),
+                        ) : Center(child: Text('No Events Added'),),
                   ),
                 ],
               ),

@@ -260,6 +260,12 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                   context, Routes.saved_cards)
                             }),
                     getMenuTile(
+                      'MY EVENTS',
+                          () => {
+                        Routes.navigateToScreen(context, Routes.my_event)
+                      },
+                    ),
+                    getMenuTile(
                       'MY PAID EVENTS',
                       () => {
                         Routes.navigateToScreen(context, Routes.my_book_event)
