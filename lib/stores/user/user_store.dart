@@ -196,7 +196,7 @@ abstract class _UserStore with Store {
   }
 
   //SETTING
-
+  @action
   Future Feedback_add(String description, int eventId, String rate,
       successCallback, errorCallback) async {
     _repository.Feedback_add(description, eventId, rate).then((value) async {

@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 class PaymentHistoryResponseModel {
   bool? success;
   String? message;
@@ -9,7 +11,7 @@ class PaymentHistoryResponseModel {
     success = json['success'];
     message = json['message'];
     history =
-    json['history'] != null ? new History.fromJson(json['history']) : null;
+        json['history'] != null ? new History.fromJson(json['history']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -82,28 +84,28 @@ class HistoryItem {
 
   HistoryItem(
       {this.id,
-        this.fromUserId,
-        this.toUserId,
-        this.eventId,
-        this.businessId,
-        this.amount,
-        this.balanceAfterCurrentTransaction,
-        this.paymentMethod,
-        this.status,
-        this.transactionId,
-        this.paymentGatewayResponse,
-        this.isRefundEntry,
-        this.transactionType,
-        this.paidWalletAmount,
-        this.paidCardAmount,
-        this.paidBankAmount,
-        this.createdAt,
-        this.updatedAt,
-        this.fromUserInfo,
-        this.toUserInfo,
-        this.event,
-        this.type,
-        this.message});
+      this.fromUserId,
+      this.toUserId,
+      this.eventId,
+      this.businessId,
+      this.amount,
+      this.balanceAfterCurrentTransaction,
+      this.paymentMethod,
+      this.status,
+      this.transactionId,
+      this.paymentGatewayResponse,
+      this.isRefundEntry,
+      this.transactionType,
+      this.paidWalletAmount,
+      this.paidCardAmount,
+      this.paidBankAmount,
+      this.createdAt,
+      this.updatedAt,
+      this.fromUserInfo,
+      this.toUserInfo,
+      this.event,
+      this.type,
+      this.message});
 
   HistoryItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -112,11 +114,13 @@ class HistoryItem {
     eventId = json['eventId'];
     businessId = json['businessId'];
     amount = json['amount'].toDouble();
-    balanceAfterCurrentTransaction = json['balanceAfterCurrentTransaction'].toDouble();
+    balanceAfterCurrentTransaction =
+        json['balanceAfterCurrentTransaction'].toDouble();
     paymentMethod = json['paymentMethod'];
     status = json['status'];
     transactionId = json['transactionId'];
-    paymentGatewayResponse = json['paymentGatewayResponse'] != null
+    paymentGatewayResponse = json['paymentGatewayResponse'] != null &&
+            json['paymentGatewayResponse'].isNotEmpty
         ? new PaymentGatewayResponse.fromJson(json['paymentGatewayResponse'])
         : null;
     isRefundEntry = json['isRefundEntry'];
@@ -265,23 +269,23 @@ class TransactionResponse {
 
   TransactionResponse(
       {this.profile,
-        this.transId,
-        this.authCode,
-        this.messages,
-        this.transHash,
-        this.refTransID,
-        this.accountType,
-        this.testRequest,
-        this.responseCode,
-        this.accountNumber,
-        this.avsResultCode,
-        this.cvvResultCode,
-        this.transHashSha2,
-        this.cavvResultCode});
+      this.transId,
+      this.authCode,
+      this.messages,
+      this.transHash,
+      this.refTransID,
+      this.accountType,
+      this.testRequest,
+      this.responseCode,
+      this.accountNumber,
+      this.avsResultCode,
+      this.cvvResultCode,
+      this.transHashSha2,
+      this.cavvResultCode});
 
   TransactionResponse.fromJson(Map<String, dynamic> json) {
     profile =
-    json['profile'] != null ? new Profile.fromJson(json['profile']) : null;
+        json['profile'] != null ? new Profile.fromJson(json['profile']) : null;
     transId = json['transId'];
     authCode = json['authCode'];
     messages = json['messages'] != null

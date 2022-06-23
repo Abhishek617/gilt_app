@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/models/Auth/feedback_add_model.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
@@ -38,25 +39,27 @@ class Add_feedback extends StatefulWidget {
 class _Add_feedbackState extends State<Add_feedback> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   TextEditingController _DescripationController = TextEditingController();
-  ThemeStore _themeStore = ThemeStore(getIt<Repository>());
   final UserStore _userStore = UserStore(getIt<Repository>());
-  late UserStore _feedbackStore;
+  int eventId = 0;
 
   String? rate;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      try {
+        eventId = ModalRoute.of(context)!.settings.arguments as int;
+      } catch (e) {
+        print("${e.toString()}");
+      }
+    });
+  }
 
   void selectRate(value) {
     setState(() {
       rate = value;
     });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // initializing stores
-    _feedbackStore = Provider.of<UserStore>(context);
-
-    // check to see if already called api
   }
 
   //bool isSelected = true;
@@ -250,22 +253,26 @@ class _Add_feedbackState extends State<Add_feedback> {
                         buttonColor: AppColors.primaryColor,
                         onPressed: () {
                           {
+                            GlobalMethods.hideKeyboard(context);
                             if (formkey.currentState!.validate()) {
+                              GlobalMethods.showLoader();
                               _userStore.Feedback_add(
                                   _DescripationController.value.text,
-                                  27,
-                                  getRating(), (value) {
-                                Routes.navigateRootToScreen(
-                                    context, Routes.feedback_list);
-                                // Routes.navigateToScreenWithArgs(
-                                //     context,
-                                //     Routes.success_error_validate,
-                                //     SuccessErrorValidationPageArgs(
-                                //         isSuccess: true,
-                                //         description: 'Logged in successfully',
-                                //         title: 'Success',
-                                //         isPreviousLogin: false));
+                                  eventId,
+                                  getRating(), (Feedback_add_Model val) {
+                                GlobalMethods.hideLoader();
+                                if (val.success == true) {
+                                  GlobalMethods.showSuccessMessage(context,
+                                      val.message ?? 'Success', 'Event');
+                                } else {
+                                  GlobalMethods.showErrorMessage(context,
+                                      val.message ?? 'Failed', 'Event');
+                                }
+                                Routes.goBack(context);
+                                // Routes.navigateRootToScreen(
+                                //     context, Routes.feedback_list);
                               }, (error) {
+                                GlobalMethods.hideLoader();
                                 print(error);
                                 final data =
                                     json.decode(json.encode(error.data));
