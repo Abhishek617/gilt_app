@@ -219,11 +219,23 @@ class _BusinessDetailState extends State<BusinessDetail> {
                   fontSize: 14, fontWeight: FontWeight.w500),
             ),
           )
-              : Row(
+             //   ListView(
+             //      scrollDirection: Axis.horizontal,
+             //      children: b.businessPhotos!
+             //             .map((e) => getImageContainer(e))
+             //             .toList(),
+             //
+             // ),
+          //
+              :
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+                    child: Row(
             children: b.businessPhotos!
-                .map((e) => getImageContainer(e))
-                .toList(),
+                      .map((e) => getImageContainer(e))
+                      .toList(),
           ),
+                  ),
           SizedBox(
             height: 20,
           ),

@@ -51,6 +51,8 @@ class Endpoints {
   //---------Business
   // Add Business
   static const String addBusiness = baseUrl + "api/business/add";
+  // update Business
+  static const String updateBusiness = baseUrl + "api/business";
 
   // delete Business
   static const String deleteBusiness = baseUrl + "api/business";
@@ -64,8 +66,6 @@ class Endpoints {
   // Business Details
   static const String businessDetail = baseUrl + "api/business";
 
-  // Update Business Details
-  static const String updateBusiness = baseUrl + "api/business";
 
   // Search Business List of User
   static const String searchByNameBusinessList =
@@ -164,8 +164,14 @@ class Endpoints {
   //My Booked Event List
   static const String myBookedEvent = baseUrl + 'api/event/myBookedEvents';
 
+  //My  Event List
+  static const String myEvent = baseUrl + 'api/event/myBookedEvents';
+
 //CreateEvent
   static const String addEvent = baseUrl + 'api/event/add';
+
+  //CreateEvent
+  static const String updateEvent = baseUrl + 'api/event';
 
   //CreateEvent
   static const String cancelEvent = baseUrl + 'api/event/cancel';

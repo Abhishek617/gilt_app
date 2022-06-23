@@ -483,6 +483,14 @@ abstract class _UserStore with Store {
       print(val.toString());
     }, onError: errorCallback);
   }
+  @action
+  Future updateEvent(
+      CreateEventRequestModal eventData,int id, int userId,  successCallback, errorCallback) async {
+    _repository.updateEvent(eventData,id, userId,successCallback, errorCallback).then(
+            (val) {
+          print(val.toString());
+        }, onError: errorCallback);
+  }
 
   @action
   Future acceptRejectEvent(id, status, successCallback, errorCallback) async {
@@ -508,7 +516,14 @@ abstract class _UserStore with Store {
       print(val.toString());
     }, onError: errorCallback);
   }
-
+  @action
+  Future updateBusiness(AddBusinessRequestModel businessData, int id,successCallback,
+      errorCallback) async {
+    _repository.updateBusiness(businessData,id, successCallback, errorCallback).then(
+            (val) {
+          print(val.toString());
+        }, onError: errorCallback);
+  }
   @action
   Future updateprofile(UpdateProfileRequestModal UpdateProfileData,
       successCallback, errorCallback) async {

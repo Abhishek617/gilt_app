@@ -26,6 +26,10 @@ class MenuDrawer extends StatefulWidget {
 class _MenuDrawerState extends State<MenuDrawer> {
   // late Repository _repository;
   final UserStore _userStore = UserStore(getIt<Repository>());
+  String _email = '';
+  String _firstname = '';
+  String _lastname = '';
+
 
   @observable
   var userRole = '1';
@@ -33,6 +37,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
   @override
   void initState() {
     setUserRole();
+    getdata();
     super.initState();
   }
 
@@ -82,6 +87,16 @@ class _MenuDrawerState extends State<MenuDrawer> {
     await _userStore.getProfile();
     setState(() {
       userRole = role;
+    });
+  }
+
+  getdata() async
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _email = (prefs.getString('email') ?? '');
+      _firstname = (prefs.getString('firstname') ?? '');
+      _lastname = (prefs.getString('lastname') ?? '');
     });
   }
 
@@ -260,6 +275,12 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                   context, Routes.saved_cards)
                             }),
                     getMenuTile(
+                      'MY EVENTS',
+                          () => {
+                        Routes.navigateToScreen(context, Routes.my_event)
+                      },
+                    ),
+                    getMenuTile(
                       'MY PAID EVENTS',
                       () => {
                         Routes.navigateToScreen(context, Routes.my_book_event)
@@ -333,7 +354,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             Icons.settings,
                             'Settings',
                             () => {
-                              Routes.navigateToScreen(context, Routes.setting)
+                              Routes.navigateToScreen(context, Routes.notifisetting)
                             },
                           ),
                           getBottomMenuTile(

@@ -473,9 +473,9 @@ class _EventDetailsState extends State<EventDetails> {
     GetProfileResponseModal? profileData = await _userStore.getProfileData();
     int userId = profileData?.user?.id ?? 0;
     double amount = 0;
-    List<EventAttendees> attendees = contentData?.event?.eventAttendees ?? [];
+    List<EventAttendees1> attendees = contentData?.event?.eventAttendees ?? [];
     if (attendees.isNotEmpty) {
-      List<EventAttendees> payableAttendees =
+      List<EventAttendees1> payableAttendees =
           attendees.where((element) => element.userId == userId).toList();
       if (payableAttendees.isNotEmpty) {
         amount = payableAttendees![0].expense ?? 0;

@@ -72,7 +72,7 @@ class MyBusinessListData {
   String? createdAt;
   String? updatedAt;
   Admin? admin;
-  List<BusinessPhotos>? businessPhotos;
+  List<BusinessPhotos1>? businessPhotos;
 
   MyBusinessListData(
       {this.id,
@@ -104,9 +104,9 @@ class MyBusinessListData {
     updatedAt = json['updatedAt'];
     admin = json['admin'] != null ? new Admin.fromJson(json['admin']) : null;
     if (json['BusinessPhotos'] != null) {
-      businessPhotos = <BusinessPhotos>[];
+      businessPhotos = <BusinessPhotos1>[];
       json['BusinessPhotos'].forEach((v) {
-        businessPhotos!.add(new BusinessPhotos.fromJson(v));
+        businessPhotos!.add(new BusinessPhotos1.fromJson(v));
       });
     }
   }
@@ -175,13 +175,13 @@ class Admin {
   }
 }
 
-class BusinessPhotos {
+class BusinessPhotos1 {
   int? id;
   String? name;
 
-  BusinessPhotos({this.id, this.name});
+  BusinessPhotos1({this.id, this.name});
 
-  BusinessPhotos.fromJson(Map<String, dynamic> json) {
+  BusinessPhotos1.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
   }

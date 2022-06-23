@@ -1,9 +1,11 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:guilt_app/ui/Business/SearchAllBusiness.dart';
 import 'package:guilt_app/ui/Business/SearchUserForBusinessPayment.dart';
 import 'package:guilt_app/ui/Business/add_card.dart';
 import 'package:guilt_app/ui/Business/business_payment.dart';
+import 'package:guilt_app/ui/Business/edit_business.dart';
 import 'package:guilt_app/ui/Business/edit_card.dart';
 import 'package:guilt_app/ui/Business/mybusiness.dart';
 import 'package:guilt_app/ui/Business/saved_cards.dart';
@@ -14,7 +16,7 @@ import 'package:guilt_app/ui/Event/book_event.dart';
 import 'package:guilt_app/ui/Business/business_details.dart';
 import 'package:guilt_app/ui/Event/event_detail.dart';
 import 'package:guilt_app/ui/Event/expense_screen.dart';
-import 'package:guilt_app/ui/Event/my_event.dart';
+import 'package:guilt_app/ui/Event/my_book_event.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Messages/BusinessChatScreen.dart';
 import 'package:guilt_app/ui/Messages/ChatScreen.dart';
@@ -25,7 +27,7 @@ import 'package:guilt_app/ui/common/InviteContacts.dart';
 import 'package:guilt_app/ui/home/home_explore_screen.dart';
 import 'package:guilt_app/ui/Profile/organizer_profile.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
-import 'package:guilt_app/ui/Setting/setting.dart';
+import 'package:guilt_app/ui/Setting/Notification_settings.dart';
 import 'package:guilt_app/ui/Tab/home_tab.dart';
 import 'package:guilt_app/ui/attendees/add_contacts.dart';
 import 'package:guilt_app/ui/attendees/addendees_profile.dart';
@@ -56,6 +58,9 @@ import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/ui/Event/event.dart';
 import 'package:guilt_app/ui/user/user_payment.dart';
+import '../../ui/Event/edit_event.dart';
+import '../../ui/Event/edit_expense_screen.dart';
+import '../../ui/Event/my_event.dart';
 import '../../ui/Messages/message.dart';
 import '../../ui/attendees/attendees.dart';
 import '../../ui/notification/notification.dart';
@@ -81,7 +86,7 @@ class Routes {
   static const String business_chat = '/business_chat';
   static const String event_chat = '/event_chat';
   static const String message = '/message';
-  static const String setting = '/setting';
+  static const String notifisetting = '/notifisetting';
   static const String splash = '/splash';
   static const String login = '/login';
   static const String welcome_login = '/welcome_login';
@@ -104,6 +109,7 @@ class Routes {
   static const String explore_home = '/explore_home';
   static const String view_profile = '/view_profile';
   static const String add_business = '/add_business';
+  static const String edit_business = '/edit_business';
   static const String business_list = '/business_list';
   static const String my_business = '/my_business';
   static const String search_all_business = '/search_all_business';
@@ -116,6 +122,9 @@ class Routes {
   static const String atendees = '/atendees';
   static const String notifi = '/notifi';
   static const String my_book_event = '/my_book_event ';
+  static const String my_event = '/my_event ';
+  static const String edit_event = '/edit_event ';
+  static const String edit_expense = '/edit_expense ';
   static const String search_event = '/search_event ';
   static const String business_details = '/business_details ';
   static const String help_and_support = '/help_and_support';
@@ -148,7 +157,8 @@ class Routes {
     business_chat: (BuildContext context) => BusinessChatScreen(),
     event_chat: (BuildContext context) => EventChatScreen(),
     message: (BuildContext context) => Messages(),
-    setting: (BuildContext context) => Setting(),
+    notifisetting: (BuildContext context) => NotifiSettings( ),
+
     splash: (BuildContext context) => SplashScreen(),
     intro: (BuildContext context) => OnBoardingPage(),
     welcome_login: (BuildContext context) => WelcomeLogin(),
@@ -171,6 +181,7 @@ class Routes {
     explore_home: (BuildContext context) => HomeExploreScreen(),
     invite_contact: (BuildContext context) => InviteContact(),
     add_business: (BuildContext context) => Add_business(),
+    edit_business: (BuildContext context) => Edit_business(),
     business_list: (BuildContext context) => Business_list(),
     my_business: (BuildContext context) => MyBusiness(),
     search_all_business: (BuildContext context) => SearchAllBusiness(),
@@ -183,6 +194,9 @@ class Routes {
     notifi: (BuildContext context) => Notifications(),
     search_event: (BuildContext context) => SearchEvent(),
     my_book_event: (BuildContext context) => MyBookEvent(),
+    my_event: (BuildContext context) => MyEvent(),
+    edit_event: (BuildContext context) => Edit_event(),
+    edit_expense: (BuildContext context) => EditExpense_Screen(),
     business_details: (BuildContext context) => BusinessDetail(),
     help_and_support: (BuildContext context) => HelpAndSupport(),
     about_screen: (BuildContext context) => About_screen(),

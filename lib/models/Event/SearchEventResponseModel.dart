@@ -74,7 +74,7 @@ class EventItem {
   String? createdAt;
   String? updatedAt;
   Organizer? organizer;
-  List<EventImages>? eventImages;
+  List<EventImages1>? eventImages;
   List<EventAttendees>? eventAttendees;
 
   EventItem(
@@ -116,9 +116,9 @@ class EventItem {
         ? new Organizer.fromJson(json['organizer'])
         : null;
     if (json['eventImages'] != null) {
-      eventImages = <EventImages>[];
+      eventImages = <EventImages1>[];
       json['eventImages'].forEach((v) {
-        eventImages!.add(new EventImages.fromJson(v));
+        eventImages!.add(new EventImages1.fromJson(v));
       });
     }
     if (json['eventAttendees'] != null) {
@@ -199,12 +199,12 @@ class Organizer {
   }
 }
 
-class EventImages {
+class EventImages1 {
   String? file;
 
-  EventImages({this.file});
+  EventImages1({this.file});
 
-  EventImages.fromJson(Map<String, dynamic> json) {
+  EventImages1.fromJson(Map<String, dynamic> json) {
     file = json['file'];
   }
 

@@ -225,7 +225,7 @@ class _AddCardState extends State<AddCard> {
               if (val!.isEmpty) {
                 return "Enter card number";
               } else if (CardUtils.validateCardNumWithLuhnAlgorithm(
-                      edCardNumberController.text.toString()) !=
+                  edCardNumberController.text.toString()) !=
                   null) {
                 return "Invalid card.";
               }
@@ -266,7 +266,7 @@ class _AddCardState extends State<AddCard> {
                         if (val!.isEmpty) {
                           return "Enter expiry.";
                         } else if (CardUtils.validateDate(
-                                edCardExpiryController.text.toString()) !=
+                            edCardExpiryController.text.toString()) !=
                             null) {
                           return "Invalid expiry date.";
                         } else {
@@ -360,7 +360,7 @@ class _AddCardState extends State<AddCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // imgLogo,
+                      imgLogo,
                       SizedBox(
                         height: 20,
                       ),
@@ -404,7 +404,7 @@ class _AddCardState extends State<AddCard> {
 
   String getCardParams() {
     List<String> expiryDate =
-        CardUtils.getExpiryDate(edCardExpiryController.text);
+    CardUtils.getExpiryDate(edCardExpiryController.text);
     String expiry = "${expiryDate[0]}${expiryDate[1]}";
     var map = new Map<String, dynamic>();
     map['type'] = "card";
@@ -433,8 +433,7 @@ class _AddCardState extends State<AddCard> {
   }
 
   addCardOrBankAccount({required String data}) async {
-    print(data);
-    /*GlobalMethods.showLoader();
+    GlobalMethods.showLoader();
     _userStore.addCardOrBankAccount(data, (AddPaymentMaster paymentMaster) {
       GlobalMethods.hideLoader();
       if (paymentMaster != null) {
@@ -450,7 +449,7 @@ class _AddCardState extends State<AddCard> {
     }, (error) {
       GlobalMethods.hideLoader();
       print(error.toString());
-    });*/
+    });
   }
 }
 

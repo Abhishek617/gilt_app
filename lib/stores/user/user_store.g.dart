@@ -155,7 +155,14 @@ mixin _$UserStore on _UserStore, Store {
     return _$createEventAsyncAction.run(
         () => super.createEvent(eventData, successCallback, errorCallback));
   }
+  final _$updateEventAsyncAction = AsyncAction('_UserStore.createEvent');
 
+  @override
+  Future<dynamic> updateEvent(CreateEventRequestModal eventData,int id,int userId,
+      dynamic successCallback, dynamic errorCallback) {
+    return _$updateEventAsyncAction.run(
+            () => super.updateEvent(eventData, id,userId,successCallback, errorCallback));
+  }
   final _$acceptRejectEventAsyncAction =
       AsyncAction('_UserStore.acceptRejectEvent');
 
@@ -174,6 +181,15 @@ mixin _$UserStore on _UserStore, Store {
     return _$addBusinessAsyncAction.run(
         () => super.addBusiness(businessData, successCallback, errorCallback));
   }
+  final _$updateBusinessAsyncAction = AsyncAction('_UserStore.updateBusiness');
+
+  @override
+  Future<dynamic> updateBusiness(AddBusinessRequestModel businessData, int id,
+      dynamic successCallback, dynamic errorCallback) {
+    return _$updateBusinessAsyncAction.run(
+            () => super.updateBusiness(businessData, id,successCallback, errorCallback));
+  }
+
 
   final _$updateprofileAsyncAction = AsyncAction('_UserStore.updateprofile');
 
