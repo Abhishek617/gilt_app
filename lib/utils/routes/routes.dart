@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/models/PageModals/faqs_model.dart';
 import 'package:guilt_app/ui/Business/SearchAllBusiness.dart';
@@ -25,7 +26,7 @@ import 'package:guilt_app/ui/common/InviteContacts.dart';
 import 'package:guilt_app/ui/home/home_explore_screen.dart';
 import 'package:guilt_app/ui/Profile/organizer_profile.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
-import 'package:guilt_app/ui/Setting/setting.dart';
+import 'package:guilt_app/ui/Setting/Notification_settings.dart';
 import 'package:guilt_app/ui/Tab/home_tab.dart';
 import 'package:guilt_app/ui/attendees/add_contacts.dart';
 import 'package:guilt_app/ui/attendees/addendees_profile.dart';
@@ -81,7 +82,7 @@ class Routes {
   static const String business_chat = '/business_chat';
   static const String event_chat = '/event_chat';
   static const String message = '/message';
-  static const String setting = '/setting';
+  static const String notifisetting = '/notifisetting';
   static const String splash = '/splash';
   static const String login = '/login';
   static const String welcome_login = '/welcome_login';
@@ -148,7 +149,8 @@ class Routes {
     business_chat: (BuildContext context) => BusinessChatScreen(),
     event_chat: (BuildContext context) => EventChatScreen(),
     message: (BuildContext context) => Messages(),
-    setting: (BuildContext context) => Setting(),
+    notifisetting: (BuildContext context) => NotifiSettings( ),
+
     splash: (BuildContext context) => SplashScreen(),
     intro: (BuildContext context) => OnBoardingPage(),
     welcome_login: (BuildContext context) => WelcomeLogin(),

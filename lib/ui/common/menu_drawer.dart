@@ -348,7 +348,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             Icons.settings,
                             'Settings',
                             () => {
-                              Routes.navigateToScreen(context, Routes.setting)
+                              Routes.navigateToScreen(context, Routes.notifisetting)
                             },
                           ),
                           getBottomMenuTile(
