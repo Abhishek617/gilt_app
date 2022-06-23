@@ -235,6 +235,7 @@ class _Edit_businessState extends State<Edit_business> {
                   GlobalMethods.hideLoader();
                   print(error.toString());
                 });
+
                 // TODO : Call Add New Business
               } else {
                 GlobalMethods.hideLoader();
