@@ -1,41 +1,41 @@
 class PushSettingsModal {
-  PushSettingsModal({
-    required this.success,
-    required this.message,
-    required this.settings,
-  });
-  late final bool success;
-  late final String message;
-  late final List<Settings> settings;
+  bool? success;
+  String? message;
+  List<Settings> settings=[];
 
-  PushSettingsModal.fromJson(Map<String, dynamic> json){
+  PushSettingsModal({this.success, this.message, required this.settings});
+
+  PushSettingsModal.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    settings = List.from(json['settings']).map((e)=>Settings.fromJson(e)).toList();
+    if (json['settings'] != null) {
+      settings = <Settings>[];
+      json['settings'].forEach((v) {
+        settings.add(new Settings.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['success'] = success;
-    _data['message'] = message;
-    _data['settings'] = settings.map((e)=>e.toJson()).toList();
-    return _data;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['success'] = this.success;
+    data['message'] = this.message;
+    if (this.settings != null) {
+      data['settings'] = this.settings.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
 
 class Settings {
-  Settings({
-    required this.id,
-    required this.notificationTempId,
-    required this.isReceive,
-    required this.label,
-  });
-  late final int id;
-  late final int notificationTempId;
-  late final bool isReceive;
-  late final String label;
+  int? id;
+  int? notificationTempId;
+  bool? isReceive;
+  String? label;
 
-  Settings.fromJson(Map<String, dynamic> json){
+  Settings({this.id, this.notificationTempId, this.isReceive, this.label});
+
+  Settings.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     notificationTempId = json['notificationTempId'];
     isReceive = json['isReceive'];
@@ -43,11 +43,11 @@ class Settings {
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['id'] = id;
-    _data['notificationTempId'] = notificationTempId;
-    _data['isReceive'] = isReceive;
-    _data['label'] = label;
-    return _data;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['notificationTempId'] = this.notificationTempId;
+    data['isReceive'] = this.isReceive;
+    data['label'] = this.label;
+    return data;
   }
-}
+  }

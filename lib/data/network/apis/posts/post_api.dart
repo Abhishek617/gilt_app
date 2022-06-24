@@ -141,7 +141,7 @@ class PostApi {
   //get pushsettings
   Future<PushSettingsModal> pushsettingGet(token) async {
     try {
-      final res = await _dioClient.post(Endpoints.pushsubsetting,
+      final res = await _dioClient.get(Endpoints.pushsubsetting,
           options: Options(headers: {'Authorization': 'Bearer ' + token!}));
       return PushSettingsModal.fromJson(res);
     } catch (e) {

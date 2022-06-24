@@ -34,30 +34,31 @@ class _NotifiSettingsState extends State<NotifiSettings> {
   bool _event_update_notification = false;
   late UserStore _settingStore,_pushSettingStore;
   final UserStore _userStore = UserStore(getIt<Repository>());
-   PushSettingsModal? contentData;
+  
+  List<Settings> arrNotify=[];
 
-  @override
-  void initState() {
-    super.initState();
-    initSetup();
-    getPushSubSetting();
-  }
+
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();
-    getPushSubSetting();
-
+    if (this.mounted) {
+      getPushSubSetting();
+      super.didChangeDependencies();
+    }
   }
+
 
 getPushSubSetting() async{
   _pushSettingStore = Provider.of<UserStore>(context);
   await _pushSettingStore.pushsettingGet()
       .then((pushsettingData) {
-    if(pushsettingData.Settings == null)
+    // if(pushsettingData.settings != null)
       setState(() {
-        contentData = PushSettingsModal.fromJson(pushsettingData);
+        arrNotify =pushsettingData.settings;
+        print("ArrData: $arrNotify");
+        // contentData = PushSettingsModal.fromJson(pushsettingData);
     });
-  }).catchError((error) => throw error);
+  }).
+  catchError((error) => throw error);
 
 }
 
@@ -153,7 +154,7 @@ getPushSubSetting() async{
           width: 40.0,
           height: 22.0,
           toggleSize: 14.0,
-          value: data.isReceive,
+          value: data.isReceive!,
           borderRadius: 25.0,
           onToggle: (val) {
             setState(() {
@@ -166,7 +167,7 @@ getPushSubSetting() async{
   );
 
 
-  emailsublist()  => Column(
+  emailsublist(Settings arrNotify)  => Column(
     children: [
       SizedBox(height: 10,),
       Row(
@@ -267,12 +268,12 @@ getPushSubSetting() async{
               SizedBox(
                 height: 15,
               ),
-              _switch_isPushNotification == true &&
-              contentData!.settings.length>0?ListView.builder(
+              _switch_isPushNotification == true ?
+              ListView.builder(
                 shrinkWrap: true,
-                  itemCount: contentData!.settings.length,
+                  itemCount: arrNotify.length,
                   itemBuilder: (BuildContext context, int index) => Column(children: [
-                    pushsublist(contentData!.settings[index]),
+                    pushsublist(arrNotify[index]),
 
                   ],)): Container(),
               Divider(
@@ -326,8 +327,12 @@ getPushSubSetting() async{
               _switch_isEmailNotification == true?
               ListView.builder(
                   shrinkWrap: true,
-                  itemCount: contentData?.settings.length,
-                  itemBuilder: (BuildContext context, int index) => emailsublist()): Container(),
+                  itemCount: arrNotify.length,
+                  itemBuilder: (BuildContext context, int index) => Column(children: [
+                    emailsublist(arrNotify[index]),
+
+                  ],)): Container(),
+                
 
               Divider(
                 color: Colors.black12,
