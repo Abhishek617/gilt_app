@@ -53,20 +53,22 @@ class _FaqScreenState extends State<FaqScreen> {
         shrinkWrap: true,
         itemCount: contentData!.data!.data!.length,
         itemBuilder: (_, index) {
-          bool expansValue = index==selected?true:false;
+          bool expansValue = index==selected?false:false;
           print("expansValue: $expansValue");
           return Theme(
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
                 key: Key(index.toString()),
 
-              initiallyExpanded : index==selected,
-              //
+              initiallyExpanded : index ==selected,
+
               leading: Icon(
-                index==selected? Icons.remove_circle_outline
+                selected == index? Icons.remove_circle_outline
                     : Icons.add_circle_outline_sharp,
               ),
+
                 trailing: SizedBox(),
+
                 // controlAffinity: ListTileControlAffinity.leading,
                 title: Text(contentData!.data!.data![index].question.toString(),
                     style:
@@ -81,6 +83,7 @@ class _FaqScreenState extends State<FaqScreen> {
                       leading: SizedBox(),
                     ),
                   ),
+
                   Divider(color: Colors.black12,)
                 ],
             onExpansionChanged: (expanded){
@@ -89,7 +92,6 @@ class _FaqScreenState extends State<FaqScreen> {
                   // Duration(seconds: 20000);
                   _customTileExpanded = expanded;
                   selected = index;
-
                 });
               else
                 setState(() {
@@ -105,20 +107,20 @@ class _FaqScreenState extends State<FaqScreen> {
       return Text('No Data found');
     }
   }
-  _Product_ExpandAble_List_Builder(int cat_id) {
-    List<Widget> columnContent = [];
-    [1, 2, 4, 5].forEach((product) => {
-      columnContent.add(
-        ListTile(
-          title: ExpansionTile(
-            title: Text(product.toString()),
-          ),
-          trailing: Text("$product (Kg)"),
-        ),
-      ),
-    });
-    return columnContent;
-  }
+  // _Product_ExpandAble_List_Builder(int cat_id) {
+  //   List<Widget> columnContent = [];
+  //   [1, 2, 4, 5].forEach((product) => {
+  //     columnContent.add(
+  //       ListTile(
+  //         title: ExpansionTile(
+  //           title: Text(product.toString()),
+  //         ),
+  //         trailing: Text("$product (Kg)"),
+  //       ),
+  //     ),
+  //   });
+  //   return columnContent;
+  // }
   @override
   void initState() {
     super.initState();

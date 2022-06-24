@@ -102,7 +102,7 @@ class _Change_passwordState extends State<Change_password> {
                                   passenable = true;
                                 }
                               });
-                            },
+                              },
                           ),
 
                         ),
@@ -164,8 +164,6 @@ class _Change_passwordState extends State<Change_password> {
                       ),
                     ),
                   ),
-
-
                   SizedBox(
                     height: 30,
                   ),

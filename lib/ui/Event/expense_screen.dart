@@ -385,7 +385,7 @@ class _Expense_ScreenState extends State<Expense_Screen> {
                           onPressed: () {
                             if (_amount.value.text.trim() != '0' &&
                                 _amount.value.text.trim() != '') {
-                              if (_expensedescription.value.text.trim() != '') {
+                              if (_expensedescription.value.text.     trim() != '') {
                                 final expenseData = CreateEventRequestModal(
                                   name: args!.name,
                                   category: args!.category,

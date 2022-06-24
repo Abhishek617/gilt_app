@@ -109,6 +109,7 @@ dependencies:
 
   #Date formate
   jiffy: ^5.0.0
+  syncfusion_flutter_datepicker: ^20.1.61
 
  #Notification and Chat Badge
   badges: ^2.0.3

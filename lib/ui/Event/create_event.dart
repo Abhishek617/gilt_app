@@ -17,7 +17,7 @@ import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../constants/app_settings.dart';
 
 class Create_event extends StatefulWidget {
@@ -35,6 +35,8 @@ class _Create_eventState extends State<Create_event> {
   void initState() {
     super.initState();
   }
+
+
 
   void imagePickerOption() {
     Get.bottomSheet(
@@ -216,6 +218,7 @@ class _Create_eventState extends State<Create_event> {
                   ),
                   Row(
                     children: [
+
                       Container(
                           width: DeviceUtils.getScaledWidth(context, 0.85),
                           height: DeviceUtils.getScaledHeight(context, 0.08),
@@ -277,6 +280,7 @@ class _Create_eventState extends State<Create_event> {
                   ),
                   Row(
                     children: [
+
                       Expanded(
                         child: Container(
                             child: TextFormField(
@@ -363,14 +367,16 @@ class _Create_eventState extends State<Create_event> {
                               "Start Date & Time",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
+
                             SizedBox(
                               height: 5,
                             ),
+
+
                             Container(
                                 margin: EdgeInsets.only(right: 10),
                                 child: DateTimePicker(
                                   controller: _eventStartDateAndTimeController,
-
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       focusedBorder: InputBorder.none,
@@ -381,15 +387,15 @@ class _Create_eventState extends State<Create_event> {
                                   firstDate: DateTime.now(),
                                   lastDate: DateTime(2100),
                                   icon: Icon(Icons.event),
-                                  selectableDayPredicate: (date) {
-                                    // Disable weekend days to select from the calendar
-                                    /*if (date.weekday == 6 ||
-                                        date.weekday == 7) {
-                                      return false;
-                                    }*/
-
-                                    return true;
-                                  },
+                                  // selectableDayPredicate: (date) {
+                                  //   // Disable weekend days to select from the calendar
+                                  //   if (date.weekday == 6 ||
+                                  //       date.weekday == 7) {
+                                  //     return false;
+                                  //   }
+                                  //
+                                  //   return true;
+                                  // },
                                   onChanged: (val) => print(val),
                                   validator: (val) {
                                     print(val);
@@ -397,6 +403,8 @@ class _Create_eventState extends State<Create_event> {
                                   },
                                   onSaved: (val) => print(val),
                                 )),
+
+
                             Container(
                               height: 1, // Thickness
                               color: Colors.grey,
@@ -412,6 +420,7 @@ class _Create_eventState extends State<Create_event> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
+
                             Text(
                               "End Date & Time",
                               style: TextStyle(fontWeight: FontWeight.bold),
@@ -419,6 +428,7 @@ class _Create_eventState extends State<Create_event> {
                             SizedBox(
                               height: 5,
                             ),
+
                             Container(
                                 child: DateTimePicker(
                               controller: _eventEndDateAndTimeController,
@@ -432,14 +442,13 @@ class _Create_eventState extends State<Create_event> {
                               firstDate: DateTime.now(),
                               lastDate: DateTime(2100),
                               icon: Icon(Icons.event),
-                              selectableDayPredicate: (date) {
-                                // Disable weekend days to select from the calendar
-                                if (date.weekday == 6 || date.weekday == 7) {
-                                  return false;
-                                }
-
-                                return true;
-                              },
+                              // selectableDayPredicate: (date) {
+                              //   // Disable weekend days to select from the calendar
+                              //   if (date.weekday == 6 || date.weekday == 7) {
+                              //     return false;
+                              //   }
+                              //   return true;
+                              // },
                               onChanged: (val) => print(val),
                               validator: (val) {
                                 print(val);
@@ -447,6 +456,7 @@ class _Create_eventState extends State<Create_event> {
                               },
                               onSaved: (val) => print(val),
                             )),
+
                             Container(
                               height: 1, // Thickness
                               color: Colors.grey,
@@ -487,6 +497,7 @@ class _Create_eventState extends State<Create_event> {
                       ),
                     ],
                   ),
+
                   SizedBox(
                     height: 20,
                   ),

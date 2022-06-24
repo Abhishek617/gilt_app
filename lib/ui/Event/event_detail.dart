@@ -38,7 +38,7 @@ class _EventDetailsState extends State<EventDetails> {
   final UserStore _userStore = UserStore(getIt<Repository>());
   EventDetailsResponseModel? contentData;
   var args;
-  bool isPayButton = false;
+  bool isPayButton = true;
   bool isCancelButton = false;
 
   @override
@@ -61,7 +61,7 @@ class _EventDetailsState extends State<EventDetails> {
   }
 
   getDetails(args) {
-    isPayButton = false;
+    isPayButton = true;
     GlobalMethods.showLoader();
     _userStore.Event_Detail(args, (value) {
       print(value);
@@ -303,6 +303,7 @@ class _EventDetailsState extends State<EventDetails> {
                                     fontSize: 14, fontWeight: FontWeight.w500),
                               ),
                             )
+
                           : Row(
                               children: contentData!.event!.eventImages!
                                   .map((e) => getImageContainer(e))
@@ -407,6 +408,7 @@ class _EventDetailsState extends State<EventDetails> {
                                     ))),
                                   ),
                                 ),
+
                                 ElevatedButton(
                                   onPressed: () {
                                     //Reject event
@@ -538,7 +540,8 @@ class _EventDetailsState extends State<EventDetails> {
               context, successMaster.message!, "Pay" ?? "");
         }
       }
-    }, (error) {
+    },
+            (error) {
       GlobalMethods.hideLoader();
       print(error.toString());
     });
@@ -599,18 +602,20 @@ class _EventDetailsState extends State<EventDetails> {
           SizedBox(
             width: 10,
           ),
-          Text(
-            user?.admin?.firstname! +
-                ' ' +
-                user?.admin?.lastname! +
-                (contentData?.event?.organizer?.id == user?.userId
-                    ? ' (Host)'
-                    : '') +
-                '\n' +
-                user?.admin?.phone!,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
+          Expanded(
+            child: Text(
+              user?.admin?.firstname! +
+                  ' ' +
+                  user?.admin?.lastname! +
+                  (contentData?.event?.organizer?.id == user?.userId
+                      ? ' (Host)'
+                      : '') +
+                  '\n' +
+                  user?.admin?.phone!,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],
@@ -647,6 +652,7 @@ class _EventDetailsState extends State<EventDetails> {
               ' Attendees',
           style: TextStyle(color: AppColors.primaryColor, fontSize: 12),
         ),
+
         backgroundColor: Colors.white,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,

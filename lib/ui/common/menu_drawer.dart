@@ -182,7 +182,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                             ''),
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -195,7 +195,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                             .toString() ??
                                         '',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 16),
+                                        color: Colors.white, fontSize: 14),
                                   ),
                                 ),
                                 SizedBox(

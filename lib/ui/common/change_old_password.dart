@@ -27,7 +27,6 @@ class _ChangeOldPasswordState extends State<ChangeOldPassword> {
   bool newPassEnable = true;
   bool confirmPassEnable = true;
   final UserStore _userStore = UserStore(getIt<Repository>());
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
