@@ -81,6 +81,14 @@ class _SelectCardViewState extends State<SelectCardView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'Payable amount: \$$payableAmount',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          SizedBox(height: 10,),
           walletBalance == 0
               ? Container()
               : Container(
@@ -121,13 +129,7 @@ class _SelectCardViewState extends State<SelectCardView> {
               ],
             ),
           ),
-          Text(
-            'Payable amount: \$$payableAmount',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+
           getWarningText().isNotEmpty
               ? Padding(
             padding: const EdgeInsets.only(top: 4),

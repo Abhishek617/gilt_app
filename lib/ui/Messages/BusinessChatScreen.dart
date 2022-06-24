@@ -34,7 +34,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
   File? pickedImage;
   @observable
   UserChatMessageListModel loadMessageData = UserChatMessageListModel();
-  int currentPageOffset = 0;
+  int currentPageOffset = 10;
   final FocusNode focusNode = FocusNode();
 
   @override

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 //import 'package:full_screen_image/full_screen_image.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -41,21 +42,37 @@ class _ChatScreenState extends State<ChatScreen> {
   List<MessageObj> currentMessageList = [];
   var currentUserName = '';
   File? pickedImage;
+  bool _needsScroll = false;
+
   @observable
   UserChatMessageListModel loadMessageData = UserChatMessageListModel();
   int currentPageOffset = 0;
   final FocusNode focusNode = FocusNode();
-
+  Timer? timer;
   @override
   void initState() {
-    //initSetup();
+    initSetup();
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => loadChatData());
     super.initState();
+
   }
 
   @override
   didChangeDependencies() {
     initSetup();
+
     super.didChangeDependencies();
+  }
+
+  loadChatData(){
+    if (G.socketUtils != null) {
+      currentUserName = G.socketUtils.userData.user.firstname +
+          ' ' +
+          G.socketUtils.userData.user.lastname;
+      G.socketUtils.emitLoadMessage('private', currentPageOffset);
+      G.socketUtils.onLoadMessageListener(loadMessageHandler);
+      G.socketUtils.onNewMessageListener(newMessageHandler);
+    }
   }
 
   initSetup() {
@@ -73,35 +90,34 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void onFocusChange() {
-    if (focusNode.hasFocus) {
-      // Hide sticker when keyboard appear
-      setState(() {
-        // isShowSticker = false;
-      });
-    }
-  }
 
   loadMessageHandler(messageData) {
     if (mounted) {
       setState(() {
         loadMessageData = UserChatMessageListModel.fromJson(messageData);
-        currentMessageList = loadMessageData?.messages ?? [];
+        currentMessageList = loadMessageData.messages ?? [];
         print('loadMessageHandler');
         print(currentMessageList);
         G.socketUtils.markThreadAsRead(loadMessageData.roomKey);
         if (currentMessageList.length > 0) {
+
           WidgetsBinding.instance
-              ?.addPostFrameCallback((_) => {scrollToBottom()});
+              .addPostFrameCallback((_) => {scrollToBottom()});
         }
       });
+
     }
   }
 
   scrollToBottom() {
     setState(() {
-      _listScrollController.animateTo(0.0,
-          duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+      if (!_listScrollController.hasClients) {
+        _listScrollController.animateTo(_listScrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut);
+      }
+      // _listScrollController.animateTo(0.0,
+      //     duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     });
   }
 
@@ -157,8 +173,7 @@ class _ChatScreenState extends State<ChatScreen> {
   getChatTitle() {
     // if(currentChatRoom.type == 'event'){
     if (loadMessageData != null) {
-      return Observer(
-        builder: (_) => Row(
+      return  Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
@@ -186,8 +201,8 @@ class _ChatScreenState extends State<ChatScreen> {
               style: TextStyle(fontSize: 12),
             )
           ],
-        ),
-      );
+        );
+
     } else {
       return Container();
     }
@@ -404,8 +419,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 height: 10,
                 width: 10,
               ),
-              Observer(
-                  builder: (_) => currentMessageList != null
+              currentMessageList != null
                       ? Flexible(
                           child: Container(
                             margin: EdgeInsets.only(bottom: 60.0),
@@ -414,6 +428,10 @@ class _ChatScreenState extends State<ChatScreen> {
                             child: ListView.builder(
                               controller: _listScrollController,
                               itemCount: currentMessageList.length,
+                              reverse: false,
+                              cacheExtent: 1000,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
                               itemBuilder: (context, index) =>
                                   (currentMessageList[index].user?.firstName)
                                                   .toString() +
@@ -428,7 +446,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                           ),
                         )
-                      : Text('Start a chat')),
+                      : Text('Start a chat'),
             ],
           ),
           Align(
@@ -481,10 +499,14 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   FloatingActionButton(
                     onPressed: () {
-                      G.socketUtils?.sendMessage(_messageController.text,
-                          loadMessageData?.roomKey, 'text', () {
+
+                      G.socketUtils.sendMessage(_messageController.text,
+                          loadMessageData.roomKey, 'text', () {
                         _messageController.text = '';
                       });
+                      G.socketUtils.emitLoadMessage('private', currentPageOffset);
+                      G.socketUtils.onLoadMessageListener(loadMessageHandler);
+                      G.socketUtils.onNewMessageListener(newMessageHandler);
                     },
                     child: Icon(
                       Icons.send,

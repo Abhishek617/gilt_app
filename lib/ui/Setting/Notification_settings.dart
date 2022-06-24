@@ -38,10 +38,12 @@ class _NotifiSettingsState extends State<NotifiSettings> {
   List<Settings> arrNotify=[];
 
 
+  List<Settings> arSetting=[];
   @override
   void didChangeDependencies() {
     if (this.mounted) {
       getPushSubSetting();
+
       super.didChangeDependencies();
     }
   }

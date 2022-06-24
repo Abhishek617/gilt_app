@@ -9,7 +9,6 @@ import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_body_wrapper.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:mobx/mobx.dart';
 
 class Messages extends StatefulWidget {
@@ -46,8 +45,7 @@ class _MessagesState extends State<Messages> {
     });
   }
 
-  Message_list(msgData) =>
-      GestureDetector(
+  Message_list(msgData) => GestureDetector(
         child: Column(
           children: [
             Container(
@@ -55,410 +53,135 @@ class _MessagesState extends State<Messages> {
               padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
               child: Row(
                 children: [
-                CircleAvatar(
-                backgroundColor: AppColors.primaryColor,
-                radius: 22,
-                child: CircleAvatar(
-                    backgroundImage: NetworkImage((msgData.type == 'event')
-                        ? (msgData.eventInfo.image ??
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU')
-                        : (msgData.type == 'business')
-                        ? (msgData.businessInfo.image ??
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU')
-                        :
-                    msgData.users.length > 0 ?
-                    (msgData.users[0].profile ??
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU')
-                        : ""),
-                    onBackgroundImageError: (e, s) {
-                      debugPrint('image issue, $e,$s');
-                    }),
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Expanded(
-                  child: Column(
+                  CircleAvatar(
+                    backgroundColor: AppColors.primaryColor,
+                    radius: 22,
+                    child: CircleAvatar(
+                        backgroundImage: NetworkImage((msgData.type == 'event')
+                            ? (msgData.eventInfo.image ??
+                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU')
+                            : (msgData.type == 'business')
+                                ? (msgData.businessInfo.image ??
+                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU')
+                                : msgData.users.length > 0
+                                    ? (msgData.users[0].profile ??
+                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU')
+                                    : ""),
+                        onBackgroundImageError: (e, s) {
+                          debugPrint('image issue, $e,$s');
+                        }),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                  Text(
-                  (msgData.type == 'event')
-                      ? (msgData.eventInfo.name ?? 'Event Chat')
-                      : (msgData.type == 'business')
-                      ? (msgData.businessInfo.name ?? 'Business Chat') :
-                  msgData.users.length>0
-            ?(msgData.users[0].firstName +
-            ' ' +
-            msgData.users[0].lastName ??
-            'No Name')
-            :"",
-              style: TextStyle(
-                color: AppColors.primaryColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
+                        Text(
+                          (msgData.type == 'event')
+                              ? (msgData.eventInfo.name ?? 'Event Chat')
+                              : (msgData.type == 'business')
+                                  ? (msgData.businessInfo.name ??
+                                      'Business Chat')
+                                  : msgData.users.length > 0
+                                      ? (msgData.users[0].firstName +
+                                              ' ' +
+                                              msgData.users[0].lastName ??
+                                          'No Name')
+                                      : "",
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          msgData.lastMessage?.messageType == 'image'
+                              ? 'Image'
+                              : msgData.lastMessage?.message ?? 'No Message',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                    width: 60,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        G.convertToAgo(DateTime.parse(msgData.lastMessageAt)),
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      msgData.unreadMessageCount != 0
+                          ? Container(
+                              height: 20,
+                              width: 20,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Text(
+                                  msgData.unreadMessageCount.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              margin: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  shape: BoxShape.circle),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ],
               ),
             ),
-            Text(
-              msgData.lastMessage?.messageType == 'image'
-                  ? 'Image'
-                  : msgData.lastMessage?.message ?? 'No Message',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+            Divider(
+              color: Colors.black12,
+
+              //color of divider
+              height: 10,
+
+              //height spacing of divider
+              thickness: 1,
+
+              //thickness of divier line
+              indent: 16,
+
+              //spacing at the start of divider
+              endIndent: 16, //spacing at the end of divider
             ),
           ],
         ),
-      )
-
-  ,
-
-  SizedBox
-
-  (
-
-  height
-
-      :
-
-  10
-
-  ,
-
-  width
-
-      :
-
-  60
-
-  ,
-
-  )
-
-  ,
-
-  Column
-
-  (
-
-  crossAxisAlignment
-
-      :
-
-  CrossAxisAlignment.center
-
-  ,
-
-  children
-
-      :
-
-  [
-
-  Text
-
-  (
-
-  G.convertToAgo
-
-  (
-
-  DateTime.parse
-
-  (
-
-  msgData.lastMessageAt
-
-  )
-
-  )
-
-  ,
-
-  style
-
-      :
-
-  TextStyle
-
-  (
-
-  fontSize
-
-      :
-
-  10
-
-  ,
-
-  fontWeight
-
-      :
-
-  FontWeight.w600
-
-  ,
-
-  )
-
-  ,
-
-  )
-
-  ,
-
-  msgData.unreadMessageCount
-
-  !=
-
-  0
-
-  ?
-
-  Container
-
-  (
-
-  height
-
-      :
-
-  20
-
-  ,
-
-  width
-
-      :
-
-  20
-
-  ,
-
-  child
-
-      :
-
-  Padding
-
-  (
-
-  padding
-
-      :
-
-  EdgeInsets.only
-
-  (
-
-  top
-
-      :
-
-  5
-
-  )
-
-  ,
-
-  child
-
-      :
-
-  Text
-
-  (
-
-  msgData.unreadMessageCount.toString
-
-  (
-
-  )
-
-  ,
-
-  textAlign
-
-      :
-
-  TextAlign.center
-
-  ,
-
-  style
-
-      :
-
-  TextStyle
-
-  (
-
-  color
-
-      :
-
-  Colors.white
-
-  ,
-
-  fontSize
-
-      :
-
-  10
-
-  ,
-
-  fontWeight
-
-      :
-
-  FontWeight.w500
-
-  ,
-
-  )
-
-  ,
-
-  )
-
-  ,
-
-  )
-
-  ,
-
-  margin
-
-      :
-
-  EdgeInsets.all
-
-  (
-
-  10.0
-
-  )
-
-  ,
-
-  decoration
-
-      :
-
-  BoxDecoration
-
-  (
-
-  color
-
-      :
-
-  AppColors.primaryColor
-
-  ,
-
-  shape
-
-      :
-
-  BoxShape.circle
-
-  )
-
-  ,
-
-  )
-
-      :
-
-  Container()
-
-  ,
-  ],
-  ),
-  ],
-  ),
-  ),
-  Divider
-
-  (
-
-  color
-
-      :
-
-  Colors.black12
-
-  ,
-
-  //color of divider
-  height
-
-      :
-
-  10
-
-  ,
-
-  //height spacing of divider
-  thickness
-
-      :
-
-  1
-
-  ,
-
-  //thickness of divier line
-  indent
-
-      :
-
-  16
-
-  ,
-
-  //spacing at the start of divider
-  endIndent
-
-      :
-
-  16
-
-  , //spacing at the end of divider
-  )
-
-  ,
-
-  ]
-
-  ,
-
-  )
-
-  ,
-
-  onTap
-
-      : () {
-  print(msgData.type);
-  G.socketUtils.currentChatRoom = msgData;
-  if (msgData.type == 'private') {
-  // G.socketUtils.joinPrivateUser(msgData);
-  Routes.navigateToScreen(context, Routes.chat);
-  } else if (msgData.type == 'event') {
-  //G.socketUtils.joinEventUser(msgData);
-  Routes.navigateToScreen(context, Routes.event_chat);
-  } else {
-  Routes.navigateToScreen(context, Routes.business_chat);
-  }
-  },
-
-  );
+        onTap: () {
+          print(msgData.type);
+          G.socketUtils.currentChatRoom = msgData;
+          if (msgData.type == 'private') {
+            // G.socketUtils.joinPrivateUser(msgData);
+            Routes.navigateToScreen(context, Routes.chat);
+          } else if (msgData.type == 'event') {
+            //G.socketUtils.joinEventUser(msgData);
+            Routes.navigateToScreen(context, Routes.event_chat);
+          } else {
+            Routes.navigateToScreen(context, Routes.business_chat);
+          }
+        },
+      );
 
   // Message_list_withoutcount(msgData) => GestureDetector(
   //     child: Column(
@@ -596,21 +319,20 @@ class _MessagesState extends State<Messages> {
               ),
               screenRoomList.length > 0
                   ? SingleChildScrollView(
-                child: Container(
-                  color: Colors.white,
-                  width: DeviceUtils.getScaledWidth(context, 1.05),
-                  height: DeviceUtils.getScaledHeight(context, 0.73),
-                  child: Observer(
-                      builder: (_) =>
-                          ListView.builder(
-                              itemCount: screenRoomList.length,
-                              itemBuilder: (context, index) =>
-                                  Message_list(screenRoomList[index]))),
-                ),
-              )
+                      child: Container(
+                        color: Colors.white,
+                        width: DeviceUtils.getScaledWidth(context, 1.05),
+                        height: DeviceUtils.getScaledHeight(context, 0.73),
+                        child: Observer(
+                            builder: (_) => ListView.builder(
+                                itemCount: screenRoomList.length,
+                                itemBuilder: (context, index) =>
+                                    Message_list(screenRoomList[index]))),
+                      ),
+                    )
                   : Center(
-                child: Text('No Messages Found'),
-              ),
+                      child: Text('No Messages Found'),
+                    ),
             ],
           ),
         ),

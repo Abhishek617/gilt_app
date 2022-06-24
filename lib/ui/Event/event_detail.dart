@@ -57,6 +57,7 @@ class _EventDetailsState extends State<EventDetails> {
   void didChangeDependencies() {
     args = ModalRoute.of(context)!.settings.arguments;
     getDetails(args);
+    getProfileData();
     super.didChangeDependencies();
   }
 
@@ -477,7 +478,8 @@ class _EventDetailsState extends State<EventDetails> {
         : Center(child: Text('No Details found.'));
   }
 
-  bool isCreator() {
+  bool isCreator () {
+    // GetProfileResponseModal? profileData = await _userStore.getProfileData();
     if (profileData != null) {
       int userId = profileData?.user?.id ?? 0;
       if (contentData!.event!.createdBy! == userId) {
@@ -486,21 +488,20 @@ class _EventDetailsState extends State<EventDetails> {
     }
     return false;
   }
-
   validatePayButton() async {
-    if (profileData != null) {
-      int userId = profileData?.user?.id ?? 0;
-      if (contentData!.event!.isUserAtendee! &&
-          contentData!.event!.createdBy! != userId &&
-          contentData!.event!.status == 'pending') {
-        setState(() {
-          isPayButton = true;
-        });
-      }
+    GetProfileResponseModal? profileData = await _userStore.getProfileData();
+    int userId = profileData?.user?.id ?? 0;
+    if (contentData!.event!.isUserAtendee! &&
+        contentData!.event!.createdBy! != userId &&
+        contentData!.event!.status == 'pending') {
+      setState(() {
+        isPayButton = true;
+      });
     }
   }
 
-  void getPayableAttendee() {
+  Future<void> getPayableAttendee() async {
+    GetProfileResponseModal? profileData = await _userStore.getProfileData();
     int userId = profileData?.user?.id ?? 0;
     List<EventAttendees1> attendees = contentData?.event?.eventAttendees ?? [];
     if (attendees.isNotEmpty) {
