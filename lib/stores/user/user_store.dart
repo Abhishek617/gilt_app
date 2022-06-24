@@ -132,7 +132,14 @@ abstract class _UserStore with Store {
         .then((settingData) => settingData)
         .catchError((error) => throw error);
   }
-
+  //push setting
+  @action
+  Future pushsettingGet() async {
+    return await _repository
+        .pushsettingGet()
+        .then((pushsettingData) => pushsettingData)
+        .catchError((error) => throw error);
+  }
   @action
   Future changePassword(oldPassword, newPassword) async {
     return await _repository
