@@ -17,6 +17,7 @@ import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
 import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
+import 'package:guilt_app/models/PageModals/push_sub_settings_modal.dart';
 import 'package:guilt_app/models/PageModals/setting_model.dart';
 import 'package:guilt_app/models/payment/add_money_wallet_request.dart';
 import 'package:guilt_app/models/post/post.dart';
@@ -174,6 +175,13 @@ class Repository {
         .catchError((error) => throw error);
   }
 
+  //pushsetting
+  Future<PushSettingsModal> pushsettingGet() async {
+    var token = await authToken;
+    return await _postApi.pushsettingGet(token).then((pushsettingData) {
+      return pushsettingData;
+    }).catchError((error) => throw error);
+  }
   // Logout:---------------------------------------------------------------------
   Future logout() async {
     var token = await authToken;

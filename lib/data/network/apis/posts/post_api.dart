@@ -27,6 +27,7 @@ import 'package:guilt_app/models/Event/accept_reject_event.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
+import 'package:guilt_app/models/PageModals/push_sub_settings_modal.dart';
 import 'package:guilt_app/models/help_support/help_support_master.dart';
 import 'package:guilt_app/models/payment/add_card_master.dart';
 import 'package:guilt_app/models/payment/add_money_wallet_request.dart';
@@ -130,6 +131,18 @@ class PostApi {
         "is_allow_vibration": UpdateSettingData.isAllowVibration,
       });
       return SettingGetModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //get pushsettings
+  Future<PushSettingsModal> pushsettingGet(token) async {
+    try {
+      final res = await _dioClient.post(Endpoints.pushsubsetting,
+          options: Options(headers: {'Authorization': 'Bearer ' + token!}));
+      return PushSettingsModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;

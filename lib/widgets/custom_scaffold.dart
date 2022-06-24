@@ -63,7 +63,7 @@ class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
       );
 
   Widget build(BuildContext context) {
-    return Scaffold(
+    return    Scaffold(
       backgroundColor: Colors.white,
       drawer: widget.isMenu == true ? MenuDrawer() : null,
       appBar: widget.appBar,
