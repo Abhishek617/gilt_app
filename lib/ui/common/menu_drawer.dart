@@ -118,50 +118,47 @@ class _MenuDrawerState extends State<MenuDrawer> {
                   children: [
                     Row(
                       children: [
-                        Expanded(
-                          flex:1,
-                          child: Column(
-                            children: [
-                              Stack(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(
-                                        left: 2.0,
-                                        top: 20.0,
-                                        bottom: 00.0,
-                                        right: 00.0),
-                                    child: Observer(
-                                        builder: (_) => _userStore.Profile_data
-                                                    ?.user?.profile !=
-                                                null
-                                            ? Container(
-                                                child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100.0),
-                                                    child: Image.network(
-                                                      _userStore.Profile_data
-                                                              ?.user?.profile
-                                                              .toString() ??
-                                                          'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
-                                                      width: DeviceUtils
-                                                          .getScaledWidth(
-                                                              context, 0.15),
-                                                      height: DeviceUtils
-                                                          .getScaledWidth(
-                                                              context, 0.15),
-                                                      fit: BoxFit.cover,
-                                                    )))
-                                            : Icon(
-                                                Icons.account_circle,
-                                                size: 70,
-                                                color: Colors.white,
-                                              )),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                        Column(
+                          children: [
+                            Stack(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      left: 2.0,
+                                      top: 20.0,
+                                      bottom: 00.0,
+                                      right: 00.0),
+                                  child: Observer(
+                                      builder: (_) => _userStore.Profile_data
+                                                  ?.user?.profile !=
+                                              null
+                                          ? Container(
+                                              child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100.0),
+                                                  child: Image.network(
+                                                    _userStore.Profile_data
+                                                            ?.user?.profile
+                                                            .toString() ??
+                                                        'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                                                    width: DeviceUtils
+                                                        .getScaledWidth(
+                                                            context, 0.15),
+                                                    height: DeviceUtils
+                                                        .getScaledWidth(
+                                                            context, 0.15),
+                                                    fit: BoxFit.cover,
+                                                  )))
+                                          : Icon(
+                                              Icons.account_circle,
+                                              size: 70,
+                                              color: Colors.white,
+                                            )),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                         Expanded(
                           flex: 1,

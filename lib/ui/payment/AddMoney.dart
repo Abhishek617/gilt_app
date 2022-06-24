@@ -6,6 +6,7 @@ import 'package:guilt_app/models/payment/add_money_wallet_request.dart';
 import 'package:guilt_app/models/payment/payment_card_master.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
+import 'package:guilt_app/widgets/textfield_widget.dart';
 
 import '../../data/repository.dart';
 import '../../di/components/service_locator.dart';
@@ -105,17 +106,13 @@ class _AddMoneyState extends State<AddMoney> {
                   child: Center(
                     child: TextField(
                       controller: _controller,
-                      textAlign: TextAlign.left,
+                      textAlign: TextAlign.center,
                       keyboardType: TextInputType.number,
+                      inputFormatters: [MoneyInputFormatter()],
                       decoration: InputDecoration(
-                        prefixIconConstraints: BoxConstraints(maxWidth: 20),
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.only(left: 8, bottom: 3),
-                          child: Text("\$", style: TextStyle(fontSize: 17),),
-                        ),
-                          contentPadding: EdgeInsets.zero),
+                          contentPadding: EdgeInsets.zero, hintText: "\$0"),
                       onChanged: (value) {
-                        initValue = double.parse(value);
+                        initValue = double.parse(value.replaceAll("\$", ""));
                       },
                     ),
                   ),
@@ -149,7 +146,7 @@ class _AddMoneyState extends State<AddMoney> {
 
   void choosePaymentMethod() {
     var args = {
-      "amount": double.parse(_controller.text),
+      "amount": double.parse(_controller.text.replaceAll("\$", "")),
       "fromScreen": Routes.addmoney
     };
     Routes.navigateToScreenWithArgsAndCB(context, Routes.select_card, args,
@@ -166,7 +163,7 @@ class _AddMoneyState extends State<AddMoney> {
     AddMoneyToWalletRequest payModel = AddMoneyToWalletRequest(
       customerProfileId: currentUserId,
       paymentProfile: int.parse(data.customerPaymentProfileId!),
-      amount: double.parse(_controller.text),
+      amount: double.parse(_controller.text.replaceAll("\$", "")),
       paymentMethod: data.type,
     );
 

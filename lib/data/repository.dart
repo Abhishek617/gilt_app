@@ -266,7 +266,7 @@ class Repository {
 
   //feedback add
 
-  Future<Feedback_add_Model> Feedback_add(
+  Future Feedback_add(
       String description, int eventId, String rate) async {
     var token = await authToken;
     return await _postApi.Feedback_add(description, eventId, rate, token)

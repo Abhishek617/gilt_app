@@ -39,11 +39,18 @@ class _EventDetailsState extends State<EventDetails> {
   EventDetailsResponseModel? contentData;
   var args;
   bool isPayButton = false;
-  bool isCancelButton = false;
+  GetProfileResponseModal? profileData;
+  EventAttendees1? payableAttendee;
+  bool isPastEvent = false;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  getProfileData() async {
+    profileData = await _userStore.getProfileData();
+    setState(() {});
   }
 
   @override
@@ -68,8 +75,9 @@ class _EventDetailsState extends State<EventDetails> {
       setState(() {
         contentData = EventDetailsResponseModel.fromJson(value);
       });
-      validateCancelButton();
+      getPayableAttendee();
       validatePayButton();
+      validatePastEvent();
       GlobalMethods.hideLoader();
     }, (error) {
       GlobalMethods.hideLoader();
@@ -96,7 +104,10 @@ class _EventDetailsState extends State<EventDetails> {
                                       color: Colors.black,
                                       fontSize: 18,
                                       fontWeight: FontWeight.w700)),
-                              contentData?.event?.isUserAtendee == true
+                              contentData?.event?.isUserAtendee == true &&
+                                      !isCreator() &&
+                                      payableAttendee != null &&
+                                      payableAttendee!.paymentStatus == "paid"
                                   ? IconButton(
                                       onPressed: () {
                                         GlobalMethods.showLoader();
@@ -362,8 +373,7 @@ class _EventDetailsState extends State<EventDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      isCancelButton &&
-                              contentData!.event!.status != 'cancelled'
+                      isCreator() && contentData!.event!.status != 'cancelled'
                           ? Container(
                               margin: EdgeInsets.only(right: 15),
                               child: ElevatedButton(
@@ -371,12 +381,7 @@ class _EventDetailsState extends State<EventDetails> {
                                   //Cancel an event
                                   cancelEvent();
                                 },
-                                child: Text(
-                                    contentData!.event!.status != null &&
-                                            contentData!.event!.status !=
-                                                "cancelled"
-                                        ? 'Cancel'
-                                        : "Cancelled"),
+                                child: Text('Cancel'),
                                 style: ButtonStyle(
                                     shape: MaterialStateProperty.all<
                                             RoundedRectangleBorder>(
@@ -386,9 +391,10 @@ class _EventDetailsState extends State<EventDetails> {
                               ),
                             )
                           : Container(),
-                      isPayButton!
-                          ?
-                      Row(
+                      isPayButton &&
+                              payableAttendee != null &&
+                              payableAttendee!.paymentStatus == "pending"
+                          ? Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
@@ -434,11 +440,35 @@ class _EventDetailsState extends State<EventDetails> {
                           : Container(),
                     ],
                   ),
-                  isCancelButton && contentData!.event!.status == 'cancelled'
+                  !isCreator() &&
+                          payableAttendee != null &&
+                          payableAttendee!.paymentStatus != "pending"
                       ? Container(
-                          child: Text('You have ' +
-                              contentData!.event!.status.toString() +
-                              ' the invitation of an event.'))
+                          child: Text(
+                              "You have ${payableAttendee?.paymentStatus ?? ""} for this event"),
+                        )
+                      : Container(),
+                  isCreator() && contentData!.event!.status == 'cancelled'
+                      ? Container(child: Text('You have cancelled the event'))
+                      : Container(),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  isPastEvent
+                      ? ElevatedButton(
+                          onPressed: () {
+                            // Add feedback
+                            Routes.navigateToScreenWithArgs(
+                                context, Routes.add_feedback, eID);
+                          },
+                          child: Text('Add Feedback'),
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50.0),
+                          ))),
+                        )
                       : Container()
                 ],
               ),
@@ -447,47 +477,73 @@ class _EventDetailsState extends State<EventDetails> {
         : Center(child: Text('No Details found.'));
   }
 
-  validateCancelButton() async {
-    GetProfileResponseModal? profileData = await _userStore.getProfileData();
-    int userId = profileData?.user?.id ?? 0;
-    isCancelButton = false;
-    if (contentData!.event!.createdBy! == userId) {
-      isCancelButton = true;
+  bool isCreator() {
+    if (profileData != null) {
+      int userId = profileData?.user?.id ?? 0;
+      if (contentData!.event!.createdBy! == userId) {
+        return true;
+      }
     }
-    setState(() {});
+    return false;
   }
 
   validatePayButton() async {
-    GetProfileResponseModal? profileData = await _userStore.getProfileData();
-    int userId = profileData?.user?.id ?? 0;
-    if (contentData!.event!.isUserAtendee! &&
-        contentData!.event!.createdBy! != userId &&
-        contentData!.event!.status == 'pending') {
-      setState(() {
-        isPayButton = true;
-      });
+    if (profileData != null) {
+      int userId = profileData?.user?.id ?? 0;
+      if (contentData!.event!.isUserAtendee! &&
+          contentData!.event!.createdBy! != userId &&
+          contentData!.event!.status == 'pending') {
+        setState(() {
+          isPayButton = true;
+        });
+      }
     }
   }
 
-  void choosePaymentMethod() async {
-    GetProfileResponseModal? profileData = await _userStore.getProfileData();
+  void getPayableAttendee() {
     int userId = profileData?.user?.id ?? 0;
-    double amount = 0;
     List<EventAttendees1> attendees = contentData?.event?.eventAttendees ?? [];
     if (attendees.isNotEmpty) {
       List<EventAttendees1> payableAttendees =
           attendees.where((element) => element.userId == userId).toList();
       if (payableAttendees.isNotEmpty) {
-        amount = payableAttendees![0].expense ?? 0;
+        payableAttendee = payableAttendees![0];
       }
     }
-    var args = {"amount": amount, "fromScreen": Routes.event_details};
-    Routes.navigateToScreenWithArgsAndCB(context, Routes.select_card, args,
-        (PaymentCardDetails data) {
-      if (data != null) {
-        payToEvent(data);
+  }
+
+  void validatePastEvent() {
+    final currentDate = DateTime.now();
+    try {
+      if (contentData != null &&
+          contentData!.event != null &&
+          contentData!.event!.endDate != null) {
+        DateTime endDate =
+            DateTime.parse(contentData!.event!.endDate!).toLocal();
+        if (endDate.isBefore(currentDate)) {
+          setState(() {
+            isPastEvent = true;
+          });
+        }
       }
-    });
+    } catch (e) {
+      print("Validate past event error: ${e.toString()}");
+    }
+  }
+
+  void choosePaymentMethod() async {
+    if (profileData != null) {
+      var args = {
+        "amount": payableAttendee?.expense ?? 0,
+        "fromScreen": Routes.event_details
+      };
+      Routes.navigateToScreenWithArgsAndCB(context, Routes.select_card, args,
+          (PaymentCardDetails data) {
+        if (data != null) {
+          payToEvent(data);
+        }
+      });
+    } else {}
   }
 
   cancelEvent() {

@@ -82,8 +82,7 @@ class PostApi {
       final res = await _dioClient.post(Endpoints.login,
           data: {"username": email, "password": pass, "fcmToken": fcmToken});
       return LoginModal.fromJson(res);
-    }
-    catch (e) {
+    } catch (e) {
       print(e.toString());
       throw e;
     }
@@ -231,6 +230,7 @@ class PostApi {
       throw e;
     }
   }
+
   Future getOwnBusinessList(searchQuery, token) async {
     try {
       print("Search query: $searchQuery");
@@ -246,6 +246,7 @@ class PostApi {
       throw e;
     }
   }
+
   // Get All User List
   Future getAllUserList(searchQuery, token) async {
     try {
@@ -285,6 +286,7 @@ class PostApi {
       throw e;
     }
   }
+
   // Delete Business
   Future deleteEvent(bID, token) async {
     try {
@@ -299,14 +301,11 @@ class PostApi {
           .then((value) {
         print("Cancel event response: ${value.toString()}");
         value = AcceptRejectEvent.fromJson(value);
-
       });
     } catch (e) {
-
       throw e;
     }
   }
-
 
   // Get Business Places
   Future uploadChatImage(file, token) async {
@@ -386,8 +385,9 @@ class PostApi {
       throw e;
     }
   }
+
   // Get Search Event
-  Future getMyEvents(token, userId,{page = 0, pageSize = 20}) async {
+  Future getMyEvents(token, userId, {page = 0, pageSize = 20}) async {
     try {
       return await _dioClient.get(
         Endpoints.userEvents,
@@ -399,6 +399,7 @@ class PostApi {
       throw e;
     }
   }
+
   // Get Business Spaces
   Future getBusinessSpaces(token) async {
     try {
@@ -464,18 +465,20 @@ class PostApi {
       throw e;
     }
   }
+
   // Resend Otp
 
-  Future<GetResendOtpaResponse> ReSend_Otp(email,phone) async {
+  Future<GetResendOtpaResponse> ReSend_Otp(email, phone) async {
     try {
       final res = await _dioClient
-          .post(Endpoints.resendOtp, data: {"email": email,"phone": phone});
+          .post(Endpoints.resendOtp, data: {"email": email, "phone": phone});
       return GetResendOtpaResponse.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
     }
   }
+
   // Valid Otp
 
   Future<ValidOtpModel> Valid_Otp(email, otp) async {
@@ -504,9 +507,23 @@ class PostApi {
   //feedback Add
   Future<Feedback_add_Model> Feedback_add(
       description, eventId, rate, token) async {
+    String getParams() {
+      var map = new Map<String, dynamic>();
+      map['description'] = description;
+      map['eventId'] = eventId;
+      map['rate'] = rate;
+      return json.encode(map);
+    }
+
     try {
-      final res = await _dioClient.post(Endpoints.feedbackadd,
-          data: {"description": description, "eventId": eventId, "rate": rate});
+      final res = await _dioClient.post(
+        Endpoints.feedbackadd,
+        data: getParams(),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json'
+        }),
+      );
       return Feedback_add_Model.fromJson(res);
     } catch (e) {
       print(e.toString());
@@ -567,20 +584,21 @@ class PostApi {
     print("Explore: getUpcomingPastEventList");
     print("filterby: $filterby");
 
-    var params =  {
+    var params = {
       "filterBy": filterby,
       "page": "0",
       "size": "5",
     };
     try {
-      final res = await _dioClient.post(Endpoints.upcomingPast,
+      final res = await _dioClient.post(
+        Endpoints.upcomingPast,
         data: params,
-          options: Options(headers: {
-            'Authorization': 'Bearer ' + token!,
-            'Content-Type': 'application/json; charset=UTF-8'
-          }),
+        options: Options(headers: {
+          'Authorization': 'Bearer ' + token!,
+          'Content-Type': 'application/json; charset=UTF-8'
+        }),
 
-          // data: {"filterBy": filterby, "page": page, "size": size}
+        // data: {"filterBy": filterby, "page": page, "size": size}
       );
       print("Response $res");
       print("params: $params");
@@ -666,9 +684,10 @@ class PostApi {
       throw e;
     }
   }
+
 //update event
-  Future updateEvent(
-      CreateEventRequestModal eventData, int id, token, successCB, errorCB) async {
+  Future updateEvent(CreateEventRequestModal eventData, int id, token,
+      successCB, errorCB) async {
     try {
       await getEventImages(eventData.files, (newFilesArray) async {
         eventData.files = newFilesArray;
@@ -735,7 +754,7 @@ class PostApi {
         }),
       )
           .then((value) {
-            print("Cancel event response: ${value.toString()}");
+        print("Cancel event response: ${value.toString()}");
         value = AcceptRejectEvent.fromJson(value);
         successCB(value);
       });
@@ -772,9 +791,10 @@ class PostApi {
       throw e;
     }
   }
+
 //Add Business
-  Future updateBusiness(
-      AddBusinessRequestModel businessData,int id, token, successCB, errorCB) async {
+  Future updateBusiness(AddBusinessRequestModel businessData, int id, token,
+      successCB, errorCB) async {
     try {
       await getEventImages(businessData.files, (newFilesArray) async {
         businessData.files = newFilesArray;
