@@ -26,6 +26,7 @@ import 'package:guilt_app/models/Event/EventDetailResponseModel.dart';
 import 'package:guilt_app/models/Event/accept_reject_event.dart';
 import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
+import 'package:guilt_app/models/PageModals/email_sub_settings_modal.dart';
 import 'package:guilt_app/models/PageModals/notification_list_model.dart';
 import 'package:guilt_app/models/PageModals/push_sub_settings_modal.dart';
 import 'package:guilt_app/models/help_support/help_support_master.dart';
@@ -142,6 +143,19 @@ class PostApi {
   Future<PushSettingsModal> pushsettingGet(token) async {
     try {
       final res = await _dioClient.get(Endpoints.pushsubsetting,
+          options: Options(headers: {'Authorization': 'Bearer ' + token!}));
+      return PushSettingsModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //get emailsetting
+
+  Future<PushSettingsModal> emailsettingGet(token) async {
+    try {
+      final res = await _dioClient.get(Endpoints.emailsubsetting,
           options: Options(headers: {'Authorization': 'Bearer ' + token!}));
       return PushSettingsModal.fromJson(res);
     } catch (e) {
@@ -707,7 +721,7 @@ class PostApi {
         FormData formData = await new FormData.fromMap(eventData.toJson());
         await _dioClient
             .put(
-          "${Endpoints.updateEvent}/$id",
+          "${Endpoints. updateEvent}/$id",
           data: formData,
           options: Options(headers: {
             'Authorization': 'Bearer ' + token!,

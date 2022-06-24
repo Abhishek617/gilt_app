@@ -20,8 +20,7 @@ class NotifiSettings extends StatefulWidget {
   @override
   State<NotifiSettings> createState() => _NotifiSettingsState();
 }
-bool notifi1 = false;
-bool notifi2 = false;
+
 class _NotifiSettingsState extends State<NotifiSettings> {
 
   bool _switch_isEmailNotification = false;
@@ -31,17 +30,19 @@ class _NotifiSettingsState extends State<NotifiSettings> {
   bool _switch_isLockScreenNotification = false;
   bool _switch_isAllowSound = false;
   bool _switch_isAllowVibration = false;
-  bool _event_update_notification = false;
-  late UserStore _settingStore,_pushSettingStore;
+
+  late UserStore _settingStore,_pushSettingStore, _emailSettingStore;
   final UserStore _userStore = UserStore(getIt<Repository>());
   
   List<Settings> arrNotify=[];
-
+  List<Settings> emailarrNotify=[];
 
   @override
   void didChangeDependencies() {
     if (this.mounted) {
+      initSetup();
       getPushSubSetting();
+      getemailSubSetting();
       super.didChangeDependencies();
     }
   }
@@ -62,6 +63,20 @@ getPushSubSetting() async{
 
 }
 
+  getemailSubSetting() async{
+    _emailSettingStore = Provider.of<UserStore>(context);
+    await _emailSettingStore.emailsettingGet()
+        .then((emailsettingData) {
+      // if(pushsettingData.settings != null)
+      setState(() {
+        emailarrNotify =emailsettingData.settings;
+        print("ArrData: $emailarrNotify");
+        // contentData = PushSettingsModal.fromJson(pushsettingData);
+      });
+    }).
+    catchError((error) => throw error);
+
+  }
 
 
   initSetup() async {
@@ -167,7 +182,7 @@ getPushSubSetting() async{
   );
 
 
-  emailsublist(Settings arrNotify)  => Column(
+  emailsublist(Settings edata)  => Column(
     children: [
       SizedBox(height: 10,),
       Row(
@@ -193,11 +208,11 @@ getPushSubSetting() async{
           width: 40.0,
           height: 22.0,
           toggleSize: 14.0,
-          value: notifi2,
+          value: edata.isReceive!,
           borderRadius: 25.0,
           onToggle: (val) {
             setState(() {
-              notifi2 = val;
+              edata.isReceive = val;
             });
           },
         ),
@@ -327,10 +342,13 @@ getPushSubSetting() async{
               ),
               _switch_isEmailNotification == true?
               ListView.builder(
+
+
+
                   shrinkWrap: true,
-                  itemCount: arrNotify.length,
+                  itemCount: emailarrNotify.length,
                   itemBuilder: (BuildContext context, int index) => Column(children: [
-                    emailsublist(arrNotify[index]),
+                    emailsublist(emailarrNotify[index]),
 
                   ],)): Container(),
                 
