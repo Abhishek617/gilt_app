@@ -140,6 +140,15 @@ abstract class _UserStore with Store {
         .then((pushsettingData) => pushsettingData)
         .catchError((error) => throw error);
   }
+
+  //email setting
+  @action
+  Future emailsettingGet() async {
+    return await _repository
+        .emailsettingGet()
+        .then((emailsettingData) => emailsettingData)
+        .catchError((error) => throw error);
+  }
   @action
   Future changePassword(oldPassword, newPassword) async {
     return await _repository

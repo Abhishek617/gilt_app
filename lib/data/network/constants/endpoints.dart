@@ -148,6 +148,7 @@ class Endpoints {
   // setting
   static const String setting = baseUrl + 'api/settings';
   static const String pushsubsetting = baseUrl + 'api/notificationSetting/list-user-settings';
+  static const String emailsubsetting = baseUrl + 'api/mailsettings/list-user-settings';
   //feedback_add
   static const String feedbackadd = baseUrl + 'api/eventFeedback/add';
 
