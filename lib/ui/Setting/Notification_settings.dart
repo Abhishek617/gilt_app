@@ -290,6 +290,7 @@ getPushSubSetting() async{
               Row( mainAxisAlignment: MainAxisAlignment. spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+
                   Text(
                     'Email Notification',
                     style: TextStyle(
