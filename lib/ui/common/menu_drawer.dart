@@ -14,6 +14,7 @@ import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,7 +30,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
   String _email = '';
   String _firstname = '';
   String _lastname = '';
-
 
   @observable
   var userRole = '1';
@@ -90,8 +90,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
     });
   }
 
-  getdata() async
-  {
+  getdata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _email = (prefs.getString('email') ?? '');
@@ -138,10 +137,19 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                                       BorderRadius.circular(
                                                           100.0),
                                                   child: Image.network(
-                                                    _userStore.Profile_data
-                                                            ?.user?.profile
-                                                            .toString() ??
-                                                        'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                                                    _userStore.Profile_data ==
+                                                                null ||
+                                                            _userStore
+                                                                .Profile_data!
+                                                                .user!
+                                                                .profile!
+                                                                .isEmpty
+                                                        ? 'https://i.pinimg.com/236x/f9/75/81/f9758151b717582c500f0dcc33beca4f.jpg'
+                                                        : _userStore
+                                                                .Profile_data
+                                                                ?.user
+                                                                ?.profile ??
+                                                            "",
                                                     width: DeviceUtils
                                                         .getScaledWidth(
                                                             context, 0.15),
@@ -164,7 +172,10 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           flex: 1,
                           child: Container(
                             padding: EdgeInsets.only(
-                                left: 15.0, top: 23.0, bottom: 00.0, right: 00.0),
+                                left: 15.0,
+                                top: 23.0,
+                                bottom: 00.0,
+                                right: 00.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -273,9 +284,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             }),
                     getMenuTile(
                       'MY EVENTS',
-                          () => {
-                        Routes.navigateToScreen(context, Routes.my_event)
-                      },
+                      () => {Routes.navigateToScreen(context, Routes.my_event)},
                     ),
                     getMenuTile(
                       'MY PAID EVENTS',
@@ -351,15 +360,18 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             Icons.settings,
                             'Settings',
                             () => {
-                              Routes.navigateToScreen(context, Routes.notifisetting)
+                              Routes.navigateToScreen(
+                                  context, Routes.notifisetting)
                             },
                           ),
                           getBottomMenuTile(
                             Icons.rate_review,
                             'Rate The App',
                             () => {
-                              Routes.navigateToScreen(
-                                  context, Routes.add_feedback)
+                              // Routes.navigateToScreen(
+                              //     context, Routes.add_feedback)
+                              LaunchReview.launch(
+                                  androidAppId: "com.guilt.trip", iOSAppId: "")
                             },
                           ),
                           getBottomMenuTile(

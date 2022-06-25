@@ -1,3 +1,5 @@
+import 'package:guilt_app/models/Auth/error_master.dart';
+
 class SignUpRequestModal {
   String? firstname;
   String? lastname;
@@ -8,11 +10,11 @@ class SignUpRequestModal {
 
   SignUpRequestModal(
       {this.firstname,
-        this.lastname,
-        this.email,
-        this.phone,
-        this.password,
-        this.roleId});
+      this.lastname,
+      this.email,
+      this.phone,
+      this.password,
+      this.roleId});
 
   SignUpRequestModal.fromJson(Map<String, dynamic> json) {
     firstname = json['firstname'];
@@ -39,13 +41,20 @@ class SignUpResponseModal {
   bool? success;
   String? message;
   Data? data;
+  List<ErrorResponse>? error;
 
-  SignUpResponseModal({this.success, this.message, this.data});
+  SignUpResponseModal({this.success, this.message, this.data, this.error});
 
   SignUpResponseModal.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    if (json['error'] != null) {
+      error = <ErrorResponse>[];
+      json['error'].forEach((v) {
+        error!.add(new ErrorResponse.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -55,17 +64,22 @@ class SignUpResponseModal {
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
+    if (this.error != null) {
+      data['error'] = this.error!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
 
 class Data {
   User? user;
+  String? refreshToken;
 
-  Data({this.user});
+  Data({this.user, this.refreshToken});
 
   Data.fromJson(Map<String, dynamic> json) {
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    if (json['user'] != null) user = User.fromJson(json['user']);
+    refreshToken = json['refreshToken'];
   }
 
   Map<String, dynamic> toJson() {
@@ -73,6 +87,7 @@ class Data {
     if (this.user != null) {
       data['user'] = this.user!.toJson();
     }
+    data['refreshToken'] = this.refreshToken;
     return data;
   }
 }
@@ -86,20 +101,20 @@ class User {
   String? email;
   String? phone;
   String? password;
-  String? roleId;
+  int? roleId;
   String? authToken;
 
   User(
       {this.isEmailVerified,
-        this.isPhoneVerified,
-        this.id,
-        this.firstname,
-        this.lastname,
-        this.email,
-        this.phone,
-        this.password,
-        this.roleId,
-        this.authToken});
+      this.isPhoneVerified,
+      this.id,
+      this.firstname,
+      this.lastname,
+      this.email,
+      this.phone,
+      this.password,
+      this.roleId,
+      this.authToken});
 
   User.fromJson(Map<String, dynamic> json) {
     isEmailVerified = json['isEmailVerified'];
@@ -110,7 +125,8 @@ class User {
     email = json['email'];
     phone = json['phone'];
     password = json['password'];
-    roleId = json['role_id'];
+    roleId =
+        json['role_id'] != null ? int.parse(json['role_id'].toString()) : 1;
     authToken = json['auth_token'];
   }
 

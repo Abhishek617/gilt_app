@@ -632,6 +632,8 @@ class _FullProfileState extends State<FullProfile> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        "User profile image: ${_userStore.Profile_data?.user?.profile.toString()}");
     return Scaffold(
       drawer: MenuDrawer(),
       appBar: AppBar(
@@ -672,9 +674,13 @@ class _FullProfileState extends State<FullProfile> {
                                     fit: BoxFit.cover,
                                   )
                                 : Image.network(
-                                    _userStore.Profile_data?.user?.profile
-                                            ?.toString() ??
-                                        'https://i.pinimg.com/236x/f9/75/81/f9758151b717582c500f0dcc33beca4f.jpg',
+                                    _userStore.Profile_data == null ||
+                                            _userStore.Profile_data!.user!
+                                                .profile!.isEmpty
+                                        ? 'https://i.pinimg.com/236x/f9/75/81/f9758151b717582c500f0dcc33beca4f.jpg'
+                                        : _userStore
+                                                .Profile_data?.user?.profile ??
+                                            "",
                                     width: DeviceUtils.getScaledWidth(
                                         context, 0.30),
                                     height: DeviceUtils.getScaledWidth(

@@ -131,7 +131,7 @@ class Endpoints {
   static const String sendOtp = baseUrl + "admin/fp-send-otp";
 
   // update send otp
-  static const String resendOtp = baseUrl + "admin/resendOtp";
+  static const String resendOtp = baseUrl + "api/admin/resendOtp";
 
   // Valid Otp
   static const String validOtp = baseUrl + "admin/fp-validate";
@@ -153,7 +153,7 @@ class Endpoints {
   static const String feedbackadd = baseUrl + 'api/eventFeedback/add';
 
   //Feddback List
-  static const String feedbacklist = baseUrl + 'api/eventFeedback/';
+  static const String feedbacklist = baseUrl + 'api/eventFeedback';
 
 //Notificationlist
   static const String notificationlist = baseUrl + 'api/notification';

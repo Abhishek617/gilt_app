@@ -100,7 +100,8 @@ class _Create_eventState extends State<Create_event> {
   @override
   void didChangeDependencies() {
     try {
-      final args = ModalRoute.of(context)?.settings.arguments as List<Attendees>;
+      final args =
+          ModalRoute.of(context)?.settings.arguments as List<Attendees>;
       if (args != null) {
         print(args);
         setState(() {
@@ -133,17 +134,23 @@ class _Create_eventState extends State<Create_event> {
             (item) => Selectedcontactlist.indexOf(item) < 5
                 ? Container(
                     margin: EdgeInsets.only(left: 10),
-                    height: 40,
-                    width: 40,
-                    // margin: EdgeInsets.all(100.0),
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(
-                              'https://img.icons8.com/color/344/person-male.png'),
-                          fit: BoxFit.fill,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 40,
+                          width: 40,
+                          // margin: EdgeInsets.all(100.0),
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    'https://img.icons8.com/color/344/person-male.png'),
+                                fit: BoxFit.fill,
+                              ),
+                              color: Colors.orange,
+                              shape: BoxShape.circle),
                         ),
-                        color: Colors.orange,
-                        shape: BoxShape.circle),
+                      ],
+                    ),
                   )
                 : Selectedcontactlist.lastIndexOf(item) == 5
                     ? Container(
@@ -197,7 +204,8 @@ class _Create_eventState extends State<Create_event> {
         body: CustomBodyWrapper(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(left: 25,right: 25,top: 25 ,bottom:100),
+              padding: const EdgeInsets.only(
+                  left: 25, right: 25, top: 25, bottom: 100),
               child: Column(
                 children: [
                   SizedBox(
@@ -279,20 +287,20 @@ class _Create_eventState extends State<Create_event> {
                     children: [
                       Expanded(
                         child: Container(
-                            child: TextFormField(
-                              maxLines: 3,
-                              onChanged: (val) {},
-                              controller: _eventLocationController,
-                              cursorColor: Colors.black,
-                              decoration: new InputDecoration(
-
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  disabledBorder: InputBorder.none,
-                                  hintText: 'Enter Location'),
-                            ),),
+                          child: TextFormField(
+                            maxLines: 3,
+                            onChanged: (val) {},
+                            controller: _eventLocationController,
+                            cursorColor: Colors.black,
+                            decoration: new InputDecoration(
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                hintText: 'Enter Location'),
+                          ),
+                        ),
                       ),
                       Container(
                         child: ElevatedButton(
@@ -324,8 +332,10 @@ class _Create_eventState extends State<Create_event> {
                                 }) as Map<String, dynamic>;
                                 setState(() {
                                   if (result != null) {
-                                    addressLatLng = result['position'] as LatLng;
-                                    _eventLocationController.text = result['address'];
+                                    addressLatLng =
+                                        result['position'] as LatLng;
+                                    _eventLocationController.text =
+                                        result['address'];
                                   }
                                 });
                               });
@@ -370,7 +380,6 @@ class _Create_eventState extends State<Create_event> {
                                 margin: EdgeInsets.only(right: 10),
                                 child: DateTimePicker(
                                   controller: _eventStartDateAndTimeController,
-
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       focusedBorder: InputBorder.none,
@@ -390,7 +399,23 @@ class _Create_eventState extends State<Create_event> {
 
                                     return true;
                                   },
-                                  onChanged: (val) => print(val),
+                                  onChanged: (val) {
+                                    print(val);
+                                    if (val != null && val.isNotEmpty) {
+                                      DateTime startDate = DateTime.parse(val);
+                                      if (_eventEndDateAndTimeController
+                                          .text.isNotEmpty) {
+                                        DateTime endDate = DateTime.parse(
+                                            _eventEndDateAndTimeController
+                                                .text);
+                                        if (endDate.isBefore(startDate)) {
+                                          _eventEndDateAndTimeController.text =
+                                              "";
+                                        }
+                                      }
+                                      setState(() {});
+                                    }
+                                  },
                                   validator: (val) {
                                     print(val);
                                     return null;
@@ -434,13 +459,37 @@ class _Create_eventState extends State<Create_event> {
                               icon: Icon(Icons.event),
                               selectableDayPredicate: (date) {
                                 // Disable weekend days to select from the calendar
-                                if (date.weekday == 6 || date.weekday == 7) {
+                                /*if (date.weekday == 6 || date.weekday == 7) {
                                   return false;
-                                }
+                                }*/
 
                                 return true;
                               },
-                              onChanged: (val) => print(val),
+                              onFieldSubmitted: (val) {
+                                print("onFieldSubmitted: $val");
+                              },
+                              onEditingComplete: () {
+                                print("onEditingComplete");
+                              },
+                              onChanged: (val) {
+                                print(val);
+                                if (val != null && val.isNotEmpty) {
+                                  DateTime endDate = DateTime.parse(val);
+                                  if (_eventStartDateAndTimeController
+                                      .text.isNotEmpty) {
+                                    DateTime startDate = DateTime.parse(
+                                        _eventStartDateAndTimeController.text);
+                                    if (!startDate.isBefore(endDate)) {
+                                      _eventEndDateAndTimeController.text = "";
+                                      GlobalMethods.showErrorMessage(
+                                          context,
+                                          "End date should be bigger than start date",
+                                          "End date and time");
+                                    }
+                                  }
+                                  setState(() {});
+                                }
+                              },
                               validator: (val) {
                                 print(val);
                                 return null;
@@ -493,7 +542,7 @@ class _Create_eventState extends State<Create_event> {
                   Row(
                     children: [
                       Text(
-                        "Upload Event Photo"+AppSettings.addUptoUploadSize,
+                        "Upload Event Photo" + AppSettings.addUptoUploadSize,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -683,61 +732,68 @@ class _Create_eventState extends State<Create_event> {
                                   if (_eventEndDateAndTimeController.value.text
                                           .trim() !=
                                       '') {
-                                    if (_eventPlaceDescriptionController
-                                            .value.text
-                                            .trim() !=
-                                        '') {
-                                      if (pickedImageList.length > 0) {
-                                        if (Selectedcontactlist.length > 0) {
-                                          CreateEventRequestModal eData =
-                                              CreateEventRequestModal(
-                                            name:
-                                                _eventNameController.value.text,
-                                            category: _eventCategoryController
-                                                .value.text,
-                                            location: _eventLocationController
-                                                .value.text,
-                                            startDate:
-                                                _eventStartDateAndTimeController
-                                                    .value.text,
-                                            endDate:
-                                                _eventEndDateAndTimeController
-                                                    .value.text,
-                                            description:
-                                                _eventPlaceDescriptionController
-                                                    .value.text,
-                                            files: pickedImageList,
-                                            attendees: Selectedcontactlist,
-                                            expenseDescription: '',
-                                            totalExpense: '0',
-                                            long: addressLatLng?.longitude
-                                                    .toString() ??
-                                                '',
-                                            lat: (addressLatLng?.longitude
-                                                    .toString() ??
-                                                ''),
-                                          );
-                                          Routes.navigateToScreenWithArgs(
-                                              context,
-                                              Routes.expense_screen,
-                                              eData);
+                                    if (isDateValid()) {
+                                      if (_eventPlaceDescriptionController
+                                              .value.text
+                                              .trim() !=
+                                          '') {
+                                        if (pickedImageList.length > 0) {
+                                          if (Selectedcontactlist.length > 0) {
+                                            CreateEventRequestModal eData =
+                                                CreateEventRequestModal(
+                                              name: _eventNameController
+                                                  .value.text,
+                                              category: _eventCategoryController
+                                                  .value.text,
+                                              location: _eventLocationController
+                                                  .value.text,
+                                              startDate:
+                                                  _eventStartDateAndTimeController
+                                                      .value.text,
+                                              endDate:
+                                                  _eventEndDateAndTimeController
+                                                      .value.text,
+                                              description:
+                                                  _eventPlaceDescriptionController
+                                                      .value.text,
+                                              files: pickedImageList,
+                                              attendees: Selectedcontactlist,
+                                              expenseDescription: '',
+                                              totalExpense: '0',
+                                              long: addressLatLng?.longitude
+                                                      .toString() ??
+                                                  '',
+                                              lat: (addressLatLng?.longitude
+                                                      .toString() ??
+                                                  ''),
+                                            );
+                                            Routes.navigateToScreenWithArgs(
+                                                context,
+                                                Routes.expense_screen,
+                                                eData);
+                                          } else {
+                                            GlobalMethods.showErrorMessage(
+                                                context,
+                                                'Please select attendees',
+                                                'Create Event');
+                                          }
                                         } else {
                                           GlobalMethods.showErrorMessage(
                                               context,
-                                              'Please select attendees',
+                                              'Please upload an image',
                                               'Create Event');
                                         }
                                       } else {
                                         GlobalMethods.showErrorMessage(
                                             context,
-                                            'Please upload an image',
+                                            'Event Description Required',
                                             'Create Event');
                                       }
                                     } else {
                                       GlobalMethods.showErrorMessage(
                                           context,
-                                          'Event Description Required',
-                                          'Create Event');
+                                          "End date should be bigger than start date",
+                                          "End date and time");
                                     }
                                   } else {
                                     GlobalMethods.showErrorMessage(
@@ -767,12 +823,25 @@ class _Create_eventState extends State<Create_event> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 50,)
+                  SizedBox(
+                    height: 50,
+                  )
                 ],
               ),
             ),
           ),
         ));
+  }
+
+  // returns true if end date is bigger than start date
+  bool isDateValid() {
+    DateTime endDate = DateTime.parse(_eventEndDateAndTimeController.text);
+    DateTime startDate = DateTime.parse(_eventStartDateAndTimeController.text);
+    if (!startDate.isBefore(endDate)) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   @override
