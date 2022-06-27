@@ -29,6 +29,9 @@ abstract class NetworkModule {
         newToken = refreshResponse.accessToken;
         sharedPrefHelper.saveAuthToken(newToken!);
         sharedPrefHelper.saveRefreshToken(refreshResponse.refreshToken!);
+      }else  if (response.statusCode == 400) {
+
+
       }
     }
 

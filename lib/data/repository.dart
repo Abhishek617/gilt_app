@@ -434,10 +434,11 @@ class Repository {
         .catchError((error) => throw error);
   }
   // Feedback list
-  Future<FeedbackListModel> Feedback_list(int eventId) async {
+  Future Feedback_list(int eventId, successCB, errorCB) async {
     var token = await authToken;
-    return await _postApi.Feedback_list(eventId, token)
-        .then((Feedback_list) => Feedback_list)
+    return await _postApi
+        .Feedback_list(eventId, token, successCB, errorCB)
+        .then((feedback_list) => feedback_list)
         .catchError((error) => throw error);
   }
 

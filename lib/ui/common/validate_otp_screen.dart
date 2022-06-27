@@ -120,11 +120,14 @@ class _Otp_Validate_ScreenState extends State<Otp_Validate_Screen> {
                                     context, 'Please enter Valid Code', '')
                                 : _userStore.OtpValidate(args.email, otpCode,
                                     (OtpValidateModel value) {
+                                  if (value!.success!) {
                                     Routes.navigateRootToScreen(
                                         context, Routes.home_tab);
-                                    // Routes.navigateToScreenWithArgs(
-                                    //     context, Routes.reset_password, args);
-                                    //Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
+                                  } else {
+                                    GlobalMethods.showErrorMessage(context,
+                                        value.message?? "", 'Otp Verification');
+                                  }
+
                                   }, (error) {
                                     print(error);
                                     final data =
@@ -134,8 +137,8 @@ class _Otp_Validate_ScreenState extends State<Otp_Validate_Screen> {
                                         data['error'], 'Forgot Password');
                                   }).then((value) {
                                     print(value);
-                                    GlobalMethods.showErrorMessage(context,
-                                        "ERROR: OTP is Invalid/Expired", '');
+                                    // GlobalMethods.showErrorMessage(context,
+                                    //     "ERROR: OTP is Invalid/Expired", '');
                                   });
                         // Routes.navigateToScreen(context, Routes.reset_password);
                       }),

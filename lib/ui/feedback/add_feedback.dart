@@ -269,8 +269,6 @@ class _Add_feedbackState extends State<Add_feedback> {
                                       val.message ?? 'Failed', 'Event');
                                 }
                                 Routes.goBack(context);
-                                // Routes.navigateRootToScreen(
-                                //     context, Routes.feedback_list);
                               }, (error) {
                                 GlobalMethods.hideLoader();
                                 print(error);

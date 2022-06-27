@@ -132,6 +132,7 @@ abstract class _UserStore with Store {
         .then((settingData) => settingData)
         .catchError((error) => throw error);
   }
+
   //push setting
   @action
   Future pushsettingGet() async {
@@ -149,6 +150,7 @@ abstract class _UserStore with Store {
         .then((emailsettingData) => emailsettingData)
         .catchError((error) => throw error);
   }
+
   @action
   Future changePassword(oldPassword, newPassword) async {
     return await _repository
@@ -263,21 +265,12 @@ abstract class _UserStore with Store {
     });
   }
 
-  Future Feedback_list(String description, int eventId, String rate,
-      successCallback, errorCallback) async {
-    _repository.Feedback_list(eventId).then((value) async {
-      if (value != null) {
-        successCallback(value);
-      } else {
-        print("Faild to Feedback List");
-      }
-    }, onError: (error) {
-      print(error.toString());
-      errorCallback(error.respone);
-    }).catchError((e) {
-      print(e);
-      throw e;
-    });
+  @action
+  Future Feedback_list(int eventId, successCallback, errorCallback) async {
+    _repository.Feedback_list(eventId, successCallback, errorCallback).then(
+        (val) {
+      print(val.toString());
+    }, onError: errorCallback);
   }
 
   Future Send_Otp(String email, successCallback, errorCallback) async {
@@ -298,11 +291,13 @@ abstract class _UserStore with Store {
       throw e;
     });
   }
-  Future ReSend_Otp(String email,String phone, successCallback, errorCallback) async {
+
+  Future ReSend_Otp(
+      String email, String phone, successCallback, errorCallback) async {
     // final future = _repository.login(email, password);
 
     // loginFuture = ObservableFuture(future);
-    _repository.ResendOtpaResponse(email,phone).then((value) async {
+    _repository.ResendOtpaResponse(email, phone).then((value) async {
       if (value != null) {
         successCallback(value);
       } else {
@@ -377,13 +372,14 @@ abstract class _UserStore with Store {
   }
 
   //after signup login
+  @action
   Future OtpValidate(
       String email, String otp, successCallback, errorCallback) async {
     // final future = _repository.login(email, password);
 
     // loginFuture = ObservableFuture(future);
     _repository.OtpValidate(email, otp).then((value) async {
-      if (value.success == true && value.data!.user != null) {
+      if (value.success == true && value.data != null && value.data!.user != null) {
         _repository.saveIsLoggedIn(true);
         this.isLoggedIn = true;
         _repository.saveIsFirst(false);
@@ -392,7 +388,7 @@ abstract class _UserStore with Store {
           _repository.saveAuthToken(value.data?.user?.authToken!);
           authToken = value.data?.user?.authToken;
         }
-        if (value.data?.refreshToken != null) {
+        if (value!.data!.refreshToken! != null) {
           print(value.data?.refreshToken);
           _repository.saveRefreshToken(value.data?.refreshToken);
           refreshToken = value.data?.refreshToken;
@@ -400,18 +396,15 @@ abstract class _UserStore with Store {
         this.isFirst = false;
         this.success = true;
         getProfile();
-        successCallback(value);
-      } else {
-        print('failed to Reset Password');
       }
+      successCallback(value);
     }, onError: (error) {
-
-
       print(error.toString());
 
       errorCallback(error.response);
     }).catchError((e) {
-      print(e); errorCallback(e);
+      print(e);
+      errorCallback(e);
       throw e;
     });
   }
@@ -517,13 +510,14 @@ abstract class _UserStore with Store {
       print(val.toString());
     }, onError: errorCallback);
   }
+
   @action
-  Future updateEvent(
-      CreateEventRequestModal eventData,int id,   successCallback, errorCallback) async {
-    _repository.updateEvent(eventData,id, successCallback, errorCallback).then(
-            (val) {
-          print(val.toString());
-        }, onError: errorCallback);
+  Future updateEvent(CreateEventRequestModal eventData, int id, successCallback,
+      errorCallback) async {
+    _repository.updateEvent(eventData, id, successCallback, errorCallback).then(
+        (val) {
+      print(val.toString());
+    }, onError: errorCallback);
   }
 
   @action
@@ -550,14 +544,17 @@ abstract class _UserStore with Store {
       print(val.toString());
     }, onError: errorCallback);
   }
+
   @action
-  Future updateBusiness(AddBusinessRequestModel businessData, int id,successCallback,
-      errorCallback) async {
-    _repository.updateBusiness(businessData,id, successCallback, errorCallback).then(
-            (val) {
-          print(val.toString());
-        }, onError: errorCallback);
+  Future updateBusiness(AddBusinessRequestModel businessData, int id,
+      successCallback, errorCallback) async {
+    _repository
+        .updateBusiness(businessData, id, successCallback, errorCallback)
+        .then((val) {
+      print(val.toString());
+    }, onError: errorCallback);
   }
+
   @action
   Future updateprofile(UpdateProfileRequestModal UpdateProfileData,
       successCallback, errorCallback) async {
@@ -582,7 +579,7 @@ abstract class _UserStore with Store {
       SignUpRequestModal signUpData, successCallback, errorCallback) async {
     _repository.signUp(signUpData).then(
       (value) async {
-        if (value.success == true && value.data?.user != null) {
+        if (value.success == true && value.data != null && value.data?.user != null) {
           print('isFirst : false');
           _repository.saveIsLoggedIn(true);
           this.isLoggedIn = true;
@@ -594,22 +591,10 @@ abstract class _UserStore with Store {
           this.isFirst = false;
           this.success = true;
           successCallback(value);
-        } else if (value.success == true) {
-          print('isFirst : false');
-          // _repository.saveIsLoggedIn(true);
-          // this.isLoggedIn = true;
-          // _repository.saveIsFirst(false);
-          // if (value.data?.user?.authToken != null) {
-          //   _repository.saveAuthToken(value.data?.user?.authToken!);
-          // }
-
-          this.isFirst = false;
-          this.success = true;
+        } else if (value.success == true && value.message != null) {
           successCallback(value);
-        }else {
-          print('failed to login');
-          print(value.message);
-          errorCallback(value.message);
+        } else {
+          errorCallback(value.error);
         }
       },
       onError: (exception) {

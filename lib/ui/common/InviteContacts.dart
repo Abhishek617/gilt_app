@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/data/repository.dart';
@@ -50,7 +52,8 @@ class _InviteContactState extends State<InviteContact> {
       setState(() {
         _contacts = contacts.toList();
         _contactStrings = _contacts
-            .map((e) => e.phones?.map((i) => i.value?.replaceAll(' ','')).toList())
+            .map((e) =>
+                e.phones?.map((i) => i.value?.replaceAll(' ', '')).toList())
             .toList()
             .reduce((p, el) {
           p?.addAll(el!);
@@ -114,6 +117,13 @@ class _InviteContactState extends State<InviteContact> {
         child: ElevatedButton(
             onPressed: () {
               // TODO : Invite User
+              GlobalMethods.shareApp(
+                title: "Invite",
+                description: "Hey click the link and download the app",
+                link: Platform.isAndroid
+                    ? "https://play.google.com/store/apps/details?id=com.guilt.trip"
+                    : "",
+              );
             },
             child: Text('INVITE')),
       ),
@@ -156,21 +166,7 @@ class _InviteContactState extends State<InviteContact> {
               SizedBox(
                 height: 10,
               ),
-              _searchResult.length!=0? Column(
-                children: [
-                  Container(
-                    height: 500,
-                    // width: 460,
-                    width: MediaQuery.of(context).size.width / 0.0,
-                    child: ListView.builder(
-                        itemCount: _searchResult.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return getContactListTile(
-                              _searchResult[index]);
-                        }),
-                  ),
-                ],
-              ): (filteredContactList.length > 0)
+              _searchResult.length != 0
                   ? Column(
                       children: [
                         Container(
@@ -178,15 +174,31 @@ class _InviteContactState extends State<InviteContact> {
                           // width: 460,
                           width: MediaQuery.of(context).size.width / 0.0,
                           child: ListView.builder(
-                              itemCount: filteredContactList.length,
+                              itemCount: _searchResult.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return getContactListTile(
-                                    filteredContactList[index]);
+                                return getContactListTile(_searchResult[index]);
                               }),
                         ),
                       ],
                     )
-                  : Text('No Contacts available'),
+                  : (filteredContactList.length > 0)
+                      ? Column(
+                          children: [
+                            Container(
+                              height: 500,
+                              // width: 460,
+                              width: MediaQuery.of(context).size.width / 0.0,
+                              child: ListView.builder(
+                                  itemCount: filteredContactList.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return getContactListTile(
+                                        filteredContactList[index]);
+                                  }),
+                            ),
+                          ],
+                        )
+                      : Text('No Contacts available'),
             ],
           ),
         ),
@@ -194,19 +206,17 @@ class _InviteContactState extends State<InviteContact> {
     );
   }
 
-   onSearchTextChanged(String text) {
-     _searchResult.clear();
-     if (text.isEmpty) {
-       setState(() {});
-       return;
-     }
+  onSearchTextChanged(String text) {
+    _searchResult.clear();
+    if (text.isEmpty) {
+      setState(() {});
+      return;
+    }
 
-     filteredContactList.forEach((userDetail) {
-       if (userDetail.phone.contains(text))
-         _searchResult.add(userDetail);
-     });
+    filteredContactList.forEach((userDetail) {
+      if (userDetail.phone.contains(text)) _searchResult.add(userDetail);
+    });
 
-     setState(() {});
-   }
-
+    setState(() {});
+  }
 }

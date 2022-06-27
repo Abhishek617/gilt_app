@@ -4,6 +4,7 @@ import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/utils/locale/app_localization.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -17,7 +18,8 @@ class GlobalMethods {
           message: message,
           title: title,
           duration: Duration(seconds: 3),
-        )..show(context);
+        )
+          ..show(context);
       }
     });
     return SizedBox.shrink();
@@ -30,7 +32,8 @@ class GlobalMethods {
           message: message,
           title: title,
           duration: Duration(seconds: 3),
-        )..show(context);
+        )
+          ..show(context);
       }
     });
 
@@ -79,14 +82,14 @@ class GlobalMethods {
     }
   }
 
-  static void handleInvalidPermissions(
-      context, PermissionStatus permissionStatus) {
+  static void handleInvalidPermissions(context,
+      PermissionStatus permissionStatus) {
     if (permissionStatus == PermissionStatus.denied) {
       final snackBar = SnackBar(content: Text('Permission is denied'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else if (permissionStatus == PermissionStatus.permanentlyDenied) {
       final snackBar =
-          SnackBar(content: Text('Permission is permanently denied'));
+      SnackBar(content: Text('Permission is permanently denied'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
@@ -142,5 +145,15 @@ class GlobalMethods {
     } else {
       throw 'Could not open the map.';
     }
+  }
+
+  static Future<void> shareApp(
+      {String? title, String? description, String? link}) async {
+    await FlutterShare.share(
+        title: title ?? "",
+        text: description ?? "",
+        linkUrl: link ?? "",
+        chooserTitle: 'Guilt App'
+    );
   }
 }

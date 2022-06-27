@@ -496,9 +496,15 @@ class PostApi {
   // Resend Otp
 
   Future<GetResendOtpaResponse> ReSend_Otp(email, phone) async {
+    String getParams() {
+      var map = new Map<String, dynamic>();
+      map['email'] = email;
+      map['phone'] = phone;
+      return json.encode(map);
+    }
     try {
       final res = await _dioClient
-          .post(Endpoints.resendOtp, data: {"email": email, "phone": phone});
+          .post(Endpoints.resendOtp, data: getParams(), options: Options(headers: {'Content-Type': 'application/json'}));
       return GetResendOtpaResponse.fromJson(res);
     } catch (e) {
       print(e.toString());
@@ -588,18 +594,22 @@ class PostApi {
 
   //feedback List
 
-  Future<FeedbackListModel> Feedback_list(eventId, token) async {
+  Future Feedback_list(eventId, token, successCB, errorCB) async {
     try {
-      final res = await _dioClient.get(
+      await _dioClient
+          .get(
         Endpoints.feedbacklist,
         queryParameters: {
           "eventId": eventId,
         },
         options: Options(headers: {'Authorization': 'Bearer ' + token!}),
-      );
-
-      return FeedbackListModel.fromJson(res);
+      )
+          .then((value) {
+        value = FeedbackListModel.fromJson(value);
+        successCB(value);
+      });
     } catch (e) {
+      errorCB(e);
       print(e.toString());
       throw e;
     }
@@ -721,7 +731,7 @@ class PostApi {
         FormData formData = await new FormData.fromMap(eventData.toJson());
         await _dioClient
             .put(
-          "${Endpoints. updateEvent}/$id",
+          "${Endpoints.updateEvent}/$id",
           data: formData,
           options: Options(headers: {
             'Authorization': 'Bearer ' + token!,

@@ -315,10 +315,13 @@ class _EventDetailsState extends State<EventDetails> {
                                     fontSize: 14, fontWeight: FontWeight.w500),
                               ),
                             )
-                          : Row(
-                              children: contentData!.event!.eventImages!
-                                  .map((e) => getImageContainer(e))
-                                  .toList()),
+                          : SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                            child: Row(
+                                children: contentData!.event!.eventImages!
+                                    .map((e) => getImageContainer(e))
+                                    .toList()),
+                          ),
                       // Row(
                       //   children: [
                       //     FullScreenWidget(
@@ -368,6 +371,52 @@ class _EventDetailsState extends State<EventDetails> {
                       // ),
                     ],
                   ),
+                  // Organizer can see the feedback list
+                  isPastEvent && isCreator()
+                      ? Container(
+                          padding: EdgeInsets.only(left: 12, right: 12),
+                          child: InkWell(
+                            onTap: () {
+                              Routes.navigateToScreenWithArgs(
+                                  context, Routes.feedback_list, eID);
+                            },
+                            child: Column(
+                              children: [
+                                Divider(
+                                  color: Colors.black12,
+                                  height: 20,
+                                  thickness: 1,
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 5, bottom: 5),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Feedback list",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        color: Colors.black87,
+                                        size: 15,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Divider(
+                                  color: Colors.black12,
+                                  height: 20,
+                                  thickness: 1,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : Container(),
                   SizedBox(
                     height: 20,
                   ),
@@ -393,6 +442,7 @@ class _EventDetailsState extends State<EventDetails> {
                             )
                           : Container(),
                       isPayButton &&
+                              !isPastEvent &&
                               payableAttendee != null &&
                               payableAttendee!.paymentStatus == "pending"
                           ? Row(
@@ -478,7 +528,8 @@ class _EventDetailsState extends State<EventDetails> {
         : Center(child: Text('No Details found.'));
   }
 
-  bool isCreator () {
+  // Returns true if logged in user is Organizer of an event
+  bool isCreator() {
     // GetProfileResponseModal? profileData = await _userStore.getProfileData();
     if (profileData != null) {
       int userId = profileData?.user?.id ?? 0;
@@ -488,6 +539,8 @@ class _EventDetailsState extends State<EventDetails> {
     }
     return false;
   }
+
+  // set if user is payable for payment
   validatePayButton() async {
     GetProfileResponseModal? profileData = await _userStore.getProfileData();
     int userId = profileData?.user?.id ?? 0;
@@ -500,6 +553,7 @@ class _EventDetailsState extends State<EventDetails> {
     }
   }
 
+  // it stores attendees who can pay
   Future<void> getPayableAttendee() async {
     GetProfileResponseModal? profileData = await _userStore.getProfileData();
     int userId = profileData?.user?.id ?? 0;
@@ -513,6 +567,7 @@ class _EventDetailsState extends State<EventDetails> {
     }
   }
 
+  // validates if event has passed or not
   void validatePastEvent() {
     final currentDate = DateTime.now();
     try {
@@ -628,47 +683,66 @@ class _EventDetailsState extends State<EventDetails> {
         shrinkWrap: true,
         itemCount: contentData?.event?.eventAttendees?.length,
         itemBuilder: (BuildContext context, int index) {
-          return getContactTile(contentData?.event?.eventAttendees?[index]);
+          return getContactTile(contentData!.event!.eventAttendees![index]);
         },
       ),
     );
   }
 
-  getContactTile(user) {
+  getContactTile(EventAttendees1 user) {
     print('user');
     print(user);
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            height: 45,
-            width: 45,
-            child: CircleAvatar(
-              backgroundColor: AppColors.primaryColor,
-              child: Icon(
-                Icons.person,
-                color: Colors.white,
-                size: 30,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 45,
+                width: 45,
+                child: CircleAvatar(
+                  backgroundColor: AppColors.primaryColor,
+                  child: Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
               ),
-            ),
+              SizedBox(
+                width: 10,
+              ),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${user?.admin?.firstname ?? ""} ${user?.admin?.lastname ?? ""} ${(contentData?.event?.organizer?.id == user?.userId ? ' (Host)' : '')} \n${user?.admin?.phone ?? ""}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    user.paymentStatus == "paid"
+                        ? Text(
+                            "Paid amount: \$${user.expense}",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                        : Container(),
+                  ],
+                ),
+              ),
+            ],
           ),
-          SizedBox(
-            width: 10,
-          ),
-          Text(
-            user?.admin?.firstname! +
-                ' ' +
-                user?.admin?.lastname! +
-                (contentData?.event?.organizer?.id == user?.userId
-                    ? ' (Host)'
-                    : '') +
-                '\n' +
-                user?.admin?.phone!,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            height: 1,
+            width: double.infinity,
+            color: Colors.black26,
           ),
         ],
       ),
@@ -680,17 +754,19 @@ class _EventDetailsState extends State<EventDetails> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('Attendees'),
-                  content: setupAlertDialogContainer(),
-                );
-              });
-
-          // Routes.navigateToScreenWithArgs(
-          //     context, Routes.atendees, jsonEncode(contentData));
+          if (contentData != null &&
+              contentData!.event != null &&
+              contentData!.event!.eventAttendees != null &&
+              contentData!.event!.eventAttendees!.isNotEmpty) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Attendees'),
+                    content: setupAlertDialogContainer(),
+                  );
+                });
+          }
         },
         icon: Icon(
           Icons.supervised_user_circle_rounded,

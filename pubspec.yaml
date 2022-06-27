@@ -123,6 +123,11 @@ dependencies:
   #For AES encryption and decryption
   encrypt: ^5.0.1
 
+  #For launch review
+  launch_review: ^3.0.1
+
+  #Share link
+  flutter_share: ^2.0.0
 
 dev_dependencies:
   flutter_test:
