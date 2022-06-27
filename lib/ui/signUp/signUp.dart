@@ -249,7 +249,7 @@ class _SignUpState extends State<SignUp> {
                           _userStore.signUp(signUpData, (val) {
                             print(val);
 
-                            (val.success == true && val.user != null )
+                            (val.success == true )
                                 ?    Routes.navigateToScreenWithArgs(
                                 context,
                                 Routes.otpvalidate,
