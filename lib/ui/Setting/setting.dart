@@ -1,9 +1,17 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:guilt_app/constants/colors.dart';
-
-import '../../widgets/custom_scaffold.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/PageModals/setting_model.dart';
+import 'package:guilt_app/models/PageModals/success_error_args.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/custom_scaffold.dart';
+import 'package:provider/provider.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
@@ -13,14 +21,83 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
-  bool _switchValue1 = true;
-  bool _switchValue2 = true;
-  bool _switchValue3 = true;
-  bool _switchValue4 = true;
-  bool _switchValue5 = true;
-  bool _switchValue6 = true;
-  bool _switchValue7 = true;
+  bool _switch_isEmailNotification = false;
+  bool _switch_isPushNotification = false;
+  bool _switch_isShowAppIcon = false;
+  bool _switch_isFloatingNotification = false;
+  bool _switch_isLockScreenNotification = false;
+  bool _switch_isAllowSound = false;
+  bool _switch_isAllowVibration = false;
+  late UserStore _settingStore;
+  final UserStore _userStore = UserStore(getIt<Repository>());
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    initSetup();
+  }
 
+  initSetup() async {
+    // initializing stores
+    _settingStore = Provider.of<UserStore>(context);
+    await _settingStore.settingGet()
+      .then((settingData) {
+        if(settingData.adminSettings.notification == null)
+      setState(() {
+        var setingnotification = settingData.adminSettings.notification;
+        _switch_isEmailNotification =
+            setingnotification.isEmailNotification == 1;
+        _switch_isPushNotification = setingnotification.isPushNotification == 1;
+        _switch_isShowAppIcon = setingnotification.isShowAppIcon == 1;
+        _switch_isFloatingNotification =
+            setingnotification.isFloatingNotification == 1;
+        _switch_isLockScreenNotification =
+            setingnotification.isLockScreenNotification == 1;
+        _switch_isAllowSound = setingnotification.isAllowSound == 1;
+        _switch_isAllowVibration = setingnotification.isAllowVibration == 1;
+      });
+    }).catchError((error) => throw error);
+  }
+  updatedata() {
+    final SettingData = SettingPostModal.fromJson({
+      "is_push_notification": _switch_isPushNotification ? 1 : 0,
+      "is_email_notification": _switch_isEmailNotification? 1 : 0,
+      "is_show_app_icon": _switch_isShowAppIcon? 1 : 0,
+      "is_floating_notification": _switch_isFloatingNotification? 1 : 0,
+      "is_lock_screen_notification": _switch_isLockScreenNotification? 1 : 0,
+      "is_allow_sound": _switch_isAllowSound? 1 : 0,
+      "is_allow_vibration":_switch_isAllowVibration? 1 : 0,
+    });
+    _userStore.settingpost(SettingData, (val) {
+      print(val);
+      (val.success == true)
+          ? (val.user != null)
+          ? Routes.navigateToScreenWithArgs(
+          context,
+          Routes.success_error_validate,
+          SuccessErrorValidationPageArgs(
+              isSuccess: true,
+              description: 'SignUp Success',
+              title: 'Success',
+              isPreviousLogin: true))
+          : Routes.navigateRootToScreen(context, Routes.otpvalidate)
+          : GlobalMethods.showErrorMessage(
+          context, val.message, 'Update Profile');
+    }, (error) {
+      print(error.data.toString());
+      final data =
+      json.decode(json.encode(error.data)) as Map<String, dynamic>;
+      print(data['error']);
+      // Map<String, dynamic> map = json.decode(error.data);
+      List<dynamic> dataList = data["error"];
+      print(dataList[0]["message"]);
+      GlobalMethods.showErrorMessage(
+          context,
+          dataList[0]["field"] + ' : ' + dataList[0]["message"],
+          'Sign Up Exception');
+    });
+    // Routes.navigateToScreen(context, Routes.before_login);
+
+  }
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
@@ -28,6 +105,7 @@ class _SettingState extends State<Setting> {
       appBar: AppBar(
         shadowColor: Colors.transparent,
         title: Text('Settings'),
+        centerTitle: true,
       ),
       child: Column(
         children: [
@@ -77,10 +155,11 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue1,
+                      value: _switch_isPushNotification,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue1 = Value;
+                          _switch_isPushNotification = Value;
+                          updatedata();
                         });
                       }),
                 )
@@ -130,10 +209,11 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue2,
+                      value: _switch_isEmailNotification,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue2 = Value;
+                          _switch_isEmailNotification = Value;
+                          updatedata();
                         });
                       }),
                 )
@@ -194,10 +274,11 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue3,
+                      value: _switch_isShowAppIcon,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue3 = Value;
+                          _switch_isShowAppIcon = Value;
+                          updatedata();
                         });
                       }),
                 )
@@ -233,10 +314,11 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue4,
+                      value: _switch_isFloatingNotification,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue4 = Value;
+                          _switch_isFloatingNotification = Value;
+                          updatedata();
                         });
                       }),
                 )
@@ -272,10 +354,11 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue5,
+                      value: _switch_isLockScreenNotification,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue5 = Value;
+                          _switch_isLockScreenNotification = Value;
+                          updatedata();
                         });
                       }),
                 )
@@ -311,10 +394,11 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue6,
+                      value: _switch_isAllowSound,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue6 = Value;
+                          _switch_isAllowSound = Value;
+                          updatedata();
                         });
                       }),
                 )
@@ -350,10 +434,11 @@ class _SettingState extends State<Setting> {
                       activeColor: Colors.white38,
                       inactiveColor: Colors.white38,
                       toggleSize: 18.0,
-                      value: _switchValue7,
+                      value: _switch_isAllowVibration,
                       onToggle: (Value) {
                         setState(() {
-                          _switchValue7 = Value;
+                          _switch_isAllowVibration = Value;
+                          updatedata();
                         });
                       }),
                 )

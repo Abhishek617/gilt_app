@@ -8,7 +8,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    throw new FileNotFoundException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -27,15 +27,18 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 31
-
     lintOptions {
+        checkReleaseBuilds false
         disable 'InvalidPackage'
     }
+//    lintOptions {
+//        disable 'InvalidPackage'
+//    }
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.iotecksolutions.todoapp"
-        minSdkVersion 19
+        applicationId "com.guilt.trip"
+        minSdkVersion 21
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -60,7 +63,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-    implementation platform('com.google.firebase:firebase-bom:29.2.0')
+    implementation platform('com.google.firebase:firebase-bom:30.0.2')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.android.support:multidex:1.0.3'
 }

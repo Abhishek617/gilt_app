@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:guilt_app/constants/dimens.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/Auth/error_master.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
@@ -14,6 +15,7 @@ import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 
 import '../../constants/colors.dart';
+import '../../models/PageModals/resend_otp_value.dart';
 import '../../models/PageModals/success_error_args.dart';
 import '../../widgets/rounded_button_widget.dart';
 
@@ -36,12 +38,13 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    final pageArgs = ModalRoute.of(context)!.settings.arguments.toString();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
         leading: GestureDetector(
           onTap: () {
-            Routes.navigateToScreen(context, Routes.welcome_login);
+            Routes.navigateToScreen(context, Routes.before_login);
           },
           child: Icon(
             Icons.arrow_back_ios_outlined,
@@ -242,37 +245,39 @@ class _SignUpState extends State<SignUp> {
                             "email": _userEmailController.value.text,
                             "phone": _phoneNumberController.value.text,
                             "password": _passwordController.value.text,
-                            "role_id": "2"
+                            "role_id": pageArgs != null ? pageArgs : '1'
                           });
                           _userStore.signUp(signUpData, (val) {
                             print(val);
-                            if (val.success) {
+
+                            if (val.success == true /*&& val.data != null && val.data.user != null*/) {
                               Routes.navigateToScreenWithArgs(
                                   context,
-                                  Routes.success_error_validate,
-                                  SuccessErrorValidationPageArgs(
-                                      isSuccess: true,
-                                      description: 'SignUp Success',
-                                      title: 'Success',
-                                      isPreviousLogin: true));
+                                  Routes.otpvalidate,
+                                  ResendOTPPageArgs(
+                                      email: _userEmailController.value.text,
+                                      phone:
+                                      _phoneNumberController.value.text));
+                            } else if (val.message != null) {
+                              GlobalMethods.showErrorMessage(
+                                  context, val.message, 'Sign Up');
+                            }
+                            // Routes.navigateToScreenWithArgs(
+                            //         context,
+                            //         Routes.success_error_validate,
+                            //         SuccessErrorValidationPageArgs(
+                            //             isSuccess: true,
+                            //             description: 'SignUp Success',
+                            //             title: 'Success',
+                            //             isPreviousLogin: true));
+                          }, (List<ErrorResponse> error) {
+                            if (error != null && error.isNotEmpty) {
+                              GlobalMethods.showErrorMessage(context,
+                                  error[0].message ?? "", 'Sign Up Exception');
                             } else {
                               GlobalMethods.showErrorMessage(context,
-                                  'Something went wrong', 'Sign Up Exception');
+                                  "Something went wrong", "Sign Up Exception");
                             }
-                          }, (error) {
-                            print(error.data.toString());
-                            final data = json.decode(json.encode(error.data))
-                                as Map<String, dynamic>;
-                            print(data['error']);
-                            // Map<String, dynamic> map = json.decode(error.data);
-                            List<dynamic> dataList = data["error"];
-                            print(dataList[0]["message"]);
-                            GlobalMethods.showErrorMessage(
-                                context,
-                                dataList[0]["field"] +
-                                    ' : ' +
-                                    dataList[0]["message"],
-                                'Sign Up Exception');
                           });
                           // Routes.navigateToScreen(context, Routes.before_login);
                         } else {
@@ -288,7 +293,7 @@ class _SignUpState extends State<SignUp> {
                         child: Center(
                       child: RichText(
                         text: TextSpan(
-                            text: 'Don\'t have an account?',
+                            text: 'Already have an account?',
                             style: TextStyle(color: Colors.black, fontSize: 14),
                             children: <TextSpan>[
                               TextSpan(
