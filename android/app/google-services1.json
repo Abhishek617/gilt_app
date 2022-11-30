@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "927637841847",
+    "project_id": "guilt-app-fd525",
+    "storage_bucket": "guilt-app-fd525.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927637841847:android:dea0796cac8b573af5ea32",
+        "android_client_info": {
+          "package_name": "com.iotecksolutions.todoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927637841847-c43pskvg62vul0btphq43jdj8n3hjcsu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKelbTPZOgf0rez_dV9my-Gec2Alv-7VE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927637841847-c43pskvg62vul0btphq43jdj8n3hjcsu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

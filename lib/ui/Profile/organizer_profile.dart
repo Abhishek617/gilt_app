@@ -148,7 +148,8 @@ class _OrganizerProfileState extends State<OrganizerProfile> {
           ),
         ),
         shadowColor: Colors.transparent,
-        title: Text('        Organizer Profile'),
+        title: Text('Organizer Profile'),
+        centerTitle: true,
       ),
       child: Column(children: [
         Column(

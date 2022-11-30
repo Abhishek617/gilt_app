@@ -36,6 +36,7 @@ final ThemeData themeData = new ThemeData(
     backgroundColor: AppColors.pageBackgroundColor,
     scaffoldBackgroundColor: AppColors.pageBackgroundColor,
     appBarTheme: AppBarTheme(
+        centerTitle: true,
         backgroundColor: AppColors.primaryColor,
         shadowColor: Colors.transparent),
     brightness: Brightness.light,
@@ -45,7 +46,7 @@ final ThemeData themeData = new ThemeData(
         fillColor: Colors.white,
         border: OutlineInputBorder(),
         floatingLabelStyle: TextStyle(color: AppColors.primaryColor),
-        focusedBorder:OutlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.primaryColor, width: 2.0),
         ),
         focusColor: AppColors.primaryColor,
