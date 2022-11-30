@@ -61,11 +61,175 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
-  final _$getProfileAsyncAction = AsyncAction('_PostStore.getProfile');
+  final _$getBusinessPlacesAsyncAction =
+      AsyncAction('_PostStore.getBusinessPlaces');
 
   @override
-  Future<dynamic> getProfile() {
-    return _$getProfileAsyncAction.run(() => super.getProfile());
+  Future<dynamic> getBusinessPlaces() {
+    return _$getBusinessPlacesAsyncAction.run(() => super.getBusinessPlaces());
+  }
+
+  final _$uploadChatImageAsyncAction =
+      AsyncAction('_PostStore.uploadChatImage');
+
+  @override
+  Future<dynamic> uploadChatImage(dynamic image) {
+    return _$uploadChatImageAsyncAction.run(() => super.uploadChatImage(image));
+  }
+
+  final _$getBusinessSpacesAsyncAction =
+      AsyncAction('_PostStore.getBusinessSpaces');
+
+  @override
+  Future<dynamic> getBusinessSpaces() {
+    return _$getBusinessSpacesAsyncAction.run(() => super.getBusinessSpaces());
+  }
+
+  final _$getSearchEventAsyncAction = AsyncAction('_PostStore.getSearchEvent');
+
+  @override
+  Future<dynamic> getSearchEvent(dynamic searchQuery) {
+    return _$getSearchEventAsyncAction
+        .run(() => super.getSearchEvent(searchQuery));
+  }
+
+  final _$getMyBusinessListAsyncAction =
+      AsyncAction('_PostStore.getMyBusinessList');
+
+  @override
+  Future<dynamic> getMyBusinessList(dynamic searchQuery) {
+    return _$getMyBusinessListAsyncAction
+        .run(() => super.getMyBusinessList(searchQuery));
+  }
+
+  final _$getAllBusinessListAsyncAction =
+      AsyncAction('_PostStore.getAllBusinessList');
+
+  @override
+  Future<dynamic> getAllBusinessList(dynamic searchQuery) {
+    return _$getAllBusinessListAsyncAction
+        .run(() => super.getAllBusinessList(searchQuery));
+  }
+
+  final _$getBusinessByNameListAsyncAction =
+      AsyncAction('_PostStore.getBusinessByNameList');
+
+  @override
+  Future<dynamic> getBusinessByNameList(dynamic searchQuery) {
+    return _$getBusinessByNameListAsyncAction
+        .run(() => super.getBusinessByNameList(searchQuery));
+  }
+
+  final _$getOwnBusinessListAsyncAction =
+  AsyncAction('_PostStore.getOwnBusinessList');
+
+  @override
+  Future<dynamic> getOwnBusinessList(dynamic searchQuery) {
+    return _$getOwnBusinessListAsyncAction
+        .run(() => super.getOwnBusinessList(searchQuery));
+  }
+  final _$getAllUserListAsyncAction = AsyncAction('_PostStore.getAllUserList');
+
+  @override
+  Future<dynamic> getAllUserList(dynamic searchQuery) {
+    return _$getAllUserListAsyncAction
+        .run(() => super.getAllUserList(searchQuery));
+  }
+
+  final _$getBusinessDetailAsyncAction =
+      AsyncAction('_PostStore.getBusinessDetail');
+
+  @override
+  Future<dynamic> getBusinessDetail(dynamic businessId) {
+    return _$getBusinessDetailAsyncAction
+        .run(() => super.getBusinessDetail(businessId));
+  }
+
+  final _$updateBusinessDetailsAsyncAction =
+      AsyncAction('_PostStore.updateBusinessDetails');
+
+  @override
+  Future<dynamic> updateBusinessDetails(dynamic searchQuery, dynamic userID) {
+    return _$updateBusinessDetailsAsyncAction
+        .run(() => super.updateBusinessDetails(searchQuery, userID));
+  }
+
+  final _$getAllBusinessByUserListAsyncAction =
+      AsyncAction('_PostStore.getAllBusinessByUserList');
+
+  @override
+  Future<dynamic> getAllBusinessByUserList(
+      dynamic searchQuery, dynamic userID) {
+    return _$getAllBusinessByUserListAsyncAction
+        .run(() => super.getAllBusinessByUserList(searchQuery, userID));
+  }
+
+  final _$payForBusinessAsyncAction = AsyncAction('_PostStore.payForBusiness');
+
+  @override
+  Future<dynamic> payForBusiness(dynamic searchQuery) {
+    return _$payForBusinessAsyncAction
+        .run(() => super.payForBusiness(searchQuery));
+  }
+
+  final _$requestForBusinessAsyncAction =
+      AsyncAction('_PostStore.requestForBusiness');
+
+  @override
+  Future<dynamic> requestForBusiness(dynamic searchQuery) {
+    return _$requestForBusinessAsyncAction
+        .run(() => super.requestForBusiness(searchQuery));
+  }
+
+  final _$deleteBusinessAsyncAction = AsyncAction('_PostStore.deleteBusiness');
+
+  @override
+  Future<dynamic> deleteBusiness(dynamic businessId) {
+    return _$deleteBusinessAsyncAction
+        .run(() => super.deleteBusiness(businessId));
+  }
+
+
+  final _$deleteEventAsyncAction = AsyncAction('_PostStore.deleteBusiness');
+
+  @override
+  Future<dynamic> deleteEvent(dynamic businessId) {
+    return _$deleteEventAsyncAction
+        .run(() => super.deleteEvent(businessId));
+  }
+
+
+
+  final _$getUserEventAsyncAction = AsyncAction('_PostStore.getUserEvent');
+
+  @override
+  Future<dynamic> getUserEvent(dynamic userID) {
+    return _$getUserEventAsyncAction.run(() => super.getUserEvent(userID));
+  }
+
+  final _$getMyBookedEventsAsyncAction =
+      AsyncAction('_PostStore.getMyBookedEvents');
+
+  @override
+  Future<dynamic> getMyBookedEvents() {
+    return _$getMyBookedEventsAsyncAction.run(() => super.getMyBookedEvents());
+  }
+
+
+  final _$getMyEventsAsyncAction =
+  AsyncAction('_PostStore.getMyEvents');
+
+  @override
+  Future<dynamic> getMyEvents(int userId) {
+    return _$getMyEventsAsyncAction.run(() => super.getMyEvents(userId));
+  }
+
+
+  final _$checkContactsAsyncAction = AsyncAction('_PostStore.checkContacts');
+
+  @override
+  Future<dynamic> checkContacts(dynamic contacts) {
+    return _$checkContactsAsyncAction.run(() => super.checkContacts(contacts));
   }
 
   @override

@@ -18,21 +18,12 @@ class AuthApi {
   AuthApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future<PostList> getProfile() async {
-    try {
-      final res = await _dioClient.get(Endpoints.getProfile);
-      return PostList.fromJson(res);
-    } catch (e) {
-      print(e.toString());
-      throw e;
-    }
-  }
-
-  /// Returns list of post in response
   Future login(email, pass) async {
     try {
       final res = await _dioClient
           .post(Endpoints.login, data: {"username": email, "password": pass});
+
+
       return LoginModal.fromJson(res);
     } catch (e) {
       print(e.toString());

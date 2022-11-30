@@ -1,3 +1,5 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:guilt_app/constants/app_theme.dart';
 import 'package:guilt_app/constants/strings.dart';
@@ -7,17 +9,21 @@ import 'package:guilt_app/ui/Business/business_list.dart';
 import 'package:guilt_app/ui/Event/expense_screen.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
-import 'package:guilt_app/ui/Profile/main_profile.dart';
+import 'package:guilt_app/ui/home/home_explore_screen.dart';
+import 'package:guilt_app/ui/Tab/home_tab.dart';
 import 'package:guilt_app/ui/common/about_screen.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
 import 'package:guilt_app/ui/common/privacy_policy.dart';
-import 'package:guilt_app/ui/common/success_message.dart';
+import 'package:guilt_app/ui/common/help_and_support.dart';
 import 'package:guilt_app/ui/common/terms_conditions.dart';
 import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalSocket.dart';
+import 'package:guilt_app/utils/Global_methods/PushNotificationService.dart';
+import 'package:guilt_app/utils/Global_methods/face_auth_service.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/stores/language/language_store.dart';
 import 'package:guilt_app/stores/post/post_store.dart';
@@ -28,6 +34,7 @@ import 'package:guilt_app/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
 import 'Business/add_business.dart';
@@ -41,9 +48,23 @@ class MyApp extends StatelessWidget {
   final PostStore _postStore = PostStore(getIt<Repository>());
   final LanguageStore _languageStore = LanguageStore(getIt<Repository>());
   final UserStore _userStore = UserStore(getIt<Repository>());
+  static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  Widget appInit() {
+    if (_userStore.isLoggedIn) {
+      FaceAuthService.authenticate();
+      PushNotificationService.initialise();
+      G.initSocket();
+    }
+    return (_userStore.isFirst
+        ? OnBoardingPage()
+        : (_userStore.isLoggedIn ? HomeTab() : WelcomeLogin()));
+  }
 
   @override
   Widget build(BuildContext context) {
+    final pushNotificationService = PushNotificationService();
+    PushNotificationService.initialise();
     return MultiProvider(
       providers: [
         Provider<ThemeStore>(create: (_) => _themeStore),
@@ -54,29 +75,38 @@ class MyApp extends StatelessWidget {
       child: Observer(
         name: 'global-observer',
         builder: (context) {
-          return GestureDetector(
-            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-            child: GetMaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: Strings.appName,
-              theme: _themeStore.darkMode ? themeDataDark : themeData,
-              routes: Routes.routes,
-              locale: Locale(_languageStore.locale),
-              supportedLocales: _languageStore.supportedLanguages
-                  .map((language) => Locale(language.locale!, language.code))
-                  .toList(),
-              localizationsDelegates: [
-                // A class which loads the translations from JSON files
-                AppLocalizations.delegate,
-                // Built-in localization of basic text for Material widgets
-                GlobalMaterialLocalizations.delegate,
-                // Built-in localization for text direction LTR/RTL
-                GlobalWidgetsLocalizations.delegate,
-                // Built-in localization of basic text for Cupertino widgets
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              home:(_userStore.isFirst ? OnBoardingPage() : (_userStore.isLoggedIn ? MainProfile() : WelcomeLogin())),
-              // home:(_userStore.isFirst ? Login() : (_userStore.isLoggedIn ? SignUp() : WelcomeLogin())),
+          return OverlaySupport.global(
+            child: GestureDetector(
+              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+              child: GetMaterialApp(
+                builder: EasyLoading.init(),
+                debugShowCheckedModeBanner: false,
+                onReady: () {
+                  print('---------------onReady--------------');
+                  // if(_userStore.isLoggedIn) {
+                  //   _userStore.getProfile();
+                  // }
+                },
+                title: Strings.appName,
+                theme: _themeStore.darkMode ? themeDataDark : themeData,
+                routes: Routes.routes,
+                locale: Locale(_languageStore.locale),
+                supportedLocales: _languageStore.supportedLanguages
+                    .map((language) => Locale(language.locale!, language.code))
+                    .toList(),
+                localizationsDelegates: [
+                  // A class which loads the translations from JSON files
+                  AppLocalizations.delegate,
+                  // Built-in localization of basic text for Material widgets
+                  GlobalMaterialLocalizations.delegate,
+                  // Built-in localization for text direction LTR/RTL
+                  GlobalWidgetsLocalizations.delegate,
+                  // Built-in localization of basic text for Cupertino widgets
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                home: appInit(),
+                // home:(_userStore.isFirst ? Login() : (_userStore.isLoggedIn ? SignUp() : WelcomeLogin())),
+              ),
             ),
           );
         },
