@@ -1,22 +1,19 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
-import 'package:guilt_app/constants/assets.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
-import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/stores/form/form_store.dart';
 import 'package:guilt_app/stores/theme/theme_store.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
-import 'package:guilt_app/widgets/textfield_widget.dart';
+import 'package:guilt_app/widgets/rounded_button_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../widgets/rounded_button_widget.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -31,8 +28,10 @@ class _LoginState extends State<Login> {
 
   TextEditingController _userEmailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+
   ThemeStore _themeStore = ThemeStore(getIt<Repository>());
   final UserStore _userStore = UserStore(getIt<Repository>());
+
   FocusNode? _passwordFocusNode;
 
   final _store = FormStore();
@@ -41,6 +40,8 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     _passwordFocusNode = FocusNode();
+    _userEmailController.text = 'chitra@phpdots.com';
+    _passwordController.text = 'Jayshreeram@123';
   }
 
   @override
@@ -55,7 +56,8 @@ class _LoginState extends State<Login> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            Routes.goBack(context);
+            Routes.navigateToScreen(context, Routes.welcome_login);
+            //Routes.goBack(context);
           },
           child: Icon(
             Icons.arrow_back_ios_outlined,
@@ -204,21 +206,26 @@ class _LoginState extends State<Login> {
                       if (formkey.currentState!.validate()) {
                         _userStore.login(_userEmailController.value.text,
                             _passwordController.value.text, (value) {
-                          Routes.navigateRootToScreen(context, Routes.events_home);
-                          // Routes.navigateToScreenWithArgs(
-                          //     context,
-                          //     Routes.success_error_validate,
-                          //     SuccessErrorValidationPageArgs(
-                          //         isSuccess: true,
-                          //         description: 'Logged in successfully',
-                          //         title: 'Success',
-                          //         isPreviousLogin: false));
-                        },(error) {
-                              print(error);
-                              final data = json.decode(json.encode(error.data)) as Map<String, dynamic>;
-                              // Map<String, dynamic> map = json.decode(error.data);
-                              GlobalMethods.showErrorMessage(context,data['message'], 'Log In Exception');
-                            }).then((value) {
+
+                          print("loginData: $value");
+                          (value.success == true && value.user != null)
+                              ? Routes.navigateRootToScreen(
+                                  context, Routes.home_tab):
+
+                          Routes.navigateToScreenWithArgs(
+                              context,
+                              Routes.otpvalidate,
+                            _userEmailController.value.text
+                            );
+                          getSharedPreference();
+                        }, (error) {
+                          print(error);
+                          final data = json.decode(json.encode(error.data))
+                              as Map<String, dynamic>;
+                          // Map<String, dynamic> map = json.decode(error.data);
+                          GlobalMethods.showErrorMessage(
+                              context, data['message'], 'Log In Exception');
+                        }).then((value) {
                           print(value);
                         });
                       } else {
@@ -312,4 +319,13 @@ class _LoginState extends State<Login> {
     _passwordFocusNode?.dispose();
     super.dispose();
   }
+
+   getSharedPreference() async {
+     final prefs = await SharedPreferences.getInstance();
+     await prefs.setString('firstname', 'firstname');
+     await prefs.setString('lastname', 'lastname');
+     await prefs.setString('email', 'email');
+
+
+   }
 }

@@ -1,5 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/Event/accept_reject_event.dart';
+import 'package:guilt_app/models/PageModals/notification_list_model.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:intl/intl.dart';
 
 class Notifications extends StatefulWidget {
   @override
@@ -7,160 +15,35 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-  With_Button() => Container(
-        padding: EdgeInsets.only(top: 15),
-        child: Row(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Stack(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(
-                        left: 10.0, top: 10.0, bottom: 00.0, right: 5.0),
-                    child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                      width: 70,
-                      height: 70,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: 5.0, top: 15.0, bottom: 00.0, right: 00.0),
-                  child: Text(
-                    'David Siliba invite to JO Malone',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: 5.0, top: 3.0, bottom: 00.0, right: 90.0),
-                  child: Text(
-                    'iliba invite to JO Ma',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.only(left: 0, right: 10),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text('Accept'),
-                          style: ButtonStyle(
+  final UserStore _userStore = UserStore(getIt<Repository>());
+  List<NotificationItem> contentData = [];
 
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50.0),
-                                  ))),
-                        )),
-                    Padding(
-                        padding: EdgeInsets.only(left: 0, right: 10),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Reject',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50.0),
-                                  ))),
-                        )),
-                  ],
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: 30.0, top: 10.0, bottom: 60.0, right: 25.0),
-              child: Text(
-                'Just Now',
-                style: TextStyle(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+  @override
+  void didChangeDependencies() {
+    getNotificationList();
+    super.didChangeDependencies();
+  }
 
-  Without_Button() => Container(
-        padding: EdgeInsets.only(top: 15),
-        child: Row(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Stack(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(
-                        left: 10.0, top: 10.0, bottom: 00.0, right: 5.0),
-                    child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
-                      width: 70,
-                      height: 70,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: 5.0, top: 15.0, bottom: 00.0, right: 00.0),
-                  child: Text(
-                    'David Siliba invite to JO Malone',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: 5.0, top: 3.0, bottom: 20.0, right: 90.0),
-                  child: Text(
-                    'iliba invite to JO Ma',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: 30.0, top: 20.0, bottom: 40.0, right: 25.0),
-              child: Text(
-                'Just Now',
-                style: TextStyle(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+  @override
+  initState() {
+    getNotificationList();
+    super.initState();
+  }
+
+  getNotificationList() {
+    GlobalMethods.showLoader();
+    _userStore.Notification_list((value) {
+      print(value);
+      setState(() {
+        contentData = value.notification?.length > 0 ? value.notification : [];
+        print('notification');
+      });
+      GlobalMethods.hideLoader();
+    }, (error) {
+      GlobalMethods.hideLoader();
+      print(error.toString());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,40 +51,204 @@ class _NotificationsState extends State<Notifications> {
       appBar: AppBar(
         shadowColor: Colors.transparent,
         title: Text('Notification'),
+        centerTitle: true,
       ),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              child: With_Button(),
-            ),
-            Container(
-              child: Without_Button(),
-            ),
-            Container(
-              child: With_Button(),
-            ),
-            Container(
-              child: With_Button(),
-            ),
-            Container(
-              child: Without_Button(),
-            ),
-            Container(
-              child: Without_Button(),
-            ),
-            Container(
-              child: Without_Button(),
-            ),
-            Container(
-              child: With_Button(),
-            ),
-            Container(
-              child: Without_Button(),
-            ),
-          ],
+      body: Column(
+        children: [
+          SingleChildScrollView(
+            child: (contentData.length > 0)
+                ? Container(
+                    width: DeviceUtils.getScaledWidth(context, 1.10),
+                    height: DeviceUtils.getScaledHeight(context, 0.85),
+                    child: ListView.builder(
+                        itemCount: contentData.length,
+                        itemBuilder: (context, index) => NotificationListItem(
+                              notificationData: contentData[index],
+                              onAccept: () {
+                                // acceptRejectEvent(
+                                //     contentData[index].eventId, "accepted");
+                                Routes.navigateToScreenWithArgs(
+                                    context,
+                                    Routes.event_details,
+                                    contentData[index].eventId);
+                              },
+                              onReject: () {
+                                acceptRejectEvent(
+                                    contentData[index].eventId, "rejected");
+                              },
+                              onPay: () {
+                                Routes.navigateToScreenWithArgs(context,
+                                    Routes.pay_request_business_payment, {
+                                  "type": 'Pay',
+                                  "userData": contentData[index].user,
+                                  "fromScreen": "notification"
+                                });
+                              },
+                              onCancel: () {},
+                            )),
+                  )
+                : Center(
+                    heightFactor: 12.0,
+                    child: Text(
+                      'No Notification found',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    )),
+          ),
+        ],
+      ),
+    );
+  }
+
+  acceptRejectEvent(id, status) async {
+    print('createEvent RequestData :');
+    //print(eData);
+    GlobalMethods.showLoader();
+    _userStore.acceptRejectEvent(id, status, (AcceptRejectEvent val) {
+      GlobalMethods.hideLoader();
+      if (val.success == true) {
+        GlobalMethods.showSuccessMessage(
+            context, val.message ?? 'Success', 'Event');
+      } else {
+        GlobalMethods.showErrorMessage(
+            context, val.message ?? 'Failed', 'Event');
+      }
+    }, (error) {
+      GlobalMethods.hideLoader();
+    });
+  }
+}
+
+class NotificationListItem extends StatelessWidget {
+  final NotificationItem notificationData;
+  Function? onAccept;
+  Function? onReject;
+  Function? onPay;
+  Function? onCancel;
+
+  NotificationListItem(
+      {required this.notificationData,
+      this.onAccept,
+      this.onReject,
+      this.onPay,
+      this.onCancel,
+      Key? key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(width: 1.0, color: Colors.grey),
         ),
+        color: Colors.white,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          SizedBox(width: 15),
+          Container(
+            child: Image.network(
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnngxCpo8jS7WE_uNWmlP4bME_IZkXWKYMzhM2Qi1JE_J-l_4SZQiGclMuNr4acfenazo&usqp=CAU',
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  notificationData?.message ?? "",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  notificationData?.username ?? "",
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                //'chat','event','business','payment','payRequest'
+                notificationData!.type == 'event' && notificationData!.isButton==true||
+                        notificationData!.type == 'payRequest'&& notificationData!.isButton==true
+                    ? Row(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              if (notificationData!.type == 'payRequest')
+                                onPay!();
+                              else
+                                onAccept!();
+                            },
+                            child: Text(notificationData!.type == 'payRequest'
+                                ? 'Pay'
+                                : 'Accept'),
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50.0),
+                            ))),
+                          ),
+                          SizedBox(width: 15),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (notificationData!.type == 'payRequest')
+                                onCancel!();
+                              else
+                                onReject!();
+                            },
+                            child: Text(
+                              notificationData!.type == 'payRequest'
+                                  ? 'Cancel'
+                                  : 'Reject',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateColor.resolveWith(
+                                    (states) => Colors.white),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ))),
+                          ),
+                        ],
+                      )
+                    : Container(),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: DeviceUtils.getScaledWidth(context, 0.02),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 0),
+            child: Text(
+              DateFormat('dd MMMM yyyy')
+                  .format(DateTime.parse(notificationData?.createdAt ?? "")),
+              style: TextStyle(
+                fontSize: 8,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -2,7 +2,7 @@ class OtpSendModel {
   bool? success;
   String? emailPhone;
   String? message;
-  int? otp;
+  String? otp;
 
   OtpSendModel({this.success, this.emailPhone, this.message, this.otp});
 

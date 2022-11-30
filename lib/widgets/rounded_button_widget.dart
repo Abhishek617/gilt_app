@@ -37,3 +37,40 @@ class ElevatedButtonWidget extends StatelessWidget {
     );
   }
 }
+
+class ElevatedButtonWithBorderWidget extends StatelessWidget {
+  final String buttonText;
+  final Color buttonColor;
+  final Color textColor;
+  final VoidCallback onPressed;
+
+  const ElevatedButtonWithBorderWidget({
+    Key? key,
+    required this.buttonText,
+    required this.buttonColor,
+    required this.onPressed,
+    this.textColor = AppColors.buttonTextColor,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: DeviceUtils.getScaledHeight(context, 0.06),
+      width: DeviceUtils.getScaledWidth(context, 0.70),
+      margin: EdgeInsets.symmetric(vertical: 8),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(buttonColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.0),
+                    side: BorderSide(color: AppColors.primaryColor)
+                ))),
+        child: Text(buttonText,
+            style: TextStyle(
+                color: textColor, fontSize: 16, fontWeight: FontWeight.bold)),
+        onPressed: onPressed,
+      ),
+    );
+  }
+}

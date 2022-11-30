@@ -22,5 +22,7 @@
   <string>1.0</string>
   <key>MinimumOSVersion</key>
   <string>9.0</string>
+  <key>NSContactsUsageDescription</key>
+  <string>This app requires contacts access to function properly.</string>
 </dict>
 </plist>

@@ -36,12 +36,13 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    final pageArgs = ModalRoute.of(context)!.settings.arguments.toString();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
         leading: GestureDetector(
           onTap: () {
-            Routes.navigateToScreen(context, Routes.welcome_login);
+            Routes.navigateToScreen(context, Routes.before_login);
           },
           child: Icon(
             Icons.arrow_back_ios_outlined,
@@ -242,23 +243,26 @@ class _SignUpState extends State<SignUp> {
                             "email": _userEmailController.value.text,
                             "phone": _phoneNumberController.value.text,
                             "password": _passwordController.value.text,
-                            "role_id": "2"
+                            "role_id": pageArgs != null ? pageArgs : '1'
                           });
                           _userStore.signUp(signUpData, (val) {
                             print(val);
-                            if (val.success) {
-                              Routes.navigateToScreenWithArgs(
-                                  context,
-                                  Routes.success_error_validate,
-                                  SuccessErrorValidationPageArgs(
-                                      isSuccess: true,
-                                      description: 'SignUp Success',
-                                      title: 'Success',
-                                      isPreviousLogin: true));
-                            } else {
-                              GlobalMethods.showErrorMessage(context,
-                                  'Something went wrong', 'Sign Up Exception');
-                            }
+                            (val.success == true)
+                                ?    Routes.navigateToScreenWithArgs(
+                                context,
+                                Routes.otpvalidate,
+                                _userEmailController.value.text
+                            )
+                                : Routes.navigateToScreenWithArgs(
+                                    context,
+                                    Routes.success_error_validate,
+                                    SuccessErrorValidationPageArgs(
+                                        isSuccess: true,
+                                        description: 'SignUp Success',
+                                        title: 'Success',
+                                        isPreviousLogin: true));
+
+
                           }, (error) {
                             print(error.data.toString());
                             final data = json.decode(json.encode(error.data))
@@ -288,7 +292,7 @@ class _SignUpState extends State<SignUp> {
                         child: Center(
                       child: RichText(
                         text: TextSpan(
-                            text: 'Don\'t have an account?',
+                            text: 'Already have an account?',
                             style: TextStyle(color: Colors.black, fontSize: 14),
                             children: <TextSpan>[
                               TextSpan(
