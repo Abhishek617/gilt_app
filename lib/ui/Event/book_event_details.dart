@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
 
+import '../../utils/routes/routes.dart';
+
 class BookEventDetails extends StatefulWidget {
   const BookEventDetails({Key? key}) : super(key: key);
 
@@ -174,13 +176,12 @@ class _BookEventDetailsState extends State<BookEventDetails> {
                 padding: EdgeInsets.only(left: 10, top:20, right: 00, bottom: 20),
                 child: Container(
                   height: 30,
-                  width: 110,
+                  width: 111,
                   child: ElevatedButton(
-                    onPressed: () {
-                    },
+                    onPressed: () =>{  Routes.navigateToScreen(context, Routes.map)},
                     child:Row(children: [
                       Icon(Icons.directions),
-                      Text(' Booked ', style: TextStyle(
+                      Text(' Direction ', style: TextStyle(
                           color: Colors.white, fontSize: 12),),
                     ],
                     ),
@@ -262,11 +263,8 @@ class _BookEventDetailsState extends State<BookEventDetails> {
       isMenu: false,
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: Row(
-          children: [
-            Text('Book Event Details'),
-          ],
-        ),
+        title: Text('Book Event Details'),
+        centerTitle: true,
       ),
 
         child: Column(children: [

@@ -1,33 +1,23 @@
-import 'package:flutter/material.dart';
-
+import 'dart:convert';
 import 'dart:io';
+import 'package:date_time_picker/date_time_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:guilt_app/models/PageModals/faqs_model.dart';
-import 'package:flutter/material.dart';
-import 'package:guilt_app/widgets/custom_scaffold.dart';
-import 'package:guilt_app/widgets/custom_scaffold.dart';
-import '../../constants/colors.dart';
-import '../../utils/routes/routes.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/rendering.dart';
-import 'package:guilt_app/constants/assets.dart';
+import 'package:guilt_app/constants/colors.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
-import 'package:guilt_app/models/PageModals/success_error_args.dart';
-import 'package:guilt_app/stores/form/form_store.dart';
-import 'package:guilt_app/stores/theme/theme_store.dart';
+import 'package:guilt_app/models/Event/create_event_modal.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
-import 'package:guilt_app/utils/routes/routes.dart';
-import 'package:guilt_app/widgets/app_logo.dart';
-import 'package:guilt_app/widgets/textfield_widget.dart';
-import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import '../../widgets/rounded_button_widget.dart';
 
+import 'package:guilt_app/widgets/custom_scaffold.dart';
+import 'package:guilt_app/widgets/rounded_button_widget.dart';
+import 'package:flutter/rendering.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import '../../utils/device/device_utils.dart';
 
 class Create_event extends StatefulWidget {
   const Create_event({Key? key}) : super(key: key);
@@ -37,32 +27,78 @@ class Create_event extends StatefulWidget {
 }
 
 class _Create_eventState extends State<Create_event> {
+  File? pickedImage;
+  final UserStore _userStore = UserStore(getIt<Repository>());
 
-  final imagePicker = ImagePicker();
-  File? imageFile;
 
-  Future getImage() async {
-    var image = await imagePicker.getImage(source: ImageSource.camera);
-
-    setState(() {
-      imageFile = File(image!.path);
-    });
+  void imagePickerOption() {
+    Get.bottomSheet(
+      SingleChildScrollView(
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10.0),
+            topRight: Radius.circular(10.0),
+          ),
+          child: Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    "Select a Photo",
+                    style: TextStyle(fontSize: 20, color: Colors.grey),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Divider(
+                    height: 1,
+                    color: Colors.grey,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      pickImage(ImageSource.gallery);
+                    },
+                    child: Text("Choose from Library...",
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.center),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
+  pickImage(ImageSource imageType) async {
+    try {
+      final photo = await ImagePicker().pickImage(source: imageType);
+      if (photo == null) return;
+      final tempImage = File(photo.path);
+      setState(() {
+        pickedImage = tempImage;
+      });
 
+      Get.back();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
 
-  String dropdownvalue = 'Item 1';
-  String? valueChange;
+  final format = DateFormat("yyyy-MM-dd HH:mm");
 
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController _eventNameController = TextEditingController();
+  TextEditingController _eventCategoryController = TextEditingController();
+  TextEditingController _eventLocationController = TextEditingController();
+  TextEditingController _eventDateAndTimeController = TextEditingController(text: DateTime.now().toString());
+  TextEditingController _eventPlaceDescriptionController = TextEditingController();
 
-  // List of items in our dropdown menu
-  var items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -76,10 +112,11 @@ class _Create_eventState extends State<Create_event> {
             child: Icon(
               Icons.arrow_back_ios_outlined,
               //color: Colors.black,
-              size: 10,
+              size: 16,
             ),
           ),
-          title: Text('            Create Event'),
+          title: Text('Create Event'),
+          centerTitle: true,
           shadowColor: Colors.transparent,
         ),
         child: SingleChildScrollView(
@@ -88,24 +125,27 @@ class _Create_eventState extends State<Create_event> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Row(
                   children: [
-                    Text("Event Name",style: TextStyle(
-                        fontWeight: FontWeight.bold),),
+                    Text(
+                      "Event Name",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
                 Row(
                   children: [
                     Container(
-                        width: 330,
-                        height: 40,
-                        child: TextField(
+                        width: DeviceUtils.getScaledWidth(context, 0.85),
+                        height: DeviceUtils.getScaledHeight(context, 0.08),
+                        child: TextFormField(
                           autocorrect: true,
+                          controller: _eventNameController,
                           decoration: InputDecoration(
                             hintText: 'Enter Event Name',
                             enabledBorder: UnderlineInputBorder(
@@ -115,165 +155,91 @@ class _Create_eventState extends State<Create_event> {
                               borderSide: BorderSide(color: Colors.grey),
                             ),
                           ),
-                        )
-                    ),
-
+                        )),
                   ],
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  children: [
-                    Text("Enter Category",style: TextStyle(
-                        fontWeight: FontWeight.bold),),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: DropdownButton(
-                    // Initial Value
-                    value: dropdownvalue,
-                    iconSize: 16,
-                    isExpanded: true,
-                    hint: Text('Slect your option'),
-                    style: TextStyle(
-                        fontSize: 13
-                    ),
-                    // Down Arrow Icon
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    // Array list of items
-                    items: items.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    // After selecting the desired option,it will
-                    // change button value to selected value
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownvalue = newValue!;
-                      });
-                    },
-                  ),
-                ),
-
                 SizedBox(
                   height: 10,
                 ),
                 Row(
                   children: [
-                    Text("Location",style: TextStyle(
-                        fontWeight: FontWeight.bold),),
+                    Text(
+                      "Enter Category",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 220,
-                      height: 40,
-                      child:TextFormField(
-                        cursorColor: Colors.black,
-                        decoration: new InputDecoration(
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            contentPadding:
-                            EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                            hintText: 'Enter Location'),
-                      )
-
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0),
-                      child: Container(
-                        height: 30,
-                        width: 115,
-                        child: ElevatedButton(
-                          child: Row(
-                            children: [
-                              Icon(Icons.location_on_outlined , size: 13,),
-                              SizedBox(
-                                width: 2,
-                              ),
-                              Text('Set on Map',style: TextStyle(color: Colors.white, fontSize: 13),),
-                            ],
-                          ),
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(32.0),
-                            ),
-                          ),
+                Container(
+                    width: DeviceUtils.getScaledWidth(context, 0.85),
+                    height: DeviceUtils.getScaledHeight(context, 0.08),
+                    child: TextFormField(
+                      controller: _eventCategoryController,
+                      autocorrect: true,
+                      decoration: InputDecoration(
+                        hintText: 'Enter Category',
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-
-                Container(
-                  width: double.infinity,
-                  height: 1, // Thickness
-                  color: Colors.grey,
-                ),
+                    )),
                 SizedBox(
                   height: 10,
                 ),
                 Row(
                   children: [
-                    Text("Date & Time or time",style: TextStyle(
-                        fontWeight: FontWeight.bold),),
+                    Text(
+                      "Location",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 5,
                 ),
                 Row(
                   children: [
                     Container(
-                        width: 220,
-                        height: 40,
-                        child:TextFormField(
+                        width: DeviceUtils.getScaledWidth(context, 0.54),
+                        height: DeviceUtils.getScaledHeight(context, 0.06),
+                        child: TextFormField(
+                          controller: _eventLocationController,
                           cursorColor: Colors.black,
                           decoration: new InputDecoration(
-
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
                               errorBorder: InputBorder.none,
                               disabledBorder: InputBorder.none,
-                              contentPadding:
-                              EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                              hintText: 'Select date or time'),
-                        )
-
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0),
-                      child: Container(
-                        height: 30,
-                        width: 115,
-                        child: ElevatedButton(
-                          child: Row(
-                            children: [
-                              Icon(Icons.location_on_outlined , size: 13,),
-                              SizedBox(
-                                width: 2,
-                              ),
-                              Text('Date Picker',style: TextStyle(color: Colors.white, fontSize: 13),),
-                            ],
-                          ),
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(32.0),
+                              hintText: 'Enter Location'),
+                        )),
+                    Container(
+                      width: DeviceUtils.getScaledWidth(context, 0.32),
+                      height: DeviceUtils.getScaledHeight(context, 0.05),
+                      child: ElevatedButton(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.location_on_outlined,
+                              size: 13,
                             ),
+                            SizedBox(
+                              width: 2,
+                            ),
+                            Text(
+                              'Set on Map',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 13),
+                            ),
+                          ],
+                        ),
+                        onPressed: () =>
+                            {Routes.navigateToScreen(context, Routes.map)},
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32.0),
                           ),
                         ),
                       ),
@@ -285,35 +251,83 @@ class _Create_eventState extends State<Create_event> {
                   height: 1, // Thickness
                   color: Colors.grey,
                 ),
-
                 SizedBox(
                   height: 20,
                 ),
-
-
                 Row(
                   children: [
-                    Text("Describe your place",style: TextStyle(
-                        fontWeight: FontWeight.bold),),
+                    Text(
+                      "Date & Time",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: DeviceUtils.getScaledWidth(context, 0.85),
+                      child: DateTimePicker(
+                        controller: _eventDateAndTimeController,
+                        decoration: InputDecoration(border: InputBorder.none, focusedBorder: InputBorder.none, contentPadding: EdgeInsets.all(0)),
+                        type: DateTimePickerType.dateTime,
+                        dateMask: 'd MMM, yyyy HH:mm',
+                        //initialValue: DateTime.now().toString(),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime(2100),
+                        icon: Icon(Icons.event),
+                        selectableDayPredicate: (date) {
+                          // Disable weekend days to select from the calendar
+                          if (date.weekday == 6 || date.weekday == 7) {
+                            return false;
+                          }
+
+                          return true;
+                        },
+                        onChanged: (val) => print(val),
+                        validator: (val) {
+                          print(val);
+                          return null;
+                        },
+                        onSaved: (val) => print(val),
+                      )
+                    ),
+
+                  ],
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 1, // Thickness
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "Describe your place",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
                 SizedBox(
                   height: 10,
                 ),
-
                 Row(
                   children: [
                     Container(
-                      width: 320,
+                      width: DeviceUtils.getScaledWidth(context, 0.86),
                       child: TextFormField(
                         minLines: 2,
                         maxLines: 10,
                         keyboardType: TextInputType.multiline,
+                        controller: _eventPlaceDescriptionController,
                         decoration: InputDecoration(
                           hintText: 'Enter your description',
-                          hintStyle: TextStyle(
-                              color: Colors.grey
-                          ),
+                          hintStyle: TextStyle(color: Colors.grey),
                         ),
                       ),
                     ),
@@ -324,147 +338,138 @@ class _Create_eventState extends State<Create_event> {
                 ),
                 Row(
                   children: [
-                    Text("Upload Business Photo",style: TextStyle(
-                        fontWeight: FontWeight.bold),),
+                    Text(
+                      "Upload Business Photo",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
                 SizedBox(
                   height: 10,
                 ),
-
                 Row(
                   children: [
-                    Container(
-                      height: 80,
-                      width: 70,
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.all(Radius.circular(5))
+                    Align(
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: AppColors.primaryColor, width: 2),
+                            ),
+                            child: ClipRect(
+                              child: pickedImage != null
+                                  ? Image.file(
+                                      pickedImage!,
+                                      width: 70,
+                                      height: 70,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.network(
+                                      'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                                      width: 60,
+                                      height: 60,
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Container(
-                      height: 80,
-                      width: 70,
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.all(Radius.circular(5))
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Container(
-                      height: 80,
-                      width: 70,
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.all(Radius.circular(5))
-                      ),
-                        child: imageFile != null ? Image.file(imageFile!, fit: BoxFit.cover,) : Text('')
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Container(
-                      height: 80,
-                      width: 70,
-
-                      decoration: BoxDecoration(
-
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.all(Radius.circular(5))
-                      ),
-                      child: imageFile != null ? Image.file(imageFile!,  fit: BoxFit.cover,) : Text(''),
-
-
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.only(left: 200),
-                  child: Container(
-                   // height: 30,
-                   // width: 105,
-                    height: MediaQuery.of(context).size.height / 23.10,
-                    width: MediaQuery.of(context).size.width / 3.6,
-                    child: ElevatedButton(
-                      child: Row(
-                        children: [
-                          Icon(Icons.cloud_upload_outlined, size: 13,),
-                          SizedBox(
-                            width: 10,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: DeviceUtils.getScaledWidth(context, 0.32),
+                      height: DeviceUtils.getScaledHeight(context, 0.05),
+                      child: ElevatedButton(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.cloud_upload_outlined,
+                              size: 13,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Browse',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 13),
+                            ),
+                          ],
+                        ),
+                        onPressed: imagePickerOption,
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32.0),
                           ),
-                          Text('Browser',style: TextStyle(color: Colors.white, fontSize: 13),),
-                        ],
-                      ),
-                      onPressed: () {
-                        getImage();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32.0),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
                 Divider(
                   thickness: 1,
                   color: Colors.grey,
                 ),
-
                 SizedBox(
                   height: 10,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text("Invite Attended",style: TextStyle(
-                        fontWeight: FontWeight.bold),),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Invite Attended",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "Add Attendence with control list",
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    )
                   ],
                 ),
-
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  height: 5,
-                  width: 360,
-                  color: Colors.grey,
-                ),
                 SizedBox(
                   height: 10,
                 ),
-
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 90),
-                      child: Container(
-                        height: 30,
-                        width: 110,
-                        child: ElevatedButton(
-                          child: Row(
-                            children: [
-                              Icon(Icons.edit_note_sharp, size: 13, ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text('Browser',style: TextStyle(color: Colors.white, fontSize: 13),),
-                            ],
-                          ),
-                          onPressed: () {
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(32.0),
+                    Container(
+                      width: DeviceUtils.getScaledWidth(context, 0.30),
+                      height: DeviceUtils.getScaledHeight(context, 0.04),
+                      child: ElevatedButton(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.edit_note_sharp,
+                              size: 13,
                             ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              'Browse',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 13),
+                            ),
+                          ],
+                        ),
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32.0),
                           ),
                         ),
                       ),
@@ -472,20 +477,26 @@ class _Create_eventState extends State<Create_event> {
                     Padding(
                       padding: const EdgeInsets.only(left: 5),
                       child: Container(
-                        height: 30,
-                        width: 130,
+                        width: DeviceUtils.getScaledWidth(context, 0.35),
+                        height: DeviceUtils.getScaledHeight(context, 0.04),
                         child: ElevatedButton(
                           child: Row(
                             children: [
-                              Icon(Icons.person, size: 13,),
+                              Icon(
+                                Icons.person,
+                                size: 13,
+                              ),
                               SizedBox(
                                 width: 5,
                               ),
-                              Text('Add Contect',style: TextStyle(color: Colors.white, fontSize: 13),),
+                              Text(
+                                'Add Contect',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 13),
+                              ),
                             ],
                           ),
-                          onPressed: () {
-                          },
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(32.0),
@@ -496,7 +507,6 @@ class _Create_eventState extends State<Create_event> {
                     ),
                   ],
                 ),
-
                 Container(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10, top: 20),
@@ -504,8 +514,15 @@ class _Create_eventState extends State<Create_event> {
                       buttonText: 'Continue',
                       buttonColor: AppColors.primaryColor,
                       onPressed: () {
-                        Routes.navigateToScreen(
-                            context, Routes.expense_screen);
+                        String eData = jsonEncode({
+                          "name": _eventNameController.value.text,
+                          "category": _eventCategoryController.value.text,
+                          "location": _eventLocationController.value.text,
+                          "startDate": _eventDateAndTimeController.value.text,
+                          "description":_eventPlaceDescriptionController.value.text
+                        });
+                        Routes.navigateToScreenWithArgs(
+                            context, Routes.expense_screen, eData);
                       },
                     ),
                   ),
@@ -514,5 +531,15 @@ class _Create_eventState extends State<Create_event> {
             ),
           ),
         ));
+  }
+
+  @override
+  void dispose() {
+    _eventDateAndTimeController.dispose();
+    _eventPlaceDescriptionController.dispose();
+    _eventCategoryController.dispose();
+    _eventLocationController.dispose();
+    _eventNameController.dispose();
+    super.dispose();
   }
 }

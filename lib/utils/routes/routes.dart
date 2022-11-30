@@ -8,26 +8,35 @@ import 'package:guilt_app/ui/Event/expense_screen.dart';
 import 'package:guilt_app/ui/Intro_screens/intro_screen.dart';
 import 'package:guilt_app/ui/Messages/ChatScreen.dart';
 import 'package:guilt_app/ui/Profile/full_profile.dart';
-import 'package:guilt_app/ui/Profile/main_profile.dart';
+import 'package:guilt_app/ui/home/home_explore_screen.dart';
 import 'package:guilt_app/ui/Profile/organizer_profile.dart';
 import 'package:guilt_app/ui/Profile/profile.dart';
 import 'package:guilt_app/ui/Setting/setting.dart';
+import 'package:guilt_app/ui/Tab/home_tab.dart';
 import 'package:guilt_app/ui/attendees/add_contacts.dart';
 import 'package:guilt_app/ui/attendees/addendees_profile.dart';
 import 'package:guilt_app/ui/common/about_screen.dart';
 import 'package:guilt_app/ui/common/before_login_Screen.dart';
+import 'package:guilt_app/ui/common/change_old_password.dart';
 import 'package:guilt_app/ui/common/faqs.dart';
 import 'package:guilt_app/ui/common/otp_screen.dart';
 import 'package:guilt_app/ui/common/privacy_policy.dart';
 import 'package:guilt_app/ui/common/success_error_validation.dart';
-import 'package:guilt_app/ui/common/success_message.dart';
+import 'package:guilt_app/ui/common/help_and_support.dart';
 import 'package:guilt_app/ui/common/terms_conditions.dart';
+import 'package:guilt_app/ui/common/validate_otp_screen.dart';
+import 'package:guilt_app/ui/feedback/add_feedback.dart';
+import 'package:guilt_app/ui/feedback/feedback_list.dart';
 import 'package:guilt_app/ui/forgot_reset_password/change_password.dart';
 import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
 import 'package:guilt_app/ui/home/home.dart';
+import 'package:guilt_app/ui/Map/map.dart';
 import 'package:guilt_app/ui/login/welcome_login.dart';
 import 'package:guilt_app/ui/login/login.dart';
+import 'package:guilt_app/ui/payment/AddMoney.dart';
 import 'package:guilt_app/ui/payment/Payment_history.dart';
+import 'package:guilt_app/ui/payment/bank_lists.dart';
+import 'package:guilt_app/ui/payment/card_details.dart';
 import 'package:guilt_app/ui/signUp/signUp.dart';
 import 'package:guilt_app/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +44,6 @@ import 'package:guilt_app/ui/Event/event.dart';
 import '../../ui/Messages/message.dart';
 import '../../ui/attendees/attendees.dart';
 import '../../ui/notification/notification.dart';
-
 import '../../ui/Business/add_business.dart';
 import '../../ui/Business/business_list.dart';
 import '../../ui/payment/expense.dart';
@@ -45,6 +53,10 @@ class Routes {
   Routes._();
 
   //static variables
+  //after login-signup otp
+  static const String otpvalidate = '/otpvalidate';
+  static const String map = '/map';
+  static const String addmoney = '/addmoney';
   static const String wallet = '/wallet';
   static const String expensehistory = '/expensehistory';
   static const String paymenthistory = '/paymenthistory';
@@ -59,7 +71,10 @@ class Routes {
   static const String home = '/home';
   static const String intro = '/intro';
   static const String forgot_password = '/forgot_password';
+  static const String home_tab = '/home_tab';
   static const String reset_password = '/reset_password';
+  static const String change_old_password = '/change_old_password';
+  //after forget password
   static const String otp = '/otp';
   static const String signup = '/signup';
   static const String success_error_validate = '/success_error_validate';
@@ -67,7 +82,7 @@ class Routes {
   static const String terms_conditions = '/terms_conditions';
   static const String faqs = '/faqs';
   static const String prof = '/prof';
-  static const String events_home = '/events_home';
+  static const String explore_home = '/explore_home';
   static const String view_profile = '/view_profile';
   static const String add_business = '/add_business';
   static const String business_list = '/business_list';
@@ -78,16 +93,23 @@ class Routes {
   static const  String notifi = '/notifi';
   static const  String book_event = '/book_event ';
   static const  String book_event_details = '/book_event_details ';
-  static const  String success_message = '/success';
+  static const  String help_and_support = '/help_and_support';
   static const  String about_screen = '/about_screen';
   static const  String create_event = '/createevent';
   static const  String expense_screen = '/expense_screen';
   static const  String attendees_profile= '/attendees_profile';
   static const  String add_contacts= '/add_contacts';
+  static const  String bank_lists= '/Bank_lists';
+  static const  String card_details= '/card_details';
+  static const  String add_feedback= '/add_feedback';
+  static const  String feedback_list= '/feedback_list';
 
 
 
   static final routes = <String, WidgetBuilder>{
+    otpvalidate: (BuildContext context) => Otp_Validate_Screen(),
+    map: (BuildContext context) => Map(),
+    addmoney: (BuildContext context) => AddMoney(),
     wallet: (BuildContext context) => Wallet(),
     expensehistory: (BuildContext context) => Expense(),
     paymenthistory: (BuildContext context) => PaymentHistory(),
@@ -103,7 +125,9 @@ class Routes {
     home: (BuildContext context) => HomeScreen(),
     otp: (BuildContext context) => Otp_screen(),
     forgot_password: (BuildContext context) => Reset_password(),
+    home_tab: (BuildContext context) => HomeTab(),
     reset_password: (BuildContext context) => Change_password(),
+    change_old_password: (BuildContext context) => ChangeOldPassword(),
     signup: (BuildContext context) => SignUp(),
     success_error_validate: (BuildContext context) =>
         SuccessErrorValidateScreen(),
@@ -112,11 +136,11 @@ class Routes {
     faqs: (BuildContext context) => FaqScreen(),
     prof: (BuildContext context) => Profile(),
     view_profile: (BuildContext context) => FullProfile(),
-    events_home: (BuildContext context) => MainProfile(),
+    explore_home: (BuildContext context) => HomeExploreScreen(),
     add_business: (BuildContext context) => Add_business(),
     business_list: (BuildContext context) => Business_list(),
 
-    events_home: (BuildContext context) => MainProfile(),
+    explore_home: (BuildContext context) => HomeExploreScreen(),
     event: (BuildContext context) => Event(),
     event_details: (BuildContext context) => EventDetails(),
     atendees: (BuildContext context) => Attendees(),
@@ -124,12 +148,16 @@ class Routes {
     book_event: (BuildContext context) => BookEvent(),
     book_event_details: (BuildContext context) => BookEventDetails(),
     notifi: (BuildContext context) => Notifications(),
-    success_message: (BuildContext context) => Success_message(),
+    help_and_support: (BuildContext context) => HelpAndSupport(),
     about_screen: (BuildContext context) => About_screen(),
     create_event: (BuildContext context) => Create_event(),
     expense_screen: (BuildContext context) => Expense_Screen(),
     attendees_profile: (BuildContext context) => Attendees_profile(),
     add_contacts: (BuildContext context) => Add_contacts(),
+    bank_lists: (BuildContext context) => Bank_lists(),
+    card_details: (BuildContext context) => Card_details(),
+    add_feedback: (BuildContext context) => Add_feedback(),
+    feedback_list: (BuildContext context) => Feedback_list(),
 
 
 
@@ -146,9 +174,9 @@ class Routes {
   }
 
   static navigateToScreenWithArgs(
-      BuildContext context, route, successErrorValidationPageArgs) {
+      BuildContext context, route, pageArgs) {
     Navigator.of(context)
-        .pushNamed(route, arguments: successErrorValidationPageArgs);
+        .pushNamed(route, arguments: pageArgs);
   }
 
   static goBack(BuildContext context) {

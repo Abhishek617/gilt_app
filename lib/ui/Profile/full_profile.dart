@@ -1,11 +1,22 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
+import 'package:guilt_app/models/PageModals/success_error_args.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/ui/common/menu_drawer.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
+import 'package:guilt_app/utils/routes/routes.dart';
+import 'package:guilt_app/widgets/custom_body_wrapper.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/colors.dart';
@@ -19,23 +30,116 @@ class FullProfile extends StatefulWidget {
 }
 
 class _FullProfileState extends State<FullProfile> {
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
   bool isEdit = false;
   bool isAboutEdit = false;
   bool isContactEdit = false;
-  late UserStore _profileStore;
+  @observable
+  var addData;
+  TextEditingController _userEmailController = TextEditingController();
+  TextEditingController _userFirstNameController = TextEditingController();
+  TextEditingController _userLastNameController = TextEditingController();
+  TextEditingController _userAboutmeController = TextEditingController();
+  TextEditingController _userContactController = TextEditingController();
+  TextEditingController _userAddressController = TextEditingController();
+  TextEditingController _userCityController = TextEditingController();
+  TextEditingController _userStateController = TextEditingController();
+  TextEditingController _userCountryController = TextEditingController();
+  TextEditingController _userZipController = TextEditingController();
+  final UserStore _userStore = UserStore(getIt<Repository>());
+
+  @action
+  setData() async {
+    await _userStore.getProfile();
+    addData = _userStore.Profile_data;
+    setState(() {
+      _userEmailController.text =
+          _userStore.Profile_data?.user?.email.toString() ?? '';
+      _userFirstNameController.text =
+          _userStore.Profile_data?.user?.firstname.toString() ?? '';
+      _userLastNameController.text =
+          _userStore.Profile_data?.user?.lastname.toString() ?? '';
+      _userAboutmeController.text =
+          _userStore.Profile_data?.user?.aboutme.toString() ?? '';
+      _userContactController.text =
+          _userStore.Profile_data?.user?.phone.toString() ?? '';
+      _userAddressController.text =
+          _userStore.Profile_data?.user?.address.toString() ?? '';
+      _userCityController.text =
+          _userStore.Profile_data?.user?.city.toString() ?? '';
+      _userStateController.text =
+          _userStore.Profile_data?.user?.state.toString() ?? '';
+      _userCountryController.text =
+          _userStore.Profile_data?.user?.country.toString() ?? '';
+      _userZipController.text =
+          _userStore.Profile_data?.user?.zip.toString() ?? '';
+      addData = _userStore.Profile_data;
+      _userEmailController.text = addData?.user?.email.toString() ?? '';
+      _userFirstNameController.text = addData?.user?.firstname.toString() ?? '';
+      _userLastNameController.text = addData?.user?.lastname.toString() ?? '';
+      _userAboutmeController.text = addData?.user?.aboutme.toString() ?? '';
+      _userContactController.text = addData?.user?.phone.toString() ?? '';
+      _userAddressController.text = addData?.user?.address.toString() ?? '';
+      _userCityController.text = addData?.user?.city.toString() ?? '';
+      _userStateController.text = addData?.user?.state.toString() ?? '';
+      _userCountryController.text = addData?.user?.country.toString() ?? '';
+      _userZipController.text = addData?.user?.zip.toString() ?? '';
+      isEdit = false;
+    });
+  }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    // initializing stores
-    _profileStore = Provider.of<UserStore>(context);
-
+  void initState() {
+    super.initState();
     // check to see if already called api
-    if (!_profileStore.loading) {
-      _profileStore.getProfile();
-      isEdit = false;
-    }
+
+    setData();
+  }
+
+  updatedata() {
+    final UpdateProfileData = UpdateProfileRequestModal.fromJson({
+      "firstname": _userFirstNameController.value.text,
+      "lastname": _userLastNameController.value.text,
+      "email": _userEmailController.value.text,
+      "phone": _userContactController.value.text,
+      "aboutme": _userAboutmeController.value.text,
+      "address": _userAddressController.value.text,
+      "city": _userCityController.value.text,
+      "state": _userStateController.value.text,
+      "country": _userCountryController.value.text,
+      "zip": int.parse(_userZipController.value.text),
+    });
+    _userStore.updateprofile(UpdateProfileData, (val) {
+      if (val.success == true) {
+        GlobalMethods.showErrorMessage(
+            context, 'Profile Updated Successfully.', 'Update Profile');
+        if (val.user != null) {
+          setState(() {
+            // addData = new GetProfileResponseModal(user: val.user);
+            setData();
+            isEdit = false;
+            isAboutEdit = false;
+            isContactEdit = false;
+          });
+        } else {
+          Routes.navigateRootToScreen(context, Routes.otpvalidate);
+        }
+      } else {
+        GlobalMethods.showErrorMessage(context, val.message, 'Update Profile');
+      }
+    }, (error) {
+      print(error.data.toString());
+      final data = json.decode(json.encode(error.data)) as Map<String, dynamic>;
+      print(data['error']);
+      // Map<String, dynamic> map = json.decode(error.data);
+      List<dynamic> dataList = data["error"];
+      print(dataList[0]["message"]);
+      GlobalMethods.showErrorMessage(
+          context,
+          dataList[0]["field"] + ' : ' + dataList[0]["message"],
+          'Sign Up Exception');
+    });
+    // Routes.navigateToScreen(context, Routes.before_login);
   }
 
   get_profile_input() {
@@ -43,125 +147,66 @@ class _FullProfileState extends State<FullProfile> {
       margin: EdgeInsets.all(8),
       child: Column(
         children: <Widget>[
-          Card(
+          Container(
             child: Row(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
-                  child: Icon(
-                    Icons.email,
-                    color: AppColors.primaryColor,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 00.0, top: 10.0, bottom: 10.0, right: 10.0),
-                  child: Text(
-                    'Email',
-                    style: TextStyle(
-                      fontSize: 12,
+                Expanded(
+                  child: TextField(
+                    controller: _userEmailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      prefixIcon: Icon(Icons.location_city,
+                          size: 20, color: AppColors.primaryColor),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          Row(
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 00.0, top: 7.0, bottom: 00.0, right: 00.0),
-                    child: Card(
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10.0,
-                                  top: 10.0,
-                                  bottom: 10.0,
-                                  right: 10.0),
-                              child: Icon(Icons.person_rounded,
-                                  color: AppColors.primaryColor)),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 00.0,
-                                top: 10.0,
-                                bottom: 10.0,
-                                right: 84.0),
-                            child: Text(
-                              'Name',
-                              style: TextStyle(
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+          Container(
+            margin: EdgeInsets.only(top: 10, bottom: 10),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextFormField(
+                    controller: _userFirstNameController,
+                    decoration: InputDecoration(
+                      labelText: 'Firstname',
+                      prefixIcon: Icon(Icons.person_rounded,
+                          size: 20, color: AppColors.primaryColor),
                     ),
                   ),
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 5.0, top: 7.0, bottom: 00.0, right: 00.0),
-                    child: Card(
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10.0,
-                                  top: 10.0,
-                                  bottom: 10.0,
-                                  right: 10.0),
-                              child: Icon(Icons.person_rounded,
-                                  color: AppColors.primaryColor)),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 00.0,
-                                top: 10.0,
-                                bottom: 10.0,
-                                right: 60.0),
-                            child: Text(
-                              'Last Name',
-                              style: TextStyle(
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: TextField(
+                    controller: _userLastNameController,
+                    decoration: InputDecoration(
+                      labelText: 'Lastname',
+                      prefixIcon: Icon(Icons.person_rounded,
+                          size: 20, color: AppColors.primaryColor),
                     ),
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-                left: 120.0, top: 20.0, bottom: 10.0, right: 120.0),
-            child: SizedBox(
-              width: 100.0,
-              height: 30.0,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  setState(() {
-                    isEdit = false;
-                  });
-                },
-                icon: Icon(
-                  Icons.save,
-                  color: Colors.white,
-                ),
-                label: Text(
-                  'Save',
-                  style: TextStyle(fontSize: 12, color: Colors.white),
-                ),
-              ),
+          ElevatedButton.icon(
+            onPressed: () {
+              setState(() {
+                updatedata();
+                isEdit = false;
+              });
+            },
+            icon: Icon(
+              Icons.save,
+              color: Colors.white,
+            ),
+            label: Text(
+              'Save',
+              style: TextStyle(fontSize: 12, color: Colors.white),
             ),
           ),
         ],
@@ -175,21 +220,24 @@ class _FullProfileState extends State<FullProfile> {
         Padding(
           padding: const EdgeInsets.only(
               left: 00.0, top: 20.0, bottom: 00.0, right: 00.0),
-          child: Text(
-            _profileStore.Profile_data!.user!.firstname.toString() +
-                '  ' +
-                _profileStore.Profile_data!.user!.lastname.toString(),
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
-            textAlign: TextAlign.center,
-          ),
+          child: Observer(
+              builder: (_) => Text(
+                    (addData?.user?.firstname.toString() ?? '') +
+                        '  ' +
+                        (addData?.user?.lastname.toString() ?? ''),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
+                    textAlign: TextAlign.center,
+                  )),
         ),
         Padding(
           padding: const EdgeInsets.only(
               left: 00.0, top: 5.0, bottom: 00.0, right: 00.0),
-          child: Text(
-            _profileStore.Profile_data!.user!.email.toString(),
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-            textAlign: TextAlign.center,
+          child: Observer(
+            builder: (_) => Text(
+              addData?.user?.email.toString() ?? '',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
         Padding(
@@ -247,11 +295,13 @@ class _FullProfileState extends State<FullProfile> {
             ),
           ],
         ),
-        Text(
-          _profileStore.Profile_data!.user!.aboutme.toString(),
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
+        Observer(
+          builder: (_) => Text(
+            addData?.user?.aboutme.toString() ?? '',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
       ],
@@ -273,6 +323,7 @@ class _FullProfileState extends State<FullProfile> {
           height: 10,
         ),
         TextField(
+          controller: _userAboutmeController,
           decoration: InputDecoration(),
         ),
         SizedBox(
@@ -282,6 +333,7 @@ class _FullProfileState extends State<FullProfile> {
           child: ElevatedButton.icon(
             onPressed: () {
               setState(() {
+                updatedata();
                 isAboutEdit = false;
               });
             },
@@ -336,21 +388,23 @@ class _FullProfileState extends State<FullProfile> {
             ),
           ],
         ),
-        Text(
-          _profileStore.Profile_data!.user!.phone.toString() +
-              '\n' +
-              _profileStore.Profile_data!.user!.address.toString() +
-              '\n' +
-              _profileStore.Profile_data!.user!.city.toString() +
-              '\n' +
-              _profileStore.Profile_data!.user!.state.toString() +
-              '\n' +
-              _profileStore.Profile_data!.user!.country.toString() +
-              '\n' +
-              _profileStore.Profile_data!.user!.zip.toString(),
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
+        Observer(
+          builder: (_) => Text(
+            (addData?.user?.phone.toString() ?? '') +
+                '\n' +
+                (addData?.user?.address.toString() ?? '') +
+                '\n' +
+                (addData?.user?.city.toString() ?? '') +
+                '\n' +
+                (addData?.user?.state.toString() ?? '') +
+                '\n' +
+                (addData?.user?.country.toString() ?? '') +
+                '\n' +
+                (addData?.user?.zip.toString() ?? ''),
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
       ],
@@ -376,6 +430,7 @@ class _FullProfileState extends State<FullProfile> {
           child: Column(
             children: [
               TextField(
+                controller: _userContactController,
                 decoration: InputDecoration(
                   labelText: 'Contact Number',
                   prefixIcon:
@@ -390,6 +445,7 @@ class _FullProfileState extends State<FullProfile> {
           child: Column(
             children: [
               TextField(
+                controller: _userAddressController,
                 decoration: InputDecoration(
                   labelText: 'Address',
                   prefixIcon: Icon(Icons.house,
@@ -405,6 +461,7 @@ class _FullProfileState extends State<FullProfile> {
             children: [
               Expanded(
                 child: TextField(
+                  controller: _userCityController,
                   decoration: InputDecoration(
                     labelText: 'City',
                     prefixIcon: Icon(Icons.apartment,
@@ -417,6 +474,7 @@ class _FullProfileState extends State<FullProfile> {
               ),
               Expanded(
                 child: TextField(
+                  controller: _userStateController,
                   decoration: InputDecoration(
                     labelText: 'State',
                     prefixIcon: Icon(Icons.location_city,
@@ -433,6 +491,7 @@ class _FullProfileState extends State<FullProfile> {
             children: [
               Expanded(
                 child: TextField(
+                  controller: _userCountryController,
                   decoration: InputDecoration(
                     labelText: 'Country',
                     prefixIcon: Icon(Icons.public,
@@ -445,6 +504,7 @@ class _FullProfileState extends State<FullProfile> {
               ),
               Expanded(
                 child: TextField(
+                  controller: _userZipController,
                   decoration: InputDecoration(
                     labelText: 'Zip Code',
                     prefixIcon: Icon(Icons.local_post_office,
@@ -461,6 +521,7 @@ class _FullProfileState extends State<FullProfile> {
         ElevatedButton.icon(
           onPressed: () {
             setState(() {
+              updatedata();
               isContactEdit = false;
             });
           },
@@ -491,64 +552,62 @@ class _FullProfileState extends State<FullProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldWrapper(
-      isTab: true,
-      isMenu: true,
+    return Scaffold(
+      drawer: MenuDrawer(),
       appBar: AppBar(
         shadowColor: Colors.transparent,
         centerTitle: true,
         title: const Text('Profile'),
       ),
-      child: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(16.0),
-          height: DeviceUtils.getScaledHeight(context, 1.20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(
-                          left: 00.0, top: 30.0, bottom: 00.0, right: 00.0),
-                      child: Image.network(
-                        'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
+      body: CustomBodyWrapper(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            height: DeviceUtils.getScaledHeight(context, 1.20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100.0),
+                    child: Observer(
+                        builder: (_) => Image.network(
+                              _userStore.Profile_data?.user?.profile
+                                      ?.toString() ??
+                                  'https://th.bing.com/th/id/R.fa0ca630a6a3de8e33e03a009e406acd?rik=UOMXfynJ2FEiVw&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2ff%2fa%2f0%2fc%2f1434020125875430376profile.png&ehk=73x7A%2fh2HgYZLT1q7b6vWMXl86IjYeDhub59EZ8hF14%3d&risl=&pid=ImgRaw&r=0',
+                              width: DeviceUtils.getScaledWidth(context, 0.30),
+                              height: DeviceUtils.getScaledWidth(context, 0.30),
+                              fit: BoxFit.cover,
+                            )),
+                  ),
                 ),
-              ),
-              checkProfile(),
-              Divider(
-                color: Colors.black12,
-                //color of divider
-                height: 20,
-                //height spacing of divider
-                thickness: 1,
-                //thickness of divier line
-                indent: 20,
-                //spacing at the start of divider
-                endIndent: 20, //spacing at the end of divider
-              ),
-              checkAbout(),
-              Divider(
-                color: Colors.black12,
-                //color of divider
-                height: 20,
-                //height spacing of divider
-                thickness: 1,
-                //thickness of divier line
-                indent: 20,
-                //spacing at the start of divider
-                endIndent: 20, //spacing at the end of divider
-              ),
-              checkContact(),
-            ],
+                checkProfile(),
+                Divider(
+                  color: Colors.black12,
+                  //color of divider
+                  height: 20,
+                  //height spacing of divider
+                  thickness: 1,
+                  //thickness of divier line
+                  indent: 20,
+                  //spacing at the start of divider
+                  endIndent: 20, //spacing at the end of divider
+                ),
+                checkAbout(),
+                Divider(
+                  color: Colors.black12,
+                  //color of divider
+                  height: 20,
+                  //height spacing of divider
+                  thickness: 1,
+                  //thickness of divier line
+                  indent: 20,
+                  //spacing at the start of divider
+                  endIndent: 20, //spacing at the end of divider
+                ),
+                checkContact(),
+              ],
+            ),
           ),
         ),
       ),

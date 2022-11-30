@@ -43,9 +43,8 @@ class _About_screenState extends State<About_screen> {
             size: 13,
           ),
         ),
-        title: Align(
-            alignment: Alignment.center,
-            child: Text('About')),
+        title: Text('About'),
+        centerTitle: true,
         shadowColor: Colors.transparent,
       ),
       child: Padding(

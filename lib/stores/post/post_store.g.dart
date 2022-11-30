@@ -61,11 +61,27 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
-  final _$getProfileAsyncAction = AsyncAction('_PostStore.getProfile');
+  final _$getBusinessPlacesAsyncAction =
+      AsyncAction('_PostStore.getBusinessPlaces');
 
   @override
-  Future<dynamic> getProfile() {
-    return _$getProfileAsyncAction.run(() => super.getProfile());
+  Future<dynamic> getBusinessPlaces() {
+    return _$getBusinessPlacesAsyncAction.run(() => super.getBusinessPlaces());
+  }
+
+  final _$getBusinessSpacesAsyncAction =
+      AsyncAction('_PostStore.getBusinessSpaces');
+
+  @override
+  Future<dynamic> getBusinessSpaces() {
+    return _$getBusinessSpacesAsyncAction.run(() => super.getBusinessSpaces());
+  }
+
+  final _$checkContactsAsyncAction = AsyncAction('_PostStore.checkContacts');
+
+  @override
+  Future<dynamic> checkContacts(dynamic contacts) {
+    return _$checkContactsAsyncAction.run(() => super.checkContacts(contacts));
   }
 
   @override

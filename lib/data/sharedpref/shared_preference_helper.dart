@@ -14,6 +14,7 @@ class SharedPreferenceHelper {
   SharedPreferenceHelper(this._sharedPreference);
 
   // General Methods: ----------------------------------------------------------
+  //Auth Token
   Future<String?> get authToken async {
     return _sharedPreference.getString(Preferences.auth_token);
   }
@@ -25,9 +26,21 @@ class SharedPreferenceHelper {
   Future<bool> removeAuthToken() async {
     return _sharedPreference.remove(Preferences.auth_token);
   }
+  // Refresh Token
+  Future<String?> get refreshToken async {
+    return _sharedPreference.getString(Preferences.refresh_token);
+  }
 
-  Future<Object?> get profileData async {
-    return _sharedPreference.get(Preferences.profileData);
+  Future<bool> saveRefreshToken(String refreshToken) async {
+    return _sharedPreference.setString(Preferences.refresh_token, refreshToken);
+  }
+
+  Future<bool> removeRefreshToken() async {
+    return _sharedPreference.remove(Preferences.refresh_token);
+  }
+
+  Future<String> get profileData async {
+    return _sharedPreference.getString(Preferences.profileData) ?? '';
   }
 
   Future<bool> saveProfileData(GetProfileResponseModal profileData) async {
@@ -54,6 +67,14 @@ class SharedPreferenceHelper {
 
   Future<bool> saveIsLoggedIn(bool value) async {
     return _sharedPreference.setBool(Preferences.is_logged_in, value);
+  }
+  // User Role:---------------------------------------------------------------------
+  Future<String> get userRole async {
+    return _sharedPreference.getString(Preferences.userRole) ?? '1';
+  }
+
+  Future<bool> saveUserRole(String value) async {
+    return _sharedPreference.setString(Preferences.userRole, value);
   }
 
   // Theme:------------------------------------------------------

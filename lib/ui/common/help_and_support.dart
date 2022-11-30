@@ -20,14 +20,14 @@ import 'package:guilt_app/widgets/textfield_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/rounded_button_widget.dart';
-class Success_message extends StatefulWidget {
-  const Success_message({Key? key}) : super(key: key);
+class HelpAndSupport extends StatefulWidget {
+  const HelpAndSupport({Key? key}) : super(key: key);
 
   @override
-  State<Success_message> createState() => _Success_messageState();
+  State<HelpAndSupport> createState() => _HelpAndSupportState();
 }
 
-class _Success_messageState extends State<Success_message> {
+class _HelpAndSupportState extends State<HelpAndSupport> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
@@ -43,10 +43,8 @@ class _Success_messageState extends State<Success_message> {
               size: 15,
             ),
           ),
-          title: Padding(
-            padding: const EdgeInsets.only(left: 80),
-            child: Text('Success'),
-          ),
+          title: Text('Help & Support'),
+          centerTitle: true,
           shadowColor: Colors.transparent,
         ),
         child: SingleChildScrollView(

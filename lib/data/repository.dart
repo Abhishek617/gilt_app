@@ -1,23 +1,27 @@
 import 'dart:async';
-
+import 'dart:convert';
+import 'dart:core';
 import 'package:guilt_app/data/local/datasources/post/post_datasource.dart';
-import 'package:guilt_app/data/network/apis/Auth/auth.dart';
 import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
+import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
+import 'package:guilt_app/models/Auth/commonModal.dart';
+import 'package:guilt_app/models/Auth/feedback_add_model.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
+import 'package:guilt_app/models/Auth/oauth_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
-import 'package:guilt_app/models/Auth/otp_send.dart';
-import 'package:guilt_app/models/Auth/otp_send.dart';
-import 'package:guilt_app/models/Auth/logoutModal.dart';
+import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
-import 'package:guilt_app/models/Auth/valid_otp.dart';
+import 'package:guilt_app/models/Event/upcoming_past_event_modal.dart';
+import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
+import 'package:guilt_app/models/PageModals/notification_list_model.dart';
+import 'package:guilt_app/models/PageModals/setting_model.dart';
 import 'package:guilt_app/models/post/post.dart';
-import 'package:guilt_app/models/post/post_list.dart';
-import 'package:guilt_app/ui/common/otp_screen.dart';
-import 'package:guilt_app/ui/forgot_reset_password/reset_password.dart';
+import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
 import 'package:sembast/sembast.dart';
-
 import '../models/Auth/otp_send.dart';
+import '../models/Auth/valid_otp_model.dart';
+import '../models/Event/create_event_modal.dart';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
 
@@ -31,18 +35,48 @@ class Repository {
   // shared pref object
   final SharedPreferenceHelper _sharedPrefsHelper;
 
+  Future<void> saveIsLoggedIn(bool value) =>
+      _sharedPrefsHelper.saveIsLoggedIn(value);
+
+  Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
+
+  Future<void> saveUserRole(String value) =>
+      _sharedPrefsHelper.saveUserRole(value);
+
+  Future<String> get userRole => _sharedPrefsHelper.userRole;
+
+  Future<void> saveAuthToken(String? value) =>
+      _sharedPrefsHelper.saveAuthToken(value!);
+
+  Future<String?> get authToken => _sharedPrefsHelper.authToken;
+
+  Future<void> saveRefreshToken(String? value) =>
+      _sharedPrefsHelper.saveRefreshToken(value!);
+
+  Future<String?> get refreshToken => _sharedPrefsHelper.refreshToken;
+
+  // Theme: --------------------------------------------------------------------
+  Future<void> changeBrightnessToDark(bool value) =>
+      _sharedPrefsHelper.changeBrightnessToDark(value);
+
+  bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
+
+  // Language: -----------------------------------------------------------------
+  Future<void> changeLanguage(String value) =>
+      _sharedPrefsHelper.changeLanguage(value);
+
+  String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
+
   // constructor
   Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource);
 
   // Post: ---------------------------------------------------------------------
-  Future<GetProfileResponseModal> getProfile() async {
+  Future getProfile() async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
     var token = await authToken;
     return await _postApi.getProfile(token).then((profileData) {
-
-
       return profileData;
     }).catchError((error) => throw error);
   }
@@ -81,9 +115,12 @@ class Repository {
 
   Future<bool> get isFirst => _sharedPrefsHelper.isFirst;
 
-  Future<void> saveProfileData(GetProfileResponseModal value) => _sharedPrefsHelper.saveProfileData(value);
+  Future<void> saveProfileData(GetProfileResponseModal value) =>
+      _sharedPrefsHelper.saveProfileData(value);
 
-  Future<Object?> get profileData => _sharedPrefsHelper.profileData;
+  Future<GetProfileResponseModal> profileData(){
+   return _sharedPrefsHelper.profileData.then((value) => jsonDecode(value));
+  }
 
   // Login:---------------------------------------------------------------------
   Future<LoginModal> login(String email, String password) async {
@@ -92,34 +129,166 @@ class Repository {
         .then((loginData) => loginData)
         .catchError((error) => throw error);
   }
-  // Logout:---------------------------------------------------------------------
-  Future<LogOutModal> logout() async {
+
+  Future<OauthModal> oauth(
+      String email, String firstname, String lastname) async {
     return await _postApi
-        .logout()
+        .oauth(email, firstname, lastname)
+        .then((oauthData) => oauthData)
+        .catchError((error) => throw error);
+  }
+
+//setting
+  Future<SettingGetModal> settingGet() async {
+    var token = await authToken;
+    return await _postApi.settingGet(token).then((settingData) {
+      return settingData;
+    }).catchError((error) => throw error);
+  }
+//update setting
+  Future<SettingGetModal> settingpost(SettingPostModal UpdateSettingData) async {
+    return await _postApi
+        .settingpost(UpdateSettingData)
+        .then((settingData) => settingData)
+        .catchError((error) => throw error);
+  }
+
+  // Logout:---------------------------------------------------------------------
+  Future logout() async {
+    var token = await authToken;
+    return await _postApi
+        .logout(token)
         .then((logoutData) => logoutData)
         .catchError((error) => throw error);
   }
 
+// Common Content GET API :---------------------------------------------------------------------
+  Future getAppContent(type) async {
+    return await _postApi
+        .getAppContent(type)
+        .then((contentData) => contentData)
+        .catchError((error) => throw error);
+  }
+
+  // Check Registered Users from Contacts
+  Future checkContacts(contacts) async {
+    var token = await authToken;
+    return await _postApi
+        .checkContacts(contacts, token)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+
+  Future getBusinessPlaces() async {
+    var token = await authToken;
+    return await _postApi
+        .getBusinessPlaces(token)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+
+  Future getBusinessSpaces() async {
+    var token = await authToken;
+    return await _postApi
+        .getBusinessSpaces(token)
+        .then((placeData) => placeData)
+        .catchError((error) => throw error);
+  }
+
+  // Common Content GET API :---------------------------------------------------------------------
+  Future changePassword(oldPassword, newPassword) async {
+    var token = await authToken;
+    return await _postApi
+        .changePassword(oldPassword, newPassword, token)
+        .then((contentData) => contentData)
+        .catchError((error) => throw error);
+  }
 
   // OtpSend:---------------------------------------------------------------------
 
   Future<OtpSendModel> Send_Otp(String email) async {
-    return await _postApi
-        .Send_Otp(email)
+    return await _postApi.Send_Otp(email)
         .then((otpSendData) => otpSendData)
         .catchError((error) => throw error);
   }
+
+
+  //notification list
+  Future<NotificationListModal> Notification_list() async {
+    var token = await authToken;
+    return await _postApi.Notification_list(token)
+        .then((NotificationData) => NotificationData)
+        .catchError((error) => throw error);
+  }
+
+
+  //feedback add
+
+  Future<Feedback_add_Model> Feedback_add(
+      String description, int eventId, String rate) async {
+    var token = await authToken;
+    return await _postApi.Feedback_add(description, eventId, rate, token)
+        .then((feedbackAdd) => feedbackAdd)
+        .catchError((error) => throw error);
+  }
+//eventview
+  Future<EventViewModal> Event_Detail(int eventId) async {
+    var token = await authToken;
+    return await _postApi.Event_Detail(eventId, token)
+        .then((EventData) => EventData)
+        .catchError((error) => throw error);
+  }
+
+  // Feedback list
+  Future<FeedbackListModel> Feedback_list(int eventId) async {
+    var token = await authToken;
+    return await _postApi.Feedback_list(eventId, token)
+        .then((Feedback_list) => Feedback_list)
+        .catchError((error) => throw error);
+  }
+
   // Valid Otp:---------------------------------------------------------------------
 
-  Future<Valid_Otp_Model> Valid_Otp(String email, int otp) async {
-    return await _postApi
-        .Valid_Otp(email, otp)
+  Future<ValidOtpModel> Valid_Otp(String email, String otp) async {
+    return await _postApi.Valid_Otp(email, otp)
         .then((otpSendData) => otpSendData)
         .catchError((error) => throw error);
   }
 
+  //otp validate
+  Future<OtpValidateModel> OtpValidate(String email, String otp) async {
+    return await _postApi.OtpValidate(email, otp)
+        .then((otpSendData) => otpSendData)
+        .catchError((error) => throw error);
+  }
 
+//UpcomingPastEvent
+  Future<UpcomingPastEventModal> getUpcomingPastEventList(
+      String filterby, int page, int size) async {
+    var token = await authToken;
+    return await _postApi
+        .getUpcomingPastEventList(filterby, page, size, token)
+        .then((eventData) => eventData)
+        .catchError((error) => throw error);
+  }
 
+//updateprofile
+  Future<UpdateProfileResponseModal> updateprofile(
+      UpdateProfileRequestModal UpdateProfileData) async {
+    var token = await authToken;
+    return await _postApi
+        .updateprofile(UpdateProfileData, token)
+        .then((profileData) => profileData)
+        .catchError((error) => throw error);
+  }
+//addevent
+  Future<CommonResponseModal> createEvent(CreateEventRequestModal eventData,) async {
+    var token = await authToken;
+    return await _postApi
+        .createEvent(eventData, token)
+        .then((addeventData) => addeventData)
+        .catchError((error) => throw error);
+  }
 
 // SignUp:---------------------------------------------------------------------
   Future<SignUpResponseModal> signUp(SignUpRequestModal signUpData) async {
@@ -128,26 +297,4 @@ class Repository {
         .then((registerData) => registerData)
         .catchError((error) => throw error);
   }
-  Future<void> saveIsLoggedIn(bool value) =>
-      _sharedPrefsHelper.saveIsLoggedIn(value);
-
-  Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
-
-  Future<void> saveAuthToken(String? value) =>
-      _sharedPrefsHelper.saveAuthToken(value!);
-
-  Future<String?> get authToken => _sharedPrefsHelper.authToken;
-
-
-  // Theme: --------------------------------------------------------------------
-  Future<void> changeBrightnessToDark(bool value) =>
-      _sharedPrefsHelper.changeBrightnessToDark(value);
-
-  bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
-
-  // Language: -----------------------------------------------------------------
-  Future<void> changeLanguage(String value) =>
-      _sharedPrefsHelper.changeLanguage(value);
-
-  String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
 }

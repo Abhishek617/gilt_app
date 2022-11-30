@@ -1,21 +1,28 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:guilt_app/data/network/constants/endpoints.dart';
 import 'package:guilt_app/data/network/dio_client.dart';
 import 'package:guilt_app/data/network/rest_client.dart';
-import 'package:guilt_app/data/repository.dart';
-import 'package:guilt_app/data/sharedpref/shared_preference_helper.dart';
-import 'package:guilt_app/di/components/service_locator.dart';
+
+import 'package:guilt_app/models/Auth/Update_Profile_Modal.dart';
+import 'package:guilt_app/models/Auth/feedback_add_model.dart';
+import 'package:guilt_app/models/Auth/commonModal.dart';
 import 'package:guilt_app/models/Auth/login_modal.dart';
+import 'package:guilt_app/models/Auth/oauth_modal.dart';
 import 'package:guilt_app/models/Auth/otp_send.dart';
+import 'package:guilt_app/models/Auth/otpvalidatemodel.dart';
+
 import 'package:guilt_app/models/Auth/profile_modal.dart';
 import 'package:guilt_app/models/Auth/logoutModal.dart';
 import 'package:guilt_app/models/Auth/signup_modal.dart';
-import 'package:guilt_app/models/Auth/valid_otp.dart';
-import 'package:guilt_app/models/post/post_list.dart';
-import 'package:guilt_app/stores/user/user_store.dart';
+import 'package:guilt_app/models/Auth/valid_otp_model.dart';
+import 'package:guilt_app/models/Event/create_event_modal.dart';
+import 'package:guilt_app/models/PageModals/Event_View_Model.dart';
+import 'package:guilt_app/models/PageModals/notification_list_model.dart';
+import 'package:guilt_app/ui/feedback/feedback_list_model.dart';
+import 'package:guilt_app/models/PageModals/setting_model.dart';
+
+import '../../../../models/Event/upcoming_past_event_modal.dart';
 
 class PostApi {
   // dio instance
@@ -28,11 +35,11 @@ class PostApi {
   PostApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future<GetProfileResponseModal> getProfile(token) async {
+  Future getProfile(token) async {
     try {
       final res = await _dioClient.post(Endpoints.getProfile,
           options: Options(headers: {'Authorization': 'Bearer ' + token!}));
-      return GetProfileResponseModal.fromJson(res);
+      return res;
     } catch (e) {
       print(e.toString());
       throw e;
@@ -40,7 +47,7 @@ class PostApi {
   }
 
 // Login POST API
-  Future login(email, pass) async {
+  Future<LoginModal> login(email, pass) async {
     try {
       final res = await _dioClient
           .post(Endpoints.login, data: {"username": email, "password": pass});
@@ -51,21 +58,153 @@ class PostApi {
     }
   }
 
-// Login POST API
-  Future logout() async {
+//google login Oauth Api
+  Future<OauthModal> oauth(email, firstname, lastname) async {
     try {
-      final res = await _dioClient.post(Endpoints.logout);
-      return LogOutModal.fromJson(res);
+      final res = await _dioClient.post(Endpoints.oauth,
+          data: {"email": email, "firstName": firstname, "lastName": lastname});
+      return OauthModal.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
     }
   }
 
+  //get setting
+  Future<SettingGetModal> settingGet(token) async {
+    try {
+      final res = await _dioClient.post(Endpoints.setting,
+          options: Options(headers: {'Authorization': 'Bearer ' + token!}));
+      return SettingGetModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //post setting
+  Future<SettingGetModal> settingpost(SettingPostModal UpdateSettingData) async {
+    try {
+      final res = await _dioClient.post(Endpoints.setting, data: {
+        "is_push_notification": UpdateSettingData.isPushNotification,
+        "is_email_notification": UpdateSettingData.isEmailNotification,
+        "is_show_app_icon": UpdateSettingData.isShowAppIcon,
+        "is_floating_notification": UpdateSettingData.isFloatingNotification,
+        "is_lock_screen_notification": UpdateSettingData.isLockScreenNotification,
+        "is_allow_sound": UpdateSettingData.isAllowSound,
+        "is_allow_vibration":UpdateSettingData.isAllowVibration,
+      });
+      return SettingGetModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Common Content Get API
+  Future getAppContent(type) async {
+    try {
+      var url = Endpoints.terms_and_conditions;
+      switch (type) {
+        case 'terms_and_conditions':
+          {
+            url = Endpoints.terms_and_conditions;
+            break;
+          }
+        case 'faqs':
+          {
+            url = Endpoints.faqs;
+            break;
+          }
+        case 'privacy_policy':
+          {
+            url = Endpoints.privacy_policy;
+            break;
+          }
+        case 'app_version':
+          {
+            url = Endpoints.about_app_version;
+            break;
+          }
+      }
+      final res = await _dioClient.get(url);
+      return res;
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Get Business Places
+  Future getBusinessPlaces(token) async {
+    try {
+      return await _dioClient.get(
+        Endpoints.getBusinessPlaces,
+        queryParameters: {"page": 0, "size": 20},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Get Business Spaces
+  Future getBusinessSpaces(token) async {
+    try {
+      return await _dioClient.get(
+        Endpoints.getBusinessSpaces,
+        queryParameters: {"page": 0, "size": 20},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Check Registered Users from Contacts
+  Future checkContacts(contacts, token) async {
+    try {
+      return await _dioClient.post(
+        Endpoints.checkContacts,
+        data: {"contact": contacts},
+        options: Options(headers: {'Authorization': 'Bearer ' + token}),
+      );
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+// Login POST API
+  Future logout(token) async {
+    try {
+      return await _dioClient.post(Endpoints.logout,
+          options: Options(headers: {'Authorization': 'Bearer ' + token!}));
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // Change Password POST API
+  Future<CommonResponseModal> changePassword(
+      oldPassword, newPassword, token) async {
+    try {
+      final res = await _dioClient.post(Endpoints.changePassword,
+          options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+          data: {"old_password": oldPassword, "new_password": newPassword});
+      return CommonResponseModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
 
   // Send Otp
 
-  Future Send_Otp(email) async {
+  Future<OtpSendModel> Send_Otp(email) async {
     try {
       final res = await _dioClient
           .post(Endpoints.sendOtp, data: {"email_phone": email});
@@ -78,23 +217,170 @@ class PostApi {
 
   // Valid Otp
 
-
-  Future Valid_Otp(email, otp) async {
+  Future<ValidOtpModel> Valid_Otp(email, otp) async {
     try {
       final res = await _dioClient
           .post(Endpoints.validOtp, data: {"email_phone": email, "otp": otp});
-      return Valid_Otp_Model.fromJson(res);
+      return ValidOtpModel.fromJson(res);
     } catch (e) {
       print(e.toString());
       throw e;
     }
   }
 
+//otpvalidate
+  Future<OtpValidateModel> OtpValidate(email, otp) async {
+    try {
+      final res = await _dioClient.post(Endpoints.OtpValidate,
+          data: {"email_phone": email, "otp": otp});
+      return OtpValidateModel.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
 
+  //feedback Add
+  Future<Feedback_add_Model> Feedback_add(
+      description, eventId, rate, token) async {
+    try {
+      final res = await _dioClient.post(Endpoints.feedbackadd,
+          data: {"description": description, "eventId": eventId, "rate": rate});
+      return Feedback_add_Model.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
 
+//eventview
+  Future<EventViewModal> Event_Detail(eventId, token) async {
+    try {
+      final res = await _dioClient.get(
+        Endpoints.eventview,
+        queryParameters: {
+          "id": eventId,
+        },
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
 
+      return EventViewModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
 
+  //notification_list
+  Future<NotificationListModal> Notification_list(token) async {
+    try {
+      final res = await _dioClient.get(
+        Endpoints.notificationlist,
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
 
+      return NotificationListModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //feedback List
+
+  Future<FeedbackListModel> Feedback_list(eventId, token) async {
+    try {
+      final res = await _dioClient.get(
+        Endpoints.feedbacklist,
+        queryParameters: {
+          "eventId": eventId,
+        },
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
+
+      return FeedbackListModel.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  //UpcomingPastEvent
+  Future<UpcomingPastEventModal> getUpcomingPastEventList(
+      filterby, page, size, token) async {
+    try {
+      final res = await _dioClient.post(Endpoints.upcomingPast,
+          options: Options(headers: {
+            'Authorization': 'Bearer ' + token!,
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+          }),
+          data: {"Filterby": filterby, "page": page, "size": size});
+      return UpcomingPastEventModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<UpdateProfileResponseModal> updateprofile(
+      UpdateProfileRequestModal UpdateProfileData, token) async {
+    try {
+      FormData formData = FormData();
+      var form = FormData.fromMap({
+        "email": UpdateProfileData.email.toString(),
+        "firstname": UpdateProfileData.firstname.toString(),
+        "lastname": UpdateProfileData.lastname.toString(),
+        "phone": UpdateProfileData.phone.toString(),
+        "aboutme": UpdateProfileData.aboutme.toString(),
+        "address": UpdateProfileData.address.toString(),
+        "city": UpdateProfileData.city.toString(),
+        "state": UpdateProfileData.state.toString(),
+        "country": UpdateProfileData.country.toString(),
+        "zip": UpdateProfileData.zip.toString()
+      });
+      formData.fields.addAll(form.fields);
+
+      final res = await _dioClient.put(
+        Endpoints.updateProfile,
+        data: formData,
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
+      return UpdateProfileResponseModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+//create event
+  Future<CommonResponseModal> createEvent(CreateEventRequestModal eventData,token) async {
+    try {
+      FormData formData = FormData();
+      var form = FormData.fromMap({
+        "name": eventData.name,
+        "category": eventData.category,
+        "location": eventData.location,
+        "startDate": eventData.startDate,
+        "endDate": eventData.endDate,
+        "description": eventData.description,
+        "attendees": eventData.attendees,
+        "expenseDescription": eventData.expenseDescription,
+        "lat": eventData.lat,
+        "long": eventData.long,
+        "totalExpense": eventData.totalExpense
+      });
+      formData.fields.addAll(form.fields);
+
+      final res = await _dioClient.put(
+        Endpoints.addEvent,
+        data: formData,
+        options: Options(headers: {'Authorization': 'Bearer ' + token!}),
+      );
+      return CommonResponseModal.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
 
   Future<SignUpResponseModal> signup(SignUpRequestModal signUpData) async {
     try {

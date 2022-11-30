@@ -1,8 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:guilt_app/constants/app_settings.dart';
 import 'package:guilt_app/constants/colors.dart';
-import 'package:guilt_app/constants/dimens.dart';
+import 'package:guilt_app/data/repository.dart';
+import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/ui/common/menu_drawer.dart';
+import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 
 class ScaffoldWrapper extends StatefulWidget {
@@ -24,92 +27,100 @@ class ScaffoldWrapper extends StatefulWidget {
 }
 
 class _ScaffoldWrapperState extends State<ScaffoldWrapper> {
-  Widget IconWithText(icon, text) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          icon,
-          size: 25,
-        ),
-        Text(
-          text,
-          style: TextStyle(fontSize: 9, letterSpacing: 0.3),
-        )
-      ],
-    );
-  }
+  final UserStore _userStore = UserStore(getIt<Repository>());
+
+  Widget IconWithText(icon, text, {double fontSize = 12}) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: Colors.white,
+          ),
+          Text(
+            text,
+            style: TextStyle(fontSize: fontSize, color: Colors.white),
+          )
+        ],
+      );
 
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: widget.isMenu == true ? MenuDrawer() : null,
       backgroundColor: Colors.white,
+      drawer: widget.isMenu == true ? MenuDrawer() : null,
       appBar: widget.appBar,
       floatingActionButton: widget.isTab == true
-          ? FloatingActionButton(
-              backgroundColor: AppColors.primaryColor,
-              //Floating action button on Scaffold
-              onPressed: () {
-                //code to execute on button press
-              },
-              child: IconWithText(
-                  Icons.calendar_month, 'Add Event'), //icon inside button
-            )
+          ? _userStore.getUserRole() == AppSettings.businessUserRole
+              ? FloatingActionButton(
+                  backgroundColor: AppColors.primaryColor,
+                  //Floating action button on Scaffold
+                  onPressed: () {
+                    //code to execute on button press
+                    Routes.navigateToScreen(context, Routes.create_event);
+                  },
+                  child: IconWithText(Icons.calendar_month, 'Add Event',
+                      fontSize: 8), //icon inside button
+                )
+              : FloatingActionButton(
+                  backgroundColor: AppColors.primaryColor,
+                  //Floating action button on Scaffold
+                  onPressed: () {
+                    //code to execute on button press
+                    Routes.navigateToScreen(context, Routes.book_event);
+                  },
+                  child: IconWithText(Icons.calendar_month, 'Booking',
+                      fontSize: 8), //icon inside button
+                )
           : null,
       floatingActionButtonLocation: widget.isTab == true
           ? FloatingActionButtonLocation.centerDocked
           : null,
-      bottomNavigationBar: widget.isTab == true
-          ? BottomAppBar(
+      bottomNavigationBar:
+      widget.isTab == true ? BottomAppBar(
               color: AppColors.primaryColor,
               //bottom navigation bar on scaffold
               shape: CircularNotchedRectangle(),
               //shape of notch
-              notchMargin: 6,
+              notchMargin: 4,
               //notch margin between floating button and bottom appbar
-              child: Row(
-                //children inside bottom appbar
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(
-                      Icons.explore,
-                      color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  //children inside bottom appbar
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () {
+                        Routes.navigateToScreen(context, Routes.explore_home);
+                      },
+                      child: IconWithText(Icons.explore, 'Explore'),
                     ),
-                    onPressed: () {
-                      Routes.navigateToScreen(context, Routes.events_home);
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.account_balance_wallet,
-                      color: Colors.white,
+                    InkWell(
+                      onTap: () {
+                        Routes.navigateToScreen(context, Routes.wallet);
+                      },
+                      child:
+                          IconWithText(Icons.account_balance_wallet, 'Wallet'),
                     ),
-                    onPressed: () {
-                      Routes.navigateToScreen(context, Routes.events_home);
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.question_answer_rounded,
-                      color: Colors.white,
+                    SizedBox(
+                      width: DeviceUtils.getScaledWidth(context, 0.20),
                     ),
-                    onPressed: () {
-                      Routes.navigateToScreen(context, Routes.message);
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.account_circle_rounded,
-                      color: Colors.white,
+                    InkWell(
+                      onTap: () {
+                        Routes.navigateToScreen(context, Routes.message);
+                      },
+                      child:
+                          IconWithText(Icons.question_answer_rounded, 'Chat'),
                     ),
-                    onPressed: () {
-                      Routes.navigateToScreen(context, Routes.view_profile);
-                    },
-                  ),
-                ],
+                    InkWell(
+                      onTap: () {
+                        Routes.navigateToScreen(context, Routes.view_profile);
+                      },
+                      child:
+                          IconWithText(Icons.account_circle_rounded, 'Profile'),
+                    ),
+                  ],
+                ),
               ),
             )
           : null,
