@@ -32,12 +32,13 @@ class User {
   String? city;
   String? state;
   String? country;
-  int? zip;
+  String? zip;
   int? roleId;
-  Null? deletedAt;
+  String? deletedAt;
   bool? isEmailVerified;
   bool? isPhoneVerified;
   String? authToken;
+  String? customerProfileId;
 
   User(
       {this.id,
@@ -57,27 +58,29 @@ class User {
         this.deletedAt,
         this.isEmailVerified,
         this.isPhoneVerified,
-        this.authToken});
+        this.authToken,
+        this.customerProfileId});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     firstname = json['firstname'];
     lastname = json['lastname'];
-    email = json['email'];
-    password = json['password'];
-    phone = json['phone'];
-    profile = json['profile'];
-    aboutme = json['aboutme'];
-    address = json['address'];
-    city = json['city'];
-    state = json['state'];
-    country = json['country'];
-    zip = json['zip'];
+    email = json['email']??'';
+    password = json['password']??'';
+    phone = json['phone']??'';
+    profile = json['profile']??'';
+    aboutme = json['aboutme']??'';
+    address = json['address']??'';
+    city = json['city']??'';
+    state = json['state']??'';
+    country = json['country']??'';
+    zip = json['zip']??"";
     roleId = json['role_id'];
     deletedAt = json['deleted_at'];
     isEmailVerified = json['isEmailVerified'];
     isPhoneVerified = json['isPhoneVerified'];
     authToken = json['auth_token'];
+    customerProfileId = json['customerProfileId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -100,6 +103,7 @@ class User {
     data['isEmailVerified'] = this.isEmailVerified;
     data['isPhoneVerified'] = this.isPhoneVerified;
     data['auth_token'] = this.authToken;
+    data['customerProfileId'] = this.customerProfileId;
     return data;
   }
 }

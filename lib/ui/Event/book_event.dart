@@ -1,75 +1,114 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/colors.dart';
+import 'package:guilt_app/models/Event/SearchEventResponseModel.dart';
+import 'package:guilt_app/utils/Global_methods/GlobalStoreHandler.dart';
+import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/device/device_utils.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/custom_scaffold.dart';
+import 'package:guilt_app/widgets/rounded_button_widget.dart';
+import 'package:intl/intl.dart';
 
-class BookEvent extends StatefulWidget {
-  const BookEvent({Key? key}) : super(key: key);
+class SearchEvent extends StatefulWidget {
+  const SearchEvent({Key? key}) : super(key: key);
 
   @override
-  State<BookEvent> createState() => _BookEventState();
+  State<SearchEvent> createState() => _SearchEventState();
 }
 
-class _BookEventState extends State<BookEvent> {
-  Event_list() => Container(
-        padding: EdgeInsets.only(left: 5, top: 10, right: 00, bottom: 0),
-        child: Card(
-          child: Container(
-            margin: EdgeInsets.all(5),
-            color: Colors.white,
-            alignment: Alignment.center,
-            child: Row(
-              children: [
-                Column(
-                  children: [
-                    Image.network(
-                      'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
-                      width: 80,
-                      height: 80,
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 15),
-                  child: Column(
+class _SearchEventState extends State<SearchEvent> {
+  List<EventItem> eventList = [];
+
+  @override
+  initState() {
+    GlobalMethods.showLoader();
+    searchEvent(' ');
+    GlobalMethods.hideLoader();
+    super.initState();
+  }
+
+  Widget eventItemContainer(EventItem eventItem) {
+    print('eventItem');
+    print(eventItem);
+    if (eventItem != null) {
+      var startDate = eventItem.startDate != null
+          ? DateFormat('dd MMMM yyyy  HH:mma')
+              .format(DateTime.parse(eventItem.startDate!))
+          : 'Start Date Not found';
+      var endDate = eventItem.endDate != null
+          ? DateFormat('dd MMMM yyyy  HH:mma')
+              .format(DateTime.parse(eventItem.endDate!))
+          : 'End Date not found';
+      return GestureDetector(
+        child: Container(
+          width: DeviceUtils.getScaledWidth(context, 1.00),
+          height: DeviceUtils.getScaledHeight(context, 0.139),
+          padding: EdgeInsets.only(left: 10, top: 7, right: 10, bottom: 0),
+          child: Card(
+            child: Container(
+              margin: EdgeInsets.all(5),
+              color: Colors.white,
+              alignment: Alignment.center,
+              child: Row(
+                children: [
+                  Column(
                     children: [
-                      Text('Holiday Inn Express Albany',
+                      Container(
+                        width: 60,
+                        height: 60,
+                        child: Image.network(
+                          eventItem.eventImages!.length > 0
+                              ? eventItem.eventImages![0].file ??
+                                  'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg'
+                              : 'https://i.pinimg.com/474x/e7/0b/30/e70b309ec42e68dbc70972ec96f53839.jpg',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(eventItem.name ?? 'No Name',
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 18,
                               fontWeight: FontWeight.w700)),
-                      Padding(
-                        padding:
-                            EdgeInsets.only(right: 25, bottom: 10, top: 10),
-                        child: Text('13 January 2022 to 25 January 2022',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400)),
+                      SizedBox(
+                        height: 5,
                       ),
+                      Text(startDate + ' to ' + endDate,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w400)),
                       Row(
                         children: [
                           Padding(
                               padding: EdgeInsets.only(
-                                  left: 00.0,
-                                  top: 0.0,
-                                  bottom: 00.0,
-                                  right: 0.0),
-                              child: Icon(
-                                  Icons.supervised_user_circle_rounded,
+                                top: 5.0,
+                              ),
+                              child: Icon(Icons.supervised_user_circle_rounded,
                                   size: 20,
                                   color:
                                       Theme.of(context).colorScheme.primary)),
                           Padding(
                             padding: EdgeInsets.only(
-                                left: 0.0,
-                                top: 0.0,
-                                bottom: 00.0,
-                                right: 00.0),
+                                left: 0.0, top: 5.0, bottom: 00.0, right: 00.0),
                             child: Text(
-                              '+20 Attendees',
+                              (eventItem.eventAttendees!.length < 20
+                                      ? eventItem.eventAttendees!.length
+                                          .toString()
+                                      : '+20') +
+                                  ' Attendee(s)',
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500,
@@ -77,41 +116,82 @@ class _BookEventState extends State<BookEvent> {
                             ),
                           ),
                           Padding(
-                              padding: EdgeInsets.only(left: 56, right: 00),
+                              padding:
+                                  EdgeInsets.only(top: 5, left: 100, right: 00),
                               child: Container(
-                                height: 20,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Routes.navigateToScreen(context, Routes.book_event_details);
-                                    },
-                                  child: Text(
-                                    ' BOOKED',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 8),
-                                  ),
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateColor.resolveWith(
-                                              (states) =>
-                                                  AppColors.primaryColor),
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(90.0),
-                                      ))),
+                                padding: EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(50)),
+                                  color: AppColors.primaryColor,
+                                  shape: BoxShape.rectangle,
+                                ),
+                                child: Text(
+                                  eventItem.status!,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 12),
                                 ),
                               )),
                         ],
                       ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
+        onTap: () {
+          Routes.navigateToScreenWithArgs(
+              context, Routes.event_details, eventItem.id);
+          // Routes.navigateToScreenWithArgs(
+          //     context, Routes.book_event_details, eventItem.id);
+        },
       );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget _searchTextField() {
+    //add
+    return TextFormField(
+      onChanged: (searchVal) {
+        if (searchVal.trim().length > 0) {
+          searchEvent(searchVal);
+        }
+      },
+      cursorColor: Colors.white,
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        hintText: 'Search Event',
+        hintStyle: TextStyle(color: Colors.grey),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+      ),
+    );
+  }
+
+  bool _isSearchBar = false;
+
+  searchEvent(searchQuery) {
+    GlobalStoreHandler.postStore
+        .getSearchEvent(searchQuery)
+        .then((searchEventList) {
+      print('searchEvent Response :');
+      print(searchEventList);
+      var response = SearchEventResponseModal.fromJson(searchEventList);
+      setState(() {
+        eventList = (response?.eventsList?.listData?.length == 0
+            ? []
+            : response?.eventsList?.listData)!;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,47 +199,51 @@ class _BookEventState extends State<BookEvent> {
       isMenu: false,
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: Row(
-          children: [
-            Text('Book Event'),
-            Padding(
-                padding: EdgeInsets.only(left: 120),
-                child: IconButton(
-                  icon: Icon(Icons.circle_notifications),
-                  onPressed: () {
-                    Routes.navigateToScreen(context, Routes.notifi);
-                  },
-                )),
-          ],
-        ),
+        title: !_isSearchBar ? Text('Search Event') : _searchTextField(),
+        centerTitle: true,
+        actions: !_isSearchBar
+            ? [
+                //add
+                IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      setState(() {
+                        //add
+                        _isSearchBar = true;
+                      });
+                    })
+              ]
+            : [
+                IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: () {
+                      setState(() {
+                        _isSearchBar = false;
+                      });
+                    })
+              ],
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              child: Event_list(),
-            ),
-            Container(
-              child: Event_list(),
-            ),
-            Container(
-              child: Event_list(),
-            ),
-            Container(
-              child: Event_list(),
-            ),
-            Container(
-              child: Event_list(),
-            ),
-            Container(
-              child: Event_list(),
-            ),
-            Container(
-              child: Event_list(),
-            ),
-          ],
-        ),
-      ),
+      child: eventList.length > 0
+          ? SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Column(
+                    children: eventList
+                        .map((evt) => eventItemContainer(evt))
+                        .toList(),
+                  ),
+                ],
+              ),
+            )
+          : Center(
+              heightFactor: 12.0,
+              child: Text(
+                'No Event found',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              )),
     );
   }
 }

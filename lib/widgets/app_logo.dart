@@ -9,7 +9,6 @@ class AppLogoWidget extends StatelessWidget {
   const AppLogoWidget({Key? key,this.width = 200, this.height = 150}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
    return Container(
       width: DeviceUtils.getScaledWidth(context, 0.50),
       height: DeviceUtils.getScaledHeight(context, 0.25),

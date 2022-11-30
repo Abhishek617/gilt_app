@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:guilt_app/constants/dimens.dart';
 import 'package:guilt_app/data/repository.dart';
 import 'package:guilt_app/di/components/service_locator.dart';
+import 'package:guilt_app/models/Auth/otp_send.dart';
 import 'package:guilt_app/stores/theme/theme_store.dart';
 import 'package:guilt_app/stores/user/user_store.dart';
 import 'package:guilt_app/utils/Global_methods/global.dart';
 import 'package:guilt_app/utils/routes/routes.dart';
 import 'package:guilt_app/widgets/app_logo.dart';
 import 'package:guilt_app/widgets/rounded_button_widget.dart';
-import 'package:guilt_app/widgets/textfield_widget.dart';
+
 
 import '../../constants/colors.dart';
 
@@ -23,7 +24,6 @@ class Reset_password extends StatefulWidget {
 }
 
 class _Reset_passwordState extends State<Reset_password> {
-
   TextEditingController _userEmailController = TextEditingController();
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
@@ -85,34 +85,32 @@ class _Reset_passwordState extends State<Reset_password> {
                 SizedBox(
                   height: 25,
                 ),
-
                 Padding(
                   padding: const EdgeInsets.only(left: 5, top: 30),
                   child: Container(
                     // height: 50,
                     width: 310,
                     child: TextFormField(
-                       controller: _userEmailController,
+                      controller: _userEmailController,
                       decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.mail,),
+                        prefixIcon: Icon(
+                          Icons.mail,
+                        ),
                         border: OutlineInputBorder(),
                         labelText: 'Enter Mail',
-
                       ),
-                      validator: (val){
-                        if(val!.isEmpty || !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(val)){
+                      validator: (val) {
+                        if (val!.isEmpty ||
+                            !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                .hasMatch(val)) {
                           return "Enter a valid Email";
-                        }else{
+                        } else {
                           return null;
                         }
                       },
                     ),
                   ),
                 ),
-
-
-
                 SizedBox(
                   height: 15,
                 ),
@@ -121,24 +119,25 @@ class _Reset_passwordState extends State<Reset_password> {
                   buttonColor: AppColors.primaryColor,
                   onPressed: () {
                     if (formkey.currentState!.validate()) {
-                      _userStore.Send_Otp(_userEmailController.value.text, (value) {
-                            Routes.navigateRootToScreen(context, Routes.otp);
-                            // Routes.navigateToScreenWithArgs(
-                            //     context,
-                            //     Routes.success_error_validate,
-                            //     SuccessErrorValidationPageArgs(
-                            //         isSuccess: true,
-                            //         description: 'Logged in successfully',
-                            //         title: 'Success',
-                            //         isPreviousLogin: false));
-                          },
-
-                              (error) {
-                            print(error);
-                            final data = json.decode(json.encode(error.data)) ;
-                            // Map<String, dynamic> map = json.decode(error.data);
-                            GlobalMethods.showErrorMessage(context,data['error'], 'Forgot Password');
-                          }).then((value) {
+                      _userStore.Send_Otp(_userEmailController.value.text,
+                          (OtpSendModel value) {
+                        Routes.navigateToScreenWithArgs(
+                            context, Routes.otp, value.emailPhone);
+                        // Routes.navigateToScreenWithArgs(
+                        //     context,
+                        //     Routes.success_error_validate,
+                        //     SuccessErrorValidationPageArgs(
+                        //         isSuccess: true,
+                        //         description: 'Logged in successfully',
+                        //         title: 'Success',
+                        //         isPreviousLogin: false));
+                      }, (error) {
+                        print(error);
+                        final data = json.decode(json.encode(error.data));
+                        // Map<String, dynamic> map = json.decode(error.data);
+                        GlobalMethods.showErrorMessage(
+                            context, data['error'], 'Forgot Password');
+                      }).then((value) {
                         print(value);
                       });
                     } else {
@@ -146,6 +145,9 @@ class _Reset_passwordState extends State<Reset_password> {
                     }
                     //Routes.navigateToScreenWithArgs(context, Routes.success_error_validate,SuccessErrorValidationPageArgs(isSuccess: true, description: 'Logged in successfully', title: 'Success', isPreviousLogin: true));
                   },
+
+
+
                 ),
               ],
             ),
